@@ -1,0 +1,90 @@
+[
+  {
+    "id": "Concrete034",
+    "name": "Concrete 034",
+    "page": "https://ambientcg.com/a/Concrete034",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Concrete034_1K-JPG.zip",
+    "sourceMap": "Concrete034_1K-JPG_Color.jpg",
+    "colorSha256": "8CEB9186D990B31FCE785E06FDC6974C160F1D27C43F6160266F164DEBA713AA",
+    "downloadBytes": 3657575
+  },
+  {
+    "id": "Wood051",
+    "name": "Wood 051",
+    "page": "https://ambientcg.com/a/Wood051",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Wood051_1K-JPG.zip",
+    "sourceMap": "Wood051_1K-JPG_Color.jpg",
+    "colorSha256": "F3C6C5456457E8D05C1FEE4D2F186F41D0AEA2B8A06859B69CE2934E11AA8798",
+    "downloadBytes": 6712631
+  },
+  {
+    "id": "PaintedPlaster017",
+    "name": "Painted Plaster 017",
+    "page": "https://ambientcg.com/a/PaintedPlaster017",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=PaintedPlaster017_1K-JPG.zip",
+    "sourceMap": "PaintedPlaster017_1K-JPG_Color.jpg",
+    "colorSha256": "ED8A69A6437DE9D41D2CF380F7E6A216232FC4754F256C3405985C857547FFEF",
+    "downloadBytes": 4721132
+  },
+  {
+    "id": "Metal032",
+    "name": "Metal 032",
+    "page": "https://ambientcg.com/a/Metal032",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Metal032_1K-JPG.zip",
+    "sourceMap": "Metal032_1K-JPG_Color.jpg",
+    "colorSha256": "49493D6ADE78CCBBBD270C6A15E4B4C9B1A097E66DDF28A1073DE3E85712D9AF",
+    "downloadBytes": 3650556
+  },
+  {
+    "id": "Fabric030",
+    "name": "Fabric 030",
+    "page": "https://ambientcg.com/a/Fabric030",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Fabric030_1K-JPG.zip",
+    "sourceMap": "Fabric030_1K-JPG_Color.jpg",
+    "colorSha256": "6388762708722DE48CDBDFB4878B9AE6D8012DE5948D564006067B629F0B84EF",
+    "downloadBytes": 11064340
+  },
+  {
+    "id": "Bricks074",
+    "name": "Bricks 074",
+    "page": "https://ambientcg.com/a/Bricks074",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Bricks074_1K-JPG.zip",
+    "sourceMap": "Bricks074_1K-JPG_Color.jpg",
+    "colorSha256": "B8F7CCD6FF8C5FFDF18F6A0BF6695F6398C732921D3CE92EF5E666C359D556C1",
+    "downloadBytes": 8493136
+  },
+  {
+    "id": "Cardboard001",
+    "name": "Cardboard 001",
+    "page": "https://ambientcg.com/a/Cardboard001",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Cardboard001_1K-JPG.zip",
+    "sourceMap": "Cardboard001_1K-JPG_Color.jpg",
+    "colorSha256": "FE21687752FDE80F9738D8A9609DF1F2CFBEEDE343507963932A49F9527B336F",
+    "downloadBytes": 6706789
+  },
+  {
+    "id": "Asphalt012",
+    "name": "Asphalt 012",
+    "page": "https://ambientcg.com/a/Asphalt012",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Asphalt012_1K-JPG.zip",
+    "sourceMap": "Asphalt012_1K-JPG_Color.jpg",
+    "colorSha256": "C7A142A1C12F517024D1B4C92472C700AF86CFE3BFC12263C4260E414D4C2C59",
+    "downloadBytes": 8507722
+  }
+]

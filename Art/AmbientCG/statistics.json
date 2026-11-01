@@ -1,0 +1,50 @@
+[
+  {
+    "id": "Asphalt012",
+    "width": 1024,
+    "height": 1024,
+    "mean": 0.2644
+  },
+  {
+    "id": "Bricks074",
+    "width": 1024,
+    "height": 1024,
+    "mean": 0.4574
+  },
+  {
+    "id": "Cardboard001",
+    "width": 1024,
+    "height": 1024,
+    "mean": 0.5881
+  },
+  {
+    "id": "Concrete034",
+    "width": 1024,
+    "height": 512,
+    "mean": 0.7223
+  },
+  {
+    "id": "Fabric030",
+    "width": 1024,
+    "height": 1024,
+    "mean": 0.3554
+  },
+  {
+    "id": "Metal032",
+    "width": 1024,
+    "height": 1024,
+    "mean": 0.5272
+  },
+  {
+    "id": "PaintedPlaster017",
+    "width": 1024,
+    "height": 512,
+    "mean": 0.7457
+  },
+  {
+    "id": "Wood051",
+    "width": 1024,
+    "height": 1024,
+    "mean": 0.2156
+  }
+]

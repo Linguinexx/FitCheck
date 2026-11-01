@@ -1,0 +1,73 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace FitCheck
+{
+    public partial class CityView
+    {
+        public int ResidentCount=>residents.Count;
+        public int GeometryBatches {get;private set;}
+        public void Build(StudioView studio)
+        {
+            transform.position=Origin;
+            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();NightDetails();GeometryBatches=batches.Count;FinishGeometry();
+            marker=Disc("Destino na calçada",.27f,.27f,.19f,new Color(.36f,.76f,.65f));marker.gameObject.SetActive(false);
+            shadow=Disc("Sombra do funcionário",.65f,.36f,0,new Color(.43f,.40f,.39f));
+            BakeResident(studio,1,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-15.4f,-.055f,2.8f),-22);
+            BakeResident(studio,8,new[]{"CG_TOP_02","SB_BOTTOM_02","CG_SHOES_01",""},new Vector3(15.7f,-.055f,-1.5f),32);
+            BakeResident(studio,3,new[]{"SB_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-20,-.055f,-8.5f),-90);
+            BakeResident(studio,5,new[]{"CG_TOP_01","CG_BOTTOM_01","CG_SHOES_01",""},new Vector3(-22,-.055f,-2),180);
+            residents[1].path=new[]{new Vector2(13.5f,-6.5f),new Vector2(4,-6.5f),new Vector2(4,.4f),new Vector2(13.5f,.4f),new Vector2(15.7f,-1.5f)};
+            residents[2].path=new[]{new Vector2(-4,-8.5f),new Vector2(10,-8.5f),new Vector2(19,-8.5f),new Vector2(10,-8.5f),new Vector2(-4,-8.5f),new Vector2(-20,-8.5f)};
+            motionRigVersion=ResidentArtRevision;
+            residents[3].path=new[]{new Vector2(-22.3f,3.6f),new Vector2(-16.8f,3.6f),new Vector2(-22.3f,3.6f),new Vector2(-22,-2)};
+        }
+        Transform Disc(string name,float rx,float rz,float inner,Color color)
+        {
+            const int sides=40;var vertices=new List<Vector3>();var triangles=new List<int>();var colors=new List<Color>();var uv=new List<Vector2>();var normals=new List<Vector3>();
+            for(int ring=0;ring<2;ring++)for(int i=0;i<sides;i++){
+                float a=i*Mathf.PI*2/sides,f=ring==0?(rx>0?inner/rx:0):1;vertices.Add(new Vector3(Mathf.Cos(a)*rx*f,0,Mathf.Sin(a)*rz*f));colors.Add(color);uv.Add(Vector2.zero);normals.Add(Vector3.up);
+            }
+            for(int i=0;i<sides;i++){int next=(i+1)%sides;triangles.AddRange(new[]{i,next,i+sides,next,next+sides,i+sides});}
+            var mesh=new Mesh{name=name};mesh.SetVertices(vertices);mesh.SetNormals(normals);mesh.SetColors(colors);mesh.SetUVs(0,uv);mesh.SetTriangles(triangles,0);mesh.RecalculateBounds();assets.Add(mesh);
+            var material=new Material(Resources.Load<Shader>("CityPaint"));material.mainTexture=Resources.Load<Texture2D>("Painted/Leather");material.SetFloat("_Motion",0);assets.Add(material);
+            var go=new GameObject(name);go.transform.SetParent(transform,false);go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=material;return go.transform;
+        }
+        void BakeResident(StudioView studio,int customer,string[] outfit,Vector3 position,float yaw,bool wallLean=false)
+        {
+            int oldHair=studio.HairOverride,oldExpression=studio.ExpressionOverride;bool oldPreview=studio.PreviewProportions,oldTall=studio.TallPreview;var rotation=studio.Avatar.rotation;
+            try{
+                studio.HairOverride=-1;studio.ExpressionOverride=-1;studio.PreviewProportions=false;studio.TallPreview=false;studio.Avatar.rotation=Quaternion.identity;studio.Apply(outfit,customer);
+                if(wallLean)studio.SetShopAttitude();
+                var actor=CopyAvatar(studio,"Morador — "+DayOne.Customers[customer].name,position,yaw,false);residents.Add(actor);
+                if(wallLean)ConfigureShopLean(actor);
+                var blob=Disc("Sombra do morador",.63f,.35f,0,new Color(.43f,.40f,.39f));blob.localPosition=new Vector3(position.x,.005f,position.z);
+                actor.shadow=blob;
+            }finally{studio.HairOverride=oldHair;studio.ExpressionOverride=oldExpression;studio.PreviewProportions=oldPreview;studio.TallPreview=oldTall;studio.Avatar.rotation=rotation;}
+        }
+        Resident CopyAvatar(StudioView studio,string name,Vector3 position,float yaw,bool hideHead)
+        {
+                var resident=new GameObject(name).transform;resident.SetParent(transform,false);resident.localPosition=position;resident.localRotation=Quaternion.Euler(0,yaw,0);
+                var actor=new Resident{root=resident,home=position,facing=resident.localRotation};
+                var materials=new Dictionary<Material,Material>();
+                foreach(var renderer in studio.Avatar.GetComponentsInChildren<MeshRenderer>()){
+                    if(!renderer.gameObject.activeInHierarchy||hideHead&&(studio.IsHeadPart(renderer.transform)||renderer.name=="Pescoço"))continue;var filter=renderer.GetComponent<MeshFilter>();if(filter==null)continue;
+                    var sourceMesh=filter.sharedMesh;var vertices=sourceMesh.vertices;var normals=sourceMesh.normals;
+                    if(vertices.Length==0)throw new System.Exception("Fonte do morador vazia: "+renderer.name);
+                    // Own CPU copies of every stream and submesh. Dynamic face
+                    // changes in the studio must not invalidate a resident's buffers.
+                    var mesh=new Mesh{name=renderer.name+" — morador",indexFormat=sourceMesh.indexFormat};
+                    mesh.vertices=vertices;mesh.uv=sourceMesh.uv;if(sourceMesh.colors.Length==vertices.Length)mesh.colors=sourceMesh.colors;
+                    mesh.subMeshCount=sourceMesh.subMeshCount;for(int sub=0;sub<sourceMesh.subMeshCount;sub++)mesh.SetTriangles(sourceMesh.GetTriangles(sub),sub);
+                    for(int i=0;i<vertices.Length;i++){vertices[i]=renderer.transform.TransformPoint(vertices[i])-studio.Avatar.position;normals[i]=renderer.transform.TransformDirection(normals[i]);}
+                    mesh.vertices=vertices;mesh.normals=normals;mesh.RecalculateBounds();assets.Add(mesh);RegisterResidentMesh(actor,mesh,renderer.name,studio.IsHeadPart(renderer.transform));
+                    var piece=new GameObject(renderer.name);piece.transform.SetParent(resident,false);piece.AddComponent<MeshFilter>().sharedMesh=mesh;
+                    var source=renderer.sharedMaterials;var copies=new Material[source.Length];for(int i=0;i<source.Length;i++){
+                        Material copy;if(!materials.TryGetValue(source[i],out copy)){copy=Instantiate(source[i]);copy.SetFloat("_NightCity",IsInterior?0:1);materials[source[i]]=copy;assets.Add(copy);}copies[i]=copy;
+                    }
+                    piece.AddComponent<MeshRenderer>().sharedMaterials=copies;
+                }
+                return actor;
+        }
+    }
+}
