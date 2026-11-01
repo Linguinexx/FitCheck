@@ -19,7 +19,7 @@ namespace FitCheck
         public float ViewPitch {get;private set;}=-5;
         public const float LookSensitivity=2.8f;
         Transform marker,shadow;
-        public string Place {get{return Position.y>1&&Position.x< -9?"CAFÉ DO LADO":Position.y>0&&Position.x>0?"DRIPLAB":"PRAÇA DO ENCONTRO";}}
+        public string Place {get{return Vector2.Distance(Position,StreetHomeDoor)<3?"RESIDENCIAL  /  AP 03":Position.y>1&&Position.x< -9?"CAFÉ DO LADO":Position.y>0&&Position.x>0?"DRIPLAB":"PRAÇA DO ENCONTRO";}}
         public bool Free(Vector2 p){return WorldFree(p)&&!ResidentBlocks(p)&&!VehicleBlocks(p);}
         bool WorldFree(Vector2 p)
         {

@@ -44,6 +44,7 @@ namespace FitCheck
         }
         void Home()
         {
+            pendingDeleteSlot=-1;
             if(stage==Stage.City||(city!=null&&city.IsHome&&city.gameObject.activeSelf)||(shopService&&stage==Stage.Dialogue)||shopDressingInStore)ExitCity();
             shopService=false;shopSequence=ShopSequence.None;
             if(stage==Stage.CharacterCreator){creatorDraft=null;studio.PlayerLook=playerAppearance;}
@@ -88,8 +89,8 @@ namespace FitCheck
             var offset=new Vector3((Screen.width-1440*scale)/2,(Screen.height-900*scale)/2,0);
             GUI.matrix=Matrix4x4.TRS(offset,Quaternion.identity,Vector3.one*scale);
             var e=Event.current;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){if(renderedStage==Stage.CharacterCreator&&!paused)CancelCreator();else if(renderedStage==Stage.Confirm&&!paused)stage=Stage.Dressing;else paused=!paused;dragging=false;e.Use();}
-            bool modal=paused || renderedStage==Stage.Confirm;
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){if(pendingDeleteSlot>=0)CancelSaveDeletion();else if(renderedStage==Stage.CharacterCreator&&!paused)CancelCreator();else if(renderedStage==Stage.Confirm&&!paused)stage=Stage.Dressing;else paused=!paused;dragging=false;e.Use();}
+            bool modal=paused || renderedStage==Stage.Confirm||pendingDeleteSlot>=0;
             GUI.enabled=!modal;
             if(renderedStage==Stage.Title)TitleUI();else{
             // The header is deliberately quieter than the outfit.
@@ -115,6 +116,7 @@ namespace FitCheck
             if(renderedStage==Stage.CharacterCreator&&stage==Stage.CharacterCreator)CreatorUI();
             }
             GUI.enabled=true;
+            if(pendingDeleteSlot>=0)SaveDeletionUI();
             if(renderedStage==Stage.Confirm&&!paused){
                 Fill(new Rect(0,0,1440,900),new Color(.025f,.018f,.04f,.88f));
                 Fill(new Rect(440,280,560,320),surface);Fill(new Rect(440,280,560,4),violet);

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "Fabric084",
+    "name": "Fabric 084",
+    "page": "https://ambientcg.com/a/Fabric084",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Fabric084_1K-JPG.zip",
+    "sourceMap": "Fabric084_1K-JPG_Color.jpg",
+    "colorSha256": "100668A6EF1EF1E1C5A55DD82B82EDC725FA6B2AA0D9A5581FE05A842EA9E99C",
+    "downloadBytes": 9333044
+  },
+  {
+    "id": "Carpet016",
+    "name": "Carpet 016",
+    "page": "https://ambientcg.com/a/Carpet016",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Carpet016_1K-JPG.zip",
+    "sourceMap": "Carpet016_1K-JPG_Color.jpg",
+    "colorSha256": "C6FCA66D1D570D27A921D7CB35B1963E83844E2B8CEEC70F0193DB5E99E04123",
+    "downloadBytes": 9371762
+  },
+  {
+    "id": "Tiles107",
+    "name": "Tiles 107",
+    "page": "https://ambientcg.com/a/Tiles107",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=Tiles107_1K-JPG.zip",
+    "sourceMap": "Tiles107_1K-JPG_Color.jpg",
+    "colorSha256": "09BC9CF6E08DC4A58DF668DF0F2CB30FEA54EEE48ECE77263419222497A05D66",
+    "downloadBytes": 3200991
+  },
+  {
+    "id": "WoodFloor040",
+    "name": "Wood Floor 040",
+    "page": "https://ambientcg.com/a/WoodFloor040",
+    "license": "CC0-1.0",
+    "licensePage": "https://docs.ambientcg.com/license/",
+    "package": "https://ambientcg.com/get?file=WoodFloor040_1K-JPG.zip",
+    "sourceMap": "WoodFloor040_1K-JPG_Color.jpg",
+    "colorSha256": "2BF98C767EF184C0DBE0666F6A6BFDD22C637CC2816070DCB701D916CC9BCEE9",
+    "downloadBytes": 5913872
+  }
+]

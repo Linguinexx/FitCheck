@@ -4,7 +4,7 @@ namespace FitCheck
 {
     public static class AmbientSurfaces
     {
-        public static readonly string[] Assets={"Wood051","Fabric030","Metal032","Concrete034","PaintedPlaster017","Bricks074","Cardboard001","Asphalt012"};
+        public static readonly string[] Assets={"Wood051","Fabric030","Metal032","Concrete034","PaintedPlaster017","Bricks074","Cardboard001","Asphalt012","WoodFloor040","Carpet016","Tiles107","Fabric084"};
         static Texture2D fabric;
         public static void ClothDetail(Material material,bool enabled)
         {
@@ -17,6 +17,9 @@ namespace FitCheck
             string asset=null;float mean=.5f,contrast=3,scale=1;Color tint=Color.white;
             switch(key){
                 case "Wood":asset="Wood051";mean=.2156f;contrast=3.5f;scale=.62f;break;
+                case "HomeFloor":asset="WoodFloor040";mean=.5537f;contrast=2.5f;scale=.24f;break;
+                case "Rug":asset="Carpet016";mean=.6920f;contrast=4;scale=.75f;break;
+                case "EntryTile":asset="Tiles107";mean=.9037f;contrast=3;scale=.55f;break;
                 case "Cloth":case "CityBanners":asset="Fabric030";mean=.3554f;contrast=5;scale=.45f;break;
                 case "Paper":asset="Cardboard001";mean=.588f;contrast=1.8f;scale=.65f;break;
                 case "ShopFloor":asset="Concrete034";mean=.7223f;contrast=2.7f;scale=.38f;tint=new Color(.74f,.73f,.70f);break;
@@ -40,7 +43,7 @@ namespace FitCheck
                 if(t==null||t.width>512||t.height>512||t.mipmapCount<2||t.wrapMode!=TextureWrapMode.Repeat)
                     throw new System.Exception("Textura ambientCG sem importação adequada: "+id);
             }
-            Debug.Log("FITCHECK_AMBIENT_SURFACES_PASSED: eight CC0 color maps, bounded resolution, mipmaps and repeat sampling.");
+            Debug.Log("FITCHECK_AMBIENT_SURFACES_PASSED: "+Assets.Length+" CC0 color maps, bounded resolution, mipmaps and repeat sampling.");
         }
     }
 }

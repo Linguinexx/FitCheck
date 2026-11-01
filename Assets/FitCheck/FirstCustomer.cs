@@ -63,8 +63,9 @@ namespace FitCheck
         void UpdateCamera()
         {
             if(stage!=Stage.City&&stage!=Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf)ExitCity();
-            if(stage==Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf){city.Frame(cam,reducedMotion,0);city.FramePlayerForCamera(cam,false);return;}
+            if(stage==Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf){if(showWardrobe)FrameHomeWardrobe();else{mannequin.gameObject.SetActive(false);city.Frame(cam,reducedMotion,0);city.FramePlayerForCamera(cam,false);}return;}
             if(shopDressingInStore&&(stage==Stage.Dressing||stage==Stage.Confirm)){FrameShopDressing();return;}
+            if(campaignBeforePreview!=null&&(stage==Stage.Dressing||stage==Stage.Confirm)){studio.SetHome(false);studio.Pose(rotation,Mathf.Clamp(distance*.75f,4.8f,6.0f),.65f);cam.fieldOfView=52;return;}
             if(stage==Stage.Dialogue&&shopService){FrameShopDialogue();return;}
             if(stage==Stage.CharacterCreator){studio.SetHome(false);studio.Pose(rotation,distance,0);return;}
             if(stage==Stage.City){
@@ -84,6 +85,7 @@ namespace FitCheck
             if(stage==Stage.City)UpdateCity(Time.deltaTime);
             if(!paused){if(stage==Stage.Dialogue&&shopService)shopCameraTime+=Time.unscaledDeltaTime;if(shopDressingInStore)shopDressingTime+=Time.unscaledDeltaTime;}
             UpdateCamera();
+            if(city!=null&&city.gameObject.activeInHierarchy)city.TickCat(Time.deltaTime,paused,reducedMotion,mutedAudio);
             FinishShopFittingEntryIfReady();
             AdvanceClock(Time.deltaTime);
             if(stage==Stage.Leaving && !paused) {transition+=Time.deltaTime; if(transition>1.2f) stage=Stage.Post;}

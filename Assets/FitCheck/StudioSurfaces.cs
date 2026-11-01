@@ -118,7 +118,19 @@ namespace FitCheck
                     else if(profile==0)point.y+=.025f*raised;
                 }
                 if(point.sqrMagnitude<.564f*.564f)point=point.normalized*.564f;
-                v.Add(point);n.Add(direction);uv.Add(new Vector2(i/(float)sides*2.6f,(Mathf.PI-phi)*.58f/AvatarTileSize));
+                if(profile==6){
+                    float longF=headwear==null?f:Mathf.Lerp(headwear.cap?.40f:.31f,1,f),u=1-longF;
+                    float y=u*u*u*3.43f+3*u*u*longF*3.40f+3*u*longF*longF*2.50f+longF*longF*longF*2.07f;
+                    float rho=3*u*u*longF*.72f+3*u*longF*longF*.60f+longF*longF*longF*.66f;
+                    rho+=Mathf.Sin(theta*7-longF*5)*.018f*Mathf.Sin(longF*Mathf.PI);
+                    if(longF>0)rho=Mathf.Max(rho,Mathf.Sqrt(Mathf.Max(0,.605f*.605f-(y-2.8f)*(y-2.8f)))+.012f);
+                    var continuous=new Vector3(Mathf.Sin(theta)*rho,y-2.8f,-Mathf.Cos(theta)*rho*.97f);
+                    float sideBlend=Mathf.SmoothStep(0,1,Mathf.InverseLerp(.52f,1.05f,Mathf.Abs(theta)));
+                    point=Vector3.Lerp(point,continuous,sideBlend);
+                    if(point.sqrMagnitude<.578f*.578f)point=point.normalized*.578f;
+                    if(headwear==null&&r==0)point=new Vector3(0,.63f,0);
+                }
+                v.Add(point);n.Add(direction);uv.Add(new Vector2(i/(float)sides*2.6f,profile==6?(point.y+2.8f)*.8f/AvatarTileSize:(Mathf.PI-phi)*.58f/AvatarTileSize));
             }
             for(int r=0;r<rows;r++)for(int i=0;i<sides;i++){
                 int a=r*(sides+1)+i,b=a+sides+1;float angle=(i+.5f)*Mathf.PI*2/sides-Mathf.PI;

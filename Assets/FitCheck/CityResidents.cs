@@ -17,9 +17,10 @@ namespace FitCheck
             public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;
         }
         [SerializeField] List<Resident> residents=new List<Resident>();
-        const int ResidentArtRevision=10;
+        const int ResidentArtRevision=13;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
+            if(IsInterior&&(cat==null||!cat.Ready))return false;
             if(motionRigVersion!=ResidentArtRevision||residents.Count!=(IsHome?0:IsInterior?2:4))return false;
             if(IsInterior&&!IsHome&&(fittingCurtains==null||fittingCurtains.Length!=2||fittingCurtains[0]==null||fittingCurtains[1]==null))return false;
             foreach(var actor in residents)if(actor.root==null||actor.parts.Count==0)return false;

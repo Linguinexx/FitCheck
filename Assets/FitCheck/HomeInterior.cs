@@ -8,11 +8,11 @@ namespace FitCheck
         public bool IsHome=>homeInterior;
         public static readonly Rect HomeBounds=new Rect(-5.5f,-4.5f,11,9);
         public static readonly Vector2 HomeSpawn=new Vector2(0,.2f),HomeDoor=new Vector2(0,-3.5f),HomeBed=new Vector2(-1.5f,2.6f),HomeWardrobe=new Vector2(3,2),HomeDesk=new Vector2(-2.1f,-2.2f);
-        public static readonly Vector2 StreetHomeDoor=new Vector2(21.8f,3.8f),StreetShopDoor=new Vector2(10.4f,2.1f);
+        public static readonly Vector2 StreetHomeDoor=new Vector2(-4.8f,7.65f),StreetHomeThreshold=new Vector2(-4.8f,9.9f),StreetShopDoor=new Vector2(10.4f,2.1f);
         public void BuildHome()
         {
             interior=true;homeInterior=true;transform.position=new Vector3(600,0,0);
-            Ground(0,0,11,9,-.07f,new Color(.64f,.47f,.32f),"Wood",2);
+            Ground(0,0,11,9,-.07f,new Color(.64f,.47f,.32f),"HomeFloor",1);
             Block(new Vector3(0,4.5f,0),new Vector3(11.3f,.18f,9.3f),Cream,"Plaster");
             foreach(float x in new[]{-5.6f,5.6f})Block(new Vector3(x,2.2f,0),new Vector3(.2f,4.5f,9.3f),Cream,"Plaster");
             foreach(float z in new[]{-4.6f,4.6f}){
@@ -46,10 +46,15 @@ namespace FitCheck
             Block(new Vector3(.7f,1.77f,4.21f),new Vector3(2.9f,.1f,.35f),Cream,"Wood");
             Block(new Vector3(-3.4f,2.9f,4.42f),new Vector3(1.45f,1.65f,.045f),Kaos,"Cloth");
             Words("DROP",new Vector3(-3.4f,2.95f,4.37f),.055f,Cream);
-            Ground(.3f,-.5f,3.6f,2.4f,.005f,new Color(.30f,.10f,.15f),"Cloth",2);
-            Block(new Vector3(4.5f,2.1f,-2.3f),new Vector3(1.45f,.12f,.65f),Ink,"Wood");
-            for(int i=0;i<3;i++)Block(new Vector3(4.1f+i*.4f,2.3f,-2.3f),new Vector3(.30f,.30f,.46f),i%2==0?Kaos:Cream,"Paper");
+            Ground(.3f,-.5f,3.6f,2.4f,.005f,new Color(.30f,.10f,.15f),"Rug",1);
+            Block(new Vector3(-3.8f,2.7f,-4.23f),new Vector3(2.4f,.12f,.50f),Ink,"Wood");
+            foreach(float x in new[]{-4.6f,-3.0f}){
+                Rod(new Vector3(x,2.30f,-4.44f),new Vector3(x,2.64f,-4.00f),.035f,Ink,"CityMetal");
+                Rod(new Vector3(x,2.30f,-4.44f),new Vector3(x,2.67f,-4.44f),.035f,Ink,"CityMetal");
+            }
+            for(int i=0;i<3;i++)Block(new Vector3(-4.5f+i*.7f,2.92f,-4.23f),new Vector3(.45f,.30f,.42f),i%2==0?Kaos:Cream,"Paper");
             Block(new Vector3(0,4.25f,0),new Vector3(1.4f,.12f,.7f),Cream,"CityGlow");
+            BuildCat(new Vector3(-3.4f,1.055f,1.6f),240);
             GeometryBatches=batches.Count;FinishGeometry();motionRigVersion=ResidentArtRevision;
         }
         public int HomeInteraction=>Vector2.Distance(Position,HomeDoor)<1.4f?1:Vector2.Distance(Position,HomeWardrobe)<1.35f?2:Vector2.Distance(Position,HomeBed)<1.25f?3:Vector2.Distance(Position,HomeDesk)<1.25f?4:0;
@@ -58,6 +63,14 @@ namespace FitCheck
     public partial class FirstCustomer
     {
         CityView homeRoom;
+        float homeDoorExitRemaining,homeWardrobeRotation;
+        static readonly Vector3 HomeWardrobePreviewPosition=new Vector3(2.8f,-.055f,.7f);
+        void FrameHomeWardrobe()
+        {
+            city.Frame(cam,reducedMotion,0);city.PlayerBodyVisible=false;mannequin.gameObject.SetActive(true);
+            mannequin.position=city.transform.position+HomeWardrobePreviewPosition;mannequin.rotation=Quaternion.Euler(0,homeWardrobeRotation,0);
+            cam.transform.position=mannequin.position+new Vector3(.35f,2.6f,-5.0f);cam.transform.LookAt(mannequin.position+new Vector3(-.9f,1.75f,0));cam.fieldOfView=52;
+        }
         void EnterHome(){shopService=false;EnterSpace(true,true);}
         void EnterStreetAt(Vector2 position,float yaw)
         {if(stage==Stage.Home&&city!=null&&city.IsHome)ExitCity();EnterCity();city.RestoreWalk(position,yaw,-4,mannequin);city.Frame(cam,true,0);}
@@ -67,12 +80,12 @@ namespace FitCheck
         {
             if(paused||stage!=Stage.City||!city.IsHome)return false;
             int action=city.HomeInteraction;if(action==0)return false;
-            if(action==1){EnterStreetAt(CityView.StreetHomeDoor,180);return true;}
-            showWardrobe=action==2;stage=Stage.Home;cityFreeCursor=true;SyncCityCursor(true);return true;
+            if(action==1){EnterStreetAt(CityView.StreetHomeThreshold,180);homeDoorExitRemaining=.95f;return true;}
+            showWardrobe=action==2;homeWardrobeRotation=-12;stage=Stage.Home;cityFreeCursor=true;SyncCityCursor(true);return true;
         }
         bool InteractStreet()
         {
-            if(paused||stage!=Stage.City||city.IsInterior)return false;
+            if(paused||stage!=Stage.City||city.IsInterior||homeDoorExitRemaining>0)return false;
             if(city.StreetInteraction==1){EnterShop();return true;}
             if(city.StreetInteraction==2){GoHome();return true;}return false;
         }

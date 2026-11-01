@@ -9,7 +9,7 @@ namespace FitCheck
         public bool exists;public string error;
         public PlayerAppearance appearance=new PlayerAppearance();public DayProgress progress=new DayProgress();
     }
-    public static class SaveSlots
+    public static partial class SaveSlots
     {
         public const int Count=3;
         public static string Folder(string library,int slot)
@@ -32,14 +32,16 @@ namespace FitCheck
         }
         public static void ImportLegacy(string library)
         {
+            if(File.Exists(Path.Combine(library,"saves","legacy-imported.flag")))return;
             string folder=Folder(library,0);
-            if(Directory.Exists(folder)&&Directory.GetFiles(folder).Length>0)return;
+            if(Directory.Exists(folder)&&Directory.GetFiles(folder).Length>0){File.WriteAllText(Path.Combine(library,"saves","legacy-imported.flag"),"1");return;}
             string[] names={"day-one.json","day-one.json.bak","first-customer.json","player-appearance.json","player-appearance.json.bak"};
             bool found=false;foreach(string name in names)if(File.Exists(Path.Combine(library,name)))found=true;
             if(!found)return;
             Directory.CreateDirectory(folder);
             // Keep the originals and the absolute photo paths used by the existing FitFeed.
             foreach(string name in names){string source=Path.Combine(library,name);if(File.Exists(source))File.Copy(source,Path.Combine(folder,name),false);}
+            File.WriteAllText(Path.Combine(library,"saves","legacy-imported.flag"),"1");
         }
     }
     public partial class FirstCustomer
@@ -112,6 +114,7 @@ namespace FitCheck
             var chosen=saveSlots[selectedSave]??new SaveSlotInfo();
             if(Tap(new Rect(40,693,462,62),chosen.exists?"Continuar com este personagem  →":"Criar personagem  →",true,chosen.error==null))OpenSelectedSave();
             if(Tap(new Rect(40,776,180,48),"Voltar"))ReturnToTitle();
+            if(Tap(new Rect(237,776,265,48),"Excluir save",false,chosen.exists))RequestSaveDeletion();
             Txt(new Rect(40,839,462,48),message.Length>0?message:"Até três saves. Cada personagem tem sua própria semana.",tiny,muted);
         }
     }

@@ -1,5 +1,35 @@
 # DevLog
 
+## 01/11/2026 — Mais superfícies e revisão do gato para encerrar a rodada
+
+Consultada a API oficial do ambientCG e importados somente os mapas Color de Fabric084, Carpet016, WoodFloor040 e Tiles107. Assoalho do quarto recebe tábuas próprias; tapete doméstico e cantinho do gato na loja recebem fibras de carpete; vestíbulo recebe cerâmica. Fur detail usa a luminância de Fabric084, preservando a cor laranja da pelagem. Fontes, licença CC0, hashes e médias estão nos arquivos evening de Art/AmbientCG. Mipmaps, repetição e compressão mantidos, com 256 px (512 para tecido/pelo); pacotes ZIP temporários descartados.
+
+Fubá ganha dorso mais cheio, cabeça/focinho proporcionais, olhos acompanhando a curvatura, orelhas menores, dois pares de bigodes e patas mais recolhidas. Cauda passa a sair do corpo e afinar até a ponta, com malha fechada, sem a esfera separada. Listras em tubos foram removidas e substituídas por padrão estático de pelagem no shader CatFur, que usa a textura inteira; o atlas de pele em quatro quadros não é mais aplicado ao gato.
+
+Som trocado por cat_mewfood.wav, gravação CC0 de Kerzoven: chamado de 1,127 s, mono/44,1 kHz, altura original, Doppler desligado e ganho moderado. Não é síntese nem imitação de voz humana. Miado anterior removido dos Resources; crédito e hash atualizados em Art/Audio/CREDITS.md.
+
+Build Windows-EveningTextures sem erros nem avisos. Prova nativa aprovada para os 12 materiais, gato/miado nas duas áreas, pausa e intervalo, percurso residencial, atendimento completo e exclusão/isolamento dos três saves. Imagens em Captures/EveningTextures e logs evening-textures em ../tools. Terceiro pedido desde o último envio: preparar commit e push após conferir a versão final.
+
+## 01/11/2026 — Residencial AP 03, cabelo contínuo e Fubá
+
+Removido o acesso doméstico que havia sido sobreposto à fachada RADIO, restaurando-a como estabelecimento separado. O espaço entre café e DripLab agora contém um prédio residencial com dois pavimentos, janelas, número AP 03 em textura, vão real de porta, folha aberta, vestíbulo, luminária, soleira e caixas de correio. Colisões deixam o corredor da entrada livre e bloqueiam alas/fundo. O jogador sai de dentro do vestíbulo, atravessa a porta e retorna pelo mesmo acesso. Atlas de letreiros ampliado para cinco linhas, preservando os sinais anteriores e adicionando a identificação residencial.
+
+Ondulado longo passa a usar uma única superfície do topo até as pontas, com curva contínua, UV compartilhado e normais suavizadas. Removida a peça separada que formava o efeito de parte colada. Orelhas continuam ocultas neste corte; outros estilos mantêm sua própria composição. Revisão visual inclui os dois perfis, frente e costas, além das combinações com coberturas.
+
+Fubá é um gato laranja original em volumes arredondados de baixa resolução, olhos fechados, focinho creme, orelhas triangulares, listras e cauda enrolada. A mesma aparência e gravação são usadas em casa, sobre a cama, e na loja, junto à entrada. E exige proximidade e olhar para ele; miado tem intervalo e não abre menus/atendimento. Respiração e reação discretas respeitam movimento reduzido; pausa congela o movimento e pausa o áudio, e silenciar vale para a voz do gato. Gravação CC0 de Kerzoven em Resources/Audio; procedência, licença e hash em Art/Audio/CREDITS.md.
+
+Prova nativa aprovada: ida/volta pelo novo residencial, RADIO sem ação de entrada em casa, gato correspondente nas duas áreas, clip não silencioso, interação por olhar/distância, intervalo e pausa, campanha intacta e saves independentes. Build Windows-ResidentialCat sem erros nem avisos; imagens em Captures/ResidentialCat e logs residential-cat em ../tools. Segundo pedido desde o último envio: 2/3; confirmações e mensagens acidentais não contam novamente.
+
+## 01/11/2026 — Prateleira apoiada, câmera de roupa, saída reconhecível e exclusão de save
+
+Prateleira deslocada para a parede sobre a mesa, com fundo próximo ao reboco e dois suportes metálicos. Caixas acompanham a nova posição. Guarda-roupa doméstico usa o avatar completo do save, corpo de primeira pessoa oculto, câmera frontal de 52 graus e espaço livre para os controles; botões permitem girar. A prévia isolada do provador também recebe campo de visão e distância próximos ao enquadramento do atendimento.
+
+Prédio da casa ganha entrada coberta, laterais, soleira/tapete e folha de porta aberta. Sair começa dentro desse espaço e avança um passo em primeira pessoa antes de devolver o movimento normal, preservando pausa e bloqueando reentrada durante o passo. Sem adicionar o sistema geral de fades entre ambientes.
+
+Seleção de saves ganha Excluir save e modal com número/nome, Cancelar e Excluir definitivamente. O modal bloqueia o menu de fundo e Esc cancela. Exclusão restringe-se à pasta validada do espaço confirmado, rejeita redirecionamentos, limpa a sessão ativa se necessário e impede reimportação do legado após apagar o primeiro espaço. Arquivos legados originais fora da pasta do espaço não são removidos.
+
+Testes isolados verificam pedido sem remoção, cancelamento, exclusão do espaço confirmado mesmo se a seleção mudar, preservação dos demais, ausência de reimportação, bloqueio de regravação da sessão excluída e criação de novo jogo no espaço liberado. Câmera de roupa verifica todos os limites dos renderizadores dentro da área visível; saída testa deslocamento e pausa. Build Windows-HomePolish, capturas em Captures/HomePolish e logs home-polish em ../tools. Primeiro pedido desde o último envio: 1/3.
+
 ## 01/11/2026 — Casa em primeira pessoa e percurso até a loja
 
 Criar ou continuar um save agora entra no quarto em primeira pessoa, usando os mesmos controles, corpo visível e câmera da loja. Novo interior com cama, guarda-roupa, mesa/celular, janela noturna, porta, tapete, pôster e prateleira; materiais de tecido, madeira, reboco, metal e papelão existentes. Móveis e limites impedem atravessamentos. Cama, mesa e guarda-roupa abrem os serviços domésticos; a volta ao quarto devolve controle e atualiza o uniforme no corpo.

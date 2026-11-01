@@ -50,6 +50,16 @@ namespace FitCheck
                 OpenSaveSelection();PreviewSave(1);
                 if(OpenSelectedSave()||File.ReadAllText(second)!="invalid")throw new Exception("Slot corrompido sobrescrito");
                 ProgressStore.Save(second,progress);
+                OpenSaveSelection();PreviewSave(0);RequestSaveDeletion();
+                if(pendingDeleteSlot!=0||!SaveSlots.Read(library,0).exists)throw new Exception("Pedido de exclusão apagou antes da confirmação");
+                CancelSaveDeletion();if(!SaveSlots.Read(library,0).exists)throw new Exception("Cancelar exclusão removeu save");
+                string thirdBeforeDelete=File.ReadAllText(Path.Combine(SaveSlots.Folder(library,2),"day-one.json"));
+                RequestSaveDeletion();selectedSave=2;
+                if(!ConfirmSaveDeletion()||SaveSlots.Read(library,0).exists||File.ReadAllText(Path.Combine(SaveSlots.Folder(library,2),"day-one.json"))!=thirdBeforeDelete)throw new Exception("Confirmação não isolou o save escolhido");
+                SaveSlots.ImportLegacy(library);if(SaveSlots.Read(library,0).exists)throw new Exception("Save legado reapareceu após exclusão");
+                PreviewSave(1);RequestSaveDeletion();if(!ConfirmSaveDeletion()||activeSaveSlot!=-1||SaveSlots.Read(library,1).exists)throw new Exception("Exclusão manteve save ativo na memória");
+                bool refusedWrite=false;try{SaveDay();}catch(InvalidOperationException){refusedWrite=true;}if(!refusedWrite||SaveSlots.Read(library,1).exists)throw new Exception("Salvar recriou espaço excluído");
+                PreviewSave(0);OpenSelectedSave();creatorDraft.name="Nova história";RefreshCreator();if(!SaveCreator()||progress.posts.Count!=0)throw new Exception("Espaço excluído não permite novo jogo");
                 BuildTitlePhoto();File.WriteAllBytes(Path.Combine(folder,"title-facade-photo.png"),titlePhoto.EncodeToPNG());
                 Debug.Log("FITCHECK_SAVE_SLOTS_PASSED: three independent slots; legacy completed week retained; creation/cancel, switching, new-store customer, backup recovery and corrupt-slot protection.");
             }finally{

@@ -30,7 +30,7 @@ namespace FitCheck
             city=home?homeRoom:interior?shop:street;
             if(city==null){city=new GameObject(home?"Casa — quarto do jogador":interior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(home)city.BuildHome();else if(interior)city.BuildShop(studio,nextCustomer);else city.Build(studio);if(home)homeRoom=city;else if(interior)shop=city;else street=city;}
             city.gameObject.SetActive(true);studio.PreviewProportions=false;studio.TallPreview=false;studio.HairOverride=-1;studio.ExpressionOverride=-1;
-            studio.ApplyUniform(progress.uniform);city.ResetWalk(mannequin);city.PreparePlayerBody(studio);if(interior&&!home)city.ResetFittingCurtain();shopFittingOpening=false;stage=Stage.City;paused=false;showRequest=false;showDrops=false;
+            studio.PlayerLook=playerAppearance;studio.ApplyUniform(progress.uniform);city.ResetWalk(mannequin);city.PreparePlayerBody(studio);if(interior&&!home)city.ResetFittingCurtain();shopFittingOpening=false;stage=Stage.City;paused=false;showRequest=false;showDrops=false;
             city.Frame(cam,true,0);mannequin.gameObject.SetActive(false);cityFreeCursor=false;cityLookCaptured=false;cityDragLook=false;SyncCityCursor();
         }
         void ExitCity()
@@ -40,6 +40,7 @@ namespace FitCheck
             cam.clearFlags=beforeCityClearFlags;var sky=cam.GetComponent<Skybox>();if(sky!=null){sky.material=beforeCitySky;sky.enabled=beforeCitySkyEnabled;}
             cam.orthographic=false;cam.backgroundColor=beforeCityBackground;cam.fieldOfView=beforeCityFov;cam.nearClipPlane=beforeCityNearClip;
             cityLookCaptured=false;cityDragLook=false;shopFittingOpening=false;shopSequence=ShopSequence.None;shopDressingInStore=false;
+            homeDoorExitRemaining=0;
             if(discardShop&&shop==city){var previousShop=shop;shop=null;Destroy(previousShop.gameObject);}
             if(!ProofMode){Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
         }
@@ -86,12 +87,13 @@ namespace FitCheck
             }
             SyncCityCursor(true);
             Vector2 input=Vector2.zero;
-            if(!paused&&!shopFittingOpening&&!ShopSequenceActive&&(!cityFreeCursor||cityDragLook)&&!ProofMode&&CityInputFocused){
+            if(!paused&&!shopFittingOpening&&!ShopSequenceActive&&homeDoorExitRemaining<=0&&(!cityFreeCursor||cityDragLook)&&!ProofMode&&CityInputFocused){
                 if(cityLookCaptured&&Time.frameCount>=cityLookReadyFrame&&Cursor.lockState==CursorLockMode.Locked)city.Look(new Vector2(Input.GetAxisRaw("Mouse X"),Input.GetAxisRaw("Mouse Y")));
                 float x=(Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.RightArrow)?1:0)-(Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.LeftArrow)?1:0);
                 float y=(Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow)?1:0)-(Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow)?1:0);
                 var basis=Quaternion.Euler(0,city.ViewYaw,0);var direction=(basis*Vector3.right)*x+(basis*Vector3.forward)*y;input=new Vector2(direction.x,direction.z);
             }
+            if(!paused&&homeDoorExitRemaining>0&&!city.IsInterior){float exitStep=Mathf.Min(Mathf.Min(delta,.05f),homeDoorExitRemaining);homeDoorExitRemaining-=exitStep;input=new Vector2(0,-.55f);delta=exitStep;}
             city.Step(input,delta,paused||shopFittingOpening||ShopSequenceActive,mannequin);
         }
         static bool CityHitArea(Vector2 p)
@@ -106,8 +108,10 @@ namespace FitCheck
             Fill(new Rect(38,796,660,67),new Color(.055f,.043f,.077f,.88f));
             Txt(new Rect(58,803,620,24),city.IsHome?"EM CASA  /  DIA 0"+progress.day:city.IsInterior?"DRIPLAB  /  LOJA":city.Place,tiny,violet);
             Txt(new Rect(58,831,620,24),"WASD andar  /  Mouse olhar  /  E interagir  /  Esc pausa",tiny,paper);
-            if(city.IsHome||!city.IsInterior){
-                string worldAction=city.IsHome?HomeActionLabel():city.StreetInteraction==1?"Entrar na DripLab":city.StreetInteraction==2?"Entrar em casa":"";
+            if(city.CatInteraction(cam)){
+                Fill(new Rect(440,680,560,76),new Color(.04f,.035f,.045f,.94f));Txt(new Rect(458,696,524,45),"E  /  Fazer carinho em Fubá",action,paper);
+            }else if(city.IsHome||!city.IsInterior){
+                string worldAction=city.IsHome?HomeActionLabel():homeDoorExitRemaining>0?"Saindo de casa…":city.StreetInteraction==1?"Entrar na DripLab":city.StreetInteraction==2?"Entrar em casa":"";
                 if(worldAction.Length>0){Fill(new Rect(440,680,560,76),new Color(.04f,.035f,.045f,.94f));Txt(new Rect(458,696,524,45),"E  /  "+worldAction,action,paper);}
                 else {Fill(new Rect(38,111,540,74),new Color(.04f,.035f,.045f,.88f));Txt(new Rect(56,123,502,52),city.IsHome?"Saia pela porta quando quiser ir à loja.":"Entre pela porta sob o letreiro DRIPLAB.",caption,paper);}
             }else if(city.IsInterior){
@@ -122,7 +126,7 @@ namespace FitCheck
         {
             if(paused||stage!=Stage.City||ShopSequenceActive)return;
             if(ProcessCityDragLook(e))return;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){if(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet())e.Use();return;}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()))e.Use();return;}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Tab){cityFreeCursor=!cityFreeCursor;SyncCityCursor();e.Use();return;}
             if(!CityHitArea(e.mousePosition))return;
             if(e.type==EventType.MouseDown&&CaptureCityPointer(e.mousePosition,e.button))e.Use();

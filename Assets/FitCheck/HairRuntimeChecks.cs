@@ -33,8 +33,8 @@ namespace FitCheck
                         var mesh=scalp.GetComponent<MeshFilter>().sharedMesh;
                         foreach(var v in mesh.vertices){
                             float radius=Vector3.Distance(scalp.transform.TransformPoint(v),scalp.transform.position);
-                            if(radius<.561f||radius>.77f)throw new Exception("Cabelo fora do limite: corte="+cut+" cobertura="+hat+" raio="+radius+" escala="+scalp.transform.lossyScale+" ponto="+v);
-                            if(hat!=""&&radius>.577f)throw new Exception("Cabelo não foi recolhido sob a cobertura");
+                            if(radius<.561f||radius>(cut==6?1.2f:.77f))throw new Exception("Cabelo fora do limite: corte="+cut+" cobertura="+hat+" raio="+radius+" escala="+scalp.transform.lossyScale+" ponto="+v);
+                            if(cut!=6&&hat!=""&&radius>.577f)throw new Exception("Cabelo não foi recolhido sob a cobertura");
                         }
                         if(hat!=""){
                             if(crown==null||scalp.bounds.min.y>=crown.bounds.min.y-.03f)throw new Exception("Cabelo sumiu embaixo do boné/touca");

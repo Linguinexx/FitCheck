@@ -7,10 +7,10 @@ Jogo 3D de montagem de looks streetwear em Unity **6000.6.7f1**. Arte em desenvo
 1. Adicione esta pasta ao Unity Hub com a versão indicada.
 2. Abra `Assets/Scenes/FirstCustomer.unity` e pressione **Play**.
 3. Na tela da fachada, clique em **Jogar** e selecione um dos três saves. Um espaço vazio abre a criação do personagem; criar ou continuar começa no quarto em primeira pessoa.
-4. Ande até a porta de casa e pressione **E — Sair de casa**. No bairro, caminhe até a porta sob o letreiro **DRIPLAB** e pressione **E — Entrar na DripLab**.
+4. Ande até a porta de casa e pressione **E — Sair de casa**. Você sai pelo vestíbulo do residencial **AP 03**, entre o café e a DripLab. No bairro, caminhe até a porta sob o letreiro **DRIPLAB** e pressione **E — Entrar na DripLab**. O prédio RADIO é independente da casa.
 5. A loja começa fechada: passe por trás do balcão e pressione **E — Abrir a loja** quando estiver pronto. Ao terminar um dia, feche o expediente e volte para casa. A cama abre as opções de descanso; o guarda-roupa e a mesa dão acesso ao uniforme, à aparência e ao FitFeed.
 
-Cada save mantém aparência, campanha e fotos separadas em `saves/slot-1`, `slot-2` ou `slot-3`, dentro da pasta de dados persistentes da Unity. Na primeira seleção, o progresso da versão anterior é copiado para o primeiro espaço; os arquivos originais e as fotos antigas permanecem preservados. Não há sobrescrita ou exclusão de saves pela interface.
+Cada save mantém aparência, campanha e fotos separadas em `saves/slot-1`, `slot-2` ou `slot-3`, dentro da pasta de dados persistentes da Unity. Na primeira seleção, o progresso da versão anterior é copiado para o primeiro espaço; os arquivos originais e as fotos antigas permanecem preservados. **Excluir save** abre uma confirmação com o espaço e o nome do personagem; **Cancelar** mantém os arquivos e **Excluir definitivamente** libera somente o espaço escolhido. Um save excluído não volta a ser importado automaticamente da versão antiga.
 
 Na exploração, **WASD** move, **mouse** olha, **E** interage, **Esc** pausa e **Tab** libera ou captura o cursor. No Editor, dê foco à aba **Game**. Menus e provador usam o mouse livre.
 
@@ -19,6 +19,12 @@ O rapaz encostado na parede é um frequentador fixo da loja, separado dos atendi
 A montagem acontece no próprio provador da loja. Arraste o personagem para girar e use a roda do mouse para aproximar ou afastar. O cliente vira-se ao chegar e apresenta o fit antes de sair. Pausa interrompe a sequência; cancelar e voltar ao início reinicia o atendimento sem finalizar um look.
 
 As portas ligam casa, bairro e loja nos dois sentidos, com interações próximas e controle em primeira pessoa. O sistema geral de transições visuais entre locais ainda está reservado para uma etapa posterior.
+
+Na troca de uniforme em casa, o personagem aparece inteiro, de frente, com botões de giro. A entrada do prédio tem pórtico, porta aberta e soleira; sair de casa inclui um passo curto pela entrada, que congela durante a pausa.
+
+Fubá, o gato laranja deitado, aparece na cama em casa e num canto da loja. Olhe para ele de perto e pressione **E — Fazer carinho em Fubá** para ouvir seu miado. Pausa congela o movimento e o som; a opção de silenciar também vale para ele. Procedência e licença do som estão em `Art/Audio/CREDITS.md`.
+
+O gato usa detalhe estático de pelo e marcações de pelagem, com patas recolhidas e cauda afilada. A biblioteca de superfícies inclui 12 materiais do ambientCG, mantendo resoluções baixas, mipmaps e a paleta do jogo. Créditos e procedência estão em `Art/AmbientCG/CREDITS.md`.
 
 ## Conteúdo atual
 

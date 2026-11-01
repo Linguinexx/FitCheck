@@ -68,6 +68,8 @@ namespace FitCheck
                 Txt(new Rect(48,700,500,40),"Reputação "+progress.reputation+"   /   "+progress.Available.Length+" peças disponíveis",copy,violet);
                 Txt(new Rect(48,755,500,44),progress.achievements.Count+" de 3 conquistas   /   "+progress.posts.Count+" de 9 publicações",caption,muted);
             }else{
+                if(Tap(new Rect(845,806,210,48),"↶ Girar"))homeWardrobeRotation-=45;
+                if(Tap(new Rect(1075,806,210,48),"Girar ↷"))homeWardrobeRotation+=45;
                 for(int i=0;i<4;i++){
                     bool unlocked=i==0||progress.achievements.Contains(UniformAwards[i]);
                     if(Tap(new Rect(48,407+i*74,500,61),(progress.uniform==i?"✓ ":"")+UniformNames[i]+(unlocked?"":"  /  bloqueado"),progress.uniform==i,unlocked)){progress.uniform=i;studio.ApplyUniform(i);TrySave();}
