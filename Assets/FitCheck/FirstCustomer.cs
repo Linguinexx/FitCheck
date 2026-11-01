@@ -11,7 +11,7 @@ namespace FitCheck
         string Request=>Customer.request;
         string[] questions=>Customer.questions;
         string[] answers=>Customer.answers;
-        enum Stage { Welcome, Dialogue, Dressing, Confirm, Leaving, Post, Summary, Home, Retrospective, City, CharacterCreator }
+        enum Stage { Welcome, Dialogue, Dressing, Confirm, Leaving, Post, Summary, Home, Retrospective, City, CharacterCreator, Title }
         DayProgress progress=new DayProgress(); int customer;
         int replayIndex=-1; bool fromHome; float remaining=120; bool timerWarned;
         string[] inventory;
@@ -23,10 +23,10 @@ namespace FitCheck
         Camera cam; Transform mannequin; string storageOverride;
         Texture2D photo; float rotation=-12, distance=7.2f, transition;
         Vector2 scroll, detailsScroll; bool paused, showRequest, showDrops; string message=""; GameObject plaza;
-        string SavePath=>Path.Combine(storageOverride??Application.persistentDataPath,"first-customer.json");
-        string NewPhotoPath()=>Path.Combine(storageOverride??Application.persistentDataPath,"look-"+customer+"-"+Guid.NewGuid().ToString("N")+".png");
+        string SavePath=>Path.Combine(SessionFolder,"first-customer.json");
+        string NewPhotoPath()=>Path.Combine(SessionFolder,"look-"+customer+"-"+Guid.NewGuid().ToString("N")+".png");
         string pendingPhotoPath;byte[] pendingPhotoBytes;
-        string DayPath=>Path.Combine(storageOverride??Application.persistentDataPath,"day-one.json");
+        string DayPath=>Path.Combine(SessionFolder,"day-one.json");
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)] static void Boot()
         { if(!FindAnyObjectByType<FirstCustomer>()) new GameObject("Fit Check — primeiro atendimento").AddComponent<FirstCustomer>(); }
         void Start()
@@ -35,7 +35,7 @@ namespace FitCheck
             Application.targetFrameRate=60;
             Application.runInBackground=true;
             if(ProofMode){storageOverride=Path.Combine(FirstPersonProofOutput(),"session");Directory.CreateDirectory(storageOverride);}
-            try {
+            if(ProofMode)try {
                 if(File.Exists(DayPath)) {
                     try{progress=ProgressStore.Load(DayPath);}catch{progress=ProgressStore.Load(DayPath+".bak");message="Progresso recuperado da cópia de segurança.";}
                 }
@@ -47,6 +47,7 @@ namespace FitCheck
             catch(Exception e) { message="Não foi possível ler o save: "+e.Message; progress=new DayProgress(); record=new Attempt(); }
             foreach(var c in FindObjectsByType<Camera>()) c.gameObject.SetActive(false);
             LoadAppearance();BuildWorld();BuildAudio();BuildThumbnails();RefreshPhotoArt();stage=Stage.Welcome;ShowPlayer();
+            if(!ProofMode){BuildTitlePhoto();stage=Stage.Title;}
             if(ProofMode){mutedAudio=true;StartCoroutine(CaptureFirstPersonProof());}
         }
         Material Mat(Color color) { var m=new Material(Resources.Load<Material>("PrototypeBase")); m.color=color; return m; }
@@ -59,12 +60,26 @@ namespace FitCheck
             studio.PlayerLook=playerAppearance;studio.Build();cam=studio.Camera;mannequin=studio.Avatar;Apply();UpdateCamera();
         }
         void Apply(){studio.Apply(outfit,customer);}
-        void UpdateCamera(){if(stage==Stage.Dialogue&&shopService){FrameShopDialogue();return;}if(stage==Stage.CharacterCreator){studio.SetHome(false);studio.Pose(rotation,distance,0);return;}if(stage==Stage.City){var p=cam.transform.position;var r=cam.transform.rotation;city.Frame(cam,reducedMotion,paused?0:Time.unscaledDeltaTime);if(ShopSequenceActive&&paused)cam.transform.SetPositionAndRotation(p,r);else UpdateShopSequence(Time.unscaledDeltaTime);return;}studio.SetHome(stage==Stage.Home);studio.Pose(rotation,distance,stage==Stage.Welcome||stage==Stage.Home?-.95f:.9f);}
+        void UpdateCamera()
+        {
+            if(shopDressingInStore&&(stage==Stage.Dressing||stage==Stage.Confirm)){FrameShopDressing();return;}
+            if(stage==Stage.Dialogue&&shopService){FrameShopDialogue();return;}
+            if(stage==Stage.CharacterCreator){studio.SetHome(false);studio.Pose(rotation,distance,0);return;}
+            if(stage==Stage.City){
+                var p=cam.transform.position;var r=cam.transform.rotation;float fov=cam.fieldOfView;
+                city.Frame(cam,reducedMotion,paused?0:Time.unscaledDeltaTime);
+                if(ShopSequenceActive&&paused){cam.transform.SetPositionAndRotation(p,r);cam.fieldOfView=fov;}
+                else UpdateShopSequence(Time.unscaledDeltaTime);
+                return;
+            }
+            studio.SetHome(stage==Stage.Home);studio.Pose(rotation,distance,stage==Stage.Welcome||stage==Stage.Home?-.95f:.9f);
+        }
         void Update()
         {
             var retro=cam.GetComponent<RetroCamera>();retro.ReducedMotion=reducedMotion;retro.Paused=paused;retro.Filter=retroFilter;
             studio.ReducedMotion=reducedMotion;studio.Animate(Time.deltaTime,!paused);
             if(stage==Stage.City)UpdateCity(Time.deltaTime);
+            if(!paused){if(stage==Stage.Dialogue&&shopService)shopCameraTime+=Time.unscaledDeltaTime;if(shopDressingInStore)shopDressingTime+=Time.unscaledDeltaTime;}
             UpdateCamera();
             FinishShopFittingEntryIfReady();
             AdvanceClock(Time.deltaTime);
@@ -88,7 +103,7 @@ namespace FitCheck
             detailsScroll=Vector2.zero; rotation=-12;distance=7.2f;stage=Stage.Dialogue;Apply();UpdateCamera();
             mannequin.name=Customer.name+" — manequim provisório";
         }
-        void SaveDay(){ProgressStore.Save(DayPath,progress);}
+        void SaveDay(){if(activeSaveSlot<0&&storageOverride==null)throw new InvalidOperationException("Selecione um save antes de salvar.");ProgressStore.Save(DayPath,progress);}
         void EnterDressing(){stage=Stage.Dressing;remaining=120;timerWarned=false;showRequest=false;}
         void GoHome(){shopService=false;if(!playerAppearance.created){OpenCreator(Stage.Home);return;}stage=Stage.Home;fromHome=true;replayIndex=-1;showWardrobe=false;studio.ApplyUniform(progress.uniform);}
         void Replay()

@@ -14,13 +14,13 @@ namespace FitCheck
             public Transform root,shadow;public Vector3 home;public Quaternion facing;
             public List<ResidentPart> parts=new List<ResidentPart>();
             public Vector2[] path;public int target;public float cycle,wait,phase,speed,blend;public bool walking;
-            public bool wallLean,oneShot;public Vector3 leanAnkle;
+            public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;
         }
         [SerializeField] List<Resident> residents=new List<Resident>();
-        const int ResidentArtRevision=5;
+        const int ResidentArtRevision=7;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
-            if(motionRigVersion!=ResidentArtRevision||residents.Count!=(IsInterior?1:4))return false;
+            if(motionRigVersion!=ResidentArtRevision||residents.Count!=(IsInterior?2:4))return false;
             if(IsInterior&&(fittingCurtains==null||fittingCurtains.Length!=2||fittingCurtains[0]==null||fittingCurtains[1]==null))return false;
             foreach(var actor in residents)if(actor.root==null||actor.parts.Count==0)return false;
             return true;
@@ -38,12 +38,12 @@ namespace FitCheck
         }
         bool ResidentBlocks(Vector2 point)
         {
-            foreach(var actor in residents){var p=actor.root.localPosition;if(Mathf.Abs(point.x-p.x)<.78f&&Mathf.Abs(point.y-p.z)<.73f)return true;}return false;
+            foreach(var actor in residents){if(!actor.root.gameObject.activeSelf)continue;var p=actor.root.localPosition;if(Mathf.Abs(point.x-p.x)<.78f&&Mathf.Abs(point.y-p.z)<.73f)return true;}return false;
         }
         void TickResidents(float delta)
         {
             for(int index=0;index<residents.Count;index++){
-                var actor=residents[index];actor.cycle+=delta;actor.walking=false;
+                var actor=residents[index];if(!actor.root.gameObject.activeSelf)continue;actor.cycle+=delta;actor.walking=false;
                 var pos=actor.root.localPosition;float travelled=0;
                 // Unity can restore a null route as an empty array after a script reload.
                 if(actor.path!=null&&actor.path.Length==0)actor.path=null;
@@ -53,15 +53,20 @@ namespace FitCheck
                     else{
                         var current=new Vector2(pos.x,pos.z);var destination=actor.path[actor.target];
                         var direction=destination-current;float distance=direction.magnitude;
+                        if(actor.oneShot&&actor.target<actor.path.Length-1&&distance<.20f){
+                            destination=actor.path[++actor.target];direction=destination-current;distance=direction.magnitude;
+                        }
                         var desired=distance>.001f?Quaternion.LookRotation(new Vector3(-direction.x,0,-direction.y)):actor.facing;
                         actor.facing=Quaternion.RotateTowards(actor.facing,desired,delta*170);
                         // Turn before travelling, then accelerate and ease into each stop.
                         float alignment=Quaternion.Angle(actor.facing,desired);
-                        float desiredSpeed=alignment>32?0:Mathf.Min(index==1?1.38f:1.59f,distance*3.3f);
+                        bool passingCorner=actor.oneShot&&actor.target<actor.path.Length-1;
+                        float maxSpeed=actor.oneShot?1.8f:index==1?1.38f:1.59f;
+                        float desiredSpeed=alignment>(actor.oneShot?55:32)?0:Mathf.Min(maxSpeed,passingCorner?maxSpeed:distance*3.3f);
                         actor.speed=Mathf.MoveTowards(actor.speed,desiredSpeed,delta*2.7f);
                         var next=Vector2.MoveTowards(current,destination,delta*actor.speed);
                         bool occupied=!actor.oneShot&&Vector2.Distance(next,Position)<1.0f;
-                        foreach(var other in residents){if(other==actor)continue;var p=other.root.localPosition;if(Vector2.Distance(next,new Vector2(p.x,p.z))<1.0f)occupied=true;}
+                        foreach(var other in residents){if(other==actor||!other.root.gameObject.activeSelf)continue;var p=other.root.localPosition;if(Vector2.Distance(next,new Vector2(p.x,p.z))<1.0f)occupied=true;}
                         if(!occupied){
                             travelled=Vector2.Distance(next,current);actor.walking=travelled>.00001f;pos.x=next.x;pos.z=next.y;
                             if(Vector2.Distance(next,destination)<.04f){
@@ -73,6 +78,7 @@ namespace FitCheck
                 }
                 actor.phase=Mathf.Repeat(actor.phase+travelled/.90f,1);
                 actor.blend=Mathf.MoveTowards(actor.blend,actor.walking?1:0,delta*5);
+                actor.leanBlend=actor.wallLean?Mathf.MoveTowards(actor.leanBlend,actor.leanTarget,delta*3.2f):0;
                 float dip=actor.blend*(.035f+.005f*Mathf.Cos(actor.phase*Mathf.PI*4));
                 pos.y=actor.home.y-dip;
                 actor.root.localPosition=pos;actor.root.localRotation=actor.facing;
@@ -99,15 +105,20 @@ namespace FitCheck
         }
         BodyPose ResidentBody(Resident actor,int index)
         {
-            if(actor.wallLean)return ShopLeanBody(actor);
             float b=actor.blend,wave=Mathf.Sin(actor.phase*Mathf.PI*2)*b,idle=1-b;
             var torso=Quaternion.Euler(-2.6f*b,-wave*4.5f+Mathf.Sin(actor.cycle*.7f+index)*.5f*idle,-wave*1.5f);
-            return new BodyPose{
+            var body=new BodyPose{
                 pelvis=Quaternion.Euler(0,wave*3,wave*1.8f),torso=torso,
                 head=torso*Quaternion.Euler(1.2f*b,wave*1.5f+Mathf.Sin(actor.cycle*.6f+index)*1.2f*idle,wave*.6f),
                 pelvisShift=new Vector3(wave*.027f,0,-.011f*b),
                 torsoShift=new Vector3(wave*.027f,Mathf.Sin(actor.cycle*1.3f)*.004f*idle,-.022f*b)
             };
+            if(actor.wallLean){
+                var lean=ShopLeanBody(actor);float f=Mathf.SmoothStep(0,1,actor.leanBlend);
+                body.pelvis=Quaternion.Slerp(body.pelvis,lean.pelvis,f);body.torso=Quaternion.Slerp(body.torso,lean.torso,f);body.head=Quaternion.Slerp(body.head,lean.head,f);
+                body.pelvisShift=Vector3.Lerp(body.pelvisShift,lean.pelvisShift,f);body.torsoShift=Vector3.Lerp(body.torsoShift,lean.torsoShift,f);
+            }
+            return body;
         }
         LegPose ResidentLeg(Resident actor,float side,float dip,BodyPose body)
         {
@@ -115,8 +126,8 @@ namespace FitCheck
             float z=phase<.5f?Mathf.Lerp(-.225f,.225f,phase*2):Mathf.Lerp(.225f,-.225f,Mathf.SmoothStep(0,1,swing));
             var leg=new LegPose{hipRest=new Vector3(side*.225f,1.175f,0),kneeRest=new Vector3(side*.225f,.675f,side<0?-.025f:.012f),ankleRest=new Vector3(side*.225f,.265f,side<0?-.040f:.020f)};
             leg.hip=body.PelvisPoint(leg.hipRest);
-            leg.ankle=leg.ankleRest+new Vector3(0,(phase<.5f?0:Mathf.Sin(swing*Mathf.PI)*.13f)+dip,z);
-            if(actor.wallLean)leg.ankle=side>0?actor.leanAnkle:leg.ankleRest;
+            leg.ankle=leg.ankleRest+new Vector3(0,(phase<.5f?0:Mathf.Sin(swing*Mathf.PI)*.13f)*actor.blend+dip,z*actor.blend);
+            if(actor.wallLean)leg.ankle=Vector3.Lerp(leg.ankle,side>0?actor.leanAnkle:leg.ankleRest,Mathf.SmoothStep(0,1,actor.leanBlend));
             float upper=Vector3.Distance(leg.hipRest,leg.kneeRest),lower=Vector3.Distance(leg.kneeRest,leg.ankleRest);
             var line=leg.ankle-leg.hip;float distance=Mathf.Clamp(line.magnitude,.05f,upper+lower-.0001f);var direction=line.normalized;
             float along=(upper*upper-lower*lower+distance*distance)/(2*distance);
@@ -124,7 +135,8 @@ namespace FitCheck
             leg.knee=leg.hip+direction*along+bend*Mathf.Sqrt(Mathf.Max(0,upper*upper-along*along));
             leg.upper=Quaternion.FromToRotation(leg.kneeRest-leg.hipRest,leg.knee-leg.hip);
             leg.lower=Quaternion.FromToRotation(leg.ankleRest-leg.kneeRest,leg.ankle-leg.knee);
-            leg.foot=actor.wallLean?(side>0?ShopLeanFoot:Quaternion.identity):Quaternion.Euler(phase<.5f?0:-Mathf.Sin(swing*Mathf.PI)*7,0,0);return leg;
+            leg.foot=Quaternion.Euler(phase<.5f?0:-Mathf.Sin(swing*Mathf.PI)*7*actor.blend,0,0);
+            if(actor.wallLean)leg.foot=Quaternion.Slerp(leg.foot,side>0?ShopLeanFoot:Quaternion.identity,Mathf.SmoothStep(0,1,actor.leanBlend));return leg;
         }
         void PoseResident(Resident actor,int index,float dip)
         {

@@ -1,0 +1,61 @@
+using System;
+using System.IO;
+using UnityEngine;
+
+namespace FitCheck
+{
+    public partial class FirstCustomer
+    {
+        void CheckSaveSlots(string folder)
+        {
+            var originalProgress=progress;var originalAppearance=playerAppearance;var originalRecord=record;
+            string originalStorage=storageOverride,originalLibrary=saveLibraryOverride;
+            int originalSlot=activeSaveSlot,originalSelected=selectedSave;
+            string library=Path.Combine(folder,"save-slots-"+Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(library);
+            try{
+                Home();saveLibraryOverride=library;
+                var legacy=new DayProgress();
+                for(int i=0;i<9;i++){
+                    legacy.Add(new Attempt{outfit=(string[])Catalog.Default.Clone(),question=1});
+                    if(legacy.DayComplete){legacy.Close();if(i<8)legacy.Advance();}
+                }
+                ProgressStore.Save(Path.Combine(library,"day-one.json"),legacy);
+                AppearanceStore.Save(Path.Combine(library,"player-appearance.json"),new PlayerAppearance{created=true,name="Lia",hair=1,skin=2,hairColor=5});
+                string originalLegacy=File.ReadAllText(Path.Combine(library,"day-one.json"));
+                OpenSaveSelection();
+                if(!saveSlots[0].progress.Complete||saveSlots[0].appearance.name!="Lia"||saveSlots[1].exists||saveSlots[2].exists)throw new Exception("Migração não preservou a semana ou ocupou outro espaço");
+                PreviewSave(0);OpenSelectedSave();
+                if(stage!=Stage.Home||!progress.Complete)throw new Exception("Continuar save não retomou a semana concluída");
+                string first=File.ReadAllText(DayPath);
+                OpenSaveSelection();PreviewSave(1);OpenSelectedSave();
+                if(stage!=Stage.CharacterCreator||progress.posts.Count!=0)throw new Exception("Novo save não abriu criação independente");
+                CancelCreator();
+                if(SaveSlots.Read(library,1).exists)throw new Exception("Cancelar criação ocupou espaço vazio");
+                OpenSaveSelection();PreviewSave(1);OpenSelectedSave();creatorDraft.name="Duda";creatorDraft.hair=3;creatorDraft.skin=1;RefreshCreator();
+                if(!SaveCreator()||stage!=Stage.Home||!File.Exists(DayPath))throw new Exception("Novo save não persistiu personagem e campanha");
+                EnterShop();SettleShopArrival();MoveProof(CityView.ShopCounter,180,0);InteractShop();
+                if(stage!=Stage.Dialogue||!shopService)throw new Exception("Save novo abriu resumo em vez de cliente");
+                Home();progress.Add(new Attempt{outfit=(string[])Catalog.Default.Clone(),question=1});SaveDay();
+                OpenSaveSelection();PreviewSave(2);OpenSelectedSave();creatorDraft.name="Nico";creatorDraft.hair=2;creatorDraft.skin=4;RefreshCreator();
+                if(!SaveCreator())throw new Exception("Terceiro espaço não salvou");
+                bool refused=false;try{SaveSlots.Folder(library,3);}catch(ArgumentOutOfRangeException){refused=true;}
+                if(!refused)throw new Exception("Mais de três espaços permitidos");
+                if(File.ReadAllText(Path.Combine(SaveSlots.Folder(library,0),"day-one.json"))!=first||File.ReadAllText(Path.Combine(library,"day-one.json"))!=originalLegacy)throw new Exception("Novo jogo alterou o save antigo");
+                OpenSaveSelection();PreviewSave(1);OpenSelectedSave();
+                if(progress.posts.Count!=1||playerAppearance.name!="Duda")throw new Exception("Troca de save misturou progresso/aparência");
+                string second=DayPath;ProgressStore.Save(second,progress);File.WriteAllText(second,"invalid");
+                if(SaveSlots.Read(library,1).progress.posts.Count!=1||SaveSlots.Read(library,1).error!=null)throw new Exception("Backup do slot não recuperou campanha");
+                File.WriteAllText(second+".bak","invalid");
+                OpenSaveSelection();PreviewSave(1);
+                if(OpenSelectedSave()||File.ReadAllText(second)!="invalid")throw new Exception("Slot corrompido sobrescrito");
+                ProgressStore.Save(second,progress);
+                BuildTitlePhoto();File.WriteAllBytes(Path.Combine(folder,"title-facade-photo.png"),titlePhoto.EncodeToPNG());
+                Debug.Log("FITCHECK_SAVE_SLOTS_PASSED: three independent slots; legacy completed week retained; creation/cancel, switching, new-store customer, backup recovery and corrupt-slot protection.");
+            }finally{
+                Home();progress=originalProgress;playerAppearance=originalAppearance;record=originalRecord;storageOverride=originalStorage;saveLibraryOverride=originalLibrary;
+                activeSaveSlot=originalSlot;selectedSave=originalSelected;Home();UpdateCamera();
+            }
+        }
+    }
+}

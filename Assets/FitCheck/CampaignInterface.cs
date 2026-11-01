@@ -74,7 +74,7 @@ namespace FitCheck
                 }
                 if(Tap(new Rect(48,725,500,50),"Voltar"))showWardrobe=false;
             }
-            if(Tap(new Rect(48,817,200,45),"Menu principal"))Home();
+            if(Tap(new Rect(48,817,200,45),"Menu principal"))ReturnToTitle();
             Txt(new Rect(270,815,295,64),message,tiny,muted);
         }
         void SummaryUI()
@@ -119,6 +119,6 @@ namespace FitCheck
             if(!focus&&(stage==Stage.Dressing||stage==Stage.Confirm)){paused=true;dragging=false;}
             if(!focus&&stage==Stage.City){dragging=false;SyncCityCursor();}
         }
-        void OnDestroy(){Font.textureRebuilt-=FontRebuilt;if(photo!=null)Destroy(photo);foreach(var t in lockedThumbnails.Values)Destroy(t);foreach(var t in feedPhotos.Values)Destroy(t);if(clickSound!=null)Destroy(clickSound);if(photoSound!=null)Destroy(photoSound);if(awardSound!=null)Destroy(awardSound);}
+        void OnDestroy(){Font.textureRebuilt-=FontRebuilt;if(titlePhoto!=null)Destroy(titlePhoto);if(photo!=null)Destroy(photo);foreach(var t in lockedThumbnails.Values)Destroy(t);foreach(var t in feedPhotos.Values)Destroy(t);if(clickSound!=null)Destroy(clickSound);if(photoSound!=null)Destroy(photoSound);if(awardSound!=null)Destroy(awardSound);}
     }
 }

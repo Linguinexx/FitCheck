@@ -6,11 +6,16 @@ Jogo 3D de montagem de looks streetwear em Unity **6000.6.7f1**. Arte em desenvo
 
 1. Adicione esta pasta ao Unity Hub com a versão indicada.
 2. Abra `Assets/Scenes/FirstCustomer.unity` e pressione **Play**.
-3. Crie seu personagem e escolha **Ir trabalhar**, ou use **Visitar a loja** na tela inicial.
+3. Na tela da fachada, clique em **Jogar** e selecione um dos três saves. Um espaço vazio abre a criação do personagem; um save existente retoma sua semana em casa.
+4. Em casa, escolha **Ir trabalhar**. Ao terminar um dia, feche o expediente e durma para começar o seguinte.
+
+Cada save mantém aparência, campanha e fotos separadas em `saves/slot-1`, `slot-2` ou `slot-3`, dentro da pasta de dados persistentes da Unity. Na primeira seleção, o progresso da versão anterior é copiado para o primeiro espaço; os arquivos originais e as fotos antigas permanecem preservados. Não há sobrescrita ou exclusão de saves pela interface.
 
 Na exploração, **WASD** move, **mouse** olha, **E** interage, **Esc** pausa e **Tab** libera ou captura o cursor. No Editor, dê foco à aba **Game**. Menus e provador usam o mouse livre.
 
-O cliente entra na loja e espera pelo atendimento. Após conversar e escolher uma pergunta opcional, ele caminha até o provador; a câmera se aproxima e a cortina abre antes da montagem do fit. Ao finalizar, o cliente sai usando o look e o resultado aparece no FitFeed.
+O rapaz encostado na parede é um frequentador fixo da loja, separado dos atendimentos. O cliente entra, caminha até a frente do balcão e espera. Passe por trás do balcão e pressione **E** para atendê-lo. Após conversar e escolher uma pergunta opcional, ele caminha até o provador; a câmera se aproxima e a cortina abre antes da montagem do fit. Ao finalizar, o cliente sai usando o look e o resultado aparece no FitFeed. O frequentador permanece na loja.
+
+A montagem acontece no próprio provador da loja. Arraste o personagem para girar e use a roda do mouse para aproximar ou afastar. O cliente vira-se ao chegar e apresenta o fit antes de sair. Pausa interrompe a sequência; cancelar e voltar ao início reinicia o atendimento sem finalizar um look.
 
 O passeio no bairro é separado da loja nesta versão. A ligação física entre ambientes e as transições gerais ainda estão em desenvolvimento.
 

@@ -29,10 +29,12 @@ namespace FitCheck
         }
         void ExitCity()
         {
-            if(city==null)return;studio.EndCityWalk();city.gameObject.SetActive(false);mannequin.position=Vector3.zero;mannequin.gameObject.SetActive(true);
+            if(city==null)return;bool discardShop=city.IsInterior&&(shopDressingInStore||ShopSequenceActive);
+            studio.EndCityWalk();city.gameObject.SetActive(false);mannequin.position=Vector3.zero;mannequin.gameObject.SetActive(true);
             cam.clearFlags=beforeCityClearFlags;var sky=cam.GetComponent<Skybox>();if(sky!=null){sky.material=beforeCitySky;sky.enabled=beforeCitySkyEnabled;}
             cam.orthographic=false;cam.backgroundColor=beforeCityBackground;cam.fieldOfView=beforeCityFov;cam.nearClipPlane=beforeCityNearClip;
-            cityLookCaptured=false;cityDragLook=false;shopFittingOpening=false;shopSequence=ShopSequence.None;
+            cityLookCaptured=false;cityDragLook=false;shopFittingOpening=false;shopSequence=ShopSequence.None;shopDressingInStore=false;
+            if(discardShop&&shop==city){var previousShop=shop;shop=null;Destroy(previousShop.gameObject);}
             if(!ProofMode){Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
         }
         void SyncCityCursor(bool apply=false)
@@ -92,16 +94,16 @@ namespace FitCheck
         }
         void CityUI()
         {
-            if(ShopSequenceActive){Fill(new Rect(440,760,560,76),new Color(.04f,.035f,.045f,.94f));Txt(new Rect(458,776,524,45),ShopSequenceLabel,action,paper);return;}
+            if(ShopSequenceActive){Fill(new Rect(440,814,560,58),new Color(.04f,.035f,.045f,.94f));Txt(new Rect(458,822,524,43),ShopSequenceLabel,action,paper);return;}
             if(cityFreeCursor&&Tap(new Rect(38,111,350,48),"Clique para olhar  /  Tab")){cityFreeCursor=false;SyncCityCursor();}
-            if(Tap(new Rect(1200,111,203,48),"Voltar ao início"))Home();
+            if(Tap(new Rect(1200,111,203,48),"Voltar ao início"))ReturnToTitle();
             Fill(new Rect(38,796,660,67),new Color(.055f,.043f,.077f,.88f));
             Txt(new Rect(58,803,620,24),city.IsInterior?"DRIPLAB  /  LOJA":city.Place,tiny,violet);
             Txt(new Rect(58,831,620,24),"WASD andar  /  Mouse olhar  /  E interagir  /  Esc pausa",tiny,paper);
             if(city.IsInterior){
                 string label=ShopActionLabel();
                 if(label.Length>0){Fill(new Rect(440,680,560,76),new Color(.04f,.035f,.045f,.94f));Txt(new Rect(458,696,524,45),shopFittingOpening?label:"E  /  "+label,action,paper);}
-                else if(!cityFreeCursor){Fill(new Rect(38,111,515,66),new Color(.04f,.035f,.045f,.88f));Txt(new Rect(56,121,480,48),"Explore a loja. Aproxime-se do cliente para atender.",caption,paper);}
+                else if(!cityFreeCursor){Fill(new Rect(38,111,515,66),new Color(.04f,.035f,.045f,.88f));Txt(new Rect(56,121,480,48),city.CustomerWaitingAtCounter?"Cliente no balcão. Passe por trás para atender.":"Explore a loja e aguarde o próximo cliente.",caption,paper);}
             }
             if(cityFreeCursor)Txt(new Rect(440,750,560,32),"Também pode segurar o botão direito para olhar.",caption,paper);
             ProcessCityEvent(Event.current);
@@ -148,10 +150,8 @@ namespace FitCheck
             if(pendingPhotoBytes!=null&&!TrySave())return false;
             if(action==2){shopFittingOpening=true;city.OpenFittingCurtain();return true;}
             if(progress.DayComplete){ExitCity();stage=Stage.Summary;return true;}
-            stage=Stage.Welcome;
-            Begin();
-            shopService=stage==Stage.Dialogue;
-            if(shopService)FrameShopDialogue();
+            if(!city.CustomerWaitingAtCounter)return false;
+            StartShopConversation();
             SyncCityCursor();return true;
         }
         void FinishShopFittingEntryIfReady()

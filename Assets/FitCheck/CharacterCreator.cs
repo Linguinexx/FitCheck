@@ -8,7 +8,7 @@ namespace FitCheck
     {
         PlayerAppearance playerAppearance=new PlayerAppearance(),creatorDraft;
         Stage creatorReturn,creatorDestination;
-        string AppearancePath=>Path.Combine(storageOverride??Application.persistentDataPath,"player-appearance.json");
+        string AppearancePath=>Path.Combine(SessionFolder,"player-appearance.json");
         static readonly Color CreatorRed=new Color(227/255f,6/255f,19/255f);
         void LoadAppearance()
         {try{playerAppearance=AppearanceStore.Load(AppearancePath);}catch{playerAppearance=new PlayerAppearance();message="Não foi possível ler a aparência. Você pode criar outra.";}}
@@ -25,7 +25,7 @@ namespace FitCheck
         bool SaveCreator()
         {
             var saved=creatorDraft.Copy();saved.name=saved.name.Trim();saved.created=true;
-            try{AppearanceStore.Save(AppearancePath,saved);}catch(Exception error){message="Não foi possível salvar: "+error.Message;return false;}
+            try{AppearanceStore.Save(AppearancePath,saved);SaveDay();}catch(Exception error){message="Não foi possível salvar: "+error.Message;return false;}
             playerAppearance=saved;LeaveCreator(creatorDestination);return true;
         }
         void CancelCreator(){LeaveCreator(creatorReturn);}

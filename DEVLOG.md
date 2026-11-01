@@ -1,5 +1,33 @@
 # DevLog
 
+## 01/11/2026 — Fachada na entrada e três saves
+
+Tela inicial separada com fotografia renderizada da fachada noturna em perspectiva e botão Jogar. A tela anterior vira seleção de três espaços: nomes, estado da semana e prévia tridimensional do personagem selecionado. Espaço vazio abre o criador; salvar cria aparência e campanha próprias, e continuar retoma em casa. Retorno ao menu passa pela tela da fachada.
+
+Dados organizados em saves/slot-1 a slot-3. Importação copia a campanha/aparência anteriores para o primeiro espaço, preservando os arquivos de origem e as fotos referenciadas pelo FitFeed. Criar ou cancelar um personagem não altera os outros saves. Slots ilegíveis ficam bloqueados para evitar sobrescrita; backups de campanha e aparência continuam disponíveis. Saves sem slot selecionado não podem gravar o progresso legado.
+
+Verificação nativa cobre migração de semana concluída, criação/cancelamento, três slots independentes, limite de três, troca de personagem/progresso, recuperação de backup e bloqueio de arquivos corrompidos. Também verifica que um save novo recebe o cliente na loja em vez de abrir resumo. Atendimento completo e verificações anteriores preservados. Destino do build: Windows-SaveSlots; logs save-slots em ../tools.
+
+Terceiro pedido de trabalho desde o último envio: preparar commit e push após a verificação final, conforme frequência solicitada.
+
+## 01/11/2026 — Frequentador fixo e clientes separados
+
+Corrigida a interpretação do personagem encostado: ele é um frequentador fixo, com roupa e pose próprias, e permanece na loja durante todo o atendimento. Um segundo personagem entra pela porta, caminha até a frente do balcão e espera indefinidamente até o jogador atendê-lo por trás do balcão com E. Após a conversa, somente esse cliente segue ao provador, troca de roupa e sai. A montagem do look substitui apenas o avatar do cliente; o frequentador é preservado.
+
+A câmera acompanha o cliente contornando o balcão antes de se aproximar do provador. Checagens nativas verificaram os dois papéis durante chegada, espera de quatro segundos sem interação, conversa, caminhada, montagem, saída e próximo pedido. Interagir perto do frequentador não inicia atendimento. Continuidade da câmera, pausa, cancelamento, FitFeed e verificações anteriores aprovados. Build Windows-CounterClients sem erros nem avisos; capturas em Captures/CounterClients. Prévia de câmera validada em 317 quadros, 30 fps, 960×540, sem interface IMGUI.
+
+Contagem de trabalho desde o último envio ao GitHub: 2/3. A mensagem duplicada interrompida não foi contada novamente.
+
+## 01/11/2026 — Atendimento contínuo no interior da loja
+
+A montagem do fit agora acontece fisicamente no provador da loja. O cliente sai da pose apoiada, percorre uma rota com curvas sem parar em cada ponto, aguarda a cortina, entra e vira-se para a câmera antes da interface de roupas. O avatar editável ocupa a posição do cliente, com a sombra mantida e sem duplicação. Giro e zoom continuam disponíveis; o enquadramento mantém espaço para os controles. Ao finalizar, o cliente apresenta o look, caminha para a saída e só depois entra o FitFeed.
+
+Adicionadas aproximações suaves na conversa/provador e retorno gradual à câmera do jogador após a chegada. A pose apoiada ganha entrada e saída graduais. Pés e pernas retornam à posição de descanso ao parar. A câmera e seu campo de visão congelam na pausa, e o cronômetro não consome tempo durante a caminhada.
+
+Cancelar uma sequência ou a montagem descarta o estado parcial da loja, evitando cliente invisível ou preso no provador ao retornar. Checagens nativas aprovadas: continuidade da câmera, ambiente físico da montagem, giro, estoque/pergunta, cronômetro/pausa, cancelamento, saída com look salvo e próximo cliente. Build Windows-ShopFlow sem erros nem avisos. Capturas e prévia de câmera em Captures/ShopFlow; a prévia é renderização da cena, sem a interface IMGUI.
+
+Nova rodada de trabalho desde o último envio ao GitHub: 1/3. Alterações mantidas locais até completar a frequência solicitada.
+
 ## 01/11/2026 — Volume e postura natural das mãos
 
 A construção plana anterior foi substituída por uma superfície tridimensional contínua: palma arredondada, quatro dedos próximos com duas falanges curvadas e polegar flexionado. A base é calculada uma vez e reutilizada; cada avatar recebe sua própria malha para a animação. Palmas voltadas ao corpo; contorno preto desligado somente nas mãos para evitar riscos artificiais nas dobras. Revisão dos avatares incrementada para reconstruir cópias antigas no Play.

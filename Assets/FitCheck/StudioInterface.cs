@@ -44,7 +44,7 @@ namespace FitCheck
         }
         void Home()
         {
-            if(stage==Stage.City||(shopService&&stage==Stage.Dialogue))ExitCity();
+            if(stage==Stage.City||(shopService&&stage==Stage.Dialogue)||shopDressingInStore)ExitCity();
             shopService=false;shopSequence=ShopSequence.None;
             if(stage==Stage.CharacterCreator){creatorDraft=null;studio.PlayerLook=playerAppearance;}
             studio.TallPreview=false;studio.PreviewProportions=false;studio.ExpressionOverride=-1;studio.HairOverride=-1;
@@ -91,11 +91,12 @@ namespace FitCheck
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){if(renderedStage==Stage.CharacterCreator&&!paused)CancelCreator();else if(renderedStage==Stage.Confirm&&!paused)stage=Stage.Dressing;else paused=!paused;dragging=false;e.Use();}
             bool modal=paused || renderedStage==Stage.Confirm;
             GUI.enabled=!modal;
+            if(renderedStage==Stage.Title)TitleUI();else{
             // The header is deliberately quieter than the outfit.
             Fill(new Rect(0,0,1440,88),new Color(.045f,.035f,.065f,.97f));
             Txt(new Rect(38,22,280,45),"FIT CHECK",heading);
             Txt(new Rect(244,33,180,28),"by DripLab",caption,muted);
-            Txt(new Rect(965,28,300,30),stage==Stage.City?(city.IsInterior?"DRIPLAB  /  LOJA":"PRAÇA DO ENCONTRO"):campaignBeforePreview!=null?"PRÉVIA  /  CAMPANHA PRESERVADA":"DIA 0"+progress.day+"  /  DRIPLAB",tiny,muted);
+            Txt(new Rect(965,28,300,30),stage==Stage.Welcome?"SEUS PERSONAGENS":stage==Stage.City?(city.IsInterior?"DRIPLAB  /  LOJA":"PRAÇA DO ENCONTRO"):campaignBeforePreview!=null?"PRÉVIA  /  CAMPANHA PRESERVADA":"DIA 0"+progress.day+"  /  DRIPLAB",tiny,muted);
             if(Tap(new Rect(1298,20,105,46),"Pausa"))paused=true;
             if(renderedStage==Stage.Welcome)WelcomeUI();
             if(renderedStage==Stage.Dialogue)DialogueUI();
@@ -112,6 +113,7 @@ namespace FitCheck
             if(renderedStage==Stage.Retrospective)RetrospectiveUI();
             if(renderedStage==Stage.City)CityUI();
             if(renderedStage==Stage.CharacterCreator&&stage==Stage.CharacterCreator)CreatorUI();
+            }
             GUI.enabled=true;
             if(renderedStage==Stage.Confirm&&!paused){
                 Fill(new Rect(0,0,1440,900),new Color(.025f,.018f,.04f,.88f));
@@ -126,7 +128,7 @@ namespace FitCheck
                 Txt(new Rect(510,300,500,90),"Uma pausa.",display);
                 Txt(new Rect(515,408,440,50),"Seu atendimento continua daqui.",copy,muted);
                 if(Tap(new Rect(515,495,410,64),"Retomar",true))paused=false;
-                if(Tap(new Rect(515,578,410,56),"Voltar ao início")){paused=false;Home();}
+                if(Tap(new Rect(515,578,410,56),"Voltar ao início")){paused=false;ReturnToTitle();}
                 if(Tap(new Rect(515,650,410,48),mutedAudio?"Sons: desligados":"Sons: ligados")){mutedAudio=!mutedAudio;PlayerPrefs.SetInt("FitCheck.Mute",mutedAudio?1:0);PlayerPrefs.Save();}
                 if(Tap(new Rect(515,713,410,48),"Salvar novamente"))TrySave();
                 if(Tap(new Rect(515,777,410,48),reducedMotion?"Movimento reduzido: sim":"Movimento reduzido: não")){reducedMotion=!reducedMotion;PlayerPrefs.SetInt("FitCheck.ReducedMotion",reducedMotion?1:0);PlayerPrefs.Save();}
@@ -138,16 +140,7 @@ namespace FitCheck
         }
         void WelcomeUI()
         {
-            Fill(new Rect(0,88,520,812),new Color(.055f,.043f,.077f,.97f));
-            Txt(new Rect(58,153,430,35),"VISTA UMA HISTÓRIA.",caption,violet);
-            Txt(new Rect(50,214,490,200),"FIT\nCHECK",display);
-            Txt(new Rect(60,443,410,132),"Ouça o pedido. Encontre o visual. Veja ele ganhar a cidade.",heading);
-            if(Tap(new Rect(60,584,400,48),playerAppearance.created?"Editar meu personagem":"Criar meu personagem"))OpenCreator();
-            if(Tap(new Rect(60,652,400,64),progress.Complete?"Voltar para casa  →":progress.posts.Count==0?"Começar minha semana  →":"Continuar minha semana  →",true))GoHome();
-            if(Tap(new Rect(60,737,400,54),"Experimentar sem alterar a campanha"))PreviewSession();
-            if(Tap(new Rect(60,803,194,48),"Passear no bairro"))EnterCity();
-            if(Tap(new Rect(266,803,194,48),"Visitar a loja"))EnterShop();
-            Txt(new Rect(60,864,400,28),message.Length>0?message:"O progresso é salvo após cada atendimento.",tiny,muted);
+            SaveSelectionUI();
         }
         void CustomerBadge()
         {
@@ -266,13 +259,13 @@ namespace FitCheck
             Txt(new Rect(52,827,596,54),message, tiny,muted);
             if(campaignBeforePreview!=null){
                 if(Tap(new Rect(704,805,390,60),"Continuar experimentando",true))stage=Stage.Dressing;
-                if(Tap(new Rect(1114,805,240,60),"Menu"))Home();
+                if(Tap(new Rect(1114,805,240,60),"Menu"))ReturnToTitle();
             }else if(fromHome){
                 if(Tap(new Rect(704,805,390,60),"Refazer nas condições originais",true))Replay();
                 if(Tap(new Rect(1114,805,240,60),"Voltar para casa"))GoHome();
             }else{
                 if(Tap(new Rect(704,805,390,60),progress.DayComplete?"Fechar expediente  →":"Próximo cliente  →",true)){if(progress.DayComplete)stage=Stage.Summary;else if(shopService){shopService=false;EnterShop();}else Begin();}
-                if(Tap(new Rect(1114,805,240,60),"Menu"))Home();
+                if(Tap(new Rect(1114,805,240,60),"Menu"))ReturnToTitle();
             }
         }
     }

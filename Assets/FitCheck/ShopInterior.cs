@@ -10,13 +10,17 @@ namespace FitCheck
         public int ShopCustomerIndex=>shopCustomerIndex;
         public static readonly Rect ShopBounds=new Rect(-7.7f,-4.8f,15.4f,13.6f);
         public static readonly Vector2 ShopSpawn=new Vector2(0,-3.5f);
-        public static readonly Vector2 ShopCounter=new Vector2(0,6.6f),ShopFitting=new Vector2(-4.9f,4.1f);
+        public static readonly Vector2 ShopCounter=new Vector2(4.4f,7.65f),ShopCustomerQueue=new Vector2(4.4f,4.5f),ShopFitting=new Vector2(-4.9f,4.1f);
         static readonly Color FittingPurple=new Color(.35f,.14f,.57f);
         public void BuildShop(StudioView studio,int customer=0)
         {
             interior=true;shopCustomerIndex=customer;transform.position=new Vector3(400,0,0);
             ShopShell();ShopFixtures();ShopFittingRoom();ShopMerchandise(studio);
-            BakeResident(studio,customer,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(0,-.055f,7.96f),0,true);
+            BakeResident(studio,customer,ShopArrivalOutfit,new Vector3(.65f,-.055f,-4.3f),0);
+            residents[0].root.name="Cliente — "+DayOne.Customers[customer].name;
+            SetCustomerVisible(false);
+            BakeResident(studio,0,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-.8f,-.055f,7.96f),0,true);
+            residents[1].root.name="Frequentador fixo — encostado na parede";
             motionRigVersion=ResidentArtRevision;GeometryBatches=batches.Count;FinishGeometry();ResetFittingCurtain();
         }
         void ShopShell()
