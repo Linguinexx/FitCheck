@@ -44,7 +44,7 @@ namespace FitCheck
         }
         void Home()
         {
-            if(stage==Stage.City||(shopService&&stage==Stage.Dialogue)||shopDressingInStore)ExitCity();
+            if(stage==Stage.City||(city!=null&&city.IsHome&&city.gameObject.activeSelf)||(shopService&&stage==Stage.Dialogue)||shopDressingInStore)ExitCity();
             shopService=false;shopSequence=ShopSequence.None;
             if(stage==Stage.CharacterCreator){creatorDraft=null;studio.PlayerLook=playerAppearance;}
             studio.TallPreview=false;studio.PreviewProportions=false;studio.ExpressionOverride=-1;studio.HairOverride=-1;
@@ -96,7 +96,7 @@ namespace FitCheck
             Fill(new Rect(0,0,1440,88),new Color(.045f,.035f,.065f,.97f));
             Txt(new Rect(38,22,280,45),"FIT CHECK",heading);
             Txt(new Rect(244,33,180,28),"by DripLab",caption,muted);
-            Txt(new Rect(965,28,300,30),stage==Stage.Welcome?"SEUS PERSONAGENS":stage==Stage.City?(city.IsInterior?"DRIPLAB  /  LOJA":"PRAÇA DO ENCONTRO"):campaignBeforePreview!=null?"PRÉVIA  /  CAMPANHA PRESERVADA":"DIA 0"+progress.day+"  /  DRIPLAB",tiny,muted);
+            Txt(new Rect(965,28,300,30),stage==Stage.Welcome?"SEUS PERSONAGENS":stage==Stage.City?(city.IsHome?"EM CASA":city.IsInterior?"DRIPLAB  /  LOJA":"PRAÇA DO ENCONTRO"):campaignBeforePreview!=null?"PRÉVIA  /  CAMPANHA PRESERVADA":"DIA 0"+progress.day+"  /  DRIPLAB",tiny,muted);
             if(Tap(new Rect(1298,20,105,46),"Pausa"))paused=true;
             if(renderedStage==Stage.Welcome)WelcomeUI();
             if(renderedStage==Stage.Dialogue)DialogueUI();

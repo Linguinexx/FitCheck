@@ -74,6 +74,7 @@ namespace FitCheck
             float front=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(.90f,1.25f,angle));
             float hairline=profile==0?.86f+.030f*Mathf.Cos(theta*10):profile==1?.86f+.015f*Mathf.Sin(theta*2):profile==3?.865f+.020f*Mathf.Cos(theta*6)+.005f*Mathf.Cos(theta*12):profile==4?.82f+.02f*Mathf.Cos(theta*4):.81f+.08f*Mathf.SmoothStep(0,1,Mathf.InverseLerp(-.65f,.65f,theta));
             if(profile==3)hairline=1.18f+.055f*Mathf.Cos(theta*5)+.035f*Mathf.Sin(theta*2);
+            if(profile==6)hairline=1.01f+.07f*Mathf.Sin(theta*2+.4f);
             return Mathf.Lerp(edge,hairline,front);
 
         }

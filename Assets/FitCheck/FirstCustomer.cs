@@ -62,6 +62,8 @@ namespace FitCheck
         void Apply(){studio.Apply(outfit,customer);}
         void UpdateCamera()
         {
+            if(stage!=Stage.City&&stage!=Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf)ExitCity();
+            if(stage==Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf){city.Frame(cam,reducedMotion,0);city.FramePlayerForCamera(cam,false);return;}
             if(shopDressingInStore&&(stage==Stage.Dressing||stage==Stage.Confirm)){FrameShopDressing();return;}
             if(stage==Stage.Dialogue&&shopService){FrameShopDialogue();return;}
             if(stage==Stage.CharacterCreator){studio.SetHome(false);studio.Pose(rotation,distance,0);return;}
@@ -70,6 +72,7 @@ namespace FitCheck
                 city.Frame(cam,reducedMotion,paused?0:Time.unscaledDeltaTime);
                 if(ShopSequenceActive&&paused){cam.transform.SetPositionAndRotation(p,r);cam.fieldOfView=fov;}
                 else UpdateShopSequence(Time.unscaledDeltaTime);
+                if(stage==Stage.City)city.FramePlayerForCamera(cam,ShopSequenceActive);
                 return;
             }
             studio.SetHome(stage==Stage.Home);studio.Pose(rotation,distance,stage==Stage.Welcome||stage==Stage.Home?-.95f:.9f);
@@ -105,7 +108,7 @@ namespace FitCheck
         }
         void SaveDay(){if(activeSaveSlot<0&&storageOverride==null)throw new InvalidOperationException("Selecione um save antes de salvar.");ProgressStore.Save(DayPath,progress);}
         void EnterDressing(){stage=Stage.Dressing;remaining=120;timerWarned=false;showRequest=false;}
-        void GoHome(){shopService=false;if(!playerAppearance.created){OpenCreator(Stage.Home);return;}stage=Stage.Home;fromHome=true;replayIndex=-1;showWardrobe=false;studio.ApplyUniform(progress.uniform);}
+        void GoHome(){shopService=false;if(!playerAppearance.created){OpenCreator(Stage.Home);return;}fromHome=true;replayIndex=-1;showWardrobe=false;EnterHome();}
         void Replay()
         {
             shopService=false;

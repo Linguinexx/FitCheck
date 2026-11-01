@@ -20,8 +20,8 @@ namespace FitCheck
                 var loaded=AppearanceStore.Load(path);if(!loaded.created||loaded.name!="Teste do avatar"||loaded.skin!=2||loaded.hairColor!=2)throw new Exception("Aparência salva divergiu");
                 var stored=File.ReadAllText(path);OpenCreator();creatorDraft.skin=1;RefreshCreator();CancelCreator();
                 if(File.ReadAllText(path)!=stored||playerAppearance.skin!=2)throw new Exception("Cancelar sobrescreveu o jogador");
-                for(int cut=0;cut<6;cut++){
-                    OpenCreator();creatorDraft.hair=cut;creatorDraft.hairColor=cut;creatorDraft.expression=cut;RefreshCreator();studio.Animate(.05f,true);
+                for(int cut=0;cut<PlayerAppearance.HairNames.Length;cut++){
+                    OpenCreator();creatorDraft.hair=cut;creatorDraft.hairColor=cut%PlayerAppearance.HairColors.Length;creatorDraft.expression=cut%PlayerAppearance.FaceNames.Length;RefreshCreator();studio.Animate(.05f,true);
                     foreach(var r in studio.Avatar.GetComponentsInChildren<MeshRenderer>())if(r.name=="Cabeça arredondada"&&r.bounds.size.y<1)throw new Exception("Criação alterou a base da cabeça");
                     CancelCreator();
                 }
@@ -29,7 +29,7 @@ namespace FitCheck
                 if(AppearanceStore.Load(path).skin!=2)throw new Exception("Backup da aparência não foi recuperado");
                 AppearanceStore.Save(path,loaded);
                 if(JsonUtility.ToJson(progress)!=originalProgress)throw new Exception("Criação alterou a campanha");
-                Debug.Log("FITCHECK_CREATOR_PASSED: editor save/cancel, six hairstyles/colors/expressions, player persistence, corrupt-save recovery and campaign separation.");
+                Debug.Log("FITCHECK_CREATOR_PASSED: editor save/cancel, all hairstyles/colors/expressions, player persistence, corrupt-save recovery and campaign separation.");
             }finally{
                 playerAppearance=original;creatorDraft=null;studio.PlayerLook=playerAppearance;
                 if(saved==null){if(File.Exists(path))File.Delete(path);}else File.WriteAllBytes(path,saved);

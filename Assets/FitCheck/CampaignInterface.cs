@@ -58,7 +58,7 @@ namespace FitCheck
             string intro=progress.Complete?"Os nove encontros viraram histórias no FitFeed. Você pode revisitar seus visuais e melhorar seus resultados.":progress.closed?"Expediente encerrado. Confira suas conquistas, reveja os posts e descanse para amanhã.":"Antes de sair, escolha seu uniforme. O bairro tem novas histórias esperando por você.";
             Txt(new Rect(48,260,500,125),intro,copy,muted);
             if(!showWardrobe){
-                if(!progress.DayComplete&&Tap(new Rect(48,413,500,60),"Ir trabalhar  →",true))EnterShop();
+                if(!progress.DayComplete&&Tap(new Rect(48,413,500,60),"Voltar ao quarto  →",true))CloseHomePanel();
                 if(progress.DayComplete&&!progress.closed&&Tap(new Rect(48,413,500,60),"Concluir fechamento  →",true))stage=Stage.Summary;
                 if(progress.closed&&!progress.Complete&&Tap(new Rect(48,413,500,60),"Dormir e começar o próximo dia  →",true)){progress.Advance();TrySave();GoHome();}
                 if(progress.Complete&&Tap(new Rect(48,413,500,60),"Receber recompensas pendentes",true)){progress.Deliver();TrySave();}
@@ -75,7 +75,8 @@ namespace FitCheck
                 if(Tap(new Rect(48,725,500,50),"Voltar"))showWardrobe=false;
             }
             if(Tap(new Rect(48,817,200,45),"Menu principal"))ReturnToTitle();
-            Txt(new Rect(270,815,295,64),message,tiny,muted);
+            if(Tap(new Rect(260,817,288,45),"Voltar ao quarto"))CloseHomePanel();
+            Txt(new Rect(48,872,500,26),message,tiny,muted);
         }
         void SummaryUI()
         {

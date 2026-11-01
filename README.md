@@ -6,24 +6,25 @@ Jogo 3D de montagem de looks streetwear em Unity **6000.6.7f1**. Arte em desenvo
 
 1. Adicione esta pasta ao Unity Hub com a versão indicada.
 2. Abra `Assets/Scenes/FirstCustomer.unity` e pressione **Play**.
-3. Na tela da fachada, clique em **Jogar** e selecione um dos três saves. Um espaço vazio abre a criação do personagem; um save existente retoma sua semana em casa.
-4. Em casa, escolha **Ir trabalhar**. Ao terminar um dia, feche o expediente e durma para começar o seguinte.
+3. Na tela da fachada, clique em **Jogar** e selecione um dos três saves. Um espaço vazio abre a criação do personagem; criar ou continuar começa no quarto em primeira pessoa.
+4. Ande até a porta de casa e pressione **E — Sair de casa**. No bairro, caminhe até a porta sob o letreiro **DRIPLAB** e pressione **E — Entrar na DripLab**.
+5. A loja começa fechada: passe por trás do balcão e pressione **E — Abrir a loja** quando estiver pronto. Ao terminar um dia, feche o expediente e volte para casa. A cama abre as opções de descanso; o guarda-roupa e a mesa dão acesso ao uniforme, à aparência e ao FitFeed.
 
 Cada save mantém aparência, campanha e fotos separadas em `saves/slot-1`, `slot-2` ou `slot-3`, dentro da pasta de dados persistentes da Unity. Na primeira seleção, o progresso da versão anterior é copiado para o primeiro espaço; os arquivos originais e as fotos antigas permanecem preservados. Não há sobrescrita ou exclusão de saves pela interface.
 
 Na exploração, **WASD** move, **mouse** olha, **E** interage, **Esc** pausa e **Tab** libera ou captura o cursor. No Editor, dê foco à aba **Game**. Menus e provador usam o mouse livre.
 
-O rapaz encostado na parede é um frequentador fixo da loja, separado dos atendimentos. O cliente entra, caminha até a frente do balcão e espera. Passe por trás do balcão e pressione **E** para atendê-lo. Após conversar e escolher uma pergunta opcional, ele caminha até o provador; a câmera se aproxima e a cortina abre antes da montagem do fit. Ao finalizar, o cliente sai usando o look e o resultado aparece no FitFeed. O frequentador permanece na loja.
+O rapaz encostado na parede é um frequentador fixo da loja, separado dos atendimentos. Após abrir a loja, o cliente entra, caminha até a frente do balcão e espera; você continua livre para andar e olhar durante a chegada. Passe por trás do balcão e pressione **E** para atendê-lo. Após conversar e escolher uma pergunta opcional, ele caminha até o provador; a câmera acompanha e a cortina abre antes da montagem do fit. O personagem completo do jogador permanece no balcão durante a câmera externa. Ao finalizar, o cliente sai usando o look e o resultado aparece no FitFeed. O frequentador permanece na loja.
 
 A montagem acontece no próprio provador da loja. Arraste o personagem para girar e use a roda do mouse para aproximar ou afastar. O cliente vira-se ao chegar e apresenta o fit antes de sair. Pausa interrompe a sequência; cancelar e voltar ao início reinicia o atendimento sem finalizar um look.
 
-O passeio no bairro é separado da loja nesta versão. A ligação física entre ambientes e as transições gerais ainda estão em desenvolvimento.
+As portas ligam casa, bairro e loja nos dois sentidos, com interações próximas e controle em primeira pessoa. O sistema geral de transições visuais entre locais ainda está reservado para uma etapa posterior.
 
 ## Conteúdo atual
 
 - Campanha de três dias, com nove pedidos e pontuação por ocasião, estilo e restrições.
 - Catálogo de 21 peças em três drops, desbloqueios por Reputação e repetição de atendimentos.
-- Criação do jogador com nome, tons de pele, cabelos, cores e expressões.
+- Criação do jogador com nome, tons de pele, sete cabelos (incluindo ondulado longo e coque alto), cores e expressões.
 - Loja com araras, tênis, caixa e provador; bairro com moradores e veículos em movimento.
 - Progresso, aparência e fotos salvos localmente. Os saves não fazem parte do repositório.
 

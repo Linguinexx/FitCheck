@@ -103,6 +103,7 @@ namespace FitCheck
             Block(new Vector3(22.1f,9.05f,9.5f),new Vector3(8.1f,.25f,8.5f),Cream);
             Window(22.0f,6.8f,5.44f,2.05f,2.15f,Cream,true);
             Block(new Vector3(21.8f,2.0f,5.4f),new Vector3(2.25f,3.8f,.14f),Teal,"Wood");
+            Words("CASA",new Vector3(21.8f,4.3f,5.28f),.06f,Cream);
             for(int i=0;i<9;i++)Block(new Vector3(21.8f,1.0f+i*.3f,5.28f),new Vector3(2.0f,.035f,.08f),Teal*.8f,"Wood",.005f);
             obstacles.Add(new Rect(18.2f,5,8,8.6f));
             // A poster wall connects the square to the music/gallery vocabulary.

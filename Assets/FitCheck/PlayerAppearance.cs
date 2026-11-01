@@ -7,7 +7,7 @@ namespace FitCheck
     [Serializable] public class PlayerAppearance
     {
         public int version=1,skin,hair,hairColor,expression;public bool created;public string name="Você";
-        public static readonly string[] HairNames={"Cachos","Coque","Raspado","Franja","Penteado","Assimétrico"};
+        public static readonly string[] HairNames={"Cachos","Coque","Raspado","Franja","Penteado","Assimétrico","Ondulado longo"};
         public static readonly string[] ColorNames={"Castanho","Preto","Ruivo","Loiro","Grisalho","Ameixa"};
         public static readonly string[] FaceNames={"Neutra","Curiosa","Desconfiada","Sonolenta","Animada","Surpresa"};
         public static readonly Color[] SkinColors={new Color(.67f,.40f,.23f),new Color(.94f,.72f,.58f),new Color(.25f,.135f,.085f),new Color(.76f,.60f,.40f),new Color(.53f,.33f,.23f),new Color(.38f,.205f,.13f)};

@@ -23,8 +23,8 @@ namespace FitCheck
         public bool Free(Vector2 p){return WorldFree(p)&&!ResidentBlocks(p)&&!VehicleBlocks(p);}
         bool WorldFree(Vector2 p)
         {
-            var bounds=IsInterior?ShopBounds:WalkBounds;
-            if(IsInterior&&FittingCurtainBlocks(p))return false;
+            var bounds=IsHome?HomeBounds:IsInterior?ShopBounds:WalkBounds;
+            if(IsInterior&&!IsHome&&FittingCurtainBlocks(p))return false;
             if(p.x<bounds.xMin+Radius||p.x>bounds.xMax-Radius||p.y<bounds.yMin+Radius||p.y>bounds.yMax-Radius)return false;
             foreach(var box in obstacles)if(p.x>box.xMin-Radius&&p.x<box.xMax+Radius&&p.y>box.yMin-Radius&&p.y<box.yMax+Radius)return false;return true;
         }
@@ -56,7 +56,7 @@ namespace FitCheck
         }
         public void ResetWalk(Transform avatar)
         {
-            Position=IsInterior?ShopSpawn:Spawn;route.Clear();waypoint=0;Walking=false;ViewYaw=IsInterior?0:46;ViewPitch=-5;
+            Position=IsHome?HomeSpawn:IsInterior?ShopSpawn:Spawn;route.Clear();waypoint=0;Walking=false;ViewYaw=IsHome?310:IsInterior?0:46;ViewPitch=IsHome?12:-5;
             avatar.position=transform.position+new Vector3(Position.x,-.055f,Position.y);avatar.rotation=Quaternion.Euler(0,-22,0);
             if(marker!=null)marker.gameObject.SetActive(false);if(shadow!=null)shadow.gameObject.SetActive(false);
         }
@@ -77,7 +77,7 @@ namespace FitCheck
         }
         public void Frame(Camera camera,bool reduced,float delta)
         {
-            if(delta>0){float step=Mathf.Min(delta,.05f);TickResidents(step);if(IsInterior)AdvanceFittingCurtain(step);else{TickTraffic(step);if(!reduced)AnimateAtmosphere(step);}}
+            if(delta>0){float step=Mathf.Min(delta,.05f);TickResidents(step);if(IsInterior){if(!IsHome)AdvanceFittingCurtain(step);}else{TickTraffic(step);if(!reduced)AnimateAtmosphere(step);}}
             StepPlayerBody(0,0);
             camera.orthographic=false;camera.fieldOfView=ViewFieldOfView;camera.nearClipPlane=.08f;
             camera.clearFlags=IsInterior?CameraClearFlags.SolidColor:CameraClearFlags.Skybox;
@@ -85,6 +85,7 @@ namespace FitCheck
             var sky=camera.GetComponent<Skybox>();if(sky==null)sky=camera.gameObject.AddComponent<Skybox>();sky.material=SkyMaterial;sky.enabled=!IsInterior;
             camera.transform.position=transform.position+new Vector3(Position.x,EyeHeight,Position.y);
             camera.transform.rotation=Quaternion.Euler(ViewPitch,ViewYaw,0);
+            if(PlayerBodyReady)foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(false);
         }
         public void RestoreWalk(Vector2 position,float yaw,float pitch,Transform avatar)
         {ResetWalk(avatar);if(Free(position))Position=position;SetView(yaw,pitch);}

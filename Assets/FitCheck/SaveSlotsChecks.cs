@@ -26,14 +26,14 @@ namespace FitCheck
                 OpenSaveSelection();
                 if(!saveSlots[0].progress.Complete||saveSlots[0].appearance.name!="Lia"||saveSlots[1].exists||saveSlots[2].exists)throw new Exception("Migração não preservou a semana ou ocupou outro espaço");
                 PreviewSave(0);OpenSelectedSave();
-                if(stage!=Stage.Home||!progress.Complete)throw new Exception("Continuar save não retomou a semana concluída");
+                if(stage!=Stage.City||!city.IsHome||!progress.Complete)throw new Exception("Continuar save não retomou a semana concluída em casa");
                 string first=File.ReadAllText(DayPath);
                 OpenSaveSelection();PreviewSave(1);OpenSelectedSave();
                 if(stage!=Stage.CharacterCreator||progress.posts.Count!=0)throw new Exception("Novo save não abriu criação independente");
                 CancelCreator();
                 if(SaveSlots.Read(library,1).exists)throw new Exception("Cancelar criação ocupou espaço vazio");
                 OpenSaveSelection();PreviewSave(1);OpenSelectedSave();creatorDraft.name="Duda";creatorDraft.hair=3;creatorDraft.skin=1;RefreshCreator();
-                if(!SaveCreator()||stage!=Stage.Home||!File.Exists(DayPath))throw new Exception("Novo save não persistiu personagem e campanha");
+                if(!SaveCreator()||stage!=Stage.City||!city.IsHome||!File.Exists(DayPath))throw new Exception("Novo save não persistiu personagem e campanha");
                 EnterShop();SettleShopArrival();MoveProof(CityView.ShopCounter,180,0);InteractShop();
                 if(stage!=Stage.Dialogue||!shopService)throw new Exception("Save novo abriu resumo em vez de cliente");
                 Home();progress.Add(new Attempt{outfit=(string[])Catalog.Default.Clone(),question=1});SaveDay();

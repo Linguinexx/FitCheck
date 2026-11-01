@@ -10,11 +10,12 @@ namespace FitCheck
             int oldCustomer=customer,oldHair=studio.HairOverride;var oldOutfit=outfit;float oldRotation=rotation;
             bool oldPreview=studio.PreviewProportions,oldTall=studio.TallPreview;string state=JsonUtility.ToJson(progress);int cases=0,worn=0;
             try{
-                foreach(bool tall in new[]{false,true})for(int cut=0;cut<6;cut++)foreach(string hat in new[]{"","CG_HEAD_01","SB_HEAD_01","AH_HEAD_01"}){
+                foreach(bool tall in new[]{false,true})for(int cut=0;cut<PlayerAppearance.HairNames.Length;cut++)foreach(string hat in new[]{"","CG_HEAD_01","SB_HEAD_01","AH_HEAD_01"}){
                     studio.PreviewProportions=true;studio.TallPreview=tall;studio.HairOverride=cut;customer=0;
                     outfit=new[]{"AH_TOP_01","AH_BOTTOM_01","AH_SHOES_01",hat};rotation=cases%2==0?131:-46;UpdateCamera();Apply();
                     Renderer scalp=null,crown=null,bun=null;
                     foreach(var r in studio.Avatar.GetComponentsInChildren<Renderer>()){
+                        if(cut==6&&r.name=="Orelha")throw new Exception("Ondulado longo deixou a orelha atravessar o volume");
                         if(r.name=="Cabelo ajustado à cabeça")scalp=r;
                         if(r.name=="Boné"||r.name=="Gorro")crown=r;
                         if(r.name=="Coque — união à nuca")bun=r;
@@ -44,7 +45,7 @@ namespace FitCheck
                     cases++;
                 }
                 if(JsonUtility.ToJson(progress)!=state)throw new Exception("Teste de encaixe alterou a campanha");
-                Debug.Log("FITCHECK_HAIR_FIT_PASSED: "+cases+" combinações de 6 cabelos, 4 coberturas e 2 corpos; "+worn+" encaixes com cabelo visível sob a peça, coque unido e campanha preservada.");
+                Debug.Log("FITCHECK_HAIR_FIT_PASSED: "+cases+" combinações de "+PlayerAppearance.HairNames.Length+" cabelos, 4 coberturas e 2 corpos; "+worn+" encaixes com cabelo visível sob a peça, coque unido e campanha preservada.");
             }finally{
                 customer=oldCustomer;outfit=oldOutfit;rotation=oldRotation;studio.HairOverride=oldHair;
                 studio.PreviewProportions=oldPreview;studio.TallPreview=oldTall;Apply();UpdateCamera();

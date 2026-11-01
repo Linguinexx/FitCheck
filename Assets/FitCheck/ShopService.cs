@@ -61,8 +61,13 @@ namespace FitCheck
     {
         enum ShopSequence { None, Arriving, SettlingArrival, ReturningToPlayer, LeavingRest, WalkingToFitting, EnteringFitting, PresentingFit, ShowingFinishedFit, Exiting }
         ShopSequence shopSequence;bool shopService,shopDressingInStore,shopCustomerEntering;
+        DayProgress shopOpenedCampaign;int shopOpenedDay;
+        Vector2 shopWorkPosition;float shopWorkYaw,shopWorkPitch;
+        bool ShopOpen=>ReferenceEquals(shopOpenedCampaign,progress)&&shopOpenedDay==progress.day&&!progress.DayComplete;
         Vector3 shopCameraStart;Quaternion shopCameraRotation;float shopCameraTime,shopCameraStartFov,shopDressingTime,shopDepartureTime;
-        bool ShopSequenceActive=>shopSequence!=ShopSequence.None;
+        bool ShopArrivalActive=>shopSequence==ShopSequence.Arriving||shopSequence==ShopSequence.SettlingArrival||shopSequence==ShopSequence.ReturningToPlayer;
+        bool ShopSequenceActive=>shopSequence!=ShopSequence.None&&!ShopArrivalActive;
+        void OpenShopForDay(){shopOpenedCampaign=progress;shopOpenedDay=progress.day;StartShopArrival();}
         void CaptureShopCamera()
         {shopCameraStart=cam.transform.position;shopCameraRotation=cam.transform.rotation;shopCameraStartFov=cam.fieldOfView;shopCameraTime=0;}
         void StartShopSequence(ShopSequence phase){shopSequence=phase;CaptureShopCamera();}
@@ -76,13 +81,13 @@ namespace FitCheck
         }
         void StartShopArrival()
         {
-            if(city.CustomerHasEntered||progress.DayComplete)return;
-            city.ArriveCustomer();cam.transform.position=city.transform.position+new Vector3(3,3.0f,2.1f);
-            cam.transform.LookAt(city.transform.position+city.ResidentPosition(0)+Vector3.up*1.9f);cam.fieldOfView=62;
+            if(!ShopOpen||city.CustomerHasEntered||progress.DayComplete)return;
+            city.ArriveCustomer();
             StartShopSequence(ShopSequence.Arriving);
         }
         void StartShopConversation()
         {
+            shopWorkPosition=city.Position;shopWorkYaw=city.ViewYaw;shopWorkPitch=city.ViewPitch;
             var p=cam.transform.position;var r=cam.transform.rotation;float fov=cam.fieldOfView;
             stage=Stage.Welcome;Begin();shopService=stage==Stage.Dialogue;
             if(!shopService)return;
@@ -103,23 +108,25 @@ namespace FitCheck
         {
             cityFreeCursor=true;SyncCityCursor(true);
             city.Frame(cam,reducedMotion,paused?0:Time.unscaledDeltaTime);
-            city.PlayerBodyVisible=false;mannequin.gameObject.SetActive(false);
+            mannequin.gameObject.SetActive(false);
             var focus=city.transform.position+city.ResidentPosition(0)+Vector3.up*2.15f;
             BlendShopCamera(city.transform.position+new Vector3(4.4f,2.65f,7.65f),focus,52,.45f,shopCameraTime);
+            city.FramePlayerForCamera(cam,true);
         }
         void EnterShopDressing()
         {
             StartShopSequence(ShopSequence.None);shopDressingTime=0;shopDressingInStore=true;
-            city.SetCustomerVisible(false,true);city.PlayerBodyVisible=false;
+            city.SetCustomerVisible(false,true);
             studio.SetHome(false);Apply();mannequin.position=city.transform.position+CityView.ShopDressingPosition;
             mannequin.gameObject.SetActive(true);rotation=0;EnterDressing();FrameShopDressing();SyncCityCursor(true);
         }
         void FrameShopDressing()
         {
-            city.Frame(cam,reducedMotion,0);city.PlayerBodyVisible=false;
+            city.Frame(cam,reducedMotion,0);
             mannequin.position=city.transform.position+CityView.ShopDressingPosition;
             mannequin.rotation=Quaternion.Euler(0,rotation,0);
             BlendShopCamera(ShopDressingCameraPosition(),mannequin.position+new Vector3(.65f,1.75f,0),52,.70f,shopDressingTime);
+            city.FramePlayerForCamera(cam,true);
         }
         Vector3 ShopDressingCameraPosition()
         {
@@ -133,25 +140,22 @@ namespace FitCheck
             cam.transform.position=u*u*u*shopCameraStart+3*u*u*t*a+3*u*t*t*b+t*t*t*end;
             cam.transform.rotation=Quaternion.Slerp(shopCameraRotation,Quaternion.LookRotation(focus-cam.transform.position),ShopEase(shopCameraTime/.5f));
             cam.fieldOfView=Mathf.Lerp(shopCameraStartFov,64,ShopEase(shopCameraTime/.8f));
+            city.FramePlayerForCamera(cam,true);
         }
         void UpdateShopSequence(float delta)
         {
-            if(!ShopSequenceActive||paused)return;
-            shopCameraTime+=delta;city.PlayerBodyVisible=false;
+            if((!ShopSequenceActive&&!ShopArrivalActive)||paused)return;
+            shopCameraTime+=delta;
             var origin=city.transform.position;var customerFocus=origin+city.ResidentPosition(0)+Vector3.up*1.9f;
             if(shopSequence==ShopSequence.Arriving||shopSequence==ShopSequence.SettlingArrival){
-                BlendShopCamera(origin+new Vector3(3,3.0f,2.1f),customerFocus,62,.50f,shopCameraTime);
                 if(shopSequence==ShopSequence.Arriving&&city.CustomerAtDestination)StartShopSequence(ShopSequence.SettlingArrival);
                 else if(shopSequence==ShopSequence.SettlingArrival&&city.TurnCustomer(180,delta)&&city.CustomerSettled){
-                    city.WaitCustomerAtCounter();StartShopSequence(ShopSequence.ReturningToPlayer);
+                    city.WaitCustomerAtCounter();shopSequence=ShopSequence.None;
                 }
                 return;
             }
             if(shopSequence==ShopSequence.ReturningToPlayer){
-                var position=origin+new Vector3(city.Position.x,CityView.EyeHeight,city.Position.y);
-                var rotation=Quaternion.Euler(city.ViewPitch,city.ViewYaw,0);
-                BlendShopCamera(position,position+rotation*Vector3.forward,CityView.ViewFieldOfView,.75f,shopCameraTime);
-                if(shopCameraTime>=.75f){shopSequence=ShopSequence.None;city.PlayerBodyVisible=true;}
+                shopSequence=ShopSequence.None;
                 return;
             }
             if(shopSequence==ShopSequence.LeavingRest){
@@ -161,6 +165,7 @@ namespace FitCheck
             }
             if(shopSequence==ShopSequence.ShowingFinishedFit){
                 BlendShopCamera(origin+new Vector3(-4.9f,2.5f,1.7f),customerFocus,52,.65f,shopCameraTime);
+                city.FramePlayerForCamera(cam,true);
                 if(shopCameraTime>=.65f){
                     city.WalkCustomer(new Vector2(-4.9f,4.1f),new Vector2(-2.9f,3.6f),new Vector2(1.1f,2.6f),new Vector2(1.1f,-2.7f),new Vector2(.65f,-4.3f));
                     shopDepartureTime=0;StartShopSequence(ShopSequence.Exiting);
@@ -169,6 +174,7 @@ namespace FitCheck
             }
             if(shopSequence==ShopSequence.Exiting){
                 BlendShopCamera(origin+new Vector3(5.2f,3.0f,2.8f),customerFocus,60,2.8f,shopCameraTime);
+                city.FramePlayerForCamera(cam,true);
                 if(city.CustomerAtDestination){
                     city.SetCustomerVisible(false);shopDepartureTime+=delta;
                     if(shopDepartureTime>=.35f){
@@ -182,6 +188,7 @@ namespace FitCheck
             var destination=presenting?ShopDressingCameraPosition():origin+(walking?new Vector3(-4.9f,2.65f,.8f):new Vector3(-4.9f,2.5f,2.2f));
             var focus=presenting?origin+CityView.ShopDressingPosition+new Vector3(.65f,1.75f,0):customerFocus;
             if(walking)FrameWalkToFitting(customerFocus);else BlendShopCamera(destination,focus,52,presenting?.8f:1.4f,shopCameraTime);
+            city.FramePlayerForCamera(cam,true);
             if(walking&&city.CustomerAtDestination){
                 city.OpenFittingCurtain();shopCustomerEntering=false;StartShopSequence(ShopSequence.EnteringFitting);
             }else if(shopSequence==ShopSequence.EnteringFitting&&city.FittingOpen){
@@ -194,9 +201,10 @@ namespace FitCheck
         void StartShopExit()
         {
             var p=cam.transform.position;var r=cam.transform.rotation;float fov=cam.fieldOfView;
-            if(shopDressingInStore)ExitCity();
-            EnterSpace(true);city.DressServiceCustomer(studio,outfit,customer);city.OpenFittingCurtain();
-            cam.transform.SetPositionAndRotation(p,r);cam.fieldOfView=fov;StartShopSequence(ShopSequence.ShowingFinishedFit);
+            if(shopDressingInStore){shopDressingInStore=false;stage=Stage.City;mannequin.position=Vector3.zero;mannequin.gameObject.SetActive(false);}
+            else EnterSpace(true);
+            city.DressServiceCustomer(studio,outfit,customer);city.OpenFittingCurtain();
+            cam.transform.SetPositionAndRotation(p,r);cam.fieldOfView=fov;city.FramePlayerForCamera(cam,true);StartShopSequence(ShopSequence.ShowingFinishedFit);
         }
         string ShopSequenceLabel=>shopSequence==ShopSequence.Arriving?"O cliente está chegando…":
             shopSequence==ShopSequence.SettlingArrival||shopSequence==ShopSequence.ReturningToPlayer?"Cliente pronto para o atendimento.":

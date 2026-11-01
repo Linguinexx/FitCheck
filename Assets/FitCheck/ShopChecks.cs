@@ -66,7 +66,7 @@ namespace FitCheck
                 ((IList)field.GetValue(city)).Clear();UpdateCity(0);
                 if(!city.IsInterior||!city.RuntimeReady||!city.PlayerBodyReady||Vector2.Distance(position,city.Position)>.001f||Mathf.Abs(Mathf.DeltaAngle(yaw,city.ViewYaw))>.001f)throw new Exception("Recuperação perdeu interior/posição");
                 MoveProof(CityView.ShopSpawn,180,0);
-                if(city.ShopInteraction!=3||!InteractShop()||stage!=Stage.Welcome)throw new Exception("Saída da loja falhou");
+                if(city.ShopInteraction!=3||!InteractShop()||stage!=Stage.City||city.IsInterior||Vector2.Distance(city.Position,CityView.StreetShopDoor)>.01f)throw new Exception("Saída da loja não chegou à rua");
                 EnterCity();if(city.IsInterior||!city.RuntimeReady)throw new Exception("Loja substituiu bairro");city.ValidateFullBodyMotion();
                 city.SetView(35,-5);city.Frame(cam,true,0);SaveFirstPersonFrame(Path.Combine(folder,"surface-street.png"));
                 city.SetView(225,35);city.Frame(cam,true,0);SaveFirstPersonFrame(Path.Combine(folder,"surface-asphalt.png"));

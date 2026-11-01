@@ -1,5 +1,31 @@
 # DevLog
 
+## 01/11/2026 — Casa em primeira pessoa e percurso até a loja
+
+Criar ou continuar um save agora entra no quarto em primeira pessoa, usando os mesmos controles, corpo visível e câmera da loja. Novo interior com cama, guarda-roupa, mesa/celular, janela noturna, porta, tapete, pôster e prateleira; materiais de tecido, madeira, reboco, metal e papelão existentes. Móveis e limites impedem atravessamentos. Cama, mesa e guarda-roupa abrem os serviços domésticos; a volta ao quarto devolve controle e atualiza o uniforme no corpo.
+
+E na porta de casa leva à frente do prédio identificado como CASA no bairro. A porta sob DRIPLAB leva à loja, ainda fechada até E no balcão. A saída da loja devolve o jogador à frente da fachada, e a porta do prédio permite voltar para casa. O percurso substitui o botão que pulava diretamente de casa ao trabalho. Portas trocam o ambiente sem adicionar o sistema geral de fades reservado para depois. Pausa, cursor e preservação de campanha permanecem ativos em todos os locais.
+
+Ondulado longo oculta as orelhas e restaura a visibilidade ao mudar de corte. O volume lateral foi ampliado na região do crânio para eliminar a abertura de pele que a orelha escondia. Cada cabelo pode definir os detalhes que precisa, sem obrigar a mesma composição em todos.
+
+Verificação nativa aprovada percorre caminhos dentro do quarto, testa cama/mesa/guarda-roupa, ida e volta pelas quatro portas, abertura manual, chegada do cliente, corpo ao olhar para baixo, pausa, menu, repetição pelo FitFeed e campanha preservada. Criação/continuação dos três saves verificam entrada no quarto. Atendimento completo e 56 combinações de cabelos/coberturas mantidos. Evidências em Captures/HomeCommute e logs home-commute de ../tools; build Windows-HomeCommute sem erros nem avisos. Terceiro pedido de trabalho desde o último envio: commit e push após a conferência final.
+
+## 01/11/2026 — Ondulado longo, coque alto e saída sem deslocar o jogador
+
+Adicionado o sétimo corte, Ondulado longo, com volume contínuo até os ombros, laterais abertas ao redor do rosto, ondas amplas e textura diagonal já usada no cabelo. O coque sem cobertura sobe para o topo posterior, com maior volume, ficando reconhecível de frente. Com bonés/toucas, mantém o encaixe recolhido anterior. Os índices dos seis cabelos antigos permanecem iguais nos saves; seleção e verificações passam a usar a quantidade do catálogo.
+
+A saída do cliente mantém a mesma loja e o mesmo corpo do jogador, substituindo apenas o avatar do cliente pelo look finalizado. Isso elimina a reconstrução que reposicionava o jogador na entrada. O próximo atendimento retoma a posição e direção do balcão usadas na conversa. Testes verificam permanência durante a apresentação, percurso até a porta e início do próximo cliente; a preparação do novo dia continua manual.
+
+Verificações de cabelo ampliadas para 56 combinações de sete cortes, quatro coberturas e dois corpos, mais criação/persistência e vistas nativas de frente/perfil/costas. Build Windows-HairAndExit; evidências em Captures/HairAndExit e logs hair-exit de ../tools. Contagem desde o último envio ao GitHub: 2/3.
+
+## 01/11/2026 — Abertura manual e presença do jogador no balcão
+
+Entrar na loja não inicia mais a chegada. Antes de começar, o jogador pode explorar; E no balcão oferece Abrir a loja. Só então o cliente entra. O estado aberto vale para os próximos atendimentos daquele dia na sessão; um novo dia ou save exige abertura novamente. A chegada e a acomodação do cliente usam a câmera normal em primeira pessoa, permitindo andar/olhar, sem deslocamento cinematográfico nem retorno de câmera.
+
+O corpo do jogador mantém o modelo completo no cenário durante a ida ao provador e a montagem do fit. Cabeça/pescoço ficam ocultos perto da câmera em primeira pessoa e são exibidos quando ela se afasta; roupa, posição e aparência permanecem as do jogador, sem criar outro NPC. A sombra acompanha a vista externa. A revisão de arte dos avatares foi incrementada para reconstruir cópias antigas no Editor.
+
+Testes nativos aprovados: loja fechada sem chegada automática, pausa antes da abertura, câmera estável e movimento livre na entrada, jogador imóvel/visível e com cabeça na câmera externa, chegada ao provador, pausa, cancelamento, saída/FitFeed, próximo cliente, abertura do próximo dia e isolamento dos três saves. Build Windows-ShopOpening sem erros ou avisos. Capturas em Captures/ShopOpening; logs shop-opening em ../tools. Contagem de trabalho desde o último envio: 1/3, sem contar a mensagem duplicada interrompida.
+
 ## 01/11/2026 — Fachada na entrada e três saves
 
 Tela inicial separada com fotografia renderizada da fachada noturna em perspectiva e botão Jogar. A tela anterior vira seleção de três espaços: nomes, estado da semana e prévia tridimensional do personagem selecionado. Espaço vazio abre o criador; salvar cria aparência e campanha próprias, e continuar retoma em casa. Retorno ao menu passa pela tela da fachada.

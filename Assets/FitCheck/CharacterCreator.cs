@@ -15,8 +15,9 @@ namespace FitCheck
         void ShowPlayer(){studio.PlayerLook=playerAppearance;studio.ApplyUniform(progress.uniform);}
         void OpenCreator(Stage destination=Stage.Welcome)
         {
-            if(stage==Stage.City)ExitCity();
-            creatorReturn=stage==Stage.Home?Stage.Home:Stage.Welcome;creatorDestination=destination;
+            bool wasHome=stage==Stage.Home||(stage==Stage.City&&city.IsHome);
+            if(stage==Stage.City||(stage==Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf))ExitCity();
+            creatorReturn=wasHome?Stage.Home:Stage.Welcome;creatorDestination=destination;
             creatorDraft=playerAppearance.Copy();studio.PlayerLook=creatorDraft;studio.SetHome(false);
             stage=Stage.CharacterCreator;message="";paused=false;dragging=false;rotation=-15;distance=6.8f;
             studio.ApplyUniform(progress.uniform);UpdateCamera();
@@ -52,8 +53,8 @@ namespace FitCheck
             Txt(new Rect(28,224,320,28),"Como você se chama?",caption);
             creatorDraft.name=GUI.TextField(new Rect(28,264,320,40),creatorDraft.name,24);
             Txt(new Rect(28,330,320,32),"Corte de cabelo",caption);
-            for(int i=0;i<6;i++)if(CreatorButton(new Rect(28+i%2*165,376+i/2*60,155,48),PlayerAppearance.HairNames[i],creatorDraft.hair==i)){creatorDraft.hair=i;RefreshCreator();}
-            Txt(new Rect(28,592,320,58),"Gire para ver o volume\ne o encaixe por todos os lados.",caption,muted);
+            for(int i=0;i<PlayerAppearance.HairNames.Length;i++)if(CreatorButton(new Rect(28+i%2*165,376+i/2*60,155,48),PlayerAppearance.HairNames[i],creatorDraft.hair==i)){creatorDraft.hair=i;RefreshCreator();}
+            Txt(new Rect(28,640,320,58),"Gire para ver o volume\ne o encaixe por todos os lados.",caption,muted);
             Txt(new Rect(1074,126,330,32),"Tom de pele",caption);
             CreatorSwatches(new Rect(1074,178,330,120),PlayerAppearance.SkinColors,true);
             Txt(new Rect(1074,324,330,32),"Cor do cabelo",caption);

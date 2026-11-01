@@ -12,24 +12,30 @@ namespace FitCheck
         void EnterCity()
         {EnterSpace(false);}
         void EnterShop()
-        {shopService=false;EnterSpace(true);StartShopArrival();}
-        void EnterSpace(bool interior)
         {
-            if(stage==Stage.City){if(city.IsInterior==interior)return;ExitCity();}
+            bool resumeWork=stage==Stage.Post&&ShopOpen;
+            shopService=false;EnterSpace(true);
+            if(resumeWork){city.RestoreWalk(shopWorkPosition,shopWorkYaw,shopWorkPitch,mannequin);city.Frame(cam,true,0);}
+            StartShopArrival();
+        }
+        void EnterSpace(bool interior,bool home=false)
+        {
+            if(stage==Stage.City){if(city.IsInterior==interior&&city.IsHome==home)return;ExitCity();}
+            else if(city!=null&&city.IsHome&&city.gameObject.activeSelf)ExitCity();
             if(campaignBeforePreview!=null)Home();
             beforeCityClearFlags=cam.clearFlags;var sky=cam.GetComponent<Skybox>();beforeCitySky=sky!=null?sky.material:null;beforeCitySkyEnabled=sky!=null&&sky.enabled;
             studio.SetHome(false);beforeCityBackground=cam.backgroundColor;beforeCityFov=cam.fieldOfView;beforeCityNearClip=cam.nearClipPlane;
             int nextCustomer=Mathf.Clamp(progress.posts.Count,0,8);
-            if(interior&&shop!=null&&shop.ShopCustomerIndex!=nextCustomer){shop.gameObject.SetActive(false);Destroy(shop.gameObject);shop=null;}
-            city=interior?shop:street;
-            if(city==null){city=new GameObject(interior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(interior)city.BuildShop(studio,nextCustomer);else city.Build(studio);if(interior)shop=city;else street=city;}
+            if(interior&&!home&&shop!=null&&shop.ShopCustomerIndex!=nextCustomer){shop.gameObject.SetActive(false);Destroy(shop.gameObject);shop=null;}
+            city=home?homeRoom:interior?shop:street;
+            if(city==null){city=new GameObject(home?"Casa — quarto do jogador":interior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(home)city.BuildHome();else if(interior)city.BuildShop(studio,nextCustomer);else city.Build(studio);if(home)homeRoom=city;else if(interior)shop=city;else street=city;}
             city.gameObject.SetActive(true);studio.PreviewProportions=false;studio.TallPreview=false;studio.HairOverride=-1;studio.ExpressionOverride=-1;
-            studio.ApplyUniform(progress.uniform);city.ResetWalk(mannequin);city.PreparePlayerBody(studio);if(interior)city.ResetFittingCurtain();shopFittingOpening=false;stage=Stage.City;paused=false;showRequest=false;showDrops=false;
+            studio.ApplyUniform(progress.uniform);city.ResetWalk(mannequin);city.PreparePlayerBody(studio);if(interior&&!home)city.ResetFittingCurtain();shopFittingOpening=false;stage=Stage.City;paused=false;showRequest=false;showDrops=false;
             city.Frame(cam,true,0);mannequin.gameObject.SetActive(false);cityFreeCursor=false;cityLookCaptured=false;cityDragLook=false;SyncCityCursor();
         }
         void ExitCity()
         {
-            if(city==null)return;bool discardShop=city.IsInterior&&(shopDressingInStore||ShopSequenceActive);
+            if(city==null)return;bool discardShop=city.IsInterior&&(shopDressingInStore||ShopSequenceActive||ShopArrivalActive);
             studio.EndCityWalk();city.gameObject.SetActive(false);mannequin.position=Vector3.zero;mannequin.gameObject.SetActive(true);
             cam.clearFlags=beforeCityClearFlags;var sky=cam.GetComponent<Skybox>();if(sky!=null){sky.material=beforeCitySky;sky.enabled=beforeCitySkyEnabled;}
             cam.orthographic=false;cam.backgroundColor=beforeCityBackground;cam.fieldOfView=beforeCityFov;cam.nearClipPlane=beforeCityNearClip;
@@ -74,7 +80,7 @@ namespace FitCheck
             if(!city.RuntimeReady||!city.PlayerBodyReady){
                 var old=city;var position=old.Position;float yaw=old.ViewYaw,pitch=old.ViewPitch;
                 old.PrepareRuntimeDisposal();old.gameObject.SetActive(false);mannequin.gameObject.SetActive(true);
-                city=new GameObject(old.IsInterior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(old.IsInterior){city.BuildShop(studio,Mathf.Clamp(progress.posts.Count,0,8));shop=city;}else{city.Build(studio);street=city;}
+                city=new GameObject(old.IsHome?"Casa — quarto do jogador":old.IsInterior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(old.IsHome){city.BuildHome();homeRoom=city;}else if(old.IsInterior){city.BuildShop(studio,Mathf.Clamp(progress.posts.Count,0,8));shop=city;}else{city.Build(studio);street=city;}
                 studio.ApplyUniform(progress.uniform);city.RestoreWalk(position,yaw,pitch,mannequin);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);Destroy(old.gameObject);
                 shopFittingOpening=false;
             }
@@ -98,12 +104,16 @@ namespace FitCheck
             if(cityFreeCursor&&Tap(new Rect(38,111,350,48),"Clique para olhar  /  Tab")){cityFreeCursor=false;SyncCityCursor();}
             if(Tap(new Rect(1200,111,203,48),"Voltar ao início"))ReturnToTitle();
             Fill(new Rect(38,796,660,67),new Color(.055f,.043f,.077f,.88f));
-            Txt(new Rect(58,803,620,24),city.IsInterior?"DRIPLAB  /  LOJA":city.Place,tiny,violet);
+            Txt(new Rect(58,803,620,24),city.IsHome?"EM CASA  /  DIA 0"+progress.day:city.IsInterior?"DRIPLAB  /  LOJA":city.Place,tiny,violet);
             Txt(new Rect(58,831,620,24),"WASD andar  /  Mouse olhar  /  E interagir  /  Esc pausa",tiny,paper);
-            if(city.IsInterior){
+            if(city.IsHome||!city.IsInterior){
+                string worldAction=city.IsHome?HomeActionLabel():city.StreetInteraction==1?"Entrar na DripLab":city.StreetInteraction==2?"Entrar em casa":"";
+                if(worldAction.Length>0){Fill(new Rect(440,680,560,76),new Color(.04f,.035f,.045f,.94f));Txt(new Rect(458,696,524,45),"E  /  "+worldAction,action,paper);}
+                else {Fill(new Rect(38,111,540,74),new Color(.04f,.035f,.045f,.88f));Txt(new Rect(56,123,502,52),city.IsHome?"Saia pela porta quando quiser ir à loja.":"Entre pela porta sob o letreiro DRIPLAB.",caption,paper);}
+            }else if(city.IsInterior){
                 string label=ShopActionLabel();
                 if(label.Length>0){Fill(new Rect(440,680,560,76),new Color(.04f,.035f,.045f,.94f));Txt(new Rect(458,696,524,45),shopFittingOpening?label:"E  /  "+label,action,paper);}
-                else if(!cityFreeCursor){Fill(new Rect(38,111,515,66),new Color(.04f,.035f,.045f,.88f));Txt(new Rect(56,121,480,48),city.CustomerWaitingAtCounter?"Cliente no balcão. Passe por trás para atender.":"Explore a loja e aguarde o próximo cliente.",caption,paper);}
+                else if(!cityFreeCursor){Fill(new Rect(38,111,515,66),new Color(.04f,.035f,.045f,.88f));Txt(new Rect(56,121,480,48),progress.DayComplete?"Expediente concluído. Confira o fechamento no balcão.":!ShopOpen?"Loja fechada. Vá ao balcão para abrir quando quiser.":city.CustomerWaitingAtCounter?"Cliente no balcão. Passe por trás para atender.":"Loja aberta. O cliente está chegando.",caption,paper);}
             }
             if(cityFreeCursor)Txt(new Rect(440,750,560,32),"Também pode segurar o botão direito para olhar.",caption,paper);
             ProcessCityEvent(Event.current);
@@ -112,7 +122,7 @@ namespace FitCheck
         {
             if(paused||stage!=Stage.City||ShopSequenceActive)return;
             if(ProcessCityDragLook(e))return;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E&&city.IsInterior){if(InteractShop())e.Use();return;}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){if(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet())e.Use();return;}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Tab){cityFreeCursor=!cityFreeCursor;SyncCityCursor();e.Use();return;}
             if(!CityHitArea(e.mousePosition))return;
             if(e.type==EventType.MouseDown&&CaptureCityPointer(e.mousePosition,e.button))e.Use();
@@ -139,17 +149,18 @@ namespace FitCheck
         string ShopActionLabel()
         {
             if(shopFittingOpening)return "Abrindo o provador…";
-            switch(city.ShopInteraction){case 1:return progress.DayComplete?"Ver fechamento do expediente":"Atender "+DayOne.Customers[progress.posts.Count].name;case 2:return "Entrar no provador";case 3:return "Sair da loja";default:return "";}
+            switch(city.ShopInteraction){case 1:return progress.DayComplete?"Ver fechamento do expediente":!ShopOpen?"Abrir a loja":city.CustomerWaitingAtCounter?"Atender "+DayOne.Customers[progress.posts.Count].name:"Aguardando o cliente chegar…";case 2:return "Entrar no provador";case 3:return "Sair da loja";default:return "";}
         }
         bool InteractShop()
         {
-            if(paused||stage!=Stage.City||!city.IsInterior||ShopSequenceActive)return false;
+            if(paused||stage!=Stage.City||!city.IsInterior||city.IsHome||ShopSequenceActive)return false;
             if(shopFittingOpening)return true;
             int action=city.ShopInteraction;if(action==0)return false;
-            if(action==3){Home();return true;}
+            if(action==3){EnterStreetAt(CityView.StreetShopDoor,180);return true;}
             if(pendingPhotoBytes!=null&&!TrySave())return false;
             if(action==2){shopFittingOpening=true;city.OpenFittingCurtain();return true;}
             if(progress.DayComplete){ExitCity();stage=Stage.Summary;return true;}
+            if(!ShopOpen){OpenShopForDay();return true;}
             if(!city.CustomerWaitingAtCounter)return false;
             StartShopConversation();
             SyncCityCursor();return true;
