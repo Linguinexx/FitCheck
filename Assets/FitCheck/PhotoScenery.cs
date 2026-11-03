@@ -12,7 +12,9 @@ namespace FitCheck
             var o=GameObject.CreatePrimitive(kind);o.name=name;o.transform.SetParent(transform);o.transform.localPosition=p;o.transform.localScale=scale;o.GetComponent<Renderer>().sharedMaterial=Paint(c);Destroy(o.GetComponent<Collider>());return o;
         }
         public static GameObject Build(int index)
-        {var go=new GameObject("Cidade — "+DayOne.Customers[index].location);go.transform.position=new Vector3(30,0,0);go.AddComponent<PhotoScenery>().Compose(index);return go;}
+        {var go=new GameObject("Cidade — "+DayOne.Customers[index].location);go.transform.position=new Vector3(30,0,0);
+            if(index==1||index==2||index==3||index==5||index==6)go.AddComponent<CityView>().BuildPhotoLocation(index);
+            else go.AddComponent<PhotoScenery>().Compose(index);return go;}
         void Compose(int index)
         {
             var sand=new Color(.66f,.6f,.48f);var stone=new Color(.38f,.4f,.38f);var green=new Color(.15f,.34f,.22f);var cream=new Color(.87f,.79f,.6f);

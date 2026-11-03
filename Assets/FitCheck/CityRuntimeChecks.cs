@@ -12,7 +12,7 @@ namespace FitCheck
             var before=JsonUtility.ToJson(progress);var oldOutfit=outfit;int oldCustomer=customer;bool oldPaused=paused;int paths=0;
             try{
                 EnterCity();paused=false;
-                if(city.ResidentCount!=4||city.GeometryBatches<6||cam.orthographic||mannequin.gameObject.activeSelf)throw new Exception("Bairro incompleto, câmera ou corpo em primeira pessoa incorretos");
+                if(city.ResidentCount!=CityView.StreetResidentCount||city.GeometryBatches<6||cam.orthographic||mannequin.gameObject.activeSelf)throw new Exception("Bairro incompleto, câmera ou corpo em primeira pessoa incorretos");
                 if(cam.clearFlags!=CameraClearFlags.Skybox||cam.GetComponent<Skybox>().material!=city.SkyMaterial||!city.SkyMaterial.shader.isSupported)throw new Exception("Skybox ausente ou incompatível");
                 var shader=Resources.Load<Shader>("CityPaint");var texture=Resources.Load<Texture2D>("Painted/CityStone");
                 if(shader==null||!shader.isSupported||texture==null||texture.width!=1024||texture.height!=256||texture.mipmapCount<2)throw new Exception("Material urbano indisponível ou sem mipmaps");
@@ -57,7 +57,7 @@ namespace FitCheck
                 Home();UpdateCamera();if(cam.clearFlags!=beforeCityClearFlags||cam.GetComponent<Skybox>().enabled!=beforeCitySkyEnabled||cam.GetComponent<Skybox>().material!=beforeCitySky)throw new Exception("Céu vazou para o provador");
                 if(cam.orthographic||city.gameObject.activeSelf||mannequin.position!=Vector3.zero||!mannequin.gameObject.activeSelf||Mathf.Abs(cam.fieldOfView-beforeCityFov)>.01f)throw new Exception("Saída do bairro não restaurou o provador");
                 // Replacing source clothes must not destroy the baked residents.
-                Apply();EnterCity();if(city.ResidentCount!=4)throw new Exception("Moradores duplicados ao entrar novamente");
+                Apply();EnterCity();if(city.ResidentCount!=CityView.StreetResidentCount)throw new Exception("Moradores duplicados ao entrar novamente");
                 foreach(var r in city.GetComponentsInChildren<Renderer>())foreach(var m in r.sharedMaterials)if(m==null)throw new Exception("Material perdido após troca de roupa");
                 if(JsonUtility.ToJson(progress)!=before)throw new Exception("Passeio alterou campanha");
                 if(RetroCamera.SoftPixelHeight!=720)throw new Exception("Pixelização voltou ao nível forte");

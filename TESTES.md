@@ -1,5 +1,14 @@
 # Registro de testes — protótipo K7
 
+## 03/11/2026 — Bairro e percurso residencial
+
+- Caminhada real pelo controlador a 60 Hz, mantendo velocidade 4,4: AP 03 → loja 31,683 s; loja → AP 03 31,083 s. As duas direções devem permanecer entre 30 e 45 segundos.
+- Pontos acessíveis: residencial, mercearia, galeria, quadra, casa de shows, oficina e praça. Colisões verificadas em fachadas, alambrado e muro do fundo da quadra.
+- Sete moradores; novos percursos avançam, respeitam arquitetura e congelam com o tempo pausado. Três saves e progresso da campanha preservados.
+- As interações antigas no RADIO e entre café/loja não levam à casa. Percurso completo casa/bairro/loja/bairro/casa, abertura manual e atendimento mantidos.
+- Fotos novas da galeria, quadra e casa de shows usam os mesmos construtores de arquitetura do bairro. Imagens de revisão e medição ficam em `Captures/CityComplete`.
+- A exploração exige quitinete cenográfica antiga e cenário temporário de foto ocultos; revisão visual da galeria detectou e motivou a correção da sobreposição.
+
 Plataforma: Unity Editor 6000.6.7f1, Windows. Data: 30/10/2026.
 
 | ID | Procedimento executado | Resultado observado |

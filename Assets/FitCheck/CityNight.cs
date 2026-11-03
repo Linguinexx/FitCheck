@@ -52,7 +52,6 @@ namespace FitCheck
                 Rod(new Vector3(x,y-.15f,-3),new Vector3(x,y-.32f,-3),.10f,new Color(1,.67f,.31f),"CityGlow",8);
             }
             // A short exposed masonry plinth makes the brick material readable up close.
-            Block(new Vector3(-4.8f,.36f,9.02f),new Vector3(7.0f,.65f,.18f),Color.white,"CityBrick");
             Block(new Vector3(22.1f,.45f,5.3f),new Vector3(7.5f,.8f,.18f),Color.white,"CityBrick");
             traffic=new GameObject("Carro — trânsito do bairro").transform;traffic.SetParent(transform,false);traffic.localPosition=new Vector3(trafficX,0,-13.8f);traffic.localScale=new Vector3(1.5f,1.42f,1.45f);
             BuildStreetCar();
@@ -70,7 +69,7 @@ namespace FitCheck
         {
             if(traffic!=null){
                 bool stop=Mathf.Abs(Position.y+13.8f)<2&&Position.x>trafficX-2&&Position.x<trafficX+6.4f;
-                if(!stop)trafficX+=delta*3.8f;if(trafficX>49)trafficX=-49;
+                if(!stop)trafficX+=delta*3.8f;if(trafficX>49)trafficX=-153;
                 traffic.localPosition=new Vector3(trafficX,0,-13.8f);
                 foreach(var wheel in trafficWheels)wheel.localRotation=Quaternion.Euler(90,0,0)*Quaternion.Euler(0,-trafficX*120,0);
             }

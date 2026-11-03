@@ -8,7 +8,7 @@ namespace FitCheck
         public bool IsHome=>homeInterior;
         public static readonly Rect HomeBounds=new Rect(-5.5f,-4.5f,11,9);
         public static readonly Vector2 HomeSpawn=new Vector2(0,.2f),HomeDoor=new Vector2(0,-3.5f),HomeBed=new Vector2(-1.5f,2.6f),HomeWardrobe=new Vector2(3,2),HomeDesk=new Vector2(-2.1f,-2.2f);
-        public static readonly Vector2 StreetHomeDoor=new Vector2(-4.8f,7.65f),StreetHomeThreshold=new Vector2(-4.8f,9.9f),StreetShopDoor=new Vector2(10.4f,2.1f);
+        public static readonly Vector2 StreetHomeDoor=new Vector2(-124.8f,7.65f),StreetHomeThreshold=new Vector2(-124.8f,9.9f),StreetShopDoor=new Vector2(10.4f,2.1f);
         public void BuildHome()
         {
             interior=true;homeInterior=true;transform.position=new Vector3(600,0,0);

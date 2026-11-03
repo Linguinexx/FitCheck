@@ -45,7 +45,7 @@ namespace FitCheck
                 MoveProof(new Vector2(21.8f,3.8f),0,0);if(city.StreetInteraction==2||InteractStreet())throw new Exception("RADIO ainda permite entrar em casa");
                 MoveProof(CityView.StreetHomeDoor,0,-6);
                 city.SetView(0,-6);city.Frame(cam,true,0);SaveFirstPersonFrame(Path.Combine(folder,"home-street-door.png"));
-                MoveProof(new Vector2(-4.8f,4.6f),0,-9);SaveFirstPersonFrame(Path.Combine(folder,"residential-front.png"));
+                MoveProof(new Vector2(CityView.StreetHomeDoor.x,4.6f),0,-9);SaveFirstPersonFrame(Path.Combine(folder,"residential-front.png"));
                 WalkWorldProof(CityView.StreetShopDoor);if(!InteractStreet()||!city.IsInterior||city.IsHome||ShopOpen||city.CustomerVisible)throw new Exception("Loja não abriu fechada a partir da rua");
                 WalkWorldProof(CityView.ShopCounter);if(!InteractShop()||!ShopOpen||!ShopArrivalActive||ShopSequenceActive)throw new Exception("Não abriu expediente após percurso");
                 SettleShopArrival();if(!city.CustomerWaitingAtCounter)throw new Exception("Cliente não chegou após abertura manual");

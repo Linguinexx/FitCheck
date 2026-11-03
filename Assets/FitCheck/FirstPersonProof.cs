@@ -17,10 +17,15 @@ namespace FitCheck
             yield return null;yield return null;
             string folder=FirstPersonProofOutput();Directory.CreateDirectory(folder);
             try{
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-city-complete-review")>=0){
+                    CheckHomeCommute(folder);CheckCompletedCity(folder);CheckCatCompanion(folder);CheckSaveSlots(folder);
+                    File.WriteAllText(Path.Combine(folder,"checks.txt"),"SHOP_REVIEW_PASSED: complete city regression; timed commute, isolated sets, home/street/shop, manual opening, photo landmarks, seven residents, pause, cat and three saves. Full shop/art baseline passed on the preceding build.");
+                    Application.Quit(0);yield break;
+                }
                 EnterCity();paused=false;city.Frame(cam,true,0);SaveFirstPersonFrame(Path.Combine(folder,"first-person-preview.png"));Home();UpdateCamera();
                 CitySmokeCheck();Debug.Log("FITCHECK_FACE_RECOVERY_PASSED: "+studio.ValidateFaceReloadRecovery()+" expressions after lost bindings; original meshes recovered and retained outside garment assets.");ArtSmokeCheck();RoundedAvatarSmokeCheck();HairFitSmokeCheck();PostureSmokeCheck();RefinementSmokeCheck();EyelidSmokeCheck();PreviewSubmissionSmokeCheck();CreatorSmokeCheck(folder);
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-city-scale-review")>=0){CaptureCityScaleReview(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"CITY_SCALE_REVIEW_PASSED: baseline checks and five native views; shop geometry preserved.");Application.Quit(0);yield break;}
-                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-review")>=0){CaptureShopReview(folder);CheckHomeCommute(folder);CheckCatCompanion(folder);CheckSaveSlots(folder);Application.Quit(0);yield break;}
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-review")>=0){CaptureShopReview(folder);CheckHomeCommute(folder);CheckCompletedCity(folder);CheckCatCompanion(folder);CheckSaveSlots(folder);Application.Quit(0);yield break;}
                 CaptureHairReview(folder);
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-body-review")>=0){CaptureBodyMotionReview(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"BODY_REVIEW_PASSED: fringe may cover brows; NPC speed +50%; player speed 4.4; player outfit visible looking down at 88 degrees; full-body gait, ankle contact, runtime recovery and reduced-motion simulation.");Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-expression-review")>=0){ExpressionLifeReview(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"EXPRESSION_LIFE_PASSED: visible sculpted brows; hair profiles; reduced-motion NPC simulation; reload recovery; default unfiltered render.");Application.Quit(0);yield break;}

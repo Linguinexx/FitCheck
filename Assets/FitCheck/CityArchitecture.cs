@@ -105,7 +105,10 @@ namespace FitCheck
             Block(new Vector3(21.8f,2.0f,5.4f),new Vector3(2.25f,3.8f,.14f),Teal,"Wood");
             for(int i=0;i<9;i++)Block(new Vector3(21.8f,1.0f+i*.3f,5.28f),new Vector3(2.0f,.035f,.08f),Teal*.8f,"Wood",.005f);
             obstacles.Add(new Rect(18.2f,5,8,8.6f));
-            ResidentialEntrance();
+            // The former apartment gap is now a pocket courtyard, without a home door.
+            Block(new Vector3(-4.8f,2,11.8f),new Vector3(7.2f,4,.3f),Cream,"CityBrick");
+            obstacles.Add(new Rect(-8.5f,11.5f,7.4f,.6f));
+            Bench(-4.8f,9.6f);Palm(-7.8f,7.6f,4);
         }
         void ResidentialEntrance()
         {

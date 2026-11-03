@@ -34,7 +34,11 @@ Shader "FitCheck/City Painted"
                 float pool=exp(-dot(p-float2(-1.75,-4),p-float2(-1.75,-4))/22)+exp(-dot(p-float2(18.25,-7),p-float2(18.25,-7))/24);
                 float shop=exp(-pow((p.y-3.3)/3.6,2))*exp(-pow((p.x-7.5)/11,2));
                 float cafe=exp(-pow((p.y-4.6)/3,2))*exp(-pow((p.x+17)/7,2));
-                float shade=.30+floor(light*4)/4*.17+pool*.40+shop*.33+cafe*.29;
+                float westLamp=clamp(round((p.x+134)/18)*18-134,-134,-26);
+                float westPool=exp(-dot(p-float2(westLamp+.75,-7.4),p-float2(westLamp+.75,-7.4))/28)*step(p.x,-24);
+                float westFront=exp(-pow((p.y-5.2)/4,2))*step(-143,p.x)*step(p.x,-25);
+                float court=exp(-dot((p-float2(-76,12))/float2(13,12),(p-float2(-76,12))/float2(13,12)));
+                float shade=.30+floor(light*4)/4*.17+pool*.40+shop*.33+cafe*.29+westPool*.44+westFront*.28+court*.26;
                 shade=lerp(shade,.64+floor(light*4)/4*.23,saturate(_Interior));
                 shade=lerp(shade,1.18,saturate(_Emission));
                 float3 colorA=floor(saturate(i.color.rgb*a*shade)*63+.5)/63,colorB=floor(saturate(i.color.rgb*b*shade)*63+.5)/63;

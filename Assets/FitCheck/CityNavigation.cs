@@ -7,7 +7,7 @@ namespace FitCheck
     {
         public static readonly Vector3 Origin=new Vector3(200,0,0);
         public static readonly Vector2 Spawn=new Vector2(-3.5f,-7.1f);
-        public static readonly Rect WalkBounds=new Rect(-25.5f,-15.5f,51,29);
+        public static readonly Rect WalkBounds=new Rect(-144,-15.5f,169.5f,36.5f);
         const float Radius=.40f,Cell=.5f;
         public const float PlayerSpeed=4.4f;
         [SerializeField] List<Rect> obstacles=new List<Rect>();
@@ -19,7 +19,7 @@ namespace FitCheck
         public float ViewPitch {get;private set;}=-5;
         public const float LookSensitivity=2.8f;
         Transform marker,shadow;
-        public string Place {get{return Vector2.Distance(Position,StreetHomeDoor)<3?"RESIDENCIAL  /  AP 03":Position.y>1&&Position.x< -9?"CAFÉ DO LADO":Position.y>0&&Position.x>0?"DRIPLAB":"PRAÇA DO ENCONTRO";}}
+        public string Place {get{return Vector2.Distance(Position,StreetHomeDoor)<6?"RESIDENCIAL  /  AP 03":Position.x< -107?"RUA DAS LAJES":Position.x< -87?"GALERIA  /  LADO B":Position.x< -64?"QUADRA DO ENCONTRO":Position.x< -38?"PALCO  /  AO VIVO":Position.x< -24?"PASSAGEM DO COMÉRCIO":Position.y>1&&Position.x< -9?"CAFÉ DO LADO":Position.y>0&&Position.x>0?"DRIPLAB":"PRAÇA DO ENCONTRO";}}
         public bool Free(Vector2 p){return WorldFree(p)&&!ResidentBlocks(p)&&!VehicleBlocks(p);}
         bool WorldFree(Vector2 p)
         {

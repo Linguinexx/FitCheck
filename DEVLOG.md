@@ -1,5 +1,17 @@
 # DevLog
 
+## 03/11/2026 — Bairro conectado e percurso residencial de 30–45 segundos
+
+AP 03 realocado para a Rua das Lajes, a oeste da praça, por solicitação do usuário. O antigo vão entre café e DripLab vira um pequeno pátio; RADIO continua independente. A entrada residencial mantém vestíbulo real, saída pela porta e conexão de volta ao mesmo quarto/save. Velocidade normal mantida em 4,4 unidades/s, sem cronômetro de deslocamento nem salto por menu.
+
+Rua contínua com mercearia, Galeria Lado B, quadra com linhas/tabela/alambrado, casa de shows AO VIVO e oficina, além de residências, sacadas, bancos, plantas, drenagem, cartazes, placas de orientação, marquises e iluminação âmbar. A praça, a DripLab e o monumento distante mantêm suas silhuetas. Novos letreiros usam o atlas de impressão, agora com 24 inscrições; superfícies usam a biblioteca de texturas do jogo. Sete moradores no bairro, incluindo dois novos percursos de pedestres. Trânsito cobre a rua ampliada.
+
+Galeria, quadra e casa de shows passam a compartilhar seus construtores de arquitetura com as fotos novas do FitFeed, preservando as fotos já salvas. Sem criar interiores para cada fachada.
+
+A revisão visual encontrou a quitinete cenográfica antiga, em x=100, sobreposta à nova galeria. SetHome agora sincroniza a visibilidade do conjunto mesmo quando o estado lógico já é o mesmo; entrar em um ambiente também oculta o cenário temporário de foto. A prova de conclusão exige ambos ocultos durante a exploração, além de gerar novas capturas da rua e das fotos.
+
+Primeira medição nativa a 60 Hz: ida 31,683 s, volta 31,083 s. A verificação também percorre os pontos do bairro, testa colisões e movimento/pausa dos novos pedestres, rejeita os dois endereços antigos da casa e confere portas, abertura manual, atendimento, Fubá e isolamento dos três saves. Capturas, relatório de tempo e provas ficam em Captures/CityComplete; build Windows-CityComplete. Esta rodada completa os três pedidos desde o último envio; preparar índice portável antes de commit/push.
+
 ## 01/11/2026 — Mais superfícies e revisão do gato para encerrar a rodada
 
 Consultada a API oficial do ambientCG e importados somente os mapas Color de Fabric084, Carpet016, WoodFloor040 e Tiles107. Assoalho do quarto recebe tábuas próprias; tapete doméstico e cantinho do gato na loja recebem fibras de carpete; vestíbulo recebe cerâmica. Fur detail usa a luminância de Fabric084, preservando a cor laranja da pelagem. Fontes, licença CC0, hashes e médias estão nos arquivos evening de Art/AmbientCG. Mipmaps, repetição e compressão mantidos, com 256 px (512 para tecido/pelo); pacotes ZIP temporários descartados.

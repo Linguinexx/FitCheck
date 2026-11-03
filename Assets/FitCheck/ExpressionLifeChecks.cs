@@ -58,7 +58,7 @@ namespace FitCheck
                 var state=city.Position;float yaw=city.ViewYaw;
                 var field=typeof(CityView).GetField("residents",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);
                 ((IList)field.GetValue(city)).Clear();UpdateCity(0);
-                if(!city.RuntimeReady||city.ResidentCount!=4||Vector2.Distance(state,city.Position)>.001f||Mathf.Abs(Mathf.DeltaAngle(yaw,city.ViewYaw))>.001f)throw new Exception("Recuperação da simulação após recompilação falhou");
+                if(!city.RuntimeReady||city.ResidentCount!=CityView.StreetResidentCount||Vector2.Distance(state,city.Position)>.001f||Mathf.Abs(Mathf.DeltaAngle(yaw,city.ViewYaw))>.001f)throw new Exception("Recuperação da simulação após recompilação falhou");
                 MoveProof(new Vector2(-3,-15),0,-8);
                 for(int i=0;i<300;i++)city.Frame(cam,true,1/30f);
                 var motion=Path.Combine(folder,"motion");Directory.CreateDirectory(motion);

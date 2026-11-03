@@ -20,6 +20,7 @@ namespace FitCheck
         }
         void EnterSpace(bool interior,bool home=false)
         {
+            if(plaza!=null)plaza.SetActive(false);
             if(stage==Stage.City){if(city.IsInterior==interior&&city.IsHome==home)return;ExitCity();}
             else if(city!=null&&city.IsHome&&city.gameObject.activeSelf)ExitCity();
             if(campaignBeforePreview!=null)Home();

@@ -10,7 +10,7 @@ namespace FitCheck
         public void Build(StudioView studio)
         {
             transform.position=Origin;
-            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();NightDetails();GeometryBatches=batches.Count;FinishGeometry();
+            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();WestNeighbourhood();NightDetails();GeometryBatches=batches.Count;FinishGeometry();
             marker=Disc("Destino na calçada",.27f,.27f,.19f,new Color(.36f,.76f,.65f));marker.gameObject.SetActive(false);
             shadow=Disc("Sombra do funcionário",.65f,.36f,0,new Color(.43f,.40f,.39f));
             BakeResident(studio,1,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-15.4f,-.055f,2.8f),-22);
@@ -21,6 +21,11 @@ namespace FitCheck
             residents[2].path=new[]{new Vector2(-4,-8.5f),new Vector2(10,-8.5f),new Vector2(19,-8.5f),new Vector2(10,-8.5f),new Vector2(-4,-8.5f),new Vector2(-20,-8.5f)};
             motionRigVersion=ResidentArtRevision;
             residents[3].path=new[]{new Vector2(-22.3f,3.6f),new Vector2(-16.8f,3.6f),new Vector2(-22.3f,3.6f),new Vector2(-22,-2)};
+            BakeResident(studio,2,new[]{"AH_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-122,-.055f,1.8f),90);
+            residents[4].path=new[]{new Vector2(-139,1.8f),new Vector2(-109,1.8f)};
+            BakeResident(studio,4,new[]{"SB_TOP_02","CG_BOTTOM_01","CG_SHOES_01",""},new Vector3(-97,-.055f,1.5f),90);
+            residents[5].path=new[]{new Vector2(-103,1.5f),new Vector2(-90,1.5f)};
+            BakeResident(studio,6,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-73,-.055f,12),-45);
         }
         Transform Disc(string name,float rx,float rz,float inner,Color color)
         {

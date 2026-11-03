@@ -16,7 +16,7 @@ namespace FitCheck
                 var color=i%3==0?new Color(.38f,.34f,.30f):i%3==1?new Color(.58f,.39f,.33f):new Color(.65f,.59f,.50f);
                 Residence(x,z,3+i%3,12.4f+(i%2)*.8f,10.5f,color,0,i);
             }
-            for(int side=-1;side<=1;side+=2){
+            for(int side=1;side<=1;side+=2){
                 Ground(side*31.2f,1,4.4f,83,-.035f,Cream,"CityStone",4.7f);
                 for(int i=0;i<6;i++)Residence(side*(38+i%2*6),-29+i*11,2+i%2,12.8f,10.5f,i%2==0?Teal:Peach,-side,i+7);
             }

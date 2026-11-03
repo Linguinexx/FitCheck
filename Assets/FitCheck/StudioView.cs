@@ -124,8 +124,9 @@ namespace FitCheck
             Box("Vaso",new Vector3(2.2f,.25f,1.5f),new Vector3(.48f,.5f,.48f),Material(new Color(.55f,.23f,.12f)),house);
             for(int i=0;i<5;i++){var leaf=Form("Folha",new Vector3(2.2f+(i-2)*.12f,.95f,1.5f),new Vector3(.18f,.9f,.12f),Material(new Color(.12f,.29f,.16f)),house);leaf.transform.localRotation=Quaternion.Euler(0,0,(i-2)*-18);}
         }
+        public bool LegacyHomeVisible=>house!=null&&house.gameObject.activeSelf;
         public void SetHome(bool home)
-        {if(home==inHome)return;inHome=home;Avatar.position=home?new Vector3(100,0,0):Vector3.zero;framingNow=home?-.95f:.9f;}
+        {if(house!=null)house.gameObject.SetActive(home);if(home==inHome)return;inHome=home;Avatar.position=home?new Vector3(100,0,0):Vector3.zero;framingNow=home?-.95f:.9f;}
         public void ApplyUniform(int uniform)
         {
             Apply(Catalog.Default,-1);buildingGarments=true;

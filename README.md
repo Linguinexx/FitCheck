@@ -7,7 +7,7 @@ Jogo 3D de montagem de looks streetwear em Unity **6000.6.7f1**. Arte em desenvo
 1. Adicione esta pasta ao Unity Hub com a versão indicada.
 2. Abra `Assets/Scenes/FirstCustomer.unity` e pressione **Play**.
 3. Na tela da fachada, clique em **Jogar** e selecione um dos três saves. Um espaço vazio abre a criação do personagem; criar ou continuar começa no quarto em primeira pessoa.
-4. Ande até a porta de casa e pressione **E — Sair de casa**. Você sai pelo vestíbulo do residencial **AP 03**, entre o café e a DripLab. No bairro, caminhe até a porta sob o letreiro **DRIPLAB** e pressione **E — Entrar na DripLab**. O prédio RADIO é independente da casa.
+4. Ande até a porta de casa e pressione **E — Sair de casa**. Você sai pelo vestíbulo do residencial **AP 03**, na Rua das Lajes. O percurso de caminhada até a DripLab passa pelo comércio, galeria, quadra e casa de shows. No bairro, caminhe até a porta sob o letreiro **DRIPLAB** e pressione **E — Entrar na DripLab**. O prédio RADIO é independente da casa.
 5. A loja começa fechada: passe por trás do balcão e pressione **E — Abrir a loja** quando estiver pronto. Ao terminar um dia, feche o expediente e volte para casa. A cama abre as opções de descanso; o guarda-roupa e a mesa dão acesso ao uniforme, à aparência e ao FitFeed.
 
 Cada save mantém aparência, campanha e fotos separadas em `saves/slot-1`, `slot-2` ou `slot-3`, dentro da pasta de dados persistentes da Unity. Na primeira seleção, o progresso da versão anterior é copiado para o primeiro espaço; os arquivos originais e as fotos antigas permanecem preservados. **Excluir save** abre uma confirmação com o espaço e o nome do personagem; **Cancelar** mantém os arquivos e **Excluir definitivamente** libera somente o espaço escolhido. Um save excluído não volta a ser importado automaticamente da versão antiga.
@@ -32,6 +32,8 @@ O gato usa detalhe estático de pelo e marcações de pelagem, com patas recolhi
 - Catálogo de 21 peças em três drops, desbloqueios por Reputação e repetição de atendimentos.
 - Criação do jogador com nome, tons de pele, sete cabelos (incluindo ondulado longo e coque alto), cores e expressões.
 - Loja com araras, tênis, caixa e provador; bairro com moradores e veículos em movimento.
+- Bairro conectado pela Rua das Lajes: AP 03, mercearia, Galeria Lado B, quadra, casa de shows, oficina, café e Praça do Encontro. Caminhada casa–loja medida a 60 Hz: aproximadamente 32 segundos, na velocidade normal de 4,4 unidades/s; sete moradores, iluminação noturna e sinalização nos dois sentidos.
+- Galeria, quadra e casa de shows compartilham a mesma arquitetura com as novas fotos do FitFeed. Fachadas e cenografia não abrem interiores adicionais.
 - Progresso, aparência e fotos salvos localmente. Os saves não fazem parte do repositório.
 
 Cabelo, mãos, roupas e demais elementos visuais continuam sujeitos à revisão artística.
@@ -56,6 +58,6 @@ O player aceita `-city-proof -shop-review -proof-output "<pasta>"` para executar
 
 ## Texturas e créditos
 
-Foram incorporados oito mapas de cor do ambientCG, adaptados à direção de arte e com resolução de importação limitada. Fontes e licença CC0: [créditos ambientCG](Art/AmbientCG/CREDITS.md). Não foram incorporados modelos ou marcas externas de calçados.
+Foram incorporados 12 mapas de cor do ambientCG, adaptados à direção de arte e com resolução de importação limitada. Fontes e licença CC0: [créditos ambientCG](Art/AmbientCG/CREDITS.md). Não foram incorporados modelos ou marcas externas de calçados.
 
 As decisões e revisões anteriores estão em [DEVLOG.md](DEVLOG.md), [DIRECAO_ARTE.md](DIRECAO_ARTE.md) e [TESTES.md](TESTES.md).
