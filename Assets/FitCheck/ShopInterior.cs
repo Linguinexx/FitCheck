@@ -11,7 +11,7 @@ namespace FitCheck
         public static readonly Rect ShopBounds=new Rect(-7.7f,-4.8f,15.4f,13.6f);
         public static readonly Vector2 ShopSpawn=new Vector2(0,-3.5f);
         public static readonly Vector2 ShopCounter=new Vector2(4.4f,7.65f),ShopCustomerQueue=new Vector2(4.4f,4.5f),ShopFitting=new Vector2(-4.9f,4.1f);
-        static readonly Color FittingPurple=new Color(.35f,.14f,.57f);
+        static readonly Color FittingPurple=new Color(.29f,.37f,.29f);
         public void BuildShop(StudioView studio,int customer=0)
         {
             interior=true;shopCustomerIndex=customer;transform.position=new Vector3(400,0,0);
@@ -69,6 +69,9 @@ namespace FitCheck
         {
             // Back counter, with access around its left side rather than a blocked full-width wall.
             ShopDetailedCounter();
+            Block(new Vector3(2.1f,1.675f,6.35f),new Vector3(.7f,.065f,.8f),Kaos,"Paper");
+            Block(new Vector3(2.1f,1.715f,6.35f),new Vector3(.61f,.015f,.7f),Cream,"Paper");
+            Block(new Vector3(2.1f,1.727f,6.35f),new Vector3(.45f,.01f,.08f),Kaos,"Leather");
             Block(new Vector3(0,1.1f,8.70f),new Vector3(2.2f,2.2f,.30f),Cream,"CityStucco");
             obstacles.Add(new Rect(-1.1f,8.55f,2.2f,.4f));
             obstacles.Add(new Rect(1.45f,5.45f,5.9f,1.6f));
@@ -116,7 +119,7 @@ namespace FitCheck
             }
             Rod(new Vector3(-7.4f,3.65f,5.15f),new Vector3(-2.5f,3.65f,5.15f),.045f,Cream,"CityMetal");
             Block(new Vector3(-4.9f,4.0f,5.15f),new Vector3(4.8f,.53f,.12f),Ink,"CityMetal");
-            Words("PROVADOR",new Vector3(-4.9f,4.0f,5.06f),.058f,new Color(.79f,.57f,1),"CityGlow");
+            Words("PROVADOR",new Vector3(-4.9f,4.0f,5.06f),.058f,new Color(.90f,.80f,.57f),"CityGlow");
             // An abstract printed panel connects this entrance to the existing fitting-room stage.
             var panel=LiveBox("Painel abstrato do provador",new Vector3(-4.9f,2.1f,8.59f),new Vector3(2.3f,3.3f,.04f),Color.white,"CityMetal");
             var abstractMaterial=new Material(Resources.Load<Shader>("AbstractBackdrop"));abstractMaterial.mainTexture=Resources.Load<Texture2D>("Painted/AbstractFlow");assets.Add(abstractMaterial);

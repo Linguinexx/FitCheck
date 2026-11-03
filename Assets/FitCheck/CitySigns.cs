@@ -4,7 +4,7 @@ namespace FitCheck
 {
     public partial class CityView
     {
-        static readonly string[] SignLabels={"DRIPLAB","CAFE DO LADO","RADIO","ABERTO","DROP 01","DROP","D","SOM","HOJE","PRACA","ENCONTRO","PROVADOR","SIDE B","AFTER HOURS","COMMON GROUND","FIT CHECK","CASA","AP 03","GALERIA","LADO B","QUADRA","AO VIVO","MERCEARIA","OFICINA"};
+        static readonly string[] SignLabels={"DRIPLAB","CAFE DO LADO","RADIO","ABERTO","DROP 01","DROP","D","SOM","HOJE","PRACA","ENCONTRO","PROVADOR","SIDE B","AFTER HOURS","COMMON GROUND","FIT CHECK","CASA","AP 03","GALERIA","LADO B","QUADRA","AO VIVO","MERCEARIA","OFICINA","BATALHA DE RIMA","CHINELO NO FIO","FIADO SO AMANHA","FUBA DONO DA RUA","SEM PIX SEM FIT","RESPEITA O CORRE","PASSINHO LIBERADO","SO MAIS UM DROP"};
         void PrintedWords(string text,Vector3 center,float pixel,Color color,bool glow)
         {
             int sign=System.Array.IndexOf(SignLabels,text);if(sign<0)return;

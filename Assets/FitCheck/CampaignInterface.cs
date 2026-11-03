@@ -21,6 +21,7 @@ namespace FitCheck
         }
         void BuildAudio()
         {
+            SetMouseSensitivity(ProofMode?1:PlayerPrefs.GetFloat("FitCheck.MouseSensitivity",1));
             mutedAudio=PlayerPrefs.GetInt("FitCheck.Mute",0)==1;
             reducedMotion=PlayerPrefs.GetInt("FitCheck.ReducedMotion",0)==1;
             if(!ProofMode&&PlayerPrefs.GetInt("FitCheck.VisualDefaultsVersion",0)<2){
@@ -37,7 +38,7 @@ namespace FitCheck
             for(int i=0;i<count;i++){float t=i/22050f;float env=Mathf.Min(1,t/.008f)*Mathf.Pow(1-t/duration,2);data[i]=Mathf.Sin(t*frequency*Mathf.PI*2)*env*.45f;}
             var clip=AudioClip.Create(name,count,1,22050,false);clip.SetData(data,0);return clip;
         }
-        void Sound(int kind){if(effects!=null&&!mutedAudio)effects.PlayOneShot(kind==0?clickSound:kind==1?photoSound:awardSound);}
+        void Sound(int kind){if(kind==1)photoFlash=.16f;if(effects!=null&&!mutedAudio)effects.PlayOneShot(kind==0?clickSound:kind==1?photoSound:awardSound);}
         bool TrySave(){try{if(pendingPhotoBytes!=null)System.IO.File.WriteAllBytes(pendingPhotoPath,pendingPhotoBytes);SaveDay();pendingPhotoBytes=null;pendingPhotoPath=null;message="Progresso salvo.";return true;}catch(Exception ex){message="Não foi possível salvar. Tente novamente: "+ex.Message;return false;}}
         void NotifyAchievements(string[] before){foreach(string id in progress.achievements)if(!before.Contains(id))notices.Enqueue(id);}
         void DrawAchievement()
@@ -52,7 +53,7 @@ namespace FitCheck
         }
         void HomeUI()
         {
-            Fill(new Rect(0,88,600,812),new Color(.055f,.043f,.077f,.97f));
+            Fill(new Rect(0,88,600,812),new Color(.055f,.06f,.055f,.97f));
             Txt(new Rect(48,125,500,35),progress.Complete?"SEMANA CONCLUÍDA":"DIA 0"+progress.day+"  /  EM CASA",caption,violet);
             Txt(new Rect(48,178,510,85),progress.Complete?"Seu toque ficou.":"Seu canto.",heading);
             string intro=progress.Complete?"Os nove encontros viraram histórias no FitFeed. Você pode revisitar seus visuais e melhorar seus resultados.":progress.closed?"Expediente encerrado. Confira suas conquistas, reveja os posts e descanse para amanhã.":"Antes de sair, escolha seu uniforme. O bairro tem novas histórias esperando por você.";
@@ -122,6 +123,6 @@ namespace FitCheck
             if(!focus&&(stage==Stage.Dressing||stage==Stage.Confirm)){paused=true;dragging=false;}
             if(!focus&&stage==Stage.City){dragging=false;SyncCityCursor();}
         }
-        void OnDestroy(){Font.textureRebuilt-=FontRebuilt;if(titlePhoto!=null)Destroy(titlePhoto);if(photo!=null)Destroy(photo);foreach(var t in lockedThumbnails.Values)Destroy(t);foreach(var t in feedPhotos.Values)Destroy(t);if(clickSound!=null)Destroy(clickSound);if(photoSound!=null)Destroy(photoSound);if(awardSound!=null)Destroy(awardSound);}
+        void OnDestroy(){if(bubbleTail!=null)Destroy(bubbleTail);DisposePresentation();Font.textureRebuilt-=FontRebuilt;if(titlePhoto!=null)Destroy(titlePhoto);if(photo!=null)Destroy(photo);foreach(var t in lockedThumbnails.Values)Destroy(t);foreach(var t in feedPhotos.Values)Destroy(t);if(clickSound!=null)Destroy(clickSound);if(photoSound!=null)Destroy(photoSound);if(awardSound!=null)Destroy(awardSound);}
     }
 }

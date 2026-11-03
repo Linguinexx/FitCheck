@@ -10,4 +10,4 @@ Manter margem livre de pelo menos 10% da altura. Não esticar, girar, adicionar 
 
 O lettering foi desenvolvido a partir da exploração visual gerada e convertido em contornos; não usa fonte comercial. A marca original DripLab e seu mascote não foram modificados.
 
-Os arquivos não foram aplicados ao menu do jogo.
+A versão vermelha está aplicada ao menu inicial sobre a fachada animada. Por solicitação do usuário, o conjunto tem pulso proporcional e flutuação leves, sem deformar o arquivo da marca. Movimento reduzido o mantém estático. A proporção original e a transparência são preservadas; a interface usa Vermelho Kaos nas ações principais.

@@ -7,9 +7,12 @@ namespace FitCheck
     {
         public static readonly Vector3 Origin=new Vector3(200,0,0);
         public static readonly Vector2 Spawn=new Vector2(-3.5f,-7.1f);
-        public static readonly Rect WalkBounds=new Rect(-144,-15.5f,169.5f,36.5f);
+        public static readonly Rect WalkBounds=new Rect(-144,-44,169.5f,102);
         const float Radius=.40f,Cell=.5f;
         public const float PlayerSpeed=4.4f;
+        public const float RunSpeed=7.2f;
+        public bool SprintRequested;
+        public bool Running {get;private set;}
         [SerializeField] List<Rect> obstacles=new List<Rect>();
         [SerializeField] List<Vector2> route=new List<Vector2>();int waypoint;
         public Vector2 Position {get;private set;}
@@ -18,8 +21,9 @@ namespace FitCheck
         public float ViewYaw {get;private set;}=46;
         public float ViewPitch {get;private set;}=-5;
         public const float LookSensitivity=2.8f;
+        public float MouseLookScale=1;
         Transform marker,shadow;
-        public string Place {get{return Vector2.Distance(Position,StreetHomeDoor)<6?"RESIDENCIAL  /  AP 03":Position.x< -107?"RUA DAS LAJES":Position.x< -87?"GALERIA  /  LADO B":Position.x< -64?"QUADRA DO ENCONTRO":Position.x< -38?"PALCO  /  AO VIVO":Position.x< -24?"PASSAGEM DO COMÉRCIO":Position.y>1&&Position.x< -9?"CAFÉ DO LADO":Position.y>0&&Position.x>0?"DRIPLAB":"PRAÇA DO ENCONTRO";}}
+        public string Place=>NeighbourhoodName(Position);
         public bool Free(Vector2 p){return WorldFree(p)&&!ResidentBlocks(p)&&!VehicleBlocks(p);}
         bool WorldFree(Vector2 p)
         {
@@ -54,15 +58,18 @@ namespace FitCheck
             var planned=new List<Vector2>();if(!PlanRoute(Position,target,planned))return false;route.Clear();route.AddRange(planned);waypoint=0;
             return true;
         }
+        public void StopWalk(){route.Clear();waypoint=0;SprintRequested=false;Walking=false;Running=false;}
         public void ResetWalk(Transform avatar)
         {
-            Position=IsHome?HomeSpawn:IsInterior?ShopSpawn:Spawn;route.Clear();waypoint=0;Walking=false;ViewYaw=IsHome?310:IsInterior?0:46;ViewPitch=IsHome?12:-5;
+            Position=IsHome?HomeSpawn:IsInterior?ShopSpawn:Spawn;route.Clear();waypoint=0;Walking=false;SprintRequested=false;Running=false;ViewYaw=IsHome?310:IsInterior?0:46;ViewPitch=IsHome?12:-5;
             avatar.position=transform.position+new Vector3(Position.x,-.055f,Position.y);avatar.rotation=Quaternion.Euler(0,-22,0);
             if(marker!=null)marker.gameObject.SetActive(false);if(shadow!=null)shadow.gameObject.SetActive(false);
         }
         public void Step(Vector2 input,float delta,bool paused,Transform avatar)
         {
-            if(paused){Walking=false;return;}delta=Mathf.Min(delta,.05f);Vector2 old=Position;float distance=PlayerSpeed*delta;
+            if(paused){Walking=false;Running=false;return;}delta=Mathf.Min(delta,.05f);Vector2 old=Position;
+            Running=SprintRequested&&input.sqrMagnitude>.001f;
+            float distance=(Running?RunSpeed:PlayerSpeed)*delta;
             if(input.sqrMagnitude>.001f){
                 route.Clear();if(marker!=null)marker.gameObject.SetActive(false);input=Vector2.ClampMagnitude(input,1);var target=Position+input*distance;
                 if(Free(target))Position=target;else{var x=new Vector2(target.x,Position.y);if(Free(x))Position=x;var z=new Vector2(Position.x,target.y);if(Free(z))Position=z;}
@@ -90,7 +97,7 @@ namespace FitCheck
         public void RestoreWalk(Vector2 position,float yaw,float pitch,Transform avatar)
         {ResetWalk(avatar);if(Free(position))Position=position;SetView(yaw,pitch);}
         public void Look(Vector2 delta)
-        {ViewYaw=Mathf.Repeat(ViewYaw+delta.x*LookSensitivity,360);ViewPitch=Mathf.Clamp(ViewPitch-delta.y*LookSensitivity,-75,88);}
+        {float gain=LookSensitivity*Mathf.Clamp(MouseLookScale,.25f,2.5f);ViewYaw=Mathf.Repeat(ViewYaw+delta.x*gain,360);ViewPitch=Mathf.Clamp(ViewPitch-delta.y*gain,-75,88);}
         public void SetView(float yaw,float pitch)
         {ViewYaw=Mathf.Repeat(yaw,360);ViewPitch=Mathf.Clamp(pitch,-75,88);}
         public Vector2 GroundPoint(Camera camera,Vector2 viewport)

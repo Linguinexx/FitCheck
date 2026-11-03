@@ -12,7 +12,7 @@ namespace FitCheck
             Ground(0,24.2f,210,7,-.04f,Color.white,"CityAsphalt",4);
             Ground(0,29.4f,210,3.5f,-.035f,Cream,"CityStone",4.7f);
             for(int i=0;i<13;i++){
-                float x=-84+i*14,z=36+(i%3)*9;
+                float x=-84+i*14,z=76+(i%3)*9;
                 var color=i%3==0?new Color(.38f,.34f,.30f):i%3==1?new Color(.58f,.39f,.33f):new Color(.65f,.59f,.50f);
                 Residence(x,z,3+i%3,12.4f+(i%2)*.8f,10.5f,color,0,i);
             }
@@ -23,6 +23,7 @@ namespace FitCheck
         }
         void Residence(float x,float z,int floors,float width,float depth,Color color,int sideFacing,int seed)
         {
+            obstacles.Add(new Rect(x-width*.5f,z-depth*.5f,width,depth));
             float height=DistrictGroundFloor+(floors-1)*DistrictUpperFloor,front=z-depth*.5f;
             Block(new Vector3(x,height*.5f,z),new Vector3(width,height,depth),color,"Plaster",.17f);
             Block(new Vector3(x,.20f,z),new Vector3(width+.12f,.4f,depth+.12f),Ink,"Plaster",.04f);

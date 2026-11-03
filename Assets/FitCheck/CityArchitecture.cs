@@ -13,7 +13,6 @@ namespace FitCheck
             Block(new Vector3(x,y,z-.14f),new Vector3(width,height,.06f),new Color(.75f,.49f,.27f),"CityWindow",.015f);
             Block(new Vector3(x,y,z-.20f),new Vector3(.055f,height,.05f),frame,"Wood",.005f);
             Block(new Vector3(x,y,z-.20f),new Vector3(width,.055f,.05f),frame,"Wood",.005f);
-            Quad(new Vector3(x-width*.42f,y-height*.35f,z-.19f),new Vector3(x-width*.42f,y-height*.08f,z-.19f),new Vector3(x+width*.12f,y+height*.40f,z-.19f),new Vector3(x+width*.35f,y+height*.40f,z-.19f),new Color(.63f,.48f,.30f),"Leather");
             Block(new Vector3(x,y-height*.5f-.17f,z-.22f),new Vector3(width+.45f,.18f,.45f),Cream);
             if(shutters)for(int side=-1;side<=1;side+=2){
                 Block(new Vector3(x+side*(width*.5f+.36f),y,z-.10f),new Vector3(.55f,height,.16f),Teal,"Wood");
@@ -43,14 +42,24 @@ namespace FitCheck
         }
         void ShoeDisplay(Vector3 p)
         {
-            Block(p+new Vector3(0,-.22f,0),new Vector3(2.65f,.23f,.65f),Cream);
-            var outline=new[]{new Vector2(-1,0),new Vector2(.88f,0),new Vector2(1.02f,.12f),new Vector2(.92f,.32f),new Vector2(.27f,.43f),new Vector2(-.15f,.81f),new Vector2(-.72f,.84f),new Vector2(-.89f,.52f)};
-            for(int i=0;i<outline.Length;i++){
-                int next=(i+1)%outline.Length;var a=outline[i];var b=outline[next];Quad(p+new Vector3(a.x,a.y,-.22f),p+new Vector3(a.x,a.y,.22f),p+new Vector3(b.x,b.y,.22f),p+new Vector3(b.x,b.y,-.22f),Violet,"Cloth");
-                Triangle(p+new Vector3(0,.32f,-.225f),p+new Vector3(b.x,b.y,-.225f),p+new Vector3(a.x,a.y,-.225f),Violet,"Cloth");
+            Block(p+new Vector3(0,-.22f,0),new Vector3(2.65f,.23f,.92f),Cream,"Plaster");
+            Block(p+new Vector3(0,-.035f,0),new Vector3(2.25f,.18f,.78f),Cream,"Rubber",.12f);
+            Block(p+new Vector3(.67f,.18f,0),new Vector3(.95f,.34f,.73f),Kaos,"Leather",.15f);
+            Block(p+new Vector3(-.20f,.27f,0),new Vector3(1.15f,.51f,.68f),Kaos,"Cloth",.12f);
+            Block(p+new Vector3(-.83f,.29f,0),new Vector3(.52f,.56f,.65f),Ink,"Leather",.10f);
+            Block(p+new Vector3(-.60f,.57f,0),new Vector3(.47f,.045f,.43f),Ink,"Rubber",.06f);
+            Block(p+new Vector3(-.13f,.51f,0),new Vector3(.55f,.10f,.40f),Cream,"Cloth",.04f);
+            foreach(float side in new[]{-1f,1f}){
+                float z=side*.355f;
+                Quad(p+new Vector3(-.55f,.12f,z),p+new Vector3(-.43f,.40f,z),p+new Vector3(.28f,.28f,z),p+new Vector3(.50f,.13f,z),Cream,"Leather");
+                Quad(p+new Vector3(.50f,.13f,z),p+new Vector3(.28f,.28f,z),p+new Vector3(-.43f,.40f,z),p+new Vector3(-.55f,.12f,z),Cream,"Leather");
             }
-            Block(p+new Vector3(0,.035f,0),new Vector3(2.05f,.15f,.52f),Cream,"Rubber");
-            for(int i=0;i<3;i++)Rod(p+new Vector3(-.32f+i*.17f,.63f-i*.08f,-.25f),p+new Vector3(-.10f+i*.17f,.62f-i*.08f,-.25f),.026f,Cream,"Leather");
+            for(int i=0;i<4;i++){
+                float x=-.28f+i*.15f,y=.59f-i*.045f;
+                Rod(p+new Vector3(x,y,-.22f),p+new Vector3(x+.12f,y-.025f,.22f),.022f,Ink,"Cloth",6);
+                Rod(p+new Vector3(x,y,.22f),p+new Vector3(x+.12f,y-.025f,-.22f),.022f,Ink,"Cloth",6);
+            }
+            for(int i=0;i<7;i++)Block(p+new Vector3(-.93f+i*.30f,-.02f,-.397f),new Vector3(.02f,.065f,.02f),Teal,"Rubber",.002f);
         }
         void DripLabFacade()
         {

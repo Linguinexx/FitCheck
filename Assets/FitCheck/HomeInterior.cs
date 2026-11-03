@@ -39,11 +39,7 @@ namespace FitCheck
             // Door, poster, night window, shelf, and a rug give each corner a purpose.
             Block(new Vector3(0,1.85f,-4.43f),new Vector3(1.9f,3.7f,.14f),Ink,"Wood");
             Rod(new Vector3(.62f,1.5f,-4.28f),new Vector3(.62f,1.95f,-4.28f),.035f,Cream,"CityMetal");
-            Block(new Vector3(.7f,2.75f,4.43f),new Vector3(2.7f,1.9f,.1f),Ink,"CityMetal");
-            Block(new Vector3(.7f,2.75f,4.35f),new Vector3(2.5f,1.7f,.03f),new Color(.12f,.035f,.07f),"CityGlow");
-            for(int i=0;i<4;i++)Block(new Vector3(-.2f+i*.6f,2.5f,4.30f),new Vector3(.38f,.9f+i%2*.5f,.03f),new Color(.28f,.12f,.12f),"CityBrick");
-            Block(new Vector3(.7f,2.75f,4.21f),new Vector3(.07f,1.8f,.05f),Cream,"Wood");
-            Block(new Vector3(.7f,1.77f,4.21f),new Vector3(2.9f,.1f,.35f),Cream,"Wood");
+            HomeNightWindow();
             Block(new Vector3(-3.4f,2.9f,4.42f),new Vector3(1.45f,1.65f,.045f),Kaos,"Cloth");
             Words("DROP",new Vector3(-3.4f,2.95f,4.37f),.055f,Cream);
             Ground(.3f,-.5f,3.6f,2.4f,.005f,new Color(.30f,.10f,.15f),"Rug",1);

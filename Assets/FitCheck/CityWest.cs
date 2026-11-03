@@ -37,7 +37,7 @@ namespace FitCheck
             Ground(-84,1.8f,120,24,-.041f,Cream,"CityStone",4.7f);
             Ground(-88,-13.7f,126,5.2f,-.018f,Color.white,"CityAsphalt",4);
             Ground(-86,-18.4f,126,4.1f,-.035f,Cream,"CityStone",4.7f);
-            Ground(-86,10,150,100,-.22f,new Color(.25f,.29f,.22f),"Plaster",6);
+            Ground(-86,10,150,140,-.22f,new Color(.25f,.29f,.22f),"Plaster",6);
             Block(new Vector3(-86,-.01f,-10.95f),new Vector3(122,.25f,.30f),Cream,"Plaster",.045f);
             for(int i=0;i<24;i++)Ground(-143+i*7.8f,-14.7f,2.4f,.10f,-.01f,new Color(.77f,.65f,.36f),"Leather");
             foreach(float x in new[]{-124.8f,-76,-36})for(int i=0;i<7;i++)Ground(x,-15.7f+i*.65f,3.6f,.35f,-.012f,Cream,"Leather");
@@ -46,19 +46,17 @@ namespace FitCheck
             StreetBuilding(-137,12,2,new Color(.65f,.45f,.35f),1);
             StreetBuilding(-112,13,2,new Color(.58f,.56f,.44f),2);
             Shopfront(-112,12,"MERCEARIA",new Color(.47f,.31f,.23f),false);
-            StreetBuilding(-96.5f,17,2,new Color(.77f,.70f,.55f),3);
-            GalleryFront();
-            StreetBuilding(-49,20,2,new Color(.35f,.30f,.30f),4);
-            MusicFront();
+            PlaceCityModule(()=>{StreetBuilding(-96.5f,17,2,new Color(.77f,.70f,.55f),3);GalleryFront();},new Vector3(0,0,30));
+            PlaceCityModule(()=>{StreetBuilding(-49,20,2,new Color(.35f,.30f,.30f),4);MusicFront();},new Vector3(-98,0,-15),true);
             StreetBuilding(-31.5f,13,2,new Color(.67f,.52f,.42f),5);
             Shopfront(-31.5f,12,"OFICINA",Ink,false);
-            NeighbourhoodCourt();
+            PlaceCityModule(NeighbourhoodCourt,new Vector3(0,0,30));
 
             // South side and receding northern roofs give the street a complete silhouette.
             for(int i=0;i<6;i++){
                 int seed=i;float x=-137+i*19;
-                PlaceCityModule(()=>Residence(0,0,2+seed%2,16,10,seed%2==0?Peach:Teal,0,seed+30),new Vector3(x,0,-24),true);
-                PlaceCityModule(()=>Residence(0,0,3+seed%2,15,10,seed%2==0?Teal:Cream,0,seed+40),new Vector3(x,0,29+seed%2*3));
+                if(i<4)PlaceCityModule(()=>Residence(0,0,2+seed%2,16,10,seed%2==0?Peach:Teal,0,seed+30),new Vector3(x,0,-24),true);
+                if(i!=2&&i!=3)PlaceCityModule(()=>Residence(0,0,3+seed%2,15,10,seed%2==0?Teal:Cream,0,seed+40),new Vector3(x,0,29+seed%2*3));
             }
             for(int i=0;i<7;i++){
                 float x=-134+i*18;Lamp(x,-7.4f);
@@ -78,6 +76,7 @@ namespace FitCheck
             DirectionBoard(-120,-5.6f);DirectionBoard(-82,-5.6f);DirectionBoard(-28,-5.6f);
             Block(new Vector3(-144.6f,1.4f,2.5f),new Vector3(.4f,2.8f,24),Teal,"CityBrick");
             obstacles.Add(new Rect(-145, -9.5f,.7f,24));
+            CityConnections();CloseCityEdges();
         }
         void StreetBuilding(float x,float width,int floors,Color color,int seed)
         {
@@ -91,8 +90,8 @@ namespace FitCheck
         }
         void Shopfront(float x,float width,string label,Color color,bool light)
         {
-            Block(new Vector3(x,4.35f,5.64f),new Vector3(width,1.1f,.3f),color,"Wood");
-            Words(label,new Vector3(x,4.35f,5.45f),label.Length>9?.09f:.13f,Cream,light?"CityGlow":"Leather");
+            Block(new Vector3(x,4.8f,5.64f),new Vector3(width,1.1f,.3f),color,"Wood");
+            Words(label,new Vector3(x,4.8f,5.45f),label.Length>9?.09f:.13f,Cream,light?"CityGlow":"Leather");
             Awning(x,5.6f,3.7f,width,Kaos);
         }
         void GalleryFront()
@@ -154,6 +153,7 @@ namespace FitCheck
             }
             Block(new Vector3(-76,1.35f,20.25f),new Vector3(22.7f,2.7f,.35f),Cream,"CityBrick");
             Words("QUADRA",new Vector3(-76,2,20.04f),.15f,Ink);
+            CourtMural();
             obstacles.Add(new Rect(-87.5f,20,23,.5f));
             Rod(new Vector3(-76,0,18.7f),new Vector3(-76,6.7f,18.7f),.12f,Ink,"CityMetal");
             Block(new Vector3(-76,6.1f,18.1f),new Vector3(3.4f,2.1f,.18f),Cream,"Wood");

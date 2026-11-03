@@ -19,14 +19,14 @@ namespace FitCheck
     {
         const float ShopLeanWall=8.55f;
         static readonly Quaternion ShopLeanFoot=Quaternion.Euler(-78,0,0);
-        void ConfigureShopLean(Resident actor,bool ease=false)
+        void ConfigureShopLean(Resident actor,bool ease=false,float wall=ShopLeanWall)
         {
             actor.wallLean=true;
             actor.leanBlend=ease?0:1;actor.leanTarget=1;
             var ankleRest=new Vector3(.225f,.265f,.020f);float furthest=float.NegativeInfinity;
             foreach(var part in actor.parts)if(part.foot&&part.side>0)
                 foreach(var point in part.rest)furthest=Mathf.Max(furthest,(ShopLeanFoot*(point-ankleRest)).z);
-            actor.leanAnkle=new Vector3(.27f,.90f,ShopLeanWall-.005f-actor.home.z-furthest);
+            actor.leanAnkle=new Vector3(.27f,.90f,wall-.005f-actor.home.z-furthest);
             PoseResident(actor,0,0);
         }
         BodyPose ShopLeanBody(Resident actor)

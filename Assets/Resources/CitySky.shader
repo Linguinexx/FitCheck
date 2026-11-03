@@ -12,30 +12,28 @@ Shader "FitCheck/Bairro Sky"
             float _CityTime;
             struct vf { float4 pos:SV_POSITION; float3 ray:TEXCOORD0; };
             vf vert(appdata_base v) { vf o;o.pos=UnityObjectToClipPos(v.vertex);o.ray=v.vertex.xyz;return o; }
-            float hash(float2 p){return frac(sin(dot(p,float2(127.1,311.7)))*43758.5453);}
+            float hash(float3 p){return frac(sin(dot(p,float3(127.1,311.7,74.7)))*43758.5453);}
+            float noise(float3 p){
+                float3 a=floor(p),f=frac(p);f=f*f*(3-2*f);
+                return lerp(lerp(lerp(hash(a),hash(a+float3(1,0,0)),f.x),lerp(hash(a+float3(0,1,0)),hash(a+float3(1,1,0)),f.x),f.y),lerp(lerp(hash(a+float3(0,0,1)),hash(a+float3(1,0,1)),f.x),lerp(hash(a+float3(0,1,1)),hash(a+float3(1,1,1)),f.x),f.y),f.z);
+            }
             fixed4 frag(vf i):SV_Target {
                 float3 d=normalize(i.ray);
                 float h=saturate(d.y);
-                float3 sky=lerp(float3(.075,.045,.050),float3(.008,.007,.012),smoothstep(0,.7,h));
-                // Rounded, elongated cloud banks. Continuous drift; no frame stepping.
-                float2 q=float2(atan2(d.x,d.z)*4.5+_CityTime*.012,d.y*6);
-                float cloud=0;
-                for(int layer=0;layer<2;layer++){
-                    float2 p=q*float2(.8,1.2)+float2(layer*3.7,layer*2.2);
-                    float2 cell=floor(p),f=frac(p);
-                    float seed=hash(cell);
-                    float shape=length((f-float2(.5,.46+seed*.08))*float2(1,1.8));
-                    shape=min(shape,length(f-float2(.39,.57))+.14);
-                    shape=min(shape,length(f-float2(.62,.56))+.16);
-                    cloud=max(cloud,(1-smoothstep(.36,.40,shape))*step(.68,seed));
-                }
-                cloud*=smoothstep(.06,.16,d.y)*(1-smoothstep(.55,.75,d.y));
-                sky=lerp(sky,float3(.12,.095,.105),cloud*.40);
-                float moon=smoothstep(.998,.9984,dot(d,normalize(float3(-.7,.48,.65))));
-                sky=lerp(sky,float3(.84,.77,.64),moon);
-                float2 starUV=float2(atan2(d.x,d.z)*130,d.y*170);
-                float star=step(.994,hash(floor(starUV)))*(1-smoothstep(.03,.09,length(frac(starUV)-.5)))*smoothstep(.1,.35,d.y);
-                sky+=star*float3(.55,.48,.40);
+                float3 sky=lerp(float3(.105,.085,.057),float3(.007,.014,.016),smoothstep(0,.65,h));
+                float3 p=d*5+float3(_CityTime*.012,0,_CityTime*.007);
+                float cloud=noise(p)*.57+noise(p*2.03+7)*.28+noise(p*4.01-11)*.15;
+                float veil=smoothstep(.43,.70,cloud)*smoothstep(.015,.16,h)*(1-smoothstep(.78,.98,h));
+                float moonDot=dot(d,normalize(float3(-.7,.55,.65)));
+                float halo=pow(saturate(moonDot),110)*.16;
+                sky+=halo*float3(.60,.55,.39);
+                float disk=smoothstep(.99936,.99951,moonDot);
+                float shadow=smoothstep(.99939,.99954,dot(d,normalize(float3(-.683,.557,.665))));
+                sky=lerp(sky,float3(.87,.83,.67)*(1-shadow*.82),disk);
+                sky=lerp(sky,lerp(float3(.10,.115,.10),float3(.25,.24,.19),halo),veil*.84);
+                float3 stars=floor(d*420);float seed=hash(stars);
+                float pin=pow(saturate(1-length(frac(d*420)-.5)*2.3),4)*step(.9965,seed)*smoothstep(.12,.38,h);
+                sky+=pin*(.65+.35*sin(_CityTime*(.5+seed)+seed*90))*(1-veil)*float3(.7,.69,.57);
                 return fixed4(sky,1);
             }
             ENDCG

@@ -6,16 +6,17 @@ namespace FitCheck
 {
     public partial class FirstCustomer
     {
-        readonly Color paper=new Color(.94f,.92f,.86f), muted=new Color(.61f,.58f,.66f),
-            surface=new Color(.09f,.075f,.12f), violet=new Color(.66f,.48f,.95f), line=new Color(.23f,.20f,.28f);
-        GUIStyle display, heading, copy, caption, action, tiny;
-        Font uiFont;bool fontDirty=true;
-        void FontRebuilt(Font font){if(font==uiFont)fontDirty=true;}
+        readonly Color paper=new Color(.94f,.92f,.86f), muted=new Color(.65f,.63f,.57f),
+            surface=new Color(.075f,.065f,.07f), violet=new Color(227/255f,6/255f,19/255f), line=new Color(.34f,.14f,.16f);
+        GUIStyle display, heading, copy, caption, action, tiny,nameEntry;
+        Font uiFont,uiStrong,titleFont;bool fontDirty=true;
+        void FontRebuilt(Font font){if(font==uiFont||font==uiStrong||font==titleFont)fontDirty=true;}
         void WarmFont()
         {
             const string glyphs="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789áàâãéêíóôõúüçÁÀÂÃÉÊÍÓÔÕÚÜÇ .,:;!?+-−/\\%()[]‘’“”•…←→↺✓–—";
             foreach(int size in new[]{13,17,21})uiFont.RequestCharactersInTexture(glyphs,size,FontStyle.Normal);
-            foreach(int size in new[]{18,30})uiFont.RequestCharactersInTexture(glyphs,size,FontStyle.Bold);
+            foreach(int size in new[]{17,18,21,30})uiStrong.RequestCharactersInTexture(glyphs,size,FontStyle.Normal);
+            foreach(int size in new[]{30,86})titleFont.RequestCharactersInTexture(glyphs,size,FontStyle.Normal);
             uiFont.RequestCharactersInTexture("0123456789 /FITCHECKOUAFim de expedienteUma pausaO visual foi pra ruaA semana virou história.",86,FontStyle.Bold);
             fontDirty=false;
         }
@@ -44,6 +45,7 @@ namespace FitCheck
         }
         void Home()
         {
+            EndLiveTitle();
             pendingDeleteSlot=-1;
             if(stage==Stage.City||(city!=null&&city.IsHome&&city.gameObject.activeSelf)||(shopService&&stage==Stage.Dialogue)||shopDressingInStore)ExitCity();
             shopService=false;shopSequence=ShopSequence.None;
@@ -55,12 +57,13 @@ namespace FitCheck
         void InterfaceStyles()
         {
             if(display!=null){if(fontDirty)WarmFont();return;}
-            uiFont=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");Font.textureRebuilt+=FontRebuilt;
-            display=new GUIStyle(GUI.skin.label){font=uiFont,fontSize=86,fontStyle=FontStyle.Bold,wordWrap=false};
-            heading=new GUIStyle(GUI.skin.label){font=uiFont,fontSize=30,fontStyle=FontStyle.Bold,wordWrap=true};
+            uiFont=Resources.Load<Font>("Fonts/Montserrat-Regular");uiStrong=Resources.Load<Font>("Fonts/Montserrat-SemiBold");titleFont=Resources.Load<Font>("Fonts/BarlowCondensed-Bold");Font.textureRebuilt+=FontRebuilt;
+            display=new GUIStyle(GUI.skin.label){font=titleFont,fontSize=86,fontStyle=FontStyle.Normal,wordWrap=false};
+            heading=new GUIStyle(GUI.skin.label){font=titleFont,fontSize=30,fontStyle=FontStyle.Normal,wordWrap=true};
             copy=new GUIStyle(GUI.skin.label){font=uiFont,fontSize=21,wordWrap=true};
             caption=new GUIStyle(copy){fontSize=17};tiny=new GUIStyle(copy){fontSize=13};
-            action=new GUIStyle(copy){fontSize=18,fontStyle=FontStyle.Bold,alignment=TextAnchor.MiddleCenter};
+            action=new GUIStyle(copy){font=uiStrong,fontSize=17,fontStyle=FontStyle.Normal,alignment=TextAnchor.MiddleCenter};
+            nameEntry=new GUIStyle(GUI.skin.textField){font=uiFont,fontSize=18,alignment=TextAnchor.MiddleLeft,padding=new RectOffset(10,10,6,6)};
             WarmFont();
         }
         void Fill(Rect r,Color c)
@@ -70,10 +73,7 @@ namespace FitCheck
         void Rule(float x,float y,float w){Fill(new Rect(x,y,w,1),line);}
         bool Tap(Rect r,string label,bool primary=false,bool enabled=true)
         {
-            bool hot=r.Contains(Event.current.mousePosition)&&enabled;
-            Fill(r,primary?(hot?new Color(.77f,.62f,1):violet):(hot?new Color(.19f,.16f,.24f):surface));
-            if(!primary){Fill(new Rect(r.x,r.y,r.width,1),line);Fill(new Rect(r.x,r.yMax-1,r.width,1),line);}
-            Txt(r,label,action,enabled?(primary?surface:paper):muted);
+            KaosButtonFace(r,label,primary,enabled);
             bool active=GUI.enabled;GUI.enabled=active&&enabled;
             bool clicked=GUI.Button(r,GUIContent.none,GUIStyle.none);GUI.enabled=active;if(clicked)Sound(0);return clicked;
         }
@@ -89,12 +89,14 @@ namespace FitCheck
             var offset=new Vector3((Screen.width-1440*scale)/2,(Screen.height-900*scale)/2,0);
             GUI.matrix=Matrix4x4.TRS(offset,Quaternion.identity,Vector3.one*scale);
             var e=Event.current;
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&settingsOpen){CloseSettings();e.Use();}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&showShopDecor){CloseShopDecor(false);e.Use();}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){if(pendingDeleteSlot>=0)CancelSaveDeletion();else if(renderedStage==Stage.CharacterCreator&&!paused)CancelCreator();else if(renderedStage==Stage.Confirm&&!paused)stage=Stage.Dressing;else paused=!paused;dragging=false;e.Use();}
-            bool modal=paused || renderedStage==Stage.Confirm||pendingDeleteSlot>=0;
+            bool modal=paused || settingsOpen || renderedStage==Stage.Confirm||pendingDeleteSlot>=0;
             GUI.enabled=!modal;
             if(renderedStage==Stage.Title)TitleUI();else{
             // The header is deliberately quieter than the outfit.
-            Fill(new Rect(0,0,1440,88),new Color(.045f,.035f,.065f,.97f));
+            Fill(new Rect(0,0,1440,88),new Color(.045f,.05f,.045f,.97f));
             Txt(new Rect(38,22,280,45),"FIT CHECK",heading);
             Txt(new Rect(244,33,180,28),"by DripLab",caption,muted);
             Txt(new Rect(965,28,300,30),stage==Stage.Welcome?"SEUS PERSONAGENS":stage==Stage.City?(city.IsHome?"EM CASA":city.IsInterior?"DRIPLAB  /  LOJA":"PRAÇA DO ENCONTRO"):campaignBeforePreview!=null?"PRÉVIA  /  CAMPANHA PRESERVADA":"DIA 0"+progress.day+"  /  DRIPLAB",tiny,muted);
@@ -118,25 +120,17 @@ namespace FitCheck
             GUI.enabled=true;
             if(pendingDeleteSlot>=0)SaveDeletionUI();
             if(renderedStage==Stage.Confirm&&!paused){
-                Fill(new Rect(0,0,1440,900),new Color(.025f,.018f,.04f,.88f));
+                Fill(new Rect(0,0,1440,900),new Color(.025f,.03f,.025f,.88f));
                 Fill(new Rect(440,280,560,320),surface);Fill(new Rect(440,280,560,4),violet);
                 Txt(new Rect(478,316,490,55),"Esse é o visual?",heading);
                 Txt(new Rect(478,381,475,65),"Depois do envio, o cliente sai com as peças que você escolheu.",copy,muted);
                 if(Tap(new Rect(478,485,222,60),"Voltar ao provador"))stage=Stage.Dressing;
                 if(Tap(new Rect(718,485,242,60),"Enviar visual",true))Submit();
             }
-            if(paused){
-                Fill(new Rect(0,0,1440,900),new Color(.025f,.018f,.04f,.92f));
-                Txt(new Rect(510,300,500,90),"Uma pausa.",display);
-                Txt(new Rect(515,408,440,50),"Seu atendimento continua daqui.",copy,muted);
-                if(Tap(new Rect(515,495,410,64),"Retomar",true))paused=false;
-                if(Tap(new Rect(515,578,410,56),"Voltar ao início")){paused=false;ReturnToTitle();}
-                if(Tap(new Rect(515,650,410,48),mutedAudio?"Sons: desligados":"Sons: ligados")){mutedAudio=!mutedAudio;PlayerPrefs.SetInt("FitCheck.Mute",mutedAudio?1:0);PlayerPrefs.Save();}
-                if(Tap(new Rect(515,713,410,48),"Salvar novamente"))TrySave();
-                if(Tap(new Rect(515,777,410,48),reducedMotion?"Movimento reduzido: sim":"Movimento reduzido: não")){reducedMotion=!reducedMotion;PlayerPrefs.SetInt("FitCheck.ReducedMotion",reducedMotion?1:0);PlayerPrefs.Save();}
-                if(Tap(new Rect(515,837,410,44),retroFilter?"Pixelização: leve":"Pixelização: desligada")){retroFilter=!retroFilter;PlayerPrefs.SetInt("FitCheck.Retro",retroFilter?1:0);PlayerPrefs.Save();}
-            }
+            if(paused&&!settingsOpen)PauseMenuUI();
+            if(settingsOpen)SettingsUI();
             DrawAchievement();
+            DrawPresentation();
             GUI.matrix=originalMatrix;GUI.enabled=originalEnabled;
             GUI.color=originalColor;GUI.contentColor=originalContent;GUI.backgroundColor=originalBackground;
         }
@@ -151,10 +145,11 @@ namespace FitCheck
         }
         void DialogueUI()
         {
+            string key=customer.ToString();if(speechRequestKey!=key){speechRequestKey=key;speechAge=0;}string answer=key+"/"+question;if(speechAnswerKey!=answer){speechAnswerKey=answer;answerAge=0;}
             CustomerBadge();
             Fill(new Rect(1000,88,440,812),surface);
             Txt(new Rect(1032,123,370,38),"Qual é a ocasião?",heading);
-            Txt(new Rect(1032,184,366,310),"“"+Request+"”",copy);
+            ComicBubble(new Rect(1016,181,408,313),Request,Customer.name,speechAge);
             Rule(1032,505,366);
             if(Timed)Txt(new Rect(50,715,850,70),"Malu está com pressa: você terá 120 segundos no provador. Pausa interrompe o relógio.",copy,violet);
             if(question<0){
@@ -162,7 +157,7 @@ namespace FitCheck
                 for(int i=0;i<2;i++)if(Tap(new Rect(1032,581+i*89,366,76),questions[i]))question=i;
             }else{
                 Txt(new Rect(1032,526,366,47),questions[question],caption,violet);
-                Txt(new Rect(1032,590,366,130),"“"+answers[question]+"”",copy);
+                ComicBubble(new Rect(1016,580,408,170),answers[question],Customer.name,answerAge);
             }
             if(Tap(new Rect(1032,786,366,66),question<0?"Ir ao provador  →":"Vamos montar o visual  →",true)){ProceedToFitting();}
             Txt(new Rect(50,800,850,44),"Primeiro, entenda o pedido. Depois, experimente à vontade.",caption,muted);
@@ -185,7 +180,7 @@ namespace FitCheck
                 if(Tap(new Rect(38,711,250,48),"Expressão: "+studio.ExpressionName+"  ↔"))studio.CycleExpression();
                 if(Tap(new Rect(38,772,250,48),"Cabelo: "+studio.HairName+"  ↔")){studio.CycleHair();Apply();}
             }
-            Fill(new Rect(325,827,565,57),new Color(.045f,.035f,.065f,.9f));
+            Fill(new Rect(325,827,565,57),new Color(.045f,.05f,.045f,.9f));
             Txt(new Rect(340,840,535,30),"ARRASTE PARA GIRAR   /   ROLE PARA APROXIMAR",tiny,paper);
             Fill(new Rect(1000,88,440,812),surface);
             Txt(new Rect(1032,118,370,42),"Seu toque.",heading);
@@ -242,7 +237,7 @@ namespace FitCheck
         }
         void PostUI()
         {
-            Fill(new Rect(0,88,1440,812),new Color(.055f,.043f,.077f));
+            Fill(new Rect(0,88,1440,812),new Color(.055f,.06f,.055f));
             Txt(new Rect(52,119,700,52),"FitFeed",heading);Txt(new Rect(52,170,700,30),"O VISUAL GANHOU A CIDADE.",tiny,violet);
             if(campaignBeforePreview==null){
                 if(Tap(new Rect(262,119,180,44),"← Anterior",false,customer>0)){customer--;record=progress.posts[customer];Continue();}

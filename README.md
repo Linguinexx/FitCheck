@@ -7,18 +7,22 @@ Jogo 3D de montagem de looks streetwear em Unity **6000.6.7f1**. Arte em desenvo
 1. Adicione esta pasta ao Unity Hub com a versão indicada.
 2. Abra `Assets/Scenes/FirstCustomer.unity` e pressione **Play**.
 3. Na tela da fachada, clique em **Jogar** e selecione um dos três saves. Um espaço vazio abre a criação do personagem; criar ou continuar começa no quarto em primeira pessoa.
-4. Ande até a porta de casa e pressione **E — Sair de casa**. Você sai pelo vestíbulo do residencial **AP 03**, na Rua das Lajes. O percurso de caminhada até a DripLab passa pelo comércio, galeria, quadra e casa de shows. No bairro, caminhe até a porta sob o letreiro **DRIPLAB** e pressione **E — Entrar na DripLab**. O prédio RADIO é independente da casa.
+4. Ande até a porta de casa e pressione **E — Sair de casa**. Você sai pelo vestíbulo do residencial **AP 03**, na Rua das Lajes. O caminho direto segue pelo comércio até a DripLab; passagens laterais dão acesso à galeria, à quadra e à casa de shows. No bairro, caminhe até a porta sob o letreiro **DRIPLAB** e pressione **E — Entrar na DripLab**. O prédio RADIO é independente da casa.
 5. A loja começa fechada: passe por trás do balcão e pressione **E — Abrir a loja** quando estiver pronto. Ao terminar um dia, feche o expediente e volte para casa. A cama abre as opções de descanso; o guarda-roupa e a mesa dão acesso ao uniforme, à aparência e ao FitFeed.
 
 Cada save mantém aparência, campanha e fotos separadas em `saves/slot-1`, `slot-2` ou `slot-3`, dentro da pasta de dados persistentes da Unity. Na primeira seleção, o progresso da versão anterior é copiado para o primeiro espaço; os arquivos originais e as fotos antigas permanecem preservados. **Excluir save** abre uma confirmação com o espaço e o nome do personagem; **Cancelar** mantém os arquivos e **Excluir definitivamente** libera somente o espaço escolhido. Um save excluído não volta a ser importado automaticamente da versão antiga.
 
-Na exploração, **WASD** move, **mouse** olha, **E** interage, **Esc** pausa e **Tab** libera ou captura o cursor. No Editor, dê foco à aba **Game**. Menus e provador usam o mouse livre.
+Na exploração, **WASD** move, **Shift** corre, **mouse** olha, **E** interage, **Esc** pausa e **Tab** libera ou captura o cursor. No Editor, dê foco à aba **Game**. Menus e provador usam o mouse livre.
+
+Com a loja fechada, **F — Personalizar loja** abre uma prévia do ambiente: paredes, três pisos, cortina, quadro e plantas. Os botões **Geral / Provador / Quadro** mudam o enquadramento da prévia. **Salvar decoração** guarda as escolhas somente neste save; **Cancelar** ou **Esc** restaura a decoração anterior. A decoração volta ao entrar na loja novamente.
+
+A galeria e a quadra ficam ao norte, ligadas pelas passagens e pela Travessa do Encontro. A casa de shows fica do outro lado da avenida, ao sul. O percurso direto casa–loja permanece próximo de 32 segundos andando; correr é opcional. Muros, casario e vegetação fecham o perímetro. O céu noturno usa nuvens contínuas, halo lunar e estrelas com variação suave. Os moradores têm aparência própria, roupas casuais sem identificação da DripLab e poses de espera ou caminhada.
 
 O rapaz encostado na parede é um frequentador fixo da loja, separado dos atendimentos. Após abrir a loja, o cliente entra, caminha até a frente do balcão e espera; você continua livre para andar e olhar durante a chegada. Passe por trás do balcão e pressione **E** para atendê-lo. Após conversar e escolher uma pergunta opcional, ele caminha até o provador; a câmera acompanha e a cortina abre antes da montagem do fit. O personagem completo do jogador permanece no balcão durante a câmera externa. Ao finalizar, o cliente sai usando o look e o resultado aparece no FitFeed. O frequentador permanece na loja.
 
 A montagem acontece no próprio provador da loja. Arraste o personagem para girar e use a roda do mouse para aproximar ou afastar. O cliente vira-se ao chegar e apresenta o fit antes de sair. Pausa interrompe a sequência; cancelar e voltar ao início reinicia o atendimento sem finalizar um look.
 
-As portas ligam casa, bairro e loja nos dois sentidos, com interações próximas e controle em primeira pessoa. O sistema geral de transições visuais entre locais ainda está reservado para uma etapa posterior.
+As portas ligam casa, bairro e loja nos dois sentidos, com interações próximas e controle em primeira pessoa. As mudanças entre locais têm transição breve; pausa e movimento reduzido são respeitados.
 
 Na troca de uniforme em casa, o personagem aparece inteiro, de frente, com botões de giro. A entrada do prédio tem pórtico, porta aberta e soleira; sair de casa inclui um passo curto pela entrada, que congela durante a pausa.
 
@@ -61,3 +65,21 @@ O player aceita `-city-proof -shop-review -proof-output "<pasta>"` para executar
 Foram incorporados 12 mapas de cor do ambientCG, adaptados à direção de arte e com resolução de importação limitada. Fontes e licença CC0: [créditos ambientCG](Art/AmbientCG/CREDITS.md). Não foram incorporados modelos ou marcas externas de calçados.
 
 As decisões e revisões anteriores estão em [DEVLOG.md](DEVLOG.md), [DIRECAO_ARTE.md](DIRECAO_ARTE.md) e [TESTES.md](TESTES.md).
+
+
+## Revisão Kaos da interface e do bairro
+
+O início usa a fachada em uma cena ao vivo, com moradores, tráfego, céu e movimento sutil da câmera, além do Selo Kaos oficial. Jogar continua levando à seleção dos três saves. A interface compartilha botões em Vermelho Kaos com relevo, sombra e resposta ao cursor/clique.
+
+Configurações está disponível no início e na pausa: sensibilidade do mouse de 25–250%, silenciar, movimento reduzido e filtro retrô. A sensibilidade é salva localmente. Durante a exploração, as interações próximas recebem destaque e uma tecla junto ao alvo; não há rodapé fixo de controles. Falas usam balões de HQ com entrada animada.
+
+A decoração oferece oito cores de parede e oito de cortina, incluindo roxo, rosa, azul e turquesa. A cidade recebeu cores mais vivas, um morro com relevo e vegetação atrás da quadra, mural de passinho, espaço de batalha de rima, vinis, bicicleta e placas brasileiras em pontos específicos. O celular acompanha a mão do morador e a surpresa alterna uma reação breve com a boca em repouso.
+
+Build desta revisão: `Builds/Windows-IdentityPolish/FitCheck.exe`. Evidências e capturas reais da interface: `Captures/KaosCity`.
+
+
+A revisão de identidade usa Montserrat nos textos e botões e Barlow Condensed nos títulos. As fontes e suas licenças acompanham o jogo em `Art/Fonts`. Botões secundários são neutros e reagem em Kaos ao mouse; a marca inicial vermelha tem movimento proporcional leve, desligado com movimento reduzido. O crédito do início é “A game by DripLab”.
+
+Vidros usam textura fotográfica de desgaste já licenciada no projeto, reflexos estilizados e caixilhos; a janela de casa recebeu acabamento, cortinas e silhueta noturna. Pálpebras independentes fazem todos os moradores, clientes, frequentador e jogador visível piscarem, inclusive durante a montagem do fit. Há um observador original escondido numa janela da galeria. Balões de HQ têm contorno, cauda, retícula discreta e entrada com pequeno salto.
+
+As referências de roupas trazidas pelo usuário e as futuras artes dos quadros estão registradas em `Art/REFERENCIAS_PENDENTES.md`; não foram aplicadas automaticamente.

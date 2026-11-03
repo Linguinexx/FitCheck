@@ -47,7 +47,7 @@ namespace FitCheck
     public partial class FirstCustomer
     {
         int activeSaveSlot=-1,selectedSave;string saveLibraryOverride;
-        SaveSlotInfo[] saveSlots=new SaveSlotInfo[SaveSlots.Count];Texture2D titlePhoto;
+        SaveSlotInfo[] saveSlots=new SaveSlotInfo[SaveSlots.Count];Texture2D titlePhoto,titleLogo;
         string SaveLibrary=>saveLibraryOverride??Application.persistentDataPath;
         string SessionFolder=>storageOverride??(activeSaveSlot<0?Application.persistentDataPath:SaveSlots.Folder(SaveLibrary,activeSaveSlot));
         void OpenSaveSelection()
@@ -74,7 +74,7 @@ namespace FitCheck
             if(info.exists&&playerAppearance.created)GoHome();else OpenCreator(Stage.Home);
             return true;
         }
-        void ReturnToTitle(){Home();paused=false;stage=Stage.Title;}
+        void ReturnToTitle(){Home();paused=false;StartLiveTitle();}
         void BuildTitlePhoto()
         {
             EnterCity();city.Frame(cam,true,0);city.PlayerBodyVisible=false;
@@ -90,23 +90,25 @@ namespace FitCheck
         }
         void TitleUI()
         {
-            if(titlePhoto!=null)GUI.DrawTexture(new Rect(0,0,1440,900),titlePhoto,ScaleMode.ScaleAndCrop);
-            Fill(new Rect(0,0,500,900),new Color(.025f,.023f,.03f,.87f));
+            if(!titleSceneActive&&titlePhoto!=null)GUI.DrawTexture(new Rect(0,0,1440,900),titlePhoto,ScaleMode.ScaleAndCrop);
+            Fill(new Rect(0,0,500,900),new Color(.025f,.028f,.025f,.87f));
             Txt(new Rect(58,88,400,30),"DRIPLAB  /  DEPOIS DO HORÁRIO",caption,CreatorRed);
-            Txt(new Rect(50,178,450,200),"FIT\nCHECK",display);
+            if(titleLogo==null)titleLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-Red");
+            if(titleLogo!=null)DrawAnimatedTitleLogo(new Rect(52,160,390,260));else Txt(new Rect(50,178,450,200),"FIT\nCHECK",display);
             Txt(new Rect(60,430,370,100),"Seu estilo.\nAs histórias da cidade.",heading);
             if(Tap(new Rect(60,651,360,70),"Jogar  →",true))OpenSaveSelection();
-            Txt(new Rect(60,765,360,70),"Uma loja. Muitos encontros.\nUma semana para deixar sua marca.",caption,paper);
+            if(Tap(new Rect(60,746,360,56),"Configurações"))OpenSettings(false);
+            Txt(new Rect(60,832,420,55),"A game by DripLab",caption,paper);
         }
         void SaveSelectionUI()
         {
-            Fill(new Rect(0,88,545,812),new Color(.055f,.043f,.077f,.97f));
+            Fill(new Rect(0,88,545,812),new Color(.055f,.06f,.055f,.97f));
             Txt(new Rect(40,122,470,30),"ESCOLHA SEU SAVE",caption,CreatorRed);
             Txt(new Rect(40,168,470,65),"Sua história.",heading);
             for(int i=0;i<SaveSlots.Count;i++){
                 var info=saveSlots[i]??new SaveSlotInfo();float y=261+i*134;
                 if(Tap(new Rect(40,y,462,118),"",selectedSave==i))PreviewSave(i);
-                var color=selectedSave==i?surface:paper;
+                var color=paper;
                 Txt(new Rect(58,y+12,420,30),"0"+(i+1)+"  /  "+(info.exists?info.appearance.name:"Novo save"),action,color);
                 string subtitle=info.error!=null?"Save indisponível — arquivos preservados":!info.exists?"Crie um personagem e comece sua semana":info.progress.Complete?"Semana concluída  /  9 publicações":"Dia 0"+info.progress.day+"  /  "+info.progress.posts.Count+" publicações";
                 Txt(new Rect(58,y+59,420,48),subtitle,caption,color);

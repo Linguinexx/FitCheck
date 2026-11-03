@@ -7,18 +7,19 @@ namespace FitCheck
     {
         [System.Serializable] sealed class ResidentPart
         {
-            public Mesh mesh;public Vector3[] rest,normals,vertices,posedNormals;public bool arm,foot,leg,head,pelvis;public float side;
+            public Mesh mesh;public Vector3[] rest,normals,vertices,posedNormals,closedLid,closedNormals;public bool arm,foot,leg,head,pelvis,mouth;public float side;public Vector3 center;public GameObject node;public int mouthKind;public bool faceVisible=true;
         }
         [System.Serializable] sealed class Resident
         {
             public Transform root,shadow;public Vector3 home;public Quaternion facing;
             public List<ResidentPart> parts=new List<ResidentPart>();
-            public Vector2[] path;public int target;public float cycle,wait,phase,speed,blend;public bool walking;
-            public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;
+            public Vector2[] path;public int target;public float cycle,blinkClock,wait,phase,speed,blend;public bool walking;
+            public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;public int idleStyle;public Transform prop;public AvatarExpression expression;
         }
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
-        const int ResidentArtRevision=14;
+        public bool CustomerSpeaking;
+        const int ResidentArtRevision=18;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
             if(IsInterior&&(cat==null||!cat.Ready))return false;
@@ -35,7 +36,7 @@ namespace FitCheck
         {
             bool arm=name.Contains("Manga")||name.Contains("Braço")||name=="Mão"||name=="Polegar"||name=="Dedos relaxados";
             bool leg=mesh.bounds.max.y<1.45f&&name!="Cintura";
-            actor.parts.Add(new ResidentPart{mesh=mesh,rest=mesh.vertices,normals=mesh.normals,vertices=new Vector3[mesh.vertexCount],posedNormals=new Vector3[mesh.vertexCount],arm=arm,leg=leg,head=head,pelvis=name=="Cintura",foot=name.StartsWith("Tênis")||name.StartsWith("Sola")||name=="Cadarço",side=mesh.bounds.center.x<0?-1:1});
+            actor.parts.Add(new ResidentPart{mesh=mesh,rest=mesh.vertices,normals=mesh.normals,vertices=new Vector3[mesh.vertexCount],posedNormals=new Vector3[mesh.vertexCount],arm=arm,leg=leg,head=head,mouth=name.StartsWith("Boca"),center=mesh.bounds.center,pelvis=name=="Cintura",foot=name.StartsWith("Tênis")||name.StartsWith("Sola")||name=="Cadarço",side=mesh.bounds.center.x<0?-1:1});
             mesh.MarkDynamic();
         }
         bool ResidentBlocks(Vector2 point)
@@ -45,7 +46,7 @@ namespace FitCheck
         void TickResidents(float delta)
         {
             for(int index=0;index<residents.Count;index++){
-                var actor=residents[index];if(!actor.root.gameObject.activeSelf)continue;actor.cycle+=delta;actor.walking=false;
+                var actor=residents[index];if(!actor.root.gameObject.activeSelf)continue;actor.cycle+=delta;actor.blinkClock+=delta;actor.walking=false;
                 var pos=actor.root.localPosition;float travelled=0;
                 // Unity can restore a null route as an empty array after a script reload.
                 if(actor.path!=null&&actor.path.Length==0)actor.path=null;
@@ -87,6 +88,7 @@ namespace FitCheck
                 if(actor.shadow!=null)actor.shadow.localPosition=new Vector3(pos.x,.005f,pos.z);
                 PoseResident(actor,index,dip);
             }
+            TickWatcher(delta);
         }
         static float MotionWeight(float low,float high,float value)
         {return Mathf.SmoothStep(0,1,Mathf.InverseLerp(low,high,value));}
@@ -115,6 +117,7 @@ namespace FitCheck
                 pelvisShift=new Vector3(wave*.027f,0,-.011f*b),
                 torsoShift=new Vector3(wave*.027f,Mathf.Sin(actor.cycle*1.3f)*.004f*idle,-.022f*b)
             };
+            if(actor.idleStyle==2&&b<.1f){body.torso=Quaternion.Euler(-4,0,-2);body.head=Quaternion.Euler(-23,-12+Mathf.Sin(actor.cycle*.5f)*2,-3);}
             if(actor.wallLean){
                 var lean=ShopLeanBody(actor);float f=Mathf.SmoothStep(0,1,actor.leanBlend);
                 body.pelvis=Quaternion.Slerp(body.pelvis,lean.pelvis,f);body.torso=Quaternion.Slerp(body.torso,lean.torso,f);body.head=Quaternion.Slerp(body.head,lean.head,f);
@@ -144,6 +147,8 @@ namespace FitCheck
         {
             var body=ResidentBody(actor,index);var left=ResidentLeg(actor,-1,dip,body);var right=ResidentLeg(actor,1,dip,body);
             foreach(var part in actor.parts)PoseResidentPart(part,actor,index,body,part.side<0?left:right);
+            AnimateResidentExpression(actor,index);
+            if(actor.prop!=null)foreach(var part in actor.parts)if(part.mesh.name.StartsWith("Mão")&&part.side>0){actor.prop.localPosition=part.mesh.bounds.center+new Vector3(0,.075f,-.04f);actor.prop.localRotation=Quaternion.Euler(12,0,-8);break;}
         }
         void PoseResidentPart(ResidentPart part,Resident actor,int index,BodyPose body,LegPose leg)
         {
@@ -153,9 +158,14 @@ namespace FitCheck
             var upperArm=Quaternion.Euler(wave*14*actor.blend+idle,0,0);
             var elbow=shoulder+upperArm*(elbowRest-shoulder);
             var forearm=upperArm*Quaternion.Euler(2+(3+Mathf.Max(0,wave)*8)*actor.blend,0,-side*2*actor.blend);
+            if(actor.idleStyle==2&&actor.blend<.1f&&side>0){upperArm=Quaternion.Euler(25,0,-side*12);elbow=shoulder+upperArm*(elbowRest-shoulder);forearm=upperArm*Quaternion.Euler(48,0,side*8);}
             for(int v=0;v<part.rest.Length;v++){
                 var p=part.rest[v];var n=part.normals[v];Vector3 posed,normal;
-                if(part.head){posed=body.HeadPoint(p);normal=body.head*n;}
+                if(part.head){
+                    if(part.closedLid!=null){float blink=ResidentBlink(actor.blinkClock,index);p=Vector3.Lerp(p,part.closedLid[v],blink);n=Vector3.Lerp(n,part.closedNormals[v],blink).normalized;}
+                    if(part.mouth){float pulse=IsInterior&&index==0&&CustomerSpeaking?Mathf.Max(0,Mathf.Sin(actor.cycle*11)*Mathf.Sin(actor.cycle*3.8f)):Mathf.Pow(Mathf.Max(0,Mathf.Sin(actor.cycle*.9f+index)),8)*.12f;p.y=part.center.y+(p.y-part.center.y)*(1+pulse*.8f);}
+                    posed=body.HeadPoint(p);normal=body.head*n;
+                }
                 else if(part.arm){
                     float upperWeight=MotionWeight(1.42f,1.60f,p.y);
                     posed=Vector3.Lerp(elbow+forearm*(p-elbowRest),shoulder+upperArm*(p-shoulder),upperWeight);

@@ -46,8 +46,8 @@ namespace FitCheck
             }
             catch(Exception e) { message="Não foi possível ler o save: "+e.Message; progress=new DayProgress(); record=new Attempt(); }
             foreach(var c in FindObjectsByType<Camera>()) c.gameObject.SetActive(false);
-            LoadAppearance();BuildWorld();BuildAudio();BuildThumbnails();RefreshPhotoArt();stage=Stage.Welcome;ShowPlayer();
-            if(!ProofMode){BuildTitlePhoto();stage=Stage.Title;}
+            LoadAppearance();BuildWorld();BuildAudio();BuildPresentation();BuildThumbnails();RefreshPhotoArt();stage=Stage.Welcome;ShowPlayer();
+            if(!ProofMode){BuildTitlePhoto();StartLiveTitle();}
             if(ProofMode){mutedAudio=true;StartCoroutine(CaptureFirstPersonProof());}
         }
         Material Mat(Color color) { var m=new Material(Resources.Load<Material>("PrototypeBase")); m.color=color; return m; }
@@ -62,6 +62,7 @@ namespace FitCheck
         void Apply(){studio.Apply(outfit,customer);}
         void UpdateCamera()
         {
+            if(stage==Stage.Title&&titleSceneActive){FrameLiveTitle(Time.unscaledDeltaTime);return;}
             if(stage!=Stage.City&&stage!=Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf)ExitCity();
             if(stage==Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf){if(showWardrobe)FrameHomeWardrobe();else{mannequin.gameObject.SetActive(false);city.Frame(cam,reducedMotion,0);city.FramePlayerForCamera(cam,false);}return;}
             if(shopDressingInStore&&(stage==Stage.Dressing||stage==Stage.Confirm)){FrameShopDressing();return;}
@@ -69,6 +70,7 @@ namespace FitCheck
             if(stage==Stage.Dialogue&&shopService){FrameShopDialogue();return;}
             if(stage==Stage.CharacterCreator){studio.SetHome(false);studio.Pose(rotation,distance,0);return;}
             if(stage==Stage.City){
+                if(showShopDecor){city.Frame(cam,reducedMotion,paused?0:Time.unscaledDeltaTime);FrameShopDecor();return;}
                 var p=cam.transform.position;var r=cam.transform.rotation;float fov=cam.fieldOfView;
                 city.Frame(cam,reducedMotion,paused?0:Time.unscaledDeltaTime);
                 if(ShopSequenceActive&&paused){cam.transform.SetPositionAndRotation(p,r);cam.fieldOfView=fov;}
@@ -80,6 +82,8 @@ namespace FitCheck
         }
         void Update()
         {
+            studio.Talking=stage==Stage.Dialogue&&!paused;
+            if(city!=null)city.CustomerSpeaking=stage==Stage.Dialogue&&shopService&&!paused;
             var retro=cam.GetComponent<RetroCamera>();retro.ReducedMotion=reducedMotion;retro.Paused=paused;retro.Filter=retroFilter;
             studio.ReducedMotion=reducedMotion;studio.Animate(Time.deltaTime,!paused);
             if(stage==Stage.City)UpdateCity(Time.deltaTime);
@@ -89,6 +93,8 @@ namespace FitCheck
             FinishShopFittingEntryIfReady();
             AdvanceClock(Time.deltaTime);
             if(stage==Stage.Leaving && !paused) {transition+=Time.deltaTime; if(transition>1.2f) stage=Stage.Post;}
+            TickPresentation(Time.unscaledDeltaTime);
+            TickContext(Time.unscaledDeltaTime);
         }
         void AdvanceClock(float delta)
         {

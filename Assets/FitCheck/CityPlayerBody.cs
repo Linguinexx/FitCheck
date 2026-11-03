@@ -33,14 +33,14 @@ namespace FitCheck
             if(!PlayerBodyReady)return;
             PlayerBodyVisible=true;
             bool showHead=external&&Vector3.Distance(camera.transform.position,playerBody.root.TransformPoint(new Vector3(0,2.8f,0)))>1.25f;
-            foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(showHead);
+            foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(showHead&&PlayerFaceVisible(piece));
             if(shadow!=null){shadow.localPosition=new Vector3(Position.x,.005f,Position.y);shadow.gameObject.SetActive(external&&showHead);}
         }
         void StepPlayerBody(float distance,float delta)
         {
             if(!PlayerBodyReady)return;
             var actor=playerBody;actor.cycle+=delta;
-            actor.phase=Mathf.Repeat(actor.phase+distance/2.2f,1);
+            actor.phase=Mathf.Repeat(actor.phase+distance/(Running?3.4f:2.2f),1);
             actor.blend=Mathf.MoveTowards(actor.blend,distance>.00001f?1:0,delta*8);
             float dip=actor.blend*(.035f+.005f*Mathf.Cos(actor.phase*Mathf.PI*4));
             // The body faces with the view, including when strafing or backing up.

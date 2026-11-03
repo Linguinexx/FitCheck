@@ -38,9 +38,7 @@ namespace FitCheck
         }
         bool CreatorButton(Rect r,string label,bool selected=false,bool enabled=true)
         {
-            Fill(r,selected?CreatorRed:new Color(.10f,.10f,.11f));
-            if(!selected){Fill(new Rect(r.x,r.y,r.width,1),line);Fill(new Rect(r.x,r.yMax-1,r.width,1),line);}
-            Txt(r,label,action,enabled?paper:muted);
+            KaosButtonFace(r,label,selected,enabled);
             bool old=GUI.enabled;GUI.enabled=old&&enabled;bool clicked=GUI.Button(r,GUIContent.none,GUIStyle.none);GUI.enabled=old;
             if(clicked)Sound(0);return clicked;
         }
@@ -51,7 +49,7 @@ namespace FitCheck
             Txt(new Rect(28,118,320,28),"SEU PERSONAGEM",tiny,CreatorRed);
             Txt(new Rect(28,160,320,52),"Seu jeito.",heading);
             Txt(new Rect(28,224,320,28),"Como você se chama?",caption);
-            creatorDraft.name=GUI.TextField(new Rect(28,264,320,40),creatorDraft.name,24);
+            creatorDraft.name=GUI.TextField(new Rect(28,264,320,40),creatorDraft.name,24,nameEntry);
             Txt(new Rect(28,330,320,32),"Corte de cabelo",caption);
             for(int i=0;i<PlayerAppearance.HairNames.Length;i++)if(CreatorButton(new Rect(28+i%2*165,376+i/2*60,155,48),PlayerAppearance.HairNames[i],creatorDraft.hair==i)){creatorDraft.hair=i;RefreshCreator();}
             Txt(new Rect(28,640,320,58),"Gire para ver o volume\ne o encaixe por todos os lados.",caption,muted);

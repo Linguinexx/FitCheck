@@ -1,5 +1,21 @@
 # DevLog
 
+## 03/11/2026 — Cidade distribuída, moradores, corrida e loja personalizável
+
+O estúdio de seleção/criação passa a ocultar explicitamente seus renderizadores cenográficos durante a exploração, preservando avatar-fonte, câmera e luz. Sair restaura o cenário do menu. Corrige a seleção aparecendo distante no bairro, além do isolamento anterior da quitinete/fotos.
+
+Galeria e quadra foram deslocadas para o setor norte e conectadas por duas passagens e uma travessa; a casa de shows ocupa o outro lado da avenida. Residências cenográficas agora também registram colisão. O perímetro recebe fechamentos físicos, solo além do limite, casario com janelas/sacadas e vegetação. O céu mantém noite e passa a ruído volumétrico suave nas nuvens, lua crescente/halo e estrelas variáveis; relógio respeita pausa e redução de movimento.
+
+Moradores usam seis tons de pele, cabelos/cores/expressões variados e roupas casuais recoloridas sem identificações/estampas da loja. O frequentador da loja continua independente dos clientes. No bairro, um morador consulta o celular e outro apoia o pé no muro da quadra. Bocas recebem movimento contido; diálogos usam pulsação maior, sem voz sintética nem sincronização labial prometida. O tênis da vitrine/fachada foi refeito com sola, volumes, painéis e cadarços.
+
+Shift permite correr a 7,2 unidades/s, mantendo caminhada a 4,4; diagonal normalizada e pausa preservada. Transições de chegada/menus, passos por ambiente, porta, tecido do provador, ar ambiente, flash discreto e partículas leves complementam o atendimento. Movimento reduzido evita partículas/flash e mantém trocas breves. Interface usa carvão neutro, papel, oliva, areia/âmbar e vermelho pontual; cortina e fundo abstrato deixam o roxo.
+
+F, com a loja fechada, abre personalização com câmera de ambiente: quatro paredes, três pisos, três cores de cortina, três quadros e plantas. Prévia reversível; Cancelar/Esc restaura; Salvar escreve shop-style.json dentro do espaço atual, com validação/gravação temporária/backup. Não usa PlayerPrefs para decoração. A revisão profunda das roupas fica reservada para o debate solicitado pelo usuário.
+
+Revisão visual da prévia reduz a altura da câmera e acrescenta vistas Geral, Provador e Quadro. O quadro fica acima do frequentador, livre do letreiro da DripLab. A recoloração da cortina aplica-se ao submesh de tecido, preservando argolas e funcionando após reatar referências; grupos de decoração mantêm referências serializadas.
+
+Build Windows-LivingCity; capturas e provas em Captures/LivingCity. Primeiro pedido desde o último push: 1/3.
+
 ## 03/11/2026 — Bairro conectado e percurso residencial de 30–45 segundos
 
 AP 03 realocado para a Rua das Lajes, a oeste da praça, por solicitação do usuário. O antigo vão entre café e DripLab vira um pequeno pátio; RADIO continua independente. A entrada residencial mantém vestíbulo real, saída pela porta e conexão de volta ao mesmo quarto/save. Velocidade normal mantida em 4,4 unidades/s, sem cronômetro de deslocamento nem salto por menu.
@@ -486,3 +502,31 @@ AmbientSurfaceImporter configura 256 px (512 para tecido), repetição, mipmaps,
 UVs dos tampos deixam de repetir a imagem por triângulo: projeção contínua por plano mantém os veios alinhados em superfícies arredondadas. Piso interno substitui o padrão de calçada por placas de concreto com juntas. RetroPaint recebe detalhe estático de tecido somente nas peças de roupa; pele, cabelo, olhos e expressões continuam com seus materiais anteriores. Sem filtro global adicional e sem novo efeito de animação de textura.
 
 AmbientSurfaces.Validate exige as oito fontes, resolução limitada, mipmaps e repetição. Prova completa de loja, controles, campanha, cortina, apoio na parede, corpo e caminhada passou; renders nativos de loja, móveis, rua e asfalto inspecionados. Build Windows-SurfacePass; logs tools/surface-pass-build.log e tools/surface-pass-proof.log. Cópia funcional Windows-ShopPose preservada.
+
+## 03/11/2026 — Interface Kaos, cenário vivo e interações
+
+Interface compartilhada usa Vermelho Kaos #E30613 com botões arredondados, sombra, borda, relevo, hover e depressão no clique. Aplicado ao menu, saves, criador, pausa e loja. Menu inicial renderiza o bairro ao vivo, com fachada, moradores, tráfego, céu e câmera suave, sem abrir a loja ou avançar a campanha. Selo Kaos branco oficial aplicado com transparência e proporção preservadas.
+
+Configurações acessível no início e na pausa inclui sensibilidade persistente de 25–250%, mute, movimento reduzido e filtro retrô. Removido rodapé permanente de controles na exploração; proximidade gera cantos de destaque e cartão com tecla junto ao alvo. Balões de HQ têm entrada por escala/opacidade; informações essenciais do pedido aparecem completas. Moradores próximos têm comentários curtos e espaçados.
+
+Celular acompanha a geometria da mão animada, com pose de leitura e orientação da tela. Surpresa deixa de manter boca aberta: alterna breve reação e repouso, no estúdio e nas cópias animadas. Paleta dos moradores e materiais urbanos ganhou intensidade sem alterar os tons de pele. Personalização preserva índices antigos e adiciona oito cores de parede/cortina, incluindo roxo, rosa e turquesa. Fundo abstrato do criador volta ao roxo vivo.
+
+Antigo volume azulado da base do monumento substituído por morro irregular com vegetação e patamares. Pontos culturais distribuídos: palco de rima, vinis, bicicleta, tênis no fio, mural de passinho e placas brasileiras. Atlas de letreiros expandido para 32 entradas. Vestuário detalhado permanece reservado ao debate posterior.
+
+Build Windows-KaosCity concluído sem erros ou avisos. Capturas de interface usam o OnGUI real renderizado no player Unity, com contêiner restrito ao modo de prova, sem aproximação em HTML ou desenho externo. Testes nunca escrevem nas preferências ou saves reais do jogador.
+
+Verificação final: `-kaos-review` terminou com código 0; passaram fluxo residencial/comercial, cidade, decoração, sensibilidade, vínculo do celular, reação breve de surpresa, restauração do menu, capturas reais de UI, gato e saves isolados. Caminhada preservada em 31,50/31,10 segundos. Interface e novos pontos do bairro inspecionados em Captures/KaosCity.
+
+## 03/11/2026 — Tipografia, etiquetas e janelas
+
+Montserrat Regular e SemiBold incorporadas para textos, botões e campo de nome; Barlow Condensed Bold restrita aos títulos. Fontes originais e licenças oficiais acompanham o projeto e o pacote Windows. Logo inicial usa arquivo vermelho aprovado, com pulso proporcional e deslocamento vertical discretos, sem deformação; movimento reduzido congela o efeito. Crédito alterado para A game by DripLab.
+
+Botões secundários passam a carvão com borda neutra, sem vermelho permanente. Hover os preenche em Kaos; ações principais e seleções permanecem vermelhas. Pequenos encaixes laterais evocam etiquetas, preservando relevo, sombra e depressão no clique. Balões de HQ têm raio mais amplo, contorno preto, cauda contornada, retícula discreta e animação de entrada com pequeno salto/rotação, sem esconder o texto essencial.
+
+Vidros deixam de usar somente couro alaranjado com uma placa diagonal por cima. Material próprio amostra o desgaste fotográfico Metal032 já licenciado, com luminosidade por profundidade e reflexo direcional estilizado. Janela da casa reconstruída com caixilho, duas folhas, puxador, peitoril, cortinas de tecido e silhueta urbana noturna.
+
+Cópias de moradores agora retêm duas malhas de pálpebra superior, com amostras de repouso/fechamento, interpoladas sobre a mesma superfície fechada do rosto. Tempos de piscada variam por ator; pupilas ocultam-se somente no instante de fechamento para evitar frestas. Preparação da cópia força presença das pupilas mesmo se a fonte estava piscando. Relógio facial independente mantém piscadas do jogador/frequentador durante o provador; pausa preservada. Fonte do estúdio usa relógio separado do balanço corporal para não congelar os olhos no modo reduzido.
+
+Easter egg original: observador na janela da galeria, que acompanha discretamente quem passa e também pisca. Não adicionado à lista de pedestres de navegação. Pasta refs roupas preservada fora dos recursos; roupas e artes futuras dos quadros ficam registradas como pendentes, sem substituições automáticas.
+
+Regressão nativa identity-polish-release-proof concluiu com código 0: casa/bairro/loja, manual opening, sensibilidade, personagem com celular, surpresa breve, decoração, menu, gato, isolamento de saves e capturas reais da UI. Compilação sem erros ou avisos. Verificações focadas adicionais cobrem relógio independente de piscada e renders finais.

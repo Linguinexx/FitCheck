@@ -84,7 +84,7 @@ namespace FitCheck
         void Monument()
         {
             // Original distant landmark: a woven ribbon spirals into a tilted open halo.
-            Foliage(new Vector3(-37,-1,67),new Vector3(31,12,19),new Color(.17f,.29f,.29f),7);
+            MonumentHill();
             Block(new Vector3(-37,11,67),new Vector3(9,3,8),Ink,"Plaster",.4f);
             for(int i=0;i<26;i++){
                 float a=i/26f,b=(i+1)/26f;

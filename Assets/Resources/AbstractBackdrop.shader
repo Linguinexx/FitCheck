@@ -17,7 +17,8 @@ Shader "FitCheck/Abstract Descending Backdrop"
             fixed4 frag(v2f i):SV_Target
             {
                 // Increasing the sampled V moves every visible shape downward.
-                return tex2D(_MainTex,float2(i.uv.x,frac(i.uv.y+_BackdropTime*.065)));
+                float tone=tex2D(_MainTex,float2(i.uv.x,frac(i.uv.y+_BackdropTime*.065))).r;
+                return fixed4(lerp(float3(.025,.008,.045),float3(.58,.08,.91),saturate(tone*2.5)),1);
             }
             ENDCG
         }

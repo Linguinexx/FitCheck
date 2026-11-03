@@ -1,5 +1,13 @@
 # Registro de testes — protótipo K7
 
+## 03/11/2026 — Cidade viva e decoração
+
+- Regressão completa de loja/campanha/arte aprovada antes da revisão final; rotas novas da galeria, quadra e casa de shows acessíveis. Caminhada normal próxima de 31,5 s na ida e 31,1 s na volta.
+- Verificar estúdio invisível no bairro e restaurado no menu; moradores com pelo menos cinco tons/cores de roupa, poses contextuais e bocas móveis.
+- Corrida a 7,2 em linha reta e diagonal; pausa sem deslocamento. Bordas bloqueadas e imagens de revisão dos setores extremos.
+- Comparar céu em dois tempos; validar shader de partículas e clips dos efeitos, com cronômetro de apresentação congelado na pausa.
+- Personalização: prévia, cancelar sem arquivo, salvar, reentrar e restaurar, além de arquivos distintos entre espaços; campanha permanece idêntica. Capturas LivingCity e marcador FITCHECK_LIVING_CITY_PASSED registram o resultado nativo.
+
 ## 03/11/2026 — Bairro e percurso residencial
 
 - Caminhada real pelo controlador a 60 Hz, mantendo velocidade 4,4: AP 03 → loja 31,683 s; loja → AP 03 31,083 s. As duas direções devem permanecer entre 30 e 45 segundos.
@@ -349,3 +357,21 @@ Handler do arrasto com botão direito recebe movimento vertical, exige variaçã
 ### T150 — Importação dos materiais ambientCG
 
 Oito mapas Color carregados via Resources, com largura/altura até 512, mipmaps e WrapMode.Repeat; FITCHECK_AMBIENT_SURFACES_PASSED. Configure/PrepareAll aplica limites de importação antes do build. SHA-256 dos originais registrado em sources.json. Renderizações inspecionadas para veios contínuos de madeira, contraste da trama, escala de tijolos/concreto, cor de embalagens e paleta noturna. Prova completa de loja e bairro, pálpebras, roupas, criação, postagem de prévia, apoio e abertura da cortina repetida. Evidências: Captures/SurfacePass/checks.txt, surface-street.png, surface-asphalt.png e tools/surface-pass-proof.log.
+
+### Revisão KaosCity — interface e bairro
+
+Executar o player com `-city-proof -kaos-review -proof-output <pasta>` verifica percurso casa/loja, cidade completa, corrida/pausa, decoração, sensibilidade, celular preso à mão ao longo da animação, surpresa com repouso predominante, menu vivo e retorno ao estúdio, dicas apenas em proximidade, oito novas escolhas de cor, gato e isolamento dos três saves. O modo também captura a interface real do título, configurações, porta de casa, decoração roxa e diálogo em HQ. A captura usa contêiner IMGUI restrito ao modo de prova e não altera preferências reais.
+
+Inspeção manual: no menu e em Esc > Configurações, variar a sensibilidade; fechar e reabrir para confirmar persistência. Em casa e na loja, aproximar-se de portas e objetos, conferir destaque/tecla e desaparecimento ao afastar. Com a loja fechada, aproximar-se do livro no balcão e usar F para testar as cores; Cancelar restaura a prévia e Salvar grava somente no espaço atual. Atender um cliente para ver os balões animados. Conferir o morro atrás da quadra, o morador lendo o celular e as novas placas nos pontos culturais.
+
+Resultado nativo final: `tools/kaos-city-final-proof.log` encerrou com código 0. Passaram HomeCommute, CityCompletion, LivingCity, KaosCity, capturas IMGUI, gato e SaveSlots. Percurso medido: 31,50 s na ida e 31,10 s na volta. Build: 0 erros e 0 avisos. Título com logo, configurações, decoração roxa, balões, celular, morro e espaço de rima inspecionados nas capturas. O enquadramento de prova da porta é muito próximo; conferir a leitura do destaque durante a exploração real continua parte da avaliação visual do jogador.
+
+### IdentityPolish — Montserrat, HQ, vidros e piscadas
+
+`-city-proof -identity-review` verifica recursos tipográficos, logo vermelha, duas pálpebras animáveis e duas pupilas por ator, incluindo pedestres, cliente, frequentador, jogador externo e observador. Captura olhos abertos/fechados, janela de casa, observador e a interface real. Inclui regressão do percurso, abertura manual, sensibilidade, decoração, gato e saves. Execução completa em tools/identity-polish-release-proof.log: código 0.
+
+`-city-proof -identity-visual-review` executa a conferência focada final: relógio facial do estúdio avança mesmo com balanço corporal reduzido e congela em pausa; cópias não perdem pupilas; olhos fecham sobre a superfície original; corpo visível/frequentador continuam piscando no provador. Capturas em Captures/IdentityPolish. Ambos os modos usam armazenamento separado.
+
+Inspeção visual: no início, verificar logo vermelha em movimento discreto e crédito A game by DripLab; botões secundários neutros tornam-se Kaos no hover. No criador, conferir nome em Montserrat e títulos condensados, sem texto cortado. Atender cliente para ver entrada dos balões e texto inteiro. Em casa, conferir cortinas, caixilho e vista noturna. No bairro, conferir reflexos/desgaste dos vidros e procurar o observador da galeria. Movimento reduzido desliga o pulso da marca/entrada dos balões, mas mantém a piscada natural.
+
+Conferência focada final em tools/identity-polish-blink-proof.log concluída com código 0. Olhos fechados inspecionados sem pupilas vazando; capturas finais de título, configurações, interação, decoração e balões verificadas. Build final: 108,22 MB, zero erros/avisos.

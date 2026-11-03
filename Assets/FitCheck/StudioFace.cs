@@ -13,7 +13,7 @@ namespace FitCheck
         [SerializeField] GameObject[] upperLidObjects=new GameObject[2],lowerLidObjects=new GameObject[2];
         [SerializeField] float[] upperCover=new float[2],lowerCover=new float[2],lastUpper={-1,-1},lastLower={-1,-1};
         Transform smile,openMouth,surprisedMouth,face;Mesh mouthLineMesh;int faceProfile;
-        Vector3 bodyScale=Vector3.one;AvatarExpression expression;
+        Vector3 bodyScale=Vector3.one;AvatarExpression expression;float expressionStart,blinkClock;
         public bool TallPreview,PreviewProportions;
         public int ExpressionOverride=-1;
         public string ExpressionName {get{return new[]{"Neutra","Curiosa","Desconfiada","Sonolenta","Animada","Surpresa"}[(int)expression];}}
@@ -144,7 +144,7 @@ namespace FitCheck
         void ApplyExpression(AvatarExpression value)
         {
             if(!EnsureFaceBindings())return;faceExpressionNeedsRefresh=false;
-            expression=value;bool happy=value==AvatarExpression.Happy,surprised=value==AvatarExpression.Surprised;
+            expression=value;expressionStart=idle;bool happy=value==AvatarExpression.Happy,surprised=value==AvatarExpression.Surprised;
             smile.gameObject.SetActive(!happy&&!surprised);openMouth.gameObject.SetActive(happy);surprisedMouth.gameObject.SetActive(surprised);
             float curve=value==AvatarExpression.Curious?.018f:value==AvatarExpression.Skeptical?-.012f:value==AvatarExpression.Sleepy?-.008f:0;
             mouthLineMesh.vertices=ArcVertices(new Vector3(0,2.50f,0),value==AvatarExpression.Sleepy?.15f:.20f,curve,.020f,value==AvatarExpression.Skeptical?.014f:0);mouthLineMesh.RecalculateNormals();mouthLineMesh.RecalculateBounds();
@@ -169,9 +169,21 @@ namespace FitCheck
         }
         void AnimateFace()
         {
-            if(!EnsureFaceBindings())return;if(faceExpressionNeedsRefresh)ApplyExpression(expression);float phase=Mathf.Repeat(idle+faceProfile*.43f,4.3f);
-            float blink=!ReducedMotion&&phase<.16f?Mathf.Sin(phase/.16f*Mathf.PI):0;
-            for(int i=0;i<2;i++){UpdateLid(i,false,Mathf.Max(upperCover[i],blink));UpdateLid(i,true,lowerCover[i]);}
+            if(!EnsureFaceBindings())return;if(faceExpressionNeedsRefresh)ApplyExpression(expression);float phase=Mathf.Repeat(blinkClock+faceProfile*.43f,4.3f);
+            float blink=phase<.16f?Mathf.Sin(phase/.16f*Mathf.PI):0;
+            for(int i=0;i<2;i++){UpdateLid(i,false,Mathf.Max(upperCover[i],blink));UpdateLid(i,true,lowerCover[i]);pupils[i].gameObject.SetActive(blink<.92f);}
+            AnimateMouth();
+        }
+        public bool Talking;
+        void AnimateMouth()
+        {
+            if(ReducedMotion||mouthLineMesh==null)return;
+            if(expression==AvatarExpression.Surprised){float phase=Mathf.Repeat(idle-expressionStart,8);bool gasp=phase>.05f&&phase<.75f;surprisedMouth.gameObject.SetActive(gasp);smile.gameObject.SetActive(!gasp);surprisedMouth.localScale=new Vector3(1,.35f+.65f*Mathf.Sin(Mathf.Clamp01(phase/.8f)*Mathf.PI),1);}
+            float syllable=Talking?Mathf.Pow(Mathf.Max(0,Mathf.Sin(idle*12)*Mathf.Sin(idle*3.7f)),1.4f):Mathf.Pow(Mathf.Max(0,Mathf.Sin(idle*.7f+faceProfile)),10)*.12f;
+            float curve=expression==AvatarExpression.Curious?.018f:expression==AvatarExpression.Skeptical?-.012f:expression==AvatarExpression.Sleepy?-.008f:0;
+            var vertices=ArcVertices(new Vector3(0,2.50f,0),.20f,curve,.02f+syllable*.05f,expression==AvatarExpression.Skeptical?.014f:0);
+            mouthLineMesh.vertices=vertices;mouthLineMesh.RecalculateNormals();mouthLineMesh.RecalculateBounds();
+            if(openMouth!=null)openMouth.localScale=new Vector3(1,1+syllable*.15f,1);
         }
     }
 }

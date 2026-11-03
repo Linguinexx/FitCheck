@@ -10,7 +10,7 @@ namespace FitCheck
         public void Build(StudioView studio)
         {
             transform.position=Origin;
-            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();WestNeighbourhood();NightDetails();GeometryBatches=batches.Count;FinishGeometry();
+            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();WestNeighbourhood();StreetCulture();NightDetails();GeometryBatches=batches.Count;FinishGeometry();
             marker=Disc("Destino na calçada",.27f,.27f,.19f,new Color(.36f,.76f,.65f));marker.gameObject.SetActive(false);
             shadow=Disc("Sombra do funcionário",.65f,.36f,0,new Color(.43f,.40f,.39f));
             BakeResident(studio,1,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-15.4f,-.055f,2.8f),-22);
@@ -23,9 +23,16 @@ namespace FitCheck
             residents[3].path=new[]{new Vector2(-22.3f,3.6f),new Vector2(-16.8f,3.6f),new Vector2(-22.3f,3.6f),new Vector2(-22,-2)};
             BakeResident(studio,2,new[]{"AH_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-122,-.055f,1.8f),90);
             residents[4].path=new[]{new Vector2(-139,1.8f),new Vector2(-109,1.8f)};
-            BakeResident(studio,4,new[]{"SB_TOP_02","CG_BOTTOM_01","CG_SHOES_01",""},new Vector3(-97,-.055f,1.5f),90);
-            residents[5].path=new[]{new Vector2(-103,1.5f),new Vector2(-90,1.5f)};
-            BakeResident(studio,6,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-73,-.055f,12),-45);
+            BakeResident(studio,4,new[]{"SB_TOP_02","CG_BOTTOM_01","CG_SHOES_01",""},new Vector3(-97,-.055f,31.5f),90);
+            residents[5].path=new[]{new Vector2(-103,31.5f),new Vector2(-90,31.5f)};
+            BakeResident(studio,6,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-73,-.055f,49.25f),0);
+            ConfigureShopLean(residents[6],false,50.10f);
+            residents[0].idleStyle=2;
+            var phone=new GameObject("Celular preso à mão").transform;phone.SetParent(residents[0].root,false);residents[0].prop=phone;
+            LiveBox("Corpo do celular",Vector3.zero,new Vector3(.165f,.30f,.035f),Ink,"CityMetal",phone);
+            LiveBox("Tela do celular",new Vector3(0,0,.021f),new Vector3(.135f,.255f,.008f),new Color(.12f,.38f,.36f),"CityGlow",phone);
+            LiveBox("Câmera do celular",new Vector3(-.045f,.10f,-.022f),new Vector3(.035f,.04f,.012f),Cream,"CityMetal",phone);
+            PoseResident(residents[0],0,0);BuildWatcher(studio);
         }
         Transform Disc(string name,float rx,float rz,float inner,Color color)
         {
@@ -40,23 +47,25 @@ namespace FitCheck
         }
         void BakeResident(StudioView studio,int customer,string[] outfit,Vector3 position,float yaw,bool wallLean=false)
         {
-            int oldHair=studio.HairOverride,oldExpression=studio.ExpressionOverride;bool oldPreview=studio.PreviewProportions,oldTall=studio.TallPreview;var rotation=studio.Avatar.rotation;
+            int oldHair=studio.HairOverride,oldExpression=studio.ExpressionOverride;bool oldPreview=studio.PreviewProportions,oldTall=studio.TallPreview;var rotation=studio.Avatar.rotation;var oldLook=studio.PlayerLook;
             try{
-                studio.HairOverride=-1;studio.ExpressionOverride=-1;studio.PreviewProportions=false;studio.TallPreview=false;studio.Avatar.rotation=Quaternion.identity;studio.Apply(outfit,customer);
+                studio.HairOverride=-1;studio.ExpressionOverride=-1;studio.PreviewProportions=false;studio.TallPreview=false;studio.Avatar.rotation=Quaternion.identity;
+                if(!IsInterior){studio.PlayerLook=CitizenAppearance(customer);studio.Apply(outfit,-1);CivilianClothes(studio,customer);}else studio.Apply(outfit,customer);
                 if(wallLean)studio.SetShopAttitude();
                 var actor=CopyAvatar(studio,"Morador — "+DayOne.Customers[customer].name,position,yaw,false);residents.Add(actor);
                 if(wallLean)ConfigureShopLean(actor);
                 var blob=Disc("Sombra do morador",.63f,.35f,0,new Color(.43f,.40f,.39f));blob.localPosition=new Vector3(position.x,.005f,position.z);
                 actor.shadow=blob;
-            }finally{studio.HairOverride=oldHair;studio.ExpressionOverride=oldExpression;studio.PreviewProportions=oldPreview;studio.TallPreview=oldTall;studio.Avatar.rotation=rotation;}
+            }finally{studio.PlayerLook=oldLook;studio.HairOverride=oldHair;studio.ExpressionOverride=oldExpression;studio.PreviewProportions=oldPreview;studio.TallPreview=oldTall;studio.Avatar.rotation=rotation;}
         }
         Resident CopyAvatar(StudioView studio,string name,Vector3 position,float yaw,bool hideHead)
         {
                 var resident=new GameObject(name).transform;resident.SetParent(transform,false);resident.localPosition=position;resident.localRotation=Quaternion.Euler(0,yaw,0);
-                var actor=new Resident{root=resident,home=position,facing=resident.localRotation};
-                var materials=new Dictionary<Material,Material>();
-                foreach(var renderer in studio.Avatar.GetComponentsInChildren<MeshRenderer>()){
-                    if(!renderer.gameObject.activeInHierarchy||hideHead&&(studio.IsHeadPart(renderer.transform)||renderer.name=="Pescoço"))continue;var filter=renderer.GetComponent<MeshFilter>();if(filter==null)continue;
+                var actor=new Resident{root=resident,home=position,facing=resident.localRotation,expression=studio.CurrentExpression};
+                var materials=new Dictionary<Material,Material>();studio.PrepareResidentLids();
+                foreach(var renderer in studio.Avatar.GetComponentsInChildren<MeshRenderer>(true)){
+                    int mouth=renderer.name=="Boca"?1:renderer.name=="Boca animada"?2:renderer.name=="Boca surpresa"?3:renderer.name=="Dentes"?4:0;
+                    if((!renderer.gameObject.activeInHierarchy&&mouth==0&&renderer.name!="Pálpebra superior")||hideHead&&(studio.IsHeadPart(renderer.transform)||renderer.name=="Pescoço"))continue;var filter=renderer.GetComponent<MeshFilter>();if(filter==null)continue;
                     var sourceMesh=filter.sharedMesh;var vertices=sourceMesh.vertices;var normals=sourceMesh.normals;
                     if(vertices.Length==0)throw new System.Exception("Fonte do morador vazia: "+renderer.name);
                     // Own CPU copies of every stream and submesh. Dynamic face
@@ -67,12 +76,18 @@ namespace FitCheck
                     for(int i=0;i<vertices.Length;i++){vertices[i]=renderer.transform.TransformPoint(vertices[i])-studio.Avatar.position;normals[i]=renderer.transform.TransformDirection(normals[i]);}
                     mesh.vertices=vertices;mesh.normals=normals;mesh.RecalculateBounds();assets.Add(mesh);RegisterResidentMesh(actor,mesh,renderer.name,studio.IsHeadPart(renderer.transform));
                     var piece=new GameObject(renderer.name);piece.transform.SetParent(resident,false);piece.AddComponent<MeshFilter>().sharedMesh=mesh;
+                    if(renderer.name=="Pálpebra superior"){
+                        Vector3[] closed,closedNormals;studio.ResidentClosedLid(renderer.transform,out closed,out closedNormals);
+                        for(int i=0;i<closed.Length;i++){closed[i]=renderer.transform.TransformPoint(closed[i])-studio.Avatar.position;closedNormals[i]=renderer.transform.TransformDirection(closedNormals[i]);}
+                        actor.parts[actor.parts.Count-1].closedLid=closed;actor.parts[actor.parts.Count-1].closedNormals=closedNormals;
+                    }
+                    actor.parts[actor.parts.Count-1].node=piece;actor.parts[actor.parts.Count-1].mouthKind=mouth;
                     var source=renderer.sharedMaterials;var copies=new Material[source.Length];for(int i=0;i<source.Length;i++){
                         Material copy;if(!materials.TryGetValue(source[i],out copy)){copy=Instantiate(source[i]);copy.SetFloat("_NightCity",IsInterior?0:1);materials[source[i]]=copy;assets.Add(copy);}copies[i]=copy;
                     }
                     piece.AddComponent<MeshRenderer>().sharedMaterials=copies;
                 }
-                return actor;
+                studio.RestoreResidentLids();AnimateResidentExpression(actor,0);return actor;
         }
     }
 }

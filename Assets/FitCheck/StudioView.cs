@@ -14,7 +14,7 @@ namespace FitCheck
         [SerializeField] List<Object> owned=new List<Object>();
         [SerializeField] List<Object> garmentAssets=new List<Object>(); bool buildingGarments;
         void Own(Object o){if(buildingGarments)garmentAssets.Add(o);else owned.Add(o);}
-        Color purple=new Color(.48f,.25f,.85f);
+        Color purple=new Color(.46f,.54f,.39f);
         Material Material(Color c, bool glow=false)
         {
             var m=new Material(Resources.Load<Shader>("RetroPaint"));m.color=c;
@@ -62,7 +62,7 @@ namespace FitCheck
         }
         public void Build()
         {
-            var dark=Material(new Color(.055f,.045f,.075f));var panel=Material(new Color(.105f,.085f,.14f));
+            var dark=Material(new Color(.055f,.06f,.055f));var panel=Material(new Color(.105f,.11f,.10f));
             var metal=Material(new Color(.28f,.25f,.32f));var neon=Material(purple,true);var ivory=Material(new Color(.82f,.79f,.72f));
             Box("Piso",new Vector3(0,-.14f,0),new Vector3(14,.2f,12),dark);
             for(int x=-7;x<=7;x++)for(int z=-5;z<=4;z++)
@@ -206,7 +206,7 @@ namespace FitCheck
             Camera.transform.LookAt(new Vector3(origin+framing,1.85f,0));Avatar.localRotation=Quaternion.Euler(0,rotation,0);
         }
         public void Animate(float delta,bool active)
-        {if(!EnsureFaceBindings())return;if(active&&!ReducedMotion)idle+=delta;Avatar.localScale=bodyScale;PoseRelaxedBody();AnimateFace();}
+        {if(!EnsureFaceBindings())return;if(active){blinkClock+=delta;if(!ReducedMotion)idle+=delta;}Avatar.localScale=bodyScale;PoseRelaxedBody();AnimateFace();}
         public Texture2D Thumbnail(Garment item)
         {
             var outfit=Catalog.Default;outfit[item.slot]=item.id;Apply(outfit,0);

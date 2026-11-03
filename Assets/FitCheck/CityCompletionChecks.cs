@@ -24,7 +24,7 @@ namespace FitCheck
             var original=JsonUtility.ToJson(progress);
             try{
                 Home();EnterCity();paused=false;
-                if(studio.LegacyHomeVisible||(plaza!=null&&plaza.activeSelf))throw new Exception("Cenário de quarto/foto vazou para o bairro");
+                if(studio.LegacyHomeVisible||studio.VisibleStudioDecor>0||(plaza!=null&&plaza.activeSelf))throw new Exception("Cenário de seleção/quarto/foto vazou para o bairro");
                 if(city.ResidentCount!=CityView.StreetResidentCount||!city.RuntimeReady)throw new Exception("Bairro expandido incompleto");
                 float outward=MeasureCityWalk(CityView.StreetHomeDoor,CityView.StreetShopDoor);
                 float back=MeasureCityWalk(CityView.StreetShopDoor,CityView.StreetHomeDoor);
@@ -32,13 +32,13 @@ namespace FitCheck
                 foreach(var old in new[]{new Vector2(-4.8f,7.65f),new Vector2(21.8f,3.8f)}){
                     MoveProof(old,0,0);if(city.StreetInteraction==2)throw new Exception("Endereço antigo ainda abre a casa");
                 }
-                var targets=new[]{new Vector2(-124.8f,-3),new Vector2(-112,-2.5f),new Vector2(-96.5f,-2.5f),new Vector2(-76,7),new Vector2(-49,-2.5f),new Vector2(-31.5f,-2.5f)};
+                var targets=new[]{new Vector2(-124.8f,-3),new Vector2(-112,-2.5f),new Vector2(-96.5f,28.5f),new Vector2(-76,39),new Vector2(-49,-9.5f),new Vector2(-31.5f,-2.5f)};
                 var names=new[]{"district-residential","district-market","district-gallery","district-court","district-music","district-passage"};
                 for(int i=0;i<targets.Length;i++){
-                    MoveProof(targets[i],0,i==3?-7:-10);city.Frame(cam,false,1/30f);
+                    MoveProof(targets[i],i==4?180:0,i==3?-7:-10);city.Frame(cam,false,1/30f);
                     SaveFirstPersonFrame(Path.Combine(folder,names[i]+".png"));
                 }
-                foreach(var blocked in new[]{new Vector2(-137,9),new Vector2(-96.5f,8),new Vector2(-49,9),new Vector2(-87.2f,12),new Vector2(-76,20.25f)})
+                foreach(var blocked in new[]{new Vector2(-137,9),new Vector2(-96.5f,42),new Vector2(-49,-27),new Vector2(-87.2f,42),new Vector2(-76,50.25f)})
                     if(city.Free(blocked))throw new Exception("Marco ou fechamento urbano sem colisão: "+blocked);
                 MoveProof(new Vector2(-61,-2),315,-8);SaveFirstPersonFrame(Path.Combine(folder,"district-street.png"));
                 // Simulate the new walking loops; exercise the same pause clock as the square.
