@@ -74,7 +74,7 @@ namespace FitCheck
                     mesh.vertices=vertices;mesh.uv=sourceMesh.uv;if(sourceMesh.colors.Length==vertices.Length)mesh.colors=sourceMesh.colors;
                     mesh.subMeshCount=sourceMesh.subMeshCount;for(int sub=0;sub<sourceMesh.subMeshCount;sub++)mesh.SetTriangles(sourceMesh.GetTriangles(sub),sub);
                     for(int i=0;i<vertices.Length;i++){vertices[i]=renderer.transform.TransformPoint(vertices[i])-studio.Avatar.position;normals[i]=renderer.transform.TransformDirection(normals[i]);}
-                    mesh.vertices=vertices;mesh.normals=normals;mesh.RecalculateBounds();assets.Add(mesh);RegisterResidentMesh(actor,mesh,renderer.name,studio.IsHeadPart(renderer.transform));
+                    mesh.vertices=vertices;mesh.normals=normals;mesh.RecalculateBounds();assets.Add(mesh);RegisterResidentMesh(actor,mesh,renderer.name,studio.IsHeadPart(renderer.transform),sourceMesh.name.Contains("Blender Baggy"));
                     var piece=new GameObject(renderer.name);piece.transform.SetParent(resident,false);piece.AddComponent<MeshFilter>().sharedMesh=mesh;
                     if(renderer.name=="Pálpebra superior"){
                         var lidPart=actor.parts[actor.parts.Count-1];lidPart.lidToAvatar=Matrix4x4.Translate(-studio.Avatar.position)*renderer.transform.localToWorldMatrix;lidPart.lidRotation=renderer.transform.rotation;lidPart.lidBaseCover=studio.ResidentLidCover(renderer.transform);

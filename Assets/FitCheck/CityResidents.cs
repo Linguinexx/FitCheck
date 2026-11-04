@@ -7,7 +7,7 @@ namespace FitCheck
     {
         [System.Serializable] sealed class ResidentPart
         {
-            public Mesh mesh;public Vector3[] rest,normals,vertices,posedNormals,closedLid,closedNormals;public Matrix4x4 lidToAvatar;public Quaternion lidRotation;public float lidBaseCover;public bool arm,foot,leg,head,pelvis,mouth;public float side;public Vector3 center;public GameObject node;public int mouthKind;public bool faceVisible=true;
+            public Mesh mesh;public Vector3[] rest,normals,vertices,posedNormals,closedLid,closedNormals;public Matrix4x4 lidToAvatar;public Quaternion lidRotation;public float lidBaseCover;public bool arm,foot,leg,head,pelvis,mouth,blenderDenim;public float side;public Vector3 center;public GameObject node;public int mouthKind;public bool faceVisible=true;
         }
         [System.Serializable] sealed class Resident
         {
@@ -19,7 +19,7 @@ namespace FitCheck
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
         public bool CustomerSpeaking;
-        const int ResidentArtRevision=24;
+        const int ResidentArtRevision=27;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
             if(IsInterior&&(cat==null||!cat.Ready))return false;
@@ -32,12 +32,12 @@ namespace FitCheck
         {
             var actor=new Resident{root=root,home=root.localPosition,facing=root.localRotation};residents.Add(actor);return actor;
         }
-        void RegisterResidentMesh(Resident actor,Mesh mesh,string name,bool head)
+        void RegisterResidentMesh(Resident actor,Mesh mesh,string name,bool head,bool blenderDenim=false)
         {
             bool arm=name.Contains("Manga")||name.Contains("Braço")||name=="Mão"||name=="Polegar"||name=="Dedos relaxados";
             bool leg=mesh.bounds.max.y<1.45f&&name!="Cintura";
             actor.parts.Add(new ResidentPart{mesh=mesh,rest=mesh.vertices,normals=mesh.normals,vertices=new Vector3[mesh.vertexCount],posedNormals=new Vector3[mesh.vertexCount],arm=arm,leg=leg,head=head,mouth=name.StartsWith("Boca"),center=mesh.bounds.center,pelvis=name=="Cintura",foot=name.StartsWith("Tênis")||name.StartsWith("Sola")||name=="Cadarço",side=mesh.bounds.center.x<0?-1:1});
-            mesh.MarkDynamic();
+            actor.parts[actor.parts.Count-1].blenderDenim=blenderDenim;mesh.MarkDynamic();
         }
         bool ResidentBlocks(Vector2 point)
         {
@@ -146,6 +146,7 @@ namespace FitCheck
         void PoseResident(Resident actor,int index,float dip)
         {
             var body=ResidentBody(actor,index);var left=ResidentLeg(actor,-1,dip,body);var right=ResidentLeg(actor,1,dip,body);
+            denimLeft=left;denimRight=right;
             foreach(var part in actor.parts)PoseResidentPart(part,actor,index,body,part.side<0?left:right);
             AnimateResidentExpression(actor,index);
             if(actor.prop!=null)foreach(var part in actor.parts)if(part.mesh.name.StartsWith("Mão")&&part.side>0){actor.prop.localPosition=part.mesh.bounds.center+new Vector3(0,.075f,-.04f);actor.prop.localRotation=Quaternion.Euler(12,0,-8);break;}
@@ -172,6 +173,10 @@ namespace FitCheck
                     normal=Vector3.Lerp(forearm*n,upperArm*n,upperWeight);
                     float anchor=1-MotionWeight(1.78f,1.94f,p.y);posed=Vector3.Lerp(p,posed,anchor);
                     posed=body.TorsoPoint(posed);normal=body.torso*normal;
+                }else if(part.blenderDenim){
+                    Vector3 lp,ln,rp,rn;DenimLegPoint(p,n,denimLeft,body,out lp,out ln);DenimLegPoint(p,n,denimRight,body,out rp,out rn);
+                    float mix=Mathf.SmoothStep(0,1,(p.x+.12f)/.24f),weight=actor.wallLean?1:actor.blend;
+                    posed=Vector3.Lerp(p,Vector3.Lerp(lp,rp,mix),weight);normal=Vector3.Lerp(n,Vector3.Lerp(ln,rn,mix),weight);
                 }else if(part.leg){
                     if(part.foot){posed=leg.ankle+leg.foot*(p-leg.ankleRest);normal=leg.foot*n;}
                     else{

@@ -1,0 +1,141 @@
+{
+  "source": "StreetwearCollection.blend",
+  "pieces": [
+    {
+      "id": "AH_BOTTOM_01",
+      "slot": 1,
+      "parts": 36,
+      "triangles": 5654,
+      "fbx": "Assets/Resources/Garments/Streetwear/AH_BOTTOM_01.fbx",
+      "texture": true
+    },
+    {
+      "id": "AH_BOTTOM_02",
+      "slot": 1,
+      "parts": 34,
+      "triangles": 5870,
+      "fbx": "Assets/Resources/Garments/Streetwear/AH_BOTTOM_02.fbx",
+      "texture": true
+    },
+    {
+      "id": "AH_SHOES_01",
+      "slot": 2,
+      "parts": 25,
+      "triangles": 2072,
+      "fbx": "Assets/Resources/Garments/Streetwear/AH_SHOES_01.fbx",
+      "texture": false
+    },
+    {
+      "id": "AH_TOP_01",
+      "slot": 0,
+      "parts": 3,
+      "triangles": 832,
+      "fbx": "Assets/Resources/Garments/Streetwear/AH_TOP_01.fbx",
+      "texture": true
+    },
+    {
+      "id": "AH_TOP_02",
+      "slot": 0,
+      "parts": 3,
+      "triangles": 832,
+      "fbx": "Assets/Resources/Garments/Streetwear/AH_TOP_02.fbx",
+      "texture": true
+    },
+    {
+      "id": "AH_TOP_03",
+      "slot": 0,
+      "parts": 13,
+      "triangles": 1458,
+      "fbx": "Assets/Resources/Garments/Streetwear/AH_TOP_03.fbx",
+      "texture": true
+    },
+    {
+      "id": "CG_BOTTOM_02",
+      "slot": 1,
+      "parts": 30,
+      "triangles": 5654,
+      "fbx": "Assets/Resources/Garments/Streetwear/CG_BOTTOM_02.fbx",
+      "texture": true
+    },
+    {
+      "id": "CG_SHOES_01",
+      "slot": 2,
+      "parts": 25,
+      "triangles": 1436,
+      "fbx": "Assets/Resources/Garments/Streetwear/CG_SHOES_01.fbx",
+      "texture": false
+    },
+    {
+      "id": "CG_TOP_01",
+      "slot": 0,
+      "parts": 6,
+      "triangles": 972,
+      "fbx": "Assets/Resources/Garments/Streetwear/CG_TOP_01.fbx",
+      "texture": true
+    },
+    {
+      "id": "CG_TOP_02",
+      "slot": 0,
+      "parts": 3,
+      "triangles": 832,
+      "fbx": "Assets/Resources/Garments/Streetwear/CG_TOP_02.fbx",
+      "texture": true
+    },
+    {
+      "id": "CG_TOP_03",
+      "slot": 0,
+      "parts": 10,
+      "triangles": 1756,
+      "fbx": "Assets/Resources/Garments/Streetwear/CG_TOP_03.fbx",
+      "texture": true
+    },
+    {
+      "id": "SB_BOTTOM_01",
+      "slot": 1,
+      "parts": 40,
+      "triangles": 6086,
+      "fbx": "Assets/Resources/Garments/Streetwear/SB_BOTTOM_01.fbx",
+      "texture": true
+    },
+    {
+      "id": "SB_BOTTOM_02",
+      "slot": 1,
+      "parts": 32,
+      "triangles": 5658,
+      "fbx": "Assets/Resources/Garments/Streetwear/SB_BOTTOM_02.fbx",
+      "texture": true
+    },
+    {
+      "id": "SB_SHOES_01",
+      "slot": 2,
+      "parts": 17,
+      "triangles": 1408,
+      "fbx": "Assets/Resources/Garments/Streetwear/SB_SHOES_01.fbx",
+      "texture": false
+    },
+    {
+      "id": "SB_TOP_01",
+      "slot": 0,
+      "parts": 3,
+      "triangles": 832,
+      "fbx": "Assets/Resources/Garments/Streetwear/SB_TOP_01.fbx",
+      "texture": true
+    },
+    {
+      "id": "SB_TOP_02",
+      "slot": 0,
+      "parts": 3,
+      "triangles": 832,
+      "fbx": "Assets/Resources/Garments/Streetwear/SB_TOP_02.fbx",
+      "texture": true
+    },
+    {
+      "id": "SB_TOP_03",
+      "slot": 0,
+      "parts": 7,
+      "triangles": 1202,
+      "fbx": "Assets/Resources/Garments/Streetwear/SB_TOP_03.fbx",
+      "texture": true
+    }
+  ]
+}

@@ -574,3 +574,20 @@ Validação nativa final aprovada, incluindo percurso e serviço completo. Corri
 
 ### GifGallery — 03/11/2026
 Corrigido observador sem corpo: avatar inteiro, escala .72 e posição sobre uma sacada ampliada com guarda-corpo lateral. Rodapé contínuo de tijolo fecha a porta residual abaixo dos expositores da galeria. Shader AbstractBackdrop ganha _BackdropBase independente de _BackdropColor, preservando textura e movimento descendente. ShopDecor armazena backdropBase além de backdrop; a interface oferece oito fundos e oito cores de formas. Campo legado led preservado para leitura de arquivos antigos; sem controle de luzes físicas.
+
+
+### Primeiro protótipo de vestuário no Blender — jeans baggy
+A jeans Open Court (CG_BOTTOM_01) passou a usar malha e UV autorados no Blender, com pernas largas, barra acumulada sobre o tênis, bolsos traseiros e costuras. As outras peças aguardam revisão. IDs, critérios, drops e desbloqueios existentes foram preservados.
+
+Fonte editável: Art/Garments/BaggyDenim01/BaggyDenim01.blend. FBX e textura 512 estão em Assets/Resources/Garments. Tools/Fit Check/Bake Blender jeans converte a malha importada para o recurso de runtime; a Unity aplica postura e pesos contínuos na cintura/entreperna para manter as partes unidas. O shader de tecido usa as UVs reais da peça e textura estática, sem atlas animado ou contorno duplicado. O arquivo Blender inclui uma referência do personagem e mantém a cena anterior separada.
+
+Esta é a primeira peça para avaliar silhueta e caimento; a coleção ainda não foi refeita. Executável: Builds/Windows-Streetwear/FitCheck.exe.
+
+
+### Streetwear — coleção Blender
+Foram produzidas 17 novas peças: nove partes de cima (camisetas, jerseys, jaqueta de couro, fleece e moletom), cinco calças/bermudas e três construções de tênis. Junto da baggy Open Court, são 18 modelos de vestuário/calçados com fontes Blender. Novos recortes, bolsos, lapelas, golas, cadarços, solados e estampas; fonte editável e mapa dos IDs em Art/Garments/StreetwearCollection. IDs e desbloqueios da campanha foram preservados. A malha de binding das mangas continua na Unity para manter os encaixes animados.
+
+Versão jogável atual: Builds/Windows-Streetwear/FitCheck.exe. Exemplos de nove looks e comparação dos três tênis em Captures/Streetwear/collection-lookbook.png e collection-shoes.png. A coleção pode ser revisada pelos arquivos Blender e refinada sem refazer o corpo dos personagens.
+
+
+Limpeza desta entrega: removidos 39 diretórios/pacotes antigos gerados em Builds, liberando 2.33 GiB antes de remover a cópia temporária de compilação. Preservados executável e ZIP de Streetwear e da jeans baggy anterior, todos os fontes Unity/Blender, texturas, referências, artes, capturas e saves. Nenhum cache da Unity ativa foi removido. Relatório local: tools/streetwear-cleanup.json.

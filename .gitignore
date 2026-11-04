@@ -29,3 +29,7 @@ sysinfo.txt
 /Assets/_Recovery/
 /Assets/_Recovery.meta
 /Art/ReferenceReview/
+
+# Automatic Blender save backups
+*.blend1
+*.blend2

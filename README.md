@@ -75,7 +75,7 @@ Configurações está disponível no início e na pausa: sensibilidade do mouse 
 
 A decoração oferece oito cores de parede e oito de cortina, incluindo roxo, rosa, azul e turquesa. A cidade recebeu cores mais vivas, um morro com relevo e vegetação atrás da quadra, mural de passinho, espaço de batalha de rima, vinis, bicicleta e placas brasileiras em pontos específicos. O celular acompanha a mão do morador e a surpresa alterna uma reação breve com a boca em repouso.
 
-Build desta revisão: `Builds/Windows-GifGallery/FitCheck.exe`. Evidências e capturas reais da interface: `Captures/KaosCity`.
+Build desta revisão: `Builds/Windows-Streetwear/FitCheck.exe`. Evidências e capturas reais da interface: `Captures/KaosCity`.
 
 
 A revisão de identidade usa Montserrat nos textos e botões e Barlow Condensed nos títulos. As fontes e suas licenças acompanham o jogo em `Art/Fonts`. Botões secundários são neutros e reagem em Kaos ao mouse; a marca inicial vermelha tem movimento proporcional leve, desligado com movimento reduzido. O crédito do início é “A game by DripLab”.
@@ -101,7 +101,24 @@ Postes, bases, rodízios e roupas das araras usam posições comuns. As três ar
 
 Revisão NormalFlow: removida a faixa de asfalto sobreposta à calçada perto dos bancos e o objeto sob a sacola do balcão. No provador vazio, E somente abre/fecha a cortina; clientes continuam entrando pela porta e aguardando atendimento no balcão. F próximo ao balcão, antes de abrir a loja, permite personalizar a loja: aba Provador oferece cores independentes para cortina, fundo animado e LED, com prévia interna e salvar/cancelar por espaço.
 
-A barra fixa superior foi removida. Esc abre a pausa simplificada; o fechamento retorna à loja, e o FitFeed retorna ao quarto. Sem botões para viajar entre ambientes: use as portas do bairro. A cama cuida do descanso, o guarda-roupa da aparência/uniforme e a mesa do FitFeed. Executável atual: Builds/Windows-GifGallery/FitCheck.exe.
+A barra fixa superior foi removida. Esc abre a pausa simplificada; o fechamento retorna à loja, e o FitFeed retorna ao quarto. Sem botões para viajar entre ambientes: use as portas do bairro. A cama cuida do descanso, o guarda-roupa da aparência/uniforme e a mesa do FitFeed. Executável atual: Builds/Windows-Streetwear/FitCheck.exe.
 
 
 Revisão GifGallery: o observador tem corpo completo e sacada dimensionada para apoiá-lo; a base da galeria foi fechada para ocultar a porta por trás. Em F → Provador, as duas escolhas do GIF são agora cor do fundo e cor das formas animadas, permitindo combinações como roxo/verde ou marinho/rosa. O padrão preto/roxo permanece disponível. A escolha de LED físico foi retirada da interface. As combinações possuem prévia, Cancelar e Salvar por espaço, com compatibilidade dos arquivos anteriores.
+
+
+### Primeiro protótipo de vestuário no Blender — jeans baggy
+A jeans Open Court (CG_BOTTOM_01) passou a usar malha e UV autorados no Blender, com pernas largas, barra acumulada sobre o tênis, bolsos traseiros e costuras. As outras peças aguardam revisão. IDs, critérios, drops e desbloqueios existentes foram preservados.
+
+Fonte editável: Art/Garments/BaggyDenim01/BaggyDenim01.blend. FBX e textura 512 estão em Assets/Resources/Garments. Tools/Fit Check/Bake Blender jeans converte a malha importada para o recurso de runtime; a Unity aplica postura e pesos contínuos na cintura/entreperna para manter as partes unidas. O shader de tecido usa as UVs reais da peça e textura estática, sem atlas animado ou contorno duplicado. O arquivo Blender inclui uma referência do personagem e mantém a cena anterior separada.
+
+Esta é a primeira peça para avaliar silhueta e caimento; a coleção ainda não foi refeita. Executável: Builds/Windows-Streetwear/FitCheck.exe.
+
+
+### Streetwear — coleção Blender
+Foram produzidas 17 novas peças: nove partes de cima (camisetas, jerseys, jaqueta de couro, fleece e moletom), cinco calças/bermudas e três construções de tênis. Junto da baggy Open Court, são 18 modelos de vestuário/calçados com fontes Blender. Novos recortes, bolsos, lapelas, golas, cadarços, solados e estampas; fonte editável e mapa dos IDs em Art/Garments/StreetwearCollection. IDs e desbloqueios da campanha foram preservados. A malha de binding das mangas continua na Unity para manter os encaixes animados.
+
+Versão jogável atual: Builds/Windows-Streetwear/FitCheck.exe. Exemplos de nove looks e comparação dos três tênis em Captures/Streetwear/collection-lookbook.png e collection-shoes.png. A coleção pode ser revisada pelos arquivos Blender e refinada sem refazer o corpo dos personagens.
+
+
+Limpeza desta entrega: removidos 39 diretórios/pacotes antigos gerados em Builds, liberando 2.33 GiB antes de remover a cópia temporária de compilação. Preservados executável e ZIP de Streetwear e da jeans baggy anterior, todos os fontes Unity/Blender, texturas, referências, artes, capturas e saves. Nenhum cache da Unity ativa foi removido. Relatório local: tools/streetwear-cleanup.json.

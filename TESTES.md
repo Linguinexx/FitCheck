@@ -414,3 +414,27 @@ Unity 6000.6.7f1: compilação com 0 erros e 0 avisos, 121,44 MB (`tools/gif-gal
 - Oito cores de fundo e oito de formas independentes no material real do GIF. Prévia roxo/verde e marinho/rosa, Cancelar, Salvar, reentrada e leitura dos arquivos antigos aprovados. Luzes físicas mantêm acabamento fixo.
 - Regressões aprovadas: alternância do provador vazio sem gerar clientes, campanha preservada, fluxo completo de atendimento, obras fornecidas, isolamento dos três saves, recuperação de backup e proteção de save corrompido.
 - Fontes, binários publicados e ZIP verificados por hash e CRC. Evidências em `Captures/GifGallery`; versão em `Builds/Windows-GifGallery/FitCheck.exe`.
+
+
+### Jeans Baggy 01 — Blender → Unity (04/11/2026)
+Blender conectado: malha editável, UV, textura 512, bolsos/pespontos, triangulação explícita e exportação FBX. Fonte em Art/Garments/BaggyDenim01/BaggyDenim01.blend. Unity 6000.6.7f1 compilou com 0 erros e 0 avisos, 125,76 MB (`tools/baggy-denim-release-build.log`).
+
+Execução nativa `-city-proof -baggy-review`: saída 0 (`tools/baggy-denim-release-proof.log`). Conferidos 5.654 triângulos da peça, eixos/escala, UVs, sete perfis, braços, miniatura do catálogo, caminhada do estúdio e corpo do jogador andando/olhando para baixo. Regressão do atendimento completo e dos três saves aprovada. Capturas frontais, traseiras e de detalhes inspecionadas em Captures/BaggyDenim.
+
+A importação inicial revelou frestas causadas por ajustes diferentes na cintura e nas pernas. Corrigido com deformação contínua por vértice tanto na postura quanto na caminhada. O primeiro teste de olhar para baixo também recriava o corpo a partir do manequim oculto; a preparação redundante do teste foi removida. A rodada final passou.
+
+Pacote Windows-BaggyDenim e ZIP verificados por correspondência dos fontes, hash dos binários e CRC. IDs, critérios e desbloqueios do catálogo permanecem compatíveis; a revisão visual se limita à jeans Open Court. O arquivo editável continua disponível para avaliar e refinar a silhueta.
+
+
+### Streetwear Collection — 04/11/2026
+Unity 6000.6.7f1: build nativo Windows 153,49 MB, 0 erros e 0 avisos (`tools/streetwear-release-build.log`). `-city-proof -streetwear-review`: saída 0 (`tools/streetwear-release-proof.log`).
+
+- 17 novos FBX Blender: nove tops, cinco calças/bermudas e três tênis; 43.386 triângulos somados, texturas originais 512. Além deles, a baggy anterior continua disponível.
+- 63 combinações nos sete perfis de corpo; encaixe de ombros, abertura de mangas, punhos/mãos, miniaturas dos 17 itens, corpo em primeira pessoa olhando para baixo e andando aprovados.
+- Capturas nativas: nove looks em `Captures/Streetwear/collection-lookbook.png`; tênis em `collection-shoes.png`. Conferidas orientação das estampas, bolsos cargo, sobreposições, barras e cadarços visíveis. A orientação de UV dos tops está corrigida no Blender e a dos bottoms na conversão de runtime.
+- Regressões aprovadas: abertura manual, chegada com câmera livre, cliente aguardando balcão, acompanhamento até o provador, montagem do fit, jogador completo no balcão, saída, postagem, próximo cliente e próximo dia; três saves isolados, legado, recuperação de backup e proteção de save corrompido.
+- Os modelos novos preservam IDs, drops, critérios e desbloqueios. A malha animada das mangas é reconstruída pela Unity para preservar costuras de ombro e punho; no Blender há BIND_PREVIEW para inspeção.
+- Fontes, binários e ZIP conferidos por hash e CRC. Arquivo editável em Art/Garments/StreetwearCollection/StreetwearCollection.blend; mapa dos IDs em manifest.json.
+
+
+Limpeza desta entrega: removidos 39 diretórios/pacotes antigos gerados em Builds, liberando 2.33 GiB antes de remover a cópia temporária de compilação. Preservados executável e ZIP de Streetwear e da jeans baggy anterior, todos os fontes Unity/Blender, texturas, referências, artes, capturas e saves. Nenhum cache da Unity ativa foi removido. Relatório local: tools/streetwear-cleanup.json.

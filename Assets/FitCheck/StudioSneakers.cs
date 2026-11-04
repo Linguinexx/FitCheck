@@ -99,6 +99,7 @@ namespace FitCheck
         }
         void BuildShoes(Garment item,int side)
         {
+            if(BuildStreetwearShoes(item,side))return;
             var shape=Sneaker(item);float x=side*.24f;var cream=new Color(.86f,.84f,.76f);
             var upper=SurfaceMaterial(item.color,shape.style==2?"Leather":"Cloth");
             upper.SetFloat("_FabricWeight",.20f);

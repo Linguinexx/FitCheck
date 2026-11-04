@@ -14,12 +14,12 @@ namespace FitCheck.Editor
         {
             AmbientSurfaceImporter.PrepareAll();
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{
-                scenes=new[]{"Assets/Scenes/FirstCustomer.unity"},locationPathName="Builds/Windows-GifGallery/FitCheck.exe",
+                scenes=new[]{"Assets/Scenes/FirstCustomer.unity"},locationPathName="Builds/Windows-Streetwear/FitCheck.exe",
                 target=BuildTarget.StandaloneWindows64,targetGroup=BuildTargetGroup.Standalone,options=BuildOptions.None
             });
             var summary=report.summary;
             var result="FITCHECK_CITY_BUILD: "+summary.result+"; size="+Math.Round(summary.totalSize/(1024.0*1024.0),2)+" MB; errors="+summary.totalErrors+"; warnings="+summary.totalWarnings;
-            File.WriteAllText("Builds/Windows-GifGallery-build-report.txt",result);Debug.Log(result);
+            File.WriteAllText("Builds/Windows-Streetwear-build-report.txt",result);Debug.Log(result);
             if(summary.result!=BuildResult.Succeeded)throw new Exception(result);
         }
     }

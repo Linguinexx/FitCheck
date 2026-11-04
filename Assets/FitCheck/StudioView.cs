@@ -152,7 +152,10 @@ namespace FitCheck
             SetFaceProfile(profile);if(applyingPlayer)ApplyExpression((AvatarExpression)PlayerLook.expression);
             BuildHair(profile,Catalog.Get(outfit[3]));
             var t=Catalog.Get(outfit[0]);var cloth=Material(t.color);
-            cloth.SetFloat("_Outline",0);ShirtBody(t,cloth);
+            cloth.SetFloat("_Outline",0);
+            bool blenderTop=BuildStreetwearTop(t,cloth);
+            if(!blenderTop){
+ShirtBody(t,cloth);
             Rings("Gola",new Vector3(0,2.217f,0),new Vector3(.34f,.045f,.32f),Material(t.id=="CG_TOP_01"?new Color(.12f,.3f,.19f):t.color*.68f),clothes,new[]{0f,1f},new[]{1f,1f},12);
             var print=Material(t.id=="SB_TOP_01"?new Color(.7f,.06f,.07f):new Color(.16f,.26f,.22f));
             Box("Estampa discreta",new Vector3(t.id=="SB_TOP_01"?0:.19f,1.98f,-.286f),new Vector3(t.id=="SB_TOP_01"?.22f:.115f,.085f,.018f),print,clothes);
@@ -167,16 +170,20 @@ namespace FitCheck
             if(t.id.EndsWith("TOP_03")){
                 if(t.drop!="COMMON GROUND")Form("Capuz",new Vector3(0,2.38f,.26f),new Vector3(.61f,.62f,.32f),cloth,clothes);
             }
+            }
             var b=Catalog.Get(outfit[1]);var denim=Material(b.color);
             foreach(Transform part in Avatar){
                 if(part.name=="Canela")part.gameObject.SetActive(b.shorts);
             }
-            Rings("Cintura",new Vector3(0,1.25f,0),new Vector3(.77f,.32f,.48f),denim,clothes,new[]{0f,1f},new[]{1f,1f});
+            bool blenderBaggy=BuildBlenderBaggy(b);
+            if(!blenderBaggy)Rings("Cintura",new Vector3(0,1.25f,0),new Vector3(.77f,.32f,.48f),denim,clothes,new[]{0f,1f},new[]{1f,1f});
             for(int side=-1;side<=1;side+=2){
+                if(!blenderBaggy){
                 Rings(b.shorts?"Bermuda":"Calça",new Vector3(side*.23f,b.shorts?1.03f:.83f,0),new Vector3(b.shorts?.46f:.39f,b.shorts?.54f:.95f,.47f),denim,clothes,new[]{0f,.12f,.43f,.66f,.86f,1f},new[]{.95f,1f,1.03f,1.04f,1.06f,1.02f});
                 Box("Bolso",new Vector3(side*.3f,1.13f,-.232f),new Vector3(.15f,.17f,.018f),Material(b.color*.82f),clothes);
                 if(b.id=="CG_BOTTOM_01")Box("Faixa lateral",new Vector3(side*.423f,.88f,0),new Vector3(.018f,.82f,.08f),Material(new Color(.8f,.75f,.6f)),clothes);
                 if(b.id=="SB_BOTTOM_02")Box("Painel Remix",new Vector3(side*.23f,1.03f,-.244f),new Vector3(.32f,.3f,.02f),Material(side<0?new Color(.32f,.32f,.34f):new Color(.65f,.65f,.67f)),clothes);
+                }
                 BuildShoes(Catalog.Get(outfit[2]),side);
             }
             BuildHeadwear(Catalog.Get(outfit[3]));
@@ -212,7 +219,7 @@ namespace FitCheck
             var outfit=Catalog.Default;outfit[item.slot]=item.id;Apply(outfit,0);
             foreach(var r in clothes.GetComponentsInChildren<Renderer>()){
                 string n=r.name;
-                bool visible=item.slot==0?(n=="Camiseta com caimento"||n.Contains("Manga")||n=="Gola"||n.Contains("Barra")||n.Contains("Estampa")||n.Contains("Carretel")||n.Contains("Grafismo")||n=="Capuz"):
+                bool visible=item.slot==0?(n=="Camiseta com caimento"||n.Contains("Manga")||n=="Gola"||n.Contains("Barra")||n.Contains("Estampa")||n.Contains("Carretel")||n.Contains("Grafismo")||n=="Capuz"||n.StartsWith("BlenderTopo")):
                     item.slot==1?(n=="Cintura"||n=="Calça"||n=="Bermuda"||n=="Bolso"||n.Contains("Faixa")||n.Contains("Painel")):
                     item.slot==2?(n.StartsWith("Tênis")||n.StartsWith("Sola")||n=="Cadarço"):(n.Contains("Boné")||n.Contains("boné")||n=="Gorro"||n.Contains("gorro"));
                 r.gameObject.layer=visible?31:30;

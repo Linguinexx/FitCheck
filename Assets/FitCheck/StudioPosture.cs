@@ -100,13 +100,15 @@ namespace FitCheck
         }
         static bool UpperPiece(string name)
         {
-            return name=="Camiseta com caimento"||name=="Gola"||name=="Barra costurada"||name=="Estampa discreta"||name=="Carretel da fita"||name=="Grafismo da coleção"||name=="Capuz";
+            return name.StartsWith("BlenderTopo")||name=="Camiseta com caimento"||name=="Gola"||name=="Barra costurada"||name=="Estampa discreta"||name=="Carretel da fita"||name=="Grafismo da coleção"||name=="Capuz";
         }
         Vector3 LowerPoint(Vector3 p,int side)
         {
             float t=Mathf.Clamp01((p.y-.35f)/.95f);p.x+=WeightSide*.035f*t+side*.014f*(1-t);
             if(side!=0)p.z+=(side<0?-.04f:.02f)*(1-t)-(side<0?.025f:.008f)*Mathf.Sin(t*Mathf.PI);return p;
         }
+        Vector3 BlenderLowerPoint(Vector3 p)
+        {return Vector3.Lerp(LowerPoint(p,-1),LowerPoint(p,1),Mathf.SmoothStep(0,1,(p.x+.12f)/.24f));}
         void FitRelaxedBody(Garment top,Material fabric)
         {
             if(calfRest[0]==null)calfRest[0]=leftCalfRest;if(calfRest[1]==null)calfRest[1]=rightCalfRest;
@@ -124,7 +126,7 @@ namespace FitCheck
                 int side=part.localPosition.x+(part.localRotation*Vector3.Scale(mesh.bounds.center,part.localScale)).x<0?-1:1;
                 if(shoe){var pivot=new Vector3(side*.216f,.10f,0);part.SetParent(side<0?leftFoot:rightFoot,false);part.localPosition-=pivot;continue;}
                 var posed=Instantiate(mesh);Own(posed);var vertices=posed.vertices;
-                for(int i=0;i<vertices.Length;i++)vertices[i]=LowerPoint(part.localPosition+part.localRotation*Vector3.Scale(vertices[i],part.localScale),name=="Cintura"?0:side);
+                for(int i=0;i<vertices.Length;i++){var p=part.localPosition+part.localRotation*Vector3.Scale(vertices[i],part.localScale);vertices[i]=mesh.name.Contains("Blender Baggy")?BlenderLowerPoint(p):LowerPoint(p,name=="Cintura"?0:side);}
                 posed.vertices=vertices;posed.RecalculateNormals();posed.RecalculateBounds();filter.sharedMesh=posed;part.localPosition=Vector3.zero;part.localRotation=Quaternion.identity;part.localScale=Vector3.one;
             }
             leftFoot.localPosition=new Vector3(-.230f,.10f,-.04f);leftFoot.localRotation=Quaternion.Euler(0,8,0);

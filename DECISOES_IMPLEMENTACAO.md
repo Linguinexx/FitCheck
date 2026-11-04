@@ -35,3 +35,8 @@ A única base corporal aprovada em uso é a compacta com pescoço curto. O corpo
 Usuário priorizou construir o interior da DripLab antes de ligar rua/loja/casa. Primeiro interior tem circulação em primeira pessoa, mobiliário, produtos do catálogo e provador preto/roxo. Acesso por Visitar a loja ou Ir trabalhar; interações por E no balcão/provador/saída. Bairro permanece independente. Cliente da vez aguarda na loja; chegada/saída animada e vista de atendimento completa ficam pendentes. Cabelo e personalização não receberam aprovação final e estão explicitamente reservados para revisão futura.
 
 Revisão posterior: cliente espera apoiado na parede com um pé levantado e sorriso de canto; braços relaxados em todos os personagens. Cortina deve começar fechada e abrir ao interagir antes de entrar na troca de roupas. Usuário quer transições ao entrar/sair de locais futuramente e dispensou implementar essa parte agora; nesta etapa existe somente abertura da cortina seguida da troca de estado existente.
+
+
+Pendências adiadas por pedido do usuário (03/11/2026):
+- O lado da rua em frente à DripLab está vazio; planejar fachadas e detalhes de bairro, preservando passagem, escala e estilo gráfico. Não implementar agora.
+- No balão de fala do cliente, passar o mouse sobre o texto deixa as letras brancas e ilegíveis. Corrigir o estado de hover para manter contraste com o fundo do balão. Não implementar agora.
