@@ -141,16 +141,8 @@ namespace FitCheck
         }
         void ShopGarment(StudioView studio,string[] outfit,Vector3 position,float yaw,bool shoes)
         {
-            studio.Apply(outfit,0);var display=CopyAvatar(studio,shoes?"Tênis em exposição":"Peça na arara",position,yaw,true);
-            display.root.name+=(" — "+(shoes?outfit[2]:outfit[0]));
-            if(!shoes)display.root.localScale=new Vector3(.60f,1,1);
-            foreach(var renderer in display.root.GetComponentsInChildren<MeshRenderer>()){
-                string n=renderer.name;
-                if(!shoes&&n=="Capuz")renderer.transform.localPosition-=Vector3.up*.32f;
-                bool top=n=="Camiseta com caimento"||n.Contains("Manga")||n=="Gola"||n.Contains("Barra")||n.Contains("Estampa")||n.Contains("Carretel")||n.Contains("Grafismo")||n=="Capuz";
-                bool foot=n.StartsWith("Tênis")||n.StartsWith("Sola")||n=="Cadarço";
-                if(!(shoes?foot:top))renderer.gameObject.SetActive(false);
-            }
+            var display=studio.CreateShopDisplay(shoes?outfit[2]:outfit[0],transform,position,yaw);
+            if(!shoes)display.localScale=new Vector3(.60f,1,1);
         }
         public int ShopInteraction
         {

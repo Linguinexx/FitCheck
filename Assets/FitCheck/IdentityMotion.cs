@@ -71,7 +71,7 @@ namespace FitCheck
             if(watcher==null||watcher.root==null)return;watcher.cycle+=delta;watcher.blinkClock+=delta;
             var offset=new Vector3(Position.x,0,Position.y)-new Vector3(watcher.home.x,0,watcher.home.z);
             if(offset.magnitude<18)watcher.facing=Quaternion.RotateTowards(watcher.facing,Quaternion.LookRotation(-offset),delta*35);
-            watcher.root.localRotation=watcher.facing;PoseResident(watcher,8,0);
+            watcher.root.localRotation=watcher.facing;if(ShouldPoseResident(watcher,delta))PoseResident(watcher,8,0);
         }
     }
 }

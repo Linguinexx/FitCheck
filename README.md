@@ -122,3 +122,7 @@ Versão jogável atual: Builds/Windows-Streetwear/FitCheck.exe. Exemplos de nove
 
 
 Limpeza desta entrega: removidos 39 diretórios/pacotes antigos gerados em Builds, liberando 2.33 GiB antes de remover a cópia temporária de compilação. Preservados executável e ZIP de Streetwear e da jeans baggy anterior, todos os fontes Unity/Blender, texturas, referências, artes, capturas e saves. Nenhum cache da Unity ativa foi removido. Relatório local: tools/streetwear-cleanup.json.
+
+## Desempenho da cidade e loja
+
+Roupas e expositores reutilizam malhas e materiais; cabeças rígidas usam transforms e a deformação do corpo reutiliza pesos e matrizes. NPCs próximos continuam animando integralmente. Medições e limites da otimização estão em [Art/Performance/EntryOptimization.md](Art/Performance/EntryOptimization.md).

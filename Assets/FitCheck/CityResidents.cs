@@ -7,19 +7,29 @@ namespace FitCheck
     {
         [System.Serializable] sealed class ResidentPart
         {
-            public Mesh mesh;public Vector3[] rest,normals,vertices,posedNormals,closedLid,closedNormals;public Matrix4x4 lidToAvatar;public Quaternion lidRotation;public float lidBaseCover;public bool arm,foot,leg,head,pelvis,mouth,blenderDenim;public float side;public Vector3 center;public GameObject node;public int mouthKind;public bool faceVisible=true;
+            [SerializeField] Vector3[] vertexPose;
+            public bool rigidHead,rigidVerticesDirty;public Matrix4x4 rigidHeadMatrix;public Vector3[] headLocalVertices,headLocalNormals;public float lastLidCover=-1;
+            public Vector3[] vertices {
+                get{
+                    if(vertexPose==null||vertexPose.Length!=rest.Length)vertexPose=new Vector3[rest.Length];
+                    if(rigidHead&&rigidVerticesDirty){var source=headLocalVertices??rest;for(int i=0;i<source.Length;i++)vertexPose[i]=rigidHeadMatrix.MultiplyPoint3x4(source[i]);rigidVerticesDirty=false;}
+                    return vertexPose;
+                }
+                set{vertexPose=value;}
+            }
+            [System.NonSerialized] public ResidentSkinCache skinCache;public Mesh mesh;public Vector3[] rest,normals,posedNormals,closedLid,closedNormals;public Matrix4x4 lidToAvatar;public Quaternion lidRotation;public float lidBaseCover;public bool arm,foot,leg,head,pelvis,mouth,blenderDenim;public float side;public Vector3 center;public GameObject node;public int mouthKind;public bool faceVisible=true;
         }
         [System.Serializable] sealed class Resident
         {
             public Transform root,shadow;public Vector3 home;public Quaternion facing;
             public List<ResidentPart> parts=new List<ResidentPart>();
-            public Vector2[] path;public int target;public float cycle,blinkClock,wait,phase,speed,blend;public bool walking;
+            public Vector2[] path;public int target;public float cycle,blinkClock,wait,phase,speed,blend,poseDelay;public bool walking;
             public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;public int idleStyle;public Transform prop;public AvatarExpression expression;
         }
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
         public bool CustomerSpeaking;
-        const int ResidentArtRevision=27;
+        const int ResidentArtRevision=28;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
             if(IsInterior&&(cat==null||!cat.Ready))return false;
@@ -86,9 +96,21 @@ namespace FitCheck
                 pos.y=actor.home.y-dip;
                 actor.root.localPosition=pos;actor.root.localRotation=actor.facing;
                 if(actor.shadow!=null)actor.shadow.localPosition=new Vector3(pos.x,.005f,pos.z);
-                PoseResident(actor,index,dip);
+                if(ShouldPoseResident(actor,delta))PoseResident(actor,index,dip);
             }
             TickWatcher(delta);
+        }
+        bool ShouldPoseResident(Resident actor,float delta)
+        {
+            actor.poseDelay+=delta;
+            if(IsInterior){actor.poseDelay=0;return true;}
+            var p=actor.root.localPosition;var offset=new Vector2(p.x-Position.x,p.z-Position.y);float distance=offset.magnitude;
+            var forward=Quaternion.Euler(0,ViewYaw,0)*Vector3.forward;
+            float facing=distance>.001f?Vector2.Dot(offset/distance,new Vector2(forward.x,forward.z)):1;
+            // Keep close characters and a generous visible cone at full update rate.
+            // Navigation, clocks and root motion always advance, including off screen.
+            float interval=distance<16||distance<50&&facing>.15f?0:facing>.15f?.1f:.25f;
+            if(actor.poseDelay+0.00001f<interval)return false;actor.poseDelay=0;return true;
         }
         static float MotionWeight(float low,float high,float value)
         {return Mathf.SmoothStep(0,1,Mathf.InverseLerp(low,high,value));}
@@ -153,6 +175,7 @@ namespace FitCheck
         }
         void PoseResidentPart(ResidentPart part,Resident actor,int index,BodyPose body,LegPose leg)
         {
+            if(part.head&&!part.mouth){PoseRigidHead(part,actor,index,body);return;}
             float side=part.side,wave=Mathf.Cos(actor.phase*Mathf.PI*2)*side;
             float idle=Mathf.Sin(actor.cycle*1.1f+index+side)*1.6f*(1-actor.blend);
             var shoulder=new Vector3(side*.39f,1.84f,.015f);var elbowRest=new Vector3(side*.52f,1.50f,side<0?.005f:-.025f);
@@ -160,6 +183,7 @@ namespace FitCheck
             var elbow=shoulder+upperArm*(elbowRest-shoulder);
             var forearm=upperArm*Quaternion.Euler(2+(3+Mathf.Max(0,wave)*8)*actor.blend,0,-side*2*actor.blend);
             if(actor.idleStyle==2&&actor.blend<.1f&&side>0){upperArm=Quaternion.Euler(25,0,-side*12);elbow=shoulder+upperArm*(elbowRest-shoulder);forearm=upperArm*Quaternion.Euler(48,0,side*8);}
+            if(!part.head&&!referenceSkin){PoseCachedSkin(part,actor,body,leg,shoulder,elbowRest,elbow,upperArm,forearm);return;}
             for(int v=0;v<part.rest.Length;v++){
                 var p=part.rest[v];var n=part.normals[v];Vector3 posed,normal;
                 if(part.head){
@@ -199,6 +223,7 @@ namespace FitCheck
         public void CheckResidents()
         {
             foreach(var actor in residents){
+                PoseResident(actor,residents.IndexOf(actor),actor.home.y-actor.root.localPosition.y);
                 var p=actor.root.localPosition;if(!WorldFree(new Vector2(p.x,p.z)))throw new System.Exception("Morador atravessou arquitetura");
                 foreach(var part in actor.parts){
                     foreach(var v in part.vertices)if(float.IsNaN(v.x)||float.IsInfinity(v.y))throw new System.Exception("Animação inválida");

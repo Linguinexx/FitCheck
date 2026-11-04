@@ -8,6 +8,7 @@ namespace FitCheck
         [SerializeField] Resident playerBody;
         [SerializeField] List<GameObject> playerHeadPieces=new List<GameObject>();
         [SerializeField] List<Object> playerBodyAssets=new List<Object>();
+        float playerPoseCycle=float.NaN,playerPosePhase,playerPoseBlend,playerPoseBlink;
         public bool PlayerBodyReady=>playerBody!=null&&playerBody.root!=null&&playerBody.parts.Count>0&&playerHeadPieces.Count>0;
         public bool PlayerHeadVisible=>PlayerBodyReady&&playerHeadPieces.Exists(piece=>piece!=null&&piece.activeInHierarchy);
         public Vector3 PlayerBodyPosition=>playerBody.root.position;
@@ -17,6 +18,7 @@ namespace FitCheck
             if(playerBody!=null&&playerBody.root!=null){playerBody.root.gameObject.SetActive(false);Destroy(playerBody.root.gameObject);}
             foreach(var asset in playerBodyAssets){assets.Remove(asset);if(asset!=null)Destroy(asset);}playerBodyAssets.Clear();
             playerHeadPieces.Clear();
+            playerPoseCycle=float.NaN;
             var rotation=studio.Avatar.rotation;
             try{
                 studio.Avatar.rotation=Quaternion.identity;
@@ -47,7 +49,9 @@ namespace FitCheck
             actor.root.localRotation=Quaternion.Euler(0,ViewYaw+180,0);
             var forward=Quaternion.Euler(0,ViewYaw,0)*Vector3.forward;
             actor.root.localPosition=new Vector3(Position.x,-.055f-dip,Position.y)-forward*.38f;
-            PoseResident(actor,4,dip);
+            if(playerPoseCycle!=actor.cycle||playerPosePhase!=actor.phase||playerPoseBlend!=actor.blend){
+                PoseResident(actor,4,dip);playerPoseCycle=actor.cycle;playerPosePhase=actor.phase;playerPoseBlend=actor.blend;playerPoseBlink=actor.blinkClock;
+            }else if(playerPoseBlink!=actor.blinkClock){AdvanceStillBlink(actor,4,0);playerPoseBlink=actor.blinkClock;}
         }
         public int CheckPlayerBody(Camera camera)
         {

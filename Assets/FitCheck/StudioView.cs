@@ -141,7 +141,7 @@ namespace FitCheck
         public void Apply(string[] outfit,int customer)
         {
             applyingPlayer=customer<0&&PlayerLook!=null;
-            RestoreCalfBindings();
+            RestoreCalfBindings();clothingInstanceMaterials.Clear();
             if(clothes!=null){clothes.gameObject.SetActive(false);Destroy(clothes.gameObject);}
             foreach(var asset in garmentAssets)if(asset!=null)Destroy(asset);garmentAssets.Clear();buildingGarments=true;
             clothes=new GameObject("Vestuário 3D").transform;clothes.SetParent(Avatar,false);clothes.localPosition=Vector3.zero;
@@ -216,7 +216,7 @@ ShirtBody(t,cloth);
         {if(!EnsureFaceBindings())return;if(active){blinkClock+=delta;if(!ReducedMotion)idle+=delta;}Avatar.localScale=bodyScale;PoseRelaxedBody();AnimateFace();}
         public Texture2D Thumbnail(Garment item)
         {
-            var outfit=Catalog.Default;outfit[item.slot]=item.id;Apply(outfit,0);
+            var outfit=Catalog.Default;outfit[item.slot]=item.id;Apply(outfit,0);CacheShopDisplay(item);
             foreach(var r in clothes.GetComponentsInChildren<Renderer>()){
                 string n=r.name;
                 bool visible=item.slot==0?(n=="Camiseta com caimento"||n.Contains("Manga")||n=="Gola"||n.Contains("Barra")||n.Contains("Estampa")||n.Contains("Carretel")||n.Contains("Grafismo")||n=="Capuz"||n.StartsWith("BlenderTopo")):

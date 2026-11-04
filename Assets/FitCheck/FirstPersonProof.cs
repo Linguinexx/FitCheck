@@ -16,7 +16,9 @@ namespace FitCheck
         {
             yield return null;yield return null;
             string folder=FirstPersonProofOutput();Directory.CreateDirectory(folder);
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-entry-performance")>=0){yield return CheckEntryPerformance(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"PERFORMANCE_CAPTURED: home, street and shop cold/return entry timings and scene costs.");Application.Quit(0);yield break;}
             try{
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-entry-regression")>=0){CheckEntryOptimization(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-streetwear-review")>=0){CheckStreetwearCollection(folder);CheckShopServiceFlow(folder);CheckSaveSlots(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"SHOP_REVIEW_PASSED: seventeen Blender streetwear assets, all catalog thumbnails, 63 fits across seven profiles, native nine-look sheet and three distinct shoe builds, first-person movement, complete customer service and isolated saves.");Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-baggy-review")>=0){CheckBlenderBaggy(folder);CheckShopServiceFlow(folder);CheckSaveSlots(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"SHOP_REVIEW_PASSED: Blender-authored baggy denim, imported UV mesh, seven profiles, separated walking legs, thumbnail, moving player, complete customer service and independent saves.");Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-gif-gallery-review")>=0){CheckGifGallery(folder);CheckNormalFlow(folder);CheckShopServiceFlow(folder);CheckGalleryFix(folder);CheckSaveSlots(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"SHOP_REVIEW_PASSED: complete balcony observer and closed gallery plinth, true two-color animated backdrop combinations, cancel/save/reentry/legacy, empty curtain and full customer service, artwork and save isolation.");Application.Quit(0);yield break;}
@@ -102,6 +104,7 @@ namespace FitCheck
             var oldTarget=cam.targetTexture;var oldActive=RenderTexture.active;float oldAspect=cam.aspect;
             var target=RenderTexture.GetTemporary(width,height,24,RenderTextureFormat.ARGB32);var image=new Texture2D(width,height,TextureFormat.RGB24,false);
             try{
+
                 cam.targetTexture=target;cam.aspect=width/(float)height;cam.Render();RenderTexture.active=target;image.ReadPixels(new Rect(0,0,width,height),0,0);image.Apply();File.WriteAllBytes(path,image.EncodeToPNG());
             }finally{cam.targetTexture=oldTarget;cam.aspect=oldAspect;RenderTexture.active=oldActive;RenderTexture.ReleaseTemporary(target);Destroy(image);}
         }

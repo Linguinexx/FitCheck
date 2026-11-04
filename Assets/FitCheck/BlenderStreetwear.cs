@@ -13,13 +13,7 @@ namespace FitCheck
         }
         void StreetwearParts(BlenderGarmentAsset model,Vector3 offset)
         {
-            foreach(var part in model.parts){
-                var mesh=new Mesh{name=part.name+(model.slot==1?" — Blender Baggy":" — Blender Streetwear")};mesh.vertices=part.vertices;mesh.normals=part.normals;mesh.uv=part.uv;mesh.triangles=part.triangles;mesh.RecalculateBounds();Own(mesh);
-                var material=new Material(Resources.Load<Shader>("GarmentFabric"));material.color=part.textured?Color.white:part.color;
-                material.mainTexture=part.textured?Resources.Load<Texture2D>("Garments/Streetwear/"+model.id):Texture2D.whiteTexture;
-                material.SetFloat("_Motion",0);material.SetFloat("_FabricWeight",0);material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);Own(material);
-                var node=new GameObject(part.name);node.transform.SetParent(clothes,false);node.transform.localPosition=offset;node.AddComponent<MeshFilter>().sharedMesh=mesh;node.AddComponent<MeshRenderer>().sharedMaterial=material;
-            }
+            BuildCachedClothing(model,model.id,"Garments/Streetwear/"+model.id,model.slot,offset);
         }
         bool BuildStreetwearTop(Garment top,Material sleeveMaterial)
         {

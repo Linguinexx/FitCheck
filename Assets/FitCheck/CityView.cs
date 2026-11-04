@@ -73,7 +73,8 @@ namespace FitCheck
                     var mesh=new Mesh{name=renderer.name+" — morador",indexFormat=sourceMesh.indexFormat};
                     mesh.vertices=vertices;mesh.uv=sourceMesh.uv;if(sourceMesh.colors.Length==vertices.Length)mesh.colors=sourceMesh.colors;
                     mesh.subMeshCount=sourceMesh.subMeshCount;for(int sub=0;sub<sourceMesh.subMeshCount;sub++)mesh.SetTriangles(sourceMesh.GetTriangles(sub),sub);
-                    for(int i=0;i<vertices.Length;i++){vertices[i]=renderer.transform.TransformPoint(vertices[i])-studio.Avatar.position;normals[i]=renderer.transform.TransformDirection(normals[i]);}
+                    var copyMatrix=Matrix4x4.Translate(-studio.Avatar.position)*renderer.transform.localToWorldMatrix;var copyRotation=renderer.transform.rotation;
+                    for(int i=0;i<vertices.Length;i++){vertices[i]=copyMatrix.MultiplyPoint3x4(vertices[i]);normals[i]=copyRotation*normals[i];}
                     mesh.vertices=vertices;mesh.normals=normals;mesh.RecalculateBounds();assets.Add(mesh);RegisterResidentMesh(actor,mesh,renderer.name,studio.IsHeadPart(renderer.transform),sourceMesh.name.Contains("Blender Baggy"));
                     var piece=new GameObject(renderer.name);piece.transform.SetParent(resident,false);piece.AddComponent<MeshFilter>().sharedMesh=mesh;
                     if(renderer.name=="Pálpebra superior"){
