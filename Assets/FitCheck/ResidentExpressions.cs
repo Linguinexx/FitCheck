@@ -14,8 +14,8 @@ namespace FitCheck
             }
         }
         void UpdateBlinkVisibility(Resident actor,int index)
-        {foreach(var part in actor.parts)if(part.node!=null&&part.node.name=="Pupila")part.node.SetActive(ResidentBlink(actor.blinkClock,index)<.92f);}
+        {foreach(var part in actor.parts)if(part.node!=null&&part.node.name=="Pupila")part.node.SetActive(true);}
         bool PlayerFaceVisible(GameObject piece)
-        {if(piece.name=="Pupila")return ResidentBlink(playerBody.blinkClock,4)<.92f;foreach(var part in playerBody.parts)if(part.node==piece&&part.mouthKind>0)return part.faceVisible;return true;}
+        {foreach(var part in playerBody.parts)if(part.node==piece&&part.mouthKind>0)return part.faceVisible;return true;}
     }
 }

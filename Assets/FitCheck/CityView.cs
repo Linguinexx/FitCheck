@@ -10,7 +10,7 @@ namespace FitCheck
         public void Build(StudioView studio)
         {
             transform.position=Origin;
-            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();WestNeighbourhood();StreetCulture();NightDetails();GeometryBatches=batches.Count;FinishGeometry();
+            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();WestNeighbourhood();StreetCulture();NightDetails();StreetArtDisplays();GeometryBatches=batches.Count;FinishGeometry();
             marker=Disc("Destino na calçada",.27f,.27f,.19f,new Color(.36f,.76f,.65f));marker.gameObject.SetActive(false);
             shadow=Disc("Sombra do funcionário",.65f,.36f,0,new Color(.43f,.40f,.39f));
             BakeResident(studio,1,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-15.4f,-.055f,2.8f),-22);
@@ -77,6 +77,7 @@ namespace FitCheck
                     mesh.vertices=vertices;mesh.normals=normals;mesh.RecalculateBounds();assets.Add(mesh);RegisterResidentMesh(actor,mesh,renderer.name,studio.IsHeadPart(renderer.transform));
                     var piece=new GameObject(renderer.name);piece.transform.SetParent(resident,false);piece.AddComponent<MeshFilter>().sharedMesh=mesh;
                     if(renderer.name=="Pálpebra superior"){
+                        var lidPart=actor.parts[actor.parts.Count-1];lidPart.lidToAvatar=Matrix4x4.Translate(-studio.Avatar.position)*renderer.transform.localToWorldMatrix;lidPart.lidRotation=renderer.transform.rotation;lidPart.lidBaseCover=studio.ResidentLidCover(renderer.transform);
                         Vector3[] closed,closedNormals;studio.ResidentClosedLid(renderer.transform,out closed,out closedNormals);
                         for(int i=0;i<closed.Length;i++){closed[i]=renderer.transform.TransformPoint(closed[i])-studio.Avatar.position;closedNormals[i]=renderer.transform.TransformDirection(closedNormals[i]);}
                         actor.parts[actor.parts.Count-1].closedLid=closed;actor.parts[actor.parts.Count-1].closedNormals=closedNormals;

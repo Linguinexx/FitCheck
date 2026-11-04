@@ -12,12 +12,9 @@ namespace FitCheck
             float lift=down?3:0;var face=new Rect(r.x,r.y+lift,r.width,r.height-4);
             RoundedPanel(new Rect(r.x+2,r.y+5,r.width,r.height),new Color(0,0,0,.42f));
             RoundedPanel(new Rect(r.x,r.y+4,r.width,r.height-3),selected?new Color(.39f,.015f,.035f):new Color(.055f,.05f,.055f));
-            Color fill=!enabled?new Color(.12f,.12f,.12f):selected?(hot?new Color(.98f,.07f,.11f):CreatorRed):hot?CreatorRed:new Color(.11f,.10f,.105f);
+            Color fill=!enabled?new Color(.12f,.12f,.12f):selected?(hot?new Color(.98f,.07f,.11f):CreatorRed):hot?new Color(.18f,.16f,.17f):surface;
             RoundedPanel(face,fill);
-            if(!selected)RoundedPanel(face,hot?CreatorRed:new Color(.28f,.26f,.25f),7,hot?1.5f:.7f);
-            // A small ticket notch and inset end stroke distinguish the shared button silhouette.
-            if(r.width>100){Fill(new Rect(face.x-1,face.center.y-3,4,6),surface);Fill(new Rect(face.xMax-3,face.center.y-3,4,6),surface);}
-            if(hot&&!selected)Fill(new Rect(face.x+8,face.y+8,3,face.height-16),paper);
+            if(selected&&enabled)RoundedPanel(face,Color.Lerp(CreatorRed,Color.white,.18f),7,1.2f);
             Fill(new Rect(face.x+9,face.y+2,face.width-18,1),new Color(1,.87f,.8f,selected?.25f:.10f));
             if(selected){Fill(new Rect(face.x+7,face.y+face.height-7,face.width-14,1),new Color(.42f,0,.02f,.45f));}
             Txt(new Rect(face.x+5,face.y,face.width-10,face.height),label,action,enabled?paper:muted);

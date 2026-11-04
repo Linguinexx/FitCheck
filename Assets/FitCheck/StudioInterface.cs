@@ -57,7 +57,7 @@ namespace FitCheck
         void InterfaceStyles()
         {
             if(display!=null){if(fontDirty)WarmFont();return;}
-            uiFont=Resources.Load<Font>("Fonts/Montserrat-Regular");uiStrong=Resources.Load<Font>("Fonts/Montserrat-SemiBold");titleFont=Resources.Load<Font>("Fonts/BarlowCondensed-Bold");Font.textureRebuilt+=FontRebuilt;
+            uiFont=Resources.Load<Font>("Fonts/SpaceGrotesk-Regular");uiStrong=Resources.Load<Font>("Fonts/SpaceGrotesk-Bold");titleFont=Resources.Load<Font>("Fonts/ArchivoBlack-Regular");Font.textureRebuilt+=FontRebuilt;
             display=new GUIStyle(GUI.skin.label){font=titleFont,fontSize=86,fontStyle=FontStyle.Normal,wordWrap=false};
             heading=new GUIStyle(GUI.skin.label){font=titleFont,fontSize=30,fontStyle=FontStyle.Normal,wordWrap=true};
             copy=new GUIStyle(GUI.skin.label){font=uiFont,fontSize=21,wordWrap=true};

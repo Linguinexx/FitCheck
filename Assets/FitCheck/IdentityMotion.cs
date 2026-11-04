@@ -15,6 +15,7 @@ namespace FitCheck
     {
         public void PrepareResidentLids(){for(int i=0;i<2;i++){UpdateLid(i,false,Mathf.Max(.006f,upperCover[i]));pupils[i].gameObject.SetActive(true);}}
         public void RestoreResidentLids(){for(int i=0;i<2;i++)UpdateLid(i,false,upperCover[i]);}
+        public float ResidentLidCover(Transform part){return upperCover[part==upperLidObjects[0].transform?0:1];}
         public void ResidentClosedLid(Transform part,out Vector3[] vertices,out Vector3[] normals)
         {
             int eye=part==upperLidObjects[0].transform?0:1;UpdateLid(eye,false,.999f);vertices=upperLids[eye].vertices;normals=upperLids[eye].normals;UpdateLid(eye,false,Mathf.Max(.006f,upperCover[eye]));
@@ -29,7 +30,20 @@ namespace FitCheck
     public partial class CityView
     {
         [SerializeField] Resident watcher;
-        public static float ResidentBlink(float time,int index){float phase=Mathf.Repeat(time+index*.617f,3.8f+(index%3)*.37f);return phase<.18f?Mathf.Sin(phase/.18f*Mathf.PI):0;}
+        public static float ResidentBlink(float time,int index){float phase=Mathf.Repeat(time+index*.617f,4.3f+(index%3)*.17f);return phase<.16f?Mathf.Sin(phase/.16f*Mathf.PI):0;}
+        // Match the original player's spherical cap at every intermediate frame.
+        void EvaluateResidentLid(ResidentPart part,int vertex,float blink,out Vector3 position,out Vector3 normal)
+        {
+            const int columns=36,rows=10,layerSize=1+columns*rows;
+            int layer=vertex/layerSize,local=vertex%layerSize;
+            var radius=layer==0?new Vector3(.174f,.184f,.109f):new Vector3(.168f,.178f,.103f);
+            if(blink<=Mathf.Max(.006f,part.lidBaseCover)){position=part.rest[vertex];normal=part.normals[vertex];return;}
+            float cover=Mathf.Max(.006f,Mathf.Max(part.lidBaseCover,blink)),limit=Mathf.Acos(1-Mathf.Min(cover,.9995f)*2);
+            Vector3 direction=Vector3.up;
+            if(local>0){int row=(local-1)/columns+1,column=(local-1)%columns;float phi=row/(float)rows*limit,theta=column/(float)columns*Mathf.PI*2;direction=new Vector3(Mathf.Sin(theta)*Mathf.Sin(phi),Mathf.Cos(phi),-Mathf.Cos(theta)*Mathf.Sin(phi));}
+            position=part.lidToAvatar.MultiplyPoint3x4(Vector3.Scale(direction,radius));
+            normal=part.lidRotation*(layer==0?direction:-direction);if(local>0)normal=part.lidRotation*((layer==0?1:-1)*new Vector3(direction.x/radius.x,direction.y/radius.y,direction.z/radius.z).normalized);
+        }
         public void AdvanceDressingBlinks(float delta)
         {
             for(int i=0;i<residents.Count;i++)AdvanceStillBlink(residents[i],i,delta);

@@ -530,3 +530,27 @@ Cópias de moradores agora retêm duas malhas de pálpebra superior, com amostra
 Easter egg original: observador na janela da galeria, que acompanha discretamente quem passa e também pisca. Não adicionado à lista de pedestres de navegação. Pasta refs roupas preservada fora dos recursos; roupas e artes futuras dos quadros ficam registradas como pendentes, sem substituições automáticas.
 
 Regressão nativa identity-polish-release-proof concluiu com código 0: casa/bairro/loja, manual opening, sensibilidade, personagem com celular, surpresa breve, decoração, menu, gato, isolamento de saves e capturas reais da UI. Compilação sem erros ou avisos. Verificações focadas adicionais cobrem relógio independente de piscada e renders finais.
+
+## 03/11/2026 — Revisão PrintStyle
+
+Após rejeição da combinação anterior, aplicadas Archivo Black nos títulos/ações curtas e Space Grotesk Regular/Bold na leitura e ações longas. Botões passam de etiquetas arredondadas para placas com recortes diagonais, fundo papel nos secundários, contorno/sombra pretos e hover/seleção em Kaos.
+
+Piscadas de NPCs deixam a interpolação linear entre malhas de repouso/fechamento. Cada fase agora reconstrói a mesma calota esférica do player original, com sua curva temporal de 0,16 s, preservando a expressão. Retirado desaparecimento artificial das pupilas. Verificação exige que a pálpebra permaneça na superfície do olho em cinco fases intermediárias para todos os atores, além de pausa e movimento reduzido.
+
+Build PrintStyle: zero erros/avisos. Prova nativa e capturas reais concluídas com código 0 em tools/print-style-proof.log. Conferidos título, personalização, diálogo e piscadas. Falha inicial de compilação ocorreu com o disco abaixo de 256 MB livres; removidas somente pastas antigas de builds que conferiam com os ZIPs preservados, liberando aproximadamente 2,5 GB. Fontes, saves, referências, ZIPs e quatro versões recentes preservados.
+
+## 03/11/2026 — Quadros fornecidos e balões restritos ao bairro
+
+Botões restaurados à versão arredondada escura anterior aos recortes diagonais, preservando a tipografia atual. Balões ambientais passam a exigir exploração ativa de um cenário externo; não são desenhados em casa, loja, provador ou menus. Os balões reais do atendimento permanecem no fluxo de diálogo. Prova também verifica que a raiz da rua está desativada ao entrar na loja.
+
+Oito JPEGs da pasta artes quadros copiados sem edição para Resources/Artwork. Origem e correspondência em Art/UserArtwork/sources.json. Quadros preservam a imagem inteira e a proporção, com moldura/passe-partout ajustados, limite de importação 512 px, mipmaps e clamp. Substituídos quadros provisórios do quarto e sobre as araras; adicionados dois quadros sobre os tênis. Quadro personalizável oferece oito artes com persistência por save; os índices antigos 0–2 continuam válidos.
+
+Build GalleryFix: 115,32 MB, zero erros/avisos. Prova nativa gallery-fix-proof concluiu com código 0: oito recursos, UV/proporção, casa/loja, todas as opções, restauração dos balões na rua, ausência nos interiores, cancelamento/salvamento/reentrada da decoração e capturas da interface real. Conferidos quarto, araras, tênis, quadro personalizado, menu e opções. Roupas permanecem como próxima etapa de trabalho.
+
+## 03/11/2026 — Outdoors e seleção sem bordas permanentes
+
+Aplicadas as oito novas artes fornecidas. Cinco horizontais em outdoors no residencial, mercearia, oficina, quadra e casa de shows, com postes/travessas/refletores; três novas artes verticais/quadradas e uma arte anterior em fachadas/passagens. Imagens inteiras, proporção preservada, sem interferência no percurso. Dezesseis recursos rastreados por nome original e SHA-256 em Art/UserArtwork/sources.json. As oito opções internas permanecem estáveis.
+
+Botões no formato arredondado da referência, com sombra e profundidade. Removidos encaixes laterais e contornos do estado normal/hover. Hover clareia o fundo; somente opções selecionadas recebem contorno em Kaos. Logo vermelha e tipografia atuais preservadas.
+
+Build StreetArtwork: 121,43 MB, zero erros/avisos. Prova nativa tools/street-artwork-proof.log terminou com código 0: 16 recursos, cinco outdoors horizontais com dois apoios cada, quatro cartazes, UV/proporção, percurso acessível, galeria interna, balões restritos à rua, decoração/cancelamento/reentrada e três saves isolados. Conferidas as cinco vistas dos outdoors, cartaz junto à galeria e menu real sem contorno nos botões neutros.

@@ -95,7 +95,7 @@ namespace FitCheck
             Txt(new Rect(58,88,400,30),"DRIPLAB  /  DEPOIS DO HORÁRIO",caption,CreatorRed);
             if(titleLogo==null)titleLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-Red");
             if(titleLogo!=null)DrawAnimatedTitleLogo(new Rect(52,160,390,260));else Txt(new Rect(50,178,450,200),"FIT\nCHECK",display);
-            Txt(new Rect(60,430,370,100),"Seu estilo.\nAs histórias da cidade.",heading);
+            Txt(new Rect(60,430,410,140),"Seu estilo.\nAs histórias da cidade.",heading);
             if(Tap(new Rect(60,651,360,70),"Jogar  →",true))OpenSaveSelection();
             if(Tap(new Rect(60,746,360,56),"Configurações"))OpenSettings(false);
             Txt(new Rect(60,832,420,55),"A game by DripLab",caption,paper);

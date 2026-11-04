@@ -76,9 +76,10 @@ namespace FitCheck
             Txt(new Rect(r.x+25,r.y+22,r.width-60,24),speaker,tiny,CreatorRed);
             Txt(new Rect(r.x+25,r.y+53,r.width-50,r.height-64),text,caption,new Color(.08f,.065f,.07f));GUI.color=old;GUI.matrix=originalMatrix;
         }
+        bool StreetBubblesAllowed=>stage==Stage.City&&city!=null&&city.gameObject.activeInHierarchy&&!city.IsInterior;
         void DrawAmbientBubble()
         {
-            if(city==null||city.IsHome||CurrentWorldHint().valid)return;
+            if(!StreetBubblesAllowed||CurrentWorldHint().valid)return;
             int nearest=-1;float distance=8;
             for(int i=0;i<city.ResidentCount;i++){
                 var p=city.ResidentPosition(i);float d=Vector2.Distance(city.Position,new Vector2(p.x,p.z));var view=cam.WorldToViewportPoint(city.transform.position+p+Vector3.up*3.2f);
@@ -86,9 +87,9 @@ namespace FitCheck
             }
             if(nearest<0)return;float phase=Mathf.Repeat(contextClock+nearest*1.7f,13);if(phase>3.7f)return;
             string[] lines={"Só mais uma música e eu vou…","Esse drop vai render assunto.","O corre não tira folga.","Passinho liberado!","Fiado? Só amanhã, chefia.","Arte boa é a que puxa conversa.","A quadra já tá no meu nome."};
-            string text=city.IsInterior?(city.CustomerWaitingAtCounter&&nearest==0?"Cheguei! Quando puder…":"Só tô dando uma olhada nos drops."):lines[nearest%lines.Length];
+            string text=lines[nearest%lines.Length];
             Vector2 point;if(!LogicalPoint(city.transform.position+city.ResidentPosition(nearest)+Vector3.up*3.6f,out point))return;
-            ComicBubble(new Rect(Mathf.Clamp(point.x-150,32,1100),Mathf.Clamp(point.y-132,125,700),300,124),text,city.IsInterior?"NA DRIPLAB":"PELO BAIRRO",phase,false);
+            ComicBubble(new Rect(Mathf.Clamp(point.x-150,32,1100),Mathf.Clamp(point.y-132,125,700),300,124),text,"PELO BAIRRO",phase,false);
         }
     }
 }

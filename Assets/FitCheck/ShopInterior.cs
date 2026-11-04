@@ -94,16 +94,9 @@ namespace FitCheck
                 ShopShoeBox(new Vector3(7.15f,y+.065f,3.6f),level==0?Ink:level==1?new Color(.20f,.34f,.22f):Cream);
             }
             obstacles.Add(new Rect(6.55f,-3,1.15f,8.0f));
-            // In-world posters use the same printed atlas as the city signs.
-            for(int i=0;i<3;i++){
-                float z=-2+i*3;var center=new Vector3(-7.70f,3.85f,z);
-                Block(center,new Vector3(.07f,.8f,2.1f),i==1?Kaos:Ink,"Paper");
-                string text=i==0?"SIDE B":i==1?"AFTER HOURS":"COMMON GROUND";
-                var printed=Get("CitySign");int first=printed.v.Count;
-                Words(text,center+Vector3.right*.05f,i==0?.042f:i==1?.028f:.023f,Cream);
-                var rotation=Quaternion.Euler(0,-90,0);var pivot=center+Vector3.right*.05f;
-                for(int v=first;v<printed.v.Count;v++){printed.v[v]=pivot+rotation*(printed.v[v]-pivot);printed.n[v]=Vector3.right;}
-            }
+            int[] prints={1,7,3};for(int i=0;i<3;i++)FramedPrint("Quadro da arara "+i,new Vector3(-7.65f,3.92f,-2+i*3),-90,prints[i],new Vector2(2.1f,1.15f));
+            FramedPrint("Quadro Crie — tênis",new Vector3(7.65f,3.96f,-.3f),90,4,new Vector2(1.8f,1.1f));
+            FramedPrint("Quadro Get Rich — tênis",new Vector3(7.65f,3.96f,2.5f),90,6,new Vector2(1.8f,1.1f));
             // Seat near the entrance, outside the central path.
             ShopFixtureDetails();
             obstacles.Add(new Rect(3.5f,-3.8f,2.6f,1.2f));

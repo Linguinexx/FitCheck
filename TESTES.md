@@ -375,3 +375,15 @@ Resultado nativo final: `tools/kaos-city-final-proof.log` encerrou com código 0
 Inspeção visual: no início, verificar logo vermelha em movimento discreto e crédito A game by DripLab; botões secundários neutros tornam-se Kaos no hover. No criador, conferir nome em Montserrat e títulos condensados, sem texto cortado. Atender cliente para ver entrada dos balões e texto inteiro. Em casa, conferir cortinas, caixilho e vista noturna. No bairro, conferir reflexos/desgaste dos vidros e procurar o observador da galeria. Movimento reduzido desliga o pulso da marca/entrada dos balões, mas mantém a piscada natural.
 
 Conferência focada final em tools/identity-polish-blink-proof.log concluída com código 0. Olhos fechados inspecionados sem pupilas vazando; capturas finais de título, configurações, interação, decoração e balões verificadas. Build final: 108,22 MB, zero erros/avisos.
+
+### PrintStyle
+
+Build 108,53 MB, zero erros/avisos; tools/print-style-proof.log terminou com código 0. Native UI conferida para Archivo Black/Space Grotesk e placas recortadas. CheckAllBlinks verifica a superfície elipsoidal em 0/25/50/80/100% da piscada, incluindo moradores, jogador, frequentador e observador. A curva é a mesma do player original; sem ocultar pupilas artificialmente. Evidências em Captures/PrintStyle.
+
+### GalleryFix — artes fornecidas e isolamento dos balões
+
+`-city-proof -gallery-review` verifica oito texturas, proporção de cada quadro, shader e aplicação em casa/loja; percorre as oito opções de arte, confirma balões liberados na rua e bloqueados nos interiores, e exige que o cenário externo esteja desativado na loja. Inclui cancelamento, persistência e reentrada da decoração, sem tocar saves reais. Capturas nativas em Captures/GalleryFix. Resultado: código 0, build zero erros/avisos; telas e quadros inspecionados visualmente.
+
+### StreetArtwork — outdoors e botões da referência
+
+`-city-proof -street-art-review` verificou 16 artes, cinco outdoors com apoios, quatro cartazes externos, proporção/UV, rota residencial/comercial, preservação dos quadros internos, balões somente na rua, oito opções de decoração e saves isolados. tools/street-artwork-proof.log: código 0; build 121,43 MB, zero erros/avisos. Capturas reais em Captures/StreetArtwork: street-art-0 a street-art-5 e telas da interface. Botões neutros sem contorno, contorno apenas na seleção e relevo mantido, conforme referência do usuário.

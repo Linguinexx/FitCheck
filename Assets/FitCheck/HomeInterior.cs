@@ -40,8 +40,8 @@ namespace FitCheck
             Block(new Vector3(0,1.85f,-4.43f),new Vector3(1.9f,3.7f,.14f),Ink,"Wood");
             Rod(new Vector3(.62f,1.5f,-4.28f),new Vector3(.62f,1.95f,-4.28f),.035f,Cream,"CityMetal");
             HomeNightWindow();
-            Block(new Vector3(-3.4f,2.9f,4.42f),new Vector3(1.45f,1.65f,.045f),Kaos,"Cloth");
-            Words("DROP",new Vector3(-3.4f,2.95f,4.37f),.055f,Cream);
+            FramedPrint("Quadro CREAM — quarto",new Vector3(-3.4f,2.9f,4.37f),0,2,new Vector2(1.45f,1.65f));
+            FramedPrint("Quadro Sol — quarto",new Vector3(-5.43f,2.8f,-.15f),-90,5,new Vector2(1.45f,1.45f));
             Ground(.3f,-.5f,3.6f,2.4f,.005f,new Color(.30f,.10f,.15f),"Rug",1);
             Block(new Vector3(-3.8f,2.7f,-4.23f),new Vector3(2.4f,.12f,.50f),Ink,"Wood");
             foreach(float x in new[]{-4.6f,-3.0f}){

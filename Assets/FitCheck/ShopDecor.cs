@@ -7,7 +7,7 @@ namespace FitCheck
     {
         public int version=1,wall,floor,accent,poster;public bool plants=true;
         public ShopDecor Copy(){return new ShopDecor{version=version,wall=wall,floor=floor,accent=accent,poster=poster,plants=plants};}
-        public void Validate(){if(version!=1||wall<0||wall>7||floor<0||floor>2||accent<0||accent>7||poster<0||poster>2)throw new ArgumentException("Decoração inválida");}
+        public void Validate(){if(version!=1||wall<0||wall>7||floor<0||floor>2||accent<0||accent>7||poster<0||poster>7)throw new ArgumentException("Decoração inválida");}
     }
     public static class ShopDecorStore
     {
@@ -20,7 +20,7 @@ namespace FitCheck
     }
     public partial class CityView
     {
-        [SerializeField] ShopDecor activeDecor;[SerializeField] Transform decorPlants,decorArtwork;[SerializeField] Transform[] decorBars;
+        [SerializeField] ShopDecor activeDecor;[SerializeField] Transform decorPlants,decorArtwork;
         readonly System.Collections.Generic.Dictionary<Mesh,Color[]> decorOriginal=new System.Collections.Generic.Dictionary<Mesh,Color[]>();
         public ShopDecor ActiveDecor=>activeDecor;
         public void ApplyShopDecor(ShopDecor value)
@@ -44,18 +44,10 @@ namespace FitCheck
                     mesh.colors=colors;
                 }
             }
-            if(decorArtwork==null){
-                decorArtwork=new GameObject("Quadro personalizável").transform;decorArtwork.SetParent(transform,false);
-                LiveBox("Moldura do quadro",new Vector3(2.0f,2.8f,8.72f),new Vector3(2.2f,1.6f,.10f),Ink,"Wood",decorArtwork);
-                LiveBox("Papel do quadro",new Vector3(2.0f,2.8f,8.65f),new Vector3(2.02f,1.42f,.04f),Cream,"Paper",decorArtwork);
-                decorBars=new Transform[3];for(int i=0;i<3;i++)decorBars[i]=LiveBox("Recorte do quadro",new Vector3(1.4f+i*.55f,2.8f,8.60f),new Vector3(.34f,.95f,.025f),i==1?Kaos:Ink,"Paper",decorArtwork);
-            }
-            // Place the artwork above the regular, clear of the DripLab wall lettering.
-            decorArtwork.localPosition=new Vector3(-2.8f,2.15f,0);decorArtwork.localScale=new Vector3(1,.625f,1);
-            for(int i=0;i<3;i++){
-                decorBars[i].localRotation=Quaternion.Euler(0,0,value.poster==0?(i-1)*15:value.poster==1?45:0);
-                decorBars[i].localScale=new Vector3(value.poster==2?.5f:.34f,value.poster==2?.45f+i*.18f:.95f,.025f);
-            }
+            if(decorArtwork==null||decorArtwork.Find("Arte fornecida")==null){
+                if(decorArtwork!=null){decorArtwork.gameObject.SetActive(false);Destroy(decorArtwork.gameObject);}
+                decorArtwork=FramedPrint("Quadro personalizável",new Vector3(-.8f,4.0f,8.74f),0,value.poster,new Vector2(2.2f,1.05f));
+            }else SetFramedPrint(decorArtwork,value.poster,new Vector2(2.2f,1.05f));
             if(decorPlants==null){
                 int first=transform.childCount;
                 foreach(float z in new[]{-3.2f,8.1f}){Block(new Vector3(7.5f,.35f,z),new Vector3(.5f,.7f,.5f),Peach,"CityBrick");Foliage(new Vector3(7.5f,1.3f,z),new Vector3(.40f,.95f,.4f),new Color(.22f,.38f,.19f),3);}
@@ -94,7 +86,7 @@ namespace FitCheck
             Fill(new Rect(30,108,570,766),new Color(.055f,.06f,.055f,.98f));
             Txt(new Rect(55,130,510,48),"Sua loja. Seu jeito.",heading);
             Txt(new Rect(55,191,510,50),"Escolha os acabamentos antes de abrir.\nA prévia aparece na própria loja.",caption,muted);
-            string[][] names={new[]{"Original","Verde","Sol","Concreto","Uva","Azul","Coral","Turquesa"},new[]{"Original","Madeira","Cerâmica"},new[]{"Verde","Ocre","Terracota","Roxo","Turquesa","Kaos","Rosa","Azul"},new[]{"Colagem","Diagonal","Blocos"}};
+            string[][] names={new[]{"Original","Verde","Sol","Concreto","Uva","Azul","Coral","Turquesa"},new[]{"Original","Madeira","Cerâmica"},new[]{"Verde","Ocre","Terracota","Roxo","Turquesa","Kaos","Rosa","Azul"},GalleryArt.Names};
             string[] labels={"Paredes","Piso","Cortina","Quadro"};int[] values={decorDraft.wall,decorDraft.floor,decorDraft.accent,decorDraft.poster};
             float y=246;for(int row=0;row<4;row++){
                 Txt(new Rect(55,y,510,26),labels[row],caption);

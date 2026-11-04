@@ -75,7 +75,7 @@ Configurações está disponível no início e na pausa: sensibilidade do mouse 
 
 A decoração oferece oito cores de parede e oito de cortina, incluindo roxo, rosa, azul e turquesa. A cidade recebeu cores mais vivas, um morro com relevo e vegetação atrás da quadra, mural de passinho, espaço de batalha de rima, vinis, bicicleta e placas brasileiras em pontos específicos. O celular acompanha a mão do morador e a surpresa alterna uma reação breve com a boca em repouso.
 
-Build desta revisão: `Builds/Windows-IdentityPolish/FitCheck.exe`. Evidências e capturas reais da interface: `Captures/KaosCity`.
+Build desta revisão: `Builds/Windows-StreetArtwork/FitCheck.exe`. Evidências e capturas reais da interface: `Captures/KaosCity`.
 
 
 A revisão de identidade usa Montserrat nos textos e botões e Barlow Condensed nos títulos. As fontes e suas licenças acompanham o jogo em `Art/Fonts`. Botões secundários são neutros e reagem em Kaos ao mouse; a marca inicial vermelha tem movimento proporcional leve, desligado com movimento reduzido. O crédito do início é “A game by DripLab”.
@@ -83,3 +83,12 @@ A revisão de identidade usa Montserrat nos textos e botões e Barlow Condensed 
 Vidros usam textura fotográfica de desgaste já licenciada no projeto, reflexos estilizados e caixilhos; a janela de casa recebeu acabamento, cortinas e silhueta noturna. Pálpebras independentes fazem todos os moradores, clientes, frequentador e jogador visível piscarem, inclusive durante a montagem do fit. Há um observador original escondido numa janela da galeria. Balões de HQ têm contorno, cauda, retícula discreta e entrada com pequeno salto.
 
 As referências de roupas trazidas pelo usuário e as futuras artes dos quadros estão registradas em `Art/REFERENCIAS_PENDENTES.md`; não foram aplicadas automaticamente.
+
+
+Revisão PrintStyle: Archivo Black em títulos e ações curtas, Space Grotesk no texto e ações longas. Botões viram placas de impressão com recortes diagonais, contorno/sombra pretos e fundo papel nos secundários; seleção e hover em Kaos. As piscadas retomam o movimento esférico original do player, compartilhado com NPCs: a pálpebra percorre a superfície do olho sem afundar no meio da animação e sem apagar pupilas.
+
+
+Revisão GalleryFix: botões restaurados à aparência arredondada escura anterior aos recortes. Balões ambientais aparecem exclusivamente no bairro; os balões do atendimento continuam na loja. Oito artes fornecidas em `artes quadros` substituem os elementos gráficos provisórios da casa e loja. O quadro personalizável oferece as oito imagens, com escolha salva por espaço e proporções originais preservadas. Os outros quadros ficam distribuídos sobre as araras/prateleiras e no quarto. Procedência em `Art/UserArtwork/sources.json`. Roupas permanecem como próxima etapa.
+
+
+Revisão StreetArtwork: cinco outdoors horizontais com estrutura/refletores distribuídos pelo trecho residencial, mercearia, oficina, quadra e casa de shows. Quatro cartazes ficam em fachadas e passagens. As artes inteiras e suas proporções são preservadas; o percurso permanece livre. Os botões seguem o formato arredondado da referência, com profundidade e contorno apenas nas opções selecionadas. O estado normal/hover não tem borda, encaixes ou recortes laterais.

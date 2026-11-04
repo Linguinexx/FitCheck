@@ -171,7 +171,7 @@ namespace FitCheck
         {
             if(!EnsureFaceBindings())return;if(faceExpressionNeedsRefresh)ApplyExpression(expression);float phase=Mathf.Repeat(blinkClock+faceProfile*.43f,4.3f);
             float blink=phase<.16f?Mathf.Sin(phase/.16f*Mathf.PI):0;
-            for(int i=0;i<2;i++){UpdateLid(i,false,Mathf.Max(upperCover[i],blink));UpdateLid(i,true,lowerCover[i]);pupils[i].gameObject.SetActive(blink<.92f);}
+            for(int i=0;i<2;i++){UpdateLid(i,false,Mathf.Max(upperCover[i],blink));UpdateLid(i,true,lowerCover[i]);pupils[i].gameObject.SetActive(true);}
             AnimateMouth();
         }
         public bool Talking;

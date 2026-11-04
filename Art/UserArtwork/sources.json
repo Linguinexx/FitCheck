@@ -1,0 +1,90 @@
+[
+  {
+    "resource": "Artwork/Poster00",
+    "source": "🪽.jpg",
+    "sha256": "209658e0d5346b8421e7d396b5685605a4f18c434bd026bfe91ed4fbaeca1478"
+  },
+  {
+    "resource": "Artwork/Poster01",
+    "source": "Music Is My Drug.jpg",
+    "sha256": "fe643e7096522bde23c9c072069fb27d720364453446a9e5d444d7751a1cf098"
+  },
+  {
+    "resource": "Artwork/Poster02",
+    "source": "baixados.jpg",
+    "sha256": "0c4f8f26e7dfbf614dd6de94cf857764c28bb81496f830fba9c6758e0ab9ca03"
+  },
+  {
+    "resource": "Artwork/Poster03",
+    "source": "baixados (1).jpg",
+    "sha256": "56199f506a565339c312d84dca2d77213cb68458b1131b9ed88eed8700fe1f1c"
+  },
+  {
+    "resource": "Artwork/Poster04",
+    "source": "baixados (2).jpg",
+    "sha256": "cf04d1a828e38e837f8c3c0d40eea9b4eb7405c93c3edb0186cdd808a471499a"
+  },
+  {
+    "resource": "Artwork/Poster05",
+    "source": "baixados (3).jpg",
+    "sha256": "7d4dd9cb2ad93ef27655d69ea3d8624866da771f453bfd7e79ae60862c89d833"
+  },
+  {
+    "resource": "Artwork/Poster06",
+    "source": "Ig @chizzy2cold.jpg",
+    "sha256": "94897c6c758d61117290e135be40d852473f7e61d7282c7d0a116ee640ada940"
+  },
+  {
+    "resource": "Artwork/Poster07",
+    "source": "Widget.jpg",
+    "sha256": "290fcdaef3c00a25363127fe05ce7b16994c863b81052b846f03643f0ef90614"
+  },
+  {
+    "resource": "Artwork/Poster08",
+    "source": "_Fade Away___Digital Painting & Collage,_Made With Photoshop___💥__#posterdesign #mixmedia #artoftheday #digitalart #graphicdesign.jpg",
+    "usage": "bairro: outdoor ou cartaz",
+    "sha256": "fcc1017f19a6eb77131cfaadf128526680c3510310f39a32e9297db63be94104"
+  },
+  {
+    "resource": "Artwork/Poster09",
+    "source": "1136736762245084106.jpg",
+    "usage": "bairro: outdoor ou cartaz",
+    "sha256": "c65b4b58764c782d210a1bbec16baa863985e93ecb330d1c28e7a28b5b84aac7"
+  },
+  {
+    "resource": "Artwork/Poster10",
+    "source": "baixados (4).jpg",
+    "usage": "bairro: outdoor ou cartaz",
+    "sha256": "2fd79a839e39238dd1688464bb3cb0ecd55328566450e635d7ed0906d5fa20b7"
+  },
+  {
+    "resource": "Artwork/Poster11",
+    "source": "baixados (5).jpg",
+    "usage": "bairro: outdoor ou cartaz",
+    "sha256": "f59e7d456a91cd3ae6db61efccc755653b5deb6591e93a319d6e082aefa73437"
+  },
+  {
+    "resource": "Artwork/Poster12",
+    "source": "baixados (6).jpg",
+    "usage": "bairro: outdoor ou cartaz",
+    "sha256": "bd3d7e1abc940fad5ad1cf3ebd5d71b4c0a2e8e985a020a806c1966c51a96cd4"
+  },
+  {
+    "resource": "Artwork/Poster13",
+    "source": "baixados (7).jpg",
+    "usage": "bairro: outdoor ou cartaz",
+    "sha256": "354712eecbb890925f1f6bdb8708aecdd112073472e89778dd0ea292d00683dc"
+  },
+  {
+    "resource": "Artwork/Poster14",
+    "source": "baixados (8).jpg",
+    "usage": "bairro: outdoor ou cartaz",
+    "sha256": "5a70a5a6e1ffb79a08d5df276bf0144af3fb3f20fad321041e811eb230157506"
+  },
+  {
+    "resource": "Artwork/Poster15",
+    "source": "SUPERSTAR.jpg",
+    "usage": "bairro: outdoor ou cartaz",
+    "sha256": "490cccab16dafff9cd9888c39069c0cb7534a25df908b3b0326346d03996ddcb"
+  }
+]

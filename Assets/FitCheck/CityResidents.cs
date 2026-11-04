@@ -7,7 +7,7 @@ namespace FitCheck
     {
         [System.Serializable] sealed class ResidentPart
         {
-            public Mesh mesh;public Vector3[] rest,normals,vertices,posedNormals,closedLid,closedNormals;public bool arm,foot,leg,head,pelvis,mouth;public float side;public Vector3 center;public GameObject node;public int mouthKind;public bool faceVisible=true;
+            public Mesh mesh;public Vector3[] rest,normals,vertices,posedNormals,closedLid,closedNormals;public Matrix4x4 lidToAvatar;public Quaternion lidRotation;public float lidBaseCover;public bool arm,foot,leg,head,pelvis,mouth;public float side;public Vector3 center;public GameObject node;public int mouthKind;public bool faceVisible=true;
         }
         [System.Serializable] sealed class Resident
         {
@@ -19,7 +19,7 @@ namespace FitCheck
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
         public bool CustomerSpeaking;
-        const int ResidentArtRevision=18;
+        const int ResidentArtRevision=21;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
             if(IsInterior&&(cat==null||!cat.Ready))return false;
@@ -162,7 +162,7 @@ namespace FitCheck
             for(int v=0;v<part.rest.Length;v++){
                 var p=part.rest[v];var n=part.normals[v];Vector3 posed,normal;
                 if(part.head){
-                    if(part.closedLid!=null){float blink=ResidentBlink(actor.blinkClock,index);p=Vector3.Lerp(p,part.closedLid[v],blink);n=Vector3.Lerp(n,part.closedNormals[v],blink).normalized;}
+                    if(part.closedLid!=null)EvaluateResidentLid(part,v,ResidentBlink(actor.blinkClock,index),out p,out n);
                     if(part.mouth){float pulse=IsInterior&&index==0&&CustomerSpeaking?Mathf.Max(0,Mathf.Sin(actor.cycle*11)*Mathf.Sin(actor.cycle*3.8f)):Mathf.Pow(Mathf.Max(0,Mathf.Sin(actor.cycle*.9f+index)),8)*.12f;p.y=part.center.y+(p.y-part.center.y)*(1+pulse*.8f);}
                     posed=body.HeadPoint(p);normal=body.head*n;
                 }

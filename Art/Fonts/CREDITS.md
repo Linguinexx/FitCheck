@@ -1,4 +1,12 @@
-# Tipografia do jogo
+# Tipografia atual
+
+Archivo Black Regular: títulos e ações curtas, com peso de cartaz impresso. Fonte original e licença: https://github.com/google/fonts/tree/main/ofl/archivoblack — ArchivoBlack-OFL.txt.
+
+Space Grotesk Regular e Bold: leitura, legendas, campos e ações longas. Fonte original: https://github.com/floriankarsten/space-grotesk/tree/master/fonts/ttf/static. Licença SIL Open Font License 1.1 em SpaceGrotesk-OFL.txt. TTFs originais sem alteração, obtidos em 03/11/2026.
+
+As fontes abaixo pertenceram à exploração anterior e não são mais a tipografia ativa.
+
+# Exploração anterior
 
 Montserrat Regular e SemiBold: textos, botões, campos e legendas. Fonte oficial: https://github.com/JulietaUla/Montserrat/tree/master/fonts/ttf. Autoria e licença SIL Open Font License 1.1 em Montserrat-OFL.txt.
 
