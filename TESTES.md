@@ -438,3 +438,8 @@ Unity 6000.6.7f1: build nativo Windows 153,49 MB, 0 erros e 0 avisos (`tools/str
 
 
 Limpeza desta entrega: removidos 39 diretórios/pacotes antigos gerados em Builds, liberando 2.33 GiB antes de remover a cópia temporária de compilação. Preservados executável e ZIP de Streetwear e da jeans baggy anterior, todos os fontes Unity/Blender, texturas, referências, artes, capturas e saves. Nenhum cache da Unity ativa foi removido. Relatório local: tools/streetwear-cleanup.json.
+
+
+### GarmentFinishes — 04/11/2026
+
+Build Windows sem erros/avisos. Renderização A/B com GPU sincronizada, opção de brilho, duas peças com efeitos de um passe, camisetas com base compartilhada, civis separados, 63 fits/7 perfis, mangas, piscadas, atendimento e saves aprovados. Relatório em Art/Performance/GarmentFinishes.md.

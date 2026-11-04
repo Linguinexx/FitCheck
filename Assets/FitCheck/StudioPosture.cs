@@ -100,7 +100,7 @@ namespace FitCheck
         }
         static bool UpperPiece(string name)
         {
-            return name.StartsWith("BlenderTopo")||name=="Camiseta com caimento"||name=="Gola"||name=="Barra costurada"||name=="Estampa discreta"||name=="Carretel da fita"||name=="Grafismo da coleção"||name=="Capuz";
+            return name.StartsWith("Detalhe civil")||name.StartsWith("BlenderTopo")||name=="Camiseta com caimento"||name=="Gola"||name=="Barra costurada"||name=="Estampa discreta"||name=="Carretel da fita"||name=="Grafismo da coleção"||name=="Capuz";
         }
         Vector3 LowerPoint(Vector3 p,int side)
         {

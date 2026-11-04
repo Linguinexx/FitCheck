@@ -34,7 +34,8 @@ namespace FitCheck
             if(Tap(new Rect(430,423,570,48),mutedAudio?"Sons: desligados":"Sons: ligados")){mutedAudio=!mutedAudio;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.Mute",mutedAudio?1:0);}
             if(Tap(new Rect(430,487,570,48),reducedMotion?"Movimento reduzido: sim":"Movimento reduzido: não")){reducedMotion=!reducedMotion;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.ReducedMotion",reducedMotion?1:0);}
             if(Tap(new Rect(430,551,570,48),retroFilter?"Pixelização: leve":"Pixelização: desligada")){retroFilter=!retroFilter;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.Retro",retroFilter?1:0);}
-            Txt(new Rect(430,623,570,60),"WASD andar • Shift correr • E interagir\nF personalizar a loja fechada • Tab liberar o cursor",caption,muted);
+            if(Tap(new Rect(430,611,570,48),garmentFinishes?"Brilho das roupas: ligado":"Brilho das roupas: desligado"))SetGarmentFinishes(!garmentFinishes,true);
+            Txt(new Rect(430,670,570,35),"WASD andar • Shift correr • E interagir • Tab cursor",caption,muted);
             if(Tap(new Rect(430,714,570,52),"Voltar",true))CloseSettings();
         }
         void PauseMenuUI()

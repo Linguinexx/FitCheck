@@ -50,7 +50,7 @@ namespace FitCheck
             int oldHair=studio.HairOverride,oldExpression=studio.ExpressionOverride;bool oldPreview=studio.PreviewProportions,oldTall=studio.TallPreview;var rotation=studio.Avatar.rotation;var oldLook=studio.PlayerLook;
             try{
                 studio.HairOverride=-1;studio.ExpressionOverride=-1;studio.PreviewProportions=false;studio.TallPreview=false;studio.Avatar.rotation=Quaternion.identity;
-                if(!IsInterior){studio.PlayerLook=CitizenAppearance(customer);studio.Apply(outfit,-1);CivilianClothes(studio,customer);}else studio.Apply(outfit,customer);
+                if(!IsInterior){studio.PlayerLook=CitizenAppearance(customer);studio.ApplyCivilian(customer);}else studio.Apply(outfit,customer);
                 if(wallLean)studio.SetShopAttitude();
                 var actor=CopyAvatar(studio,"Morador — "+DayOne.Customers[customer].name,position,yaw,false);residents.Add(actor);
                 if(wallLean)ConfigureShopLean(actor);

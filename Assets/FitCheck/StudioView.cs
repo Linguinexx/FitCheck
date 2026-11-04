@@ -151,9 +151,9 @@ namespace FitCheck
             if(applyingPlayer)skin.color=PlayerAppearance.SkinColors[PlayerLook.skin];
             SetFaceProfile(profile);if(applyingPlayer)ApplyExpression((AvatarExpression)PlayerLook.expression);
             BuildHair(profile,Catalog.Get(outfit[3]));
-            var t=Catalog.Get(outfit[0]);var cloth=Material(t.color);
+            var t=civilianWardrobe>=0?CivilianTop(civilianWardrobe):Catalog.Get(outfit[0]);var cloth=Material(t.color);
             cloth.SetFloat("_Outline",0);
-            bool blenderTop=BuildStreetwearTop(t,cloth);
+            bool blenderTop=civilianWardrobe>=0?BuildCivilianTop(t,cloth):BuildStreetwearTop(t,cloth);
             if(!blenderTop){
 ShirtBody(t,cloth);
             Rings("Gola",new Vector3(0,2.217f,0),new Vector3(.34f,.045f,.32f),Material(t.id=="CG_TOP_01"?new Color(.12f,.3f,.19f):t.color*.68f),clothes,new[]{0f,1f},new[]{1f,1f},12);
@@ -171,11 +171,11 @@ ShirtBody(t,cloth);
                 if(t.drop!="COMMON GROUND")Form("Capuz",new Vector3(0,2.38f,.26f),new Vector3(.61f,.62f,.32f),cloth,clothes);
             }
             }
-            var b=Catalog.Get(outfit[1]);var denim=Material(b.color);
+            var b=civilianWardrobe>=0?CivilianBottom(civilianWardrobe):Catalog.Get(outfit[1]);var denim=Material(b.color);if(civilianWardrobe>=0)FinishCivilianMaterial(denim,"Denim");
             foreach(Transform part in Avatar){
                 if(part.name=="Canela")part.gameObject.SetActive(b.shorts);
             }
-            bool blenderBaggy=BuildBlenderBaggy(b);
+            bool blenderBaggy=civilianWardrobe<0&&BuildBlenderBaggy(b);
             if(!blenderBaggy)Rings("Cintura",new Vector3(0,1.25f,0),new Vector3(.77f,.32f,.48f),denim,clothes,new[]{0f,1f},new[]{1f,1f});
             for(int side=-1;side<=1;side+=2){
                 if(!blenderBaggy){
@@ -184,7 +184,7 @@ ShirtBody(t,cloth);
                 if(b.id=="CG_BOTTOM_01")Box("Faixa lateral",new Vector3(side*.423f,.88f,0),new Vector3(.018f,.82f,.08f),Material(new Color(.8f,.75f,.6f)),clothes);
                 if(b.id=="SB_BOTTOM_02")Box("Painel Remix",new Vector3(side*.23f,1.03f,-.244f),new Vector3(.32f,.3f,.02f),Material(side<0?new Color(.32f,.32f,.34f):new Color(.65f,.65f,.67f)),clothes);
                 }
-                BuildShoes(Catalog.Get(outfit[2]),side);
+                if(civilianWardrobe>=0)BuildCivilianShoes(civilianWardrobe,side);else BuildShoes(Catalog.Get(outfit[2]),side);
             }
             BuildHeadwear(Catalog.Get(outfit[3]));
             var headScale=HeadProportion(profile);

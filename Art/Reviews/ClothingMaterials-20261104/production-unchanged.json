@@ -1,0 +1,8 @@
+{
+  "status": "preview_only_pending_user_approval",
+  "main_assets_unchanged": true,
+  "verified_files": 496,
+  "checks": "seven native comparison images, 96 native camera-angle frames, same vertex count for three texture variants",
+  "game_build_not_replaced": true,
+  "record_kind": "historical_initial_preview_before_test_authorization"
+}

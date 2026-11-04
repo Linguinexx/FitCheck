@@ -18,7 +18,7 @@ namespace FitCheck
                 var groups=new int[part.rest.Length];var weights=new List<Vector4>();var cross=new List<float>();var ids=new Dictionary<(Vector4,float),int>();
                 for(int i=0;i<groups.Length;i++){
                     var p=part.rest[i];Vector4 w;
-                    if(part.arm)w=new Vector4(MotionWeight(1.42f,1.60f,p.y),1-MotionWeight(1.78f,1.94f,p.y),0,0);
+                    if(part.arm)w=new Vector4(MotionWeight(1.42f,1.60f,p.y),part.node.name.Contains("Manga")&&i>=part.rest.Length-21?0:1-MotionWeight(1.78f,1.94f,p.y),0,0);
                     else if(part.blenderDenim||part.leg&&!part.foot)w=new Vector4(MotionWeight(leg.kneeRest.y-.10f,leg.kneeRest.y+.10f,p.y),1-MotionWeight(.39f,.62f,p.y),MotionWeight(1.08f,1.28f,p.y),MotionWeight(1.10f,1.60f,p.y));
                     else w=new Vector4(MotionWeight(1.10f,1.60f,p.y),0,0,0);
                     float side=part.blenderDenim?Mathf.SmoothStep(0,1,(p.x+.12f)/.24f):0;var key=(w,side);
@@ -33,7 +33,7 @@ namespace FitCheck
             var foot=BoneMatrix(leg.ankle,leg.foot,leg.ankleRest);var limb=new SkinLegFrames(leg);var leftFrames=part.blenderDenim?new SkinLegFrames(denimLeft):limb;var rightFrames=part.blenderDenim?new SkinLegFrames(denimRight):limb;float blend=actor.wallLean?1:actor.blend;
             for(int i=0;i<cache.matrices.Length;i++){
                 var w=cache.weights[i];Matrix4x4 matrix;
-                if(part.arm){var arm=MixSkin(armLower,armUpper,w.x);matrix=torso*MixSkin(Matrix4x4.identity,arm,w.y);cache.normalMatrices[i]=torso*arm;}
+                if(part.arm){var arm=MixSkin(armLower,armUpper,w.x);matrix=torso*MixSkin(Matrix4x4.identity,arm,w.y);cache.normalMatrices[i]=w.y==0?torso:torso*arm;}
                 else if(part.blenderDenim){
                     var waist=MixSkin(pelvis,torso,w.w);
                     var left=SkinLegMatrix(leftFrames,w,waist);var right=SkinLegMatrix(rightFrames,w,waist);

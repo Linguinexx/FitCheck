@@ -31,6 +31,7 @@ namespace FitCheck
             }
         }
         sealed class ClothingTemplate {public string name;public Mesh mesh;public Material[] materials;}
+        readonly Dictionary<string,Mesh> wideTeeMeshes=new Dictionary<string,Mesh>();
         readonly Dictionary<string,List<ClothingTemplate>> clothingTemplates=new Dictionary<string,List<ClothingTemplate>>();
         readonly Dictionary<ClothingTemplate,Material[]> clothingInstanceMaterials=new Dictionary<ClothingTemplate,Material[]>();
         readonly Dictionary<string,ClothingTemplate> shopDisplayTemplates=new Dictionary<string,ClothingTemplate>();
@@ -55,11 +56,13 @@ namespace FitCheck
                         bool textured=part.textured||part.denim;var color=textured?Color.white:part.color;
                         string signature=(textured?"T":"C")+color.r.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+"/"+color.g.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+"/"+color.b.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+"/"+color.a.ToString("R",System.Globalization.CultureInfo.InvariantCulture);
                         if(!palette.TryGetValue(signature,out int index)){
-                            index=materials.Count;palette.Add(signature,index);var material=new Material(shader){name="Cached clothing — "+key,color=color,mainTexture=textured?image:Texture2D.whiteTexture};material.SetFloat("_Motion",0);material.SetFloat("_FabricWeight",0);material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);materials.Add(material);owned.Add(material);
+                            index=materials.Count;palette.Add(signature,index);var material=new Material(shader){name="Cached clothing — "+key,color=color,mainTexture=textured?image:Texture2D.whiteTexture};material.SetFloat("_Motion",0);material.SetFloat("_FabricWeight",0);material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);if(textured)FinishCollectionMaterial(material,key);ConfigureGarmentFinish(material,key,group.Key=="Camiseta com caimento");materials.Add(material);owned.Add(material);
                         }
                         foreach(int i in part.triangles)builder.Add(part.vertices[i],part.normals[i],part.uv[i],index);
                     }
-                    var mesh=builder.Build(group.Key+(slot==1?" — Blender Baggy":" — Blender Streetwear"));owned.Add(mesh);templates.Add(new ClothingTemplate{name=group.Key,mesh=mesh,materials=materials.ToArray()});
+                    Mesh mesh;bool wideTee=key=="AH_TOP_01"||key=="AH_TOP_02";
+                    if(!wideTee||!wideTeeMeshes.TryGetValue(group.Key,out mesh)){mesh=builder.Build(group.Key+(slot==1?" — Blender Baggy":" — Blender Streetwear"));owned.Add(mesh);if(wideTee)wideTeeMeshes[group.Key]=mesh;}
+                    templates.Add(new ClothingTemplate{name=group.Key,mesh=mesh,materials=materials.ToArray()});
                 }
                 clothingTemplates.Add(key,templates);
             }

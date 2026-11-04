@@ -1,0 +1,1 @@
+PREVIEW_ONLY_PASSED: identical base geometry for three texture variants; current and proposed foil/nylon on existing clothing; single-pass effects, no real-time reflection capture. Main project Assets not modified.

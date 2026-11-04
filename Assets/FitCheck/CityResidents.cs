@@ -29,7 +29,7 @@ namespace FitCheck
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
         public bool CustomerSpeaking;
-        const int ResidentArtRevision=28;
+        const int ResidentArtRevision=30;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
             if(IsInterior&&(cat==null||!cat.Ready))return false;
@@ -195,7 +195,7 @@ namespace FitCheck
                     float upperWeight=MotionWeight(1.42f,1.60f,p.y);
                     posed=Vector3.Lerp(elbow+forearm*(p-elbowRest),shoulder+upperArm*(p-shoulder),upperWeight);
                     normal=Vector3.Lerp(forearm*n,upperArm*n,upperWeight);
-                    float anchor=1-MotionWeight(1.78f,1.94f,p.y);posed=Vector3.Lerp(p,posed,anchor);
+                    float anchor=part.node.name.Contains("Manga")&&v>=part.rest.Length-21?0:1-MotionWeight(1.78f,1.94f,p.y);posed=Vector3.Lerp(p,posed,anchor);if(anchor==0)normal=n;
                     posed=body.TorsoPoint(posed);normal=body.torso*normal;
                 }else if(part.blenderDenim){
                     Vector3 lp,ln,rp,rn;DenimLegPoint(p,n,denimLeft,body,out lp,out ln);DenimLegPoint(p,n,denimRight,body,out rp,out rn);

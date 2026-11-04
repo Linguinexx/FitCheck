@@ -17,7 +17,10 @@ namespace FitCheck
             yield return null;yield return null;
             string folder=FirstPersonProofOutput();Directory.CreateDirectory(folder);
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-entry-performance")>=0){yield return CheckEntryPerformance(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"PERFORMANCE_CAPTURED: home, street and shop cold/return entry timings and scene costs.");Application.Quit(0);yield break;}
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-garment-render-performance")>=0){yield return CheckGarmentRenderPerformance(folder);Application.Quit(0);yield break;}
             try{
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-garment-finishes-review")>=0){CheckGarmentFinishes(folder);Application.Quit(0);yield break;}
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-wardrobe-finish-review")>=0){CheckWardrobeFinish(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-entry-regression")>=0){CheckEntryOptimization(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-streetwear-review")>=0){CheckStreetwearCollection(folder);CheckShopServiceFlow(folder);CheckSaveSlots(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"SHOP_REVIEW_PASSED: seventeen Blender streetwear assets, all catalog thumbnails, 63 fits across seven profiles, native nine-look sheet and three distinct shoe builds, first-person movement, complete customer service and isolated saves.");Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-baggy-review")>=0){CheckBlenderBaggy(folder);CheckShopServiceFlow(folder);CheckSaveSlots(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"SHOP_REVIEW_PASSED: Blender-authored baggy denim, imported UV mesh, seven profiles, separated walking legs, thumbnail, moving player, complete customer service and independent saves.");Application.Quit(0);yield break;}

@@ -19,3 +19,7 @@ As referências do usuário orientaram proporções, sobreposição, grafismos e
 ![Nove looks](lookbook.png)
 
 ![Três construções de tênis](shoes.png)
+
+## Acabamento e moradores
+
+A revisão de 04/11/2026 mantém a modelagem e a resolução, melhora o tecido/estampas/mangas e separa o vestuário civil das peças da loja. Receitas em `paint_uv_finish.py` e `paint_basic_fabrics.py`; detalhes e medições em [WardrobeFinish](../../Performance/WardrobeFinish.md).

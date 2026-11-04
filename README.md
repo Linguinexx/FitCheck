@@ -126,3 +126,7 @@ Limpeza desta entrega: removidos 39 diretórios/pacotes antigos gerados em Build
 ## Desempenho da cidade e loja
 
 Roupas e expositores reutilizam malhas e materiais; cabeças rígidas usam transforms e a deformação do corpo reutiliza pesos e matrizes. NPCs próximos continuam animando integralmente. Medições e limites da otimização estão em [Art/Performance/EntryOptimization.md](Art/Performance/EntryOptimization.md).
+
+## Teste de acabamentos nas roupas
+
+Em Configurações, **Brilho das roupas** alterna os efeitos imediatamente. Night Route tem estrela cromada e Meeting Point tem acabamento acetinado. As peças aparecem nas araras; para montar fits, continuam valendo os desbloqueios normais. A versão anterior WardrobeFinish fica disponível para comparação. Detalhes e medições em [Art/Performance/GarmentFinishes.md](Art/Performance/GarmentFinishes.md).

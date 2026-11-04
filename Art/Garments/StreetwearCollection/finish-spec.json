@@ -1,0 +1,159 @@
+{
+  "AH_TOP_01": {
+    "base": [
+      223,
+      216,
+      196
+    ],
+    "kind": "tee",
+    "sleeve": [
+      0.87,
+      0.84,
+      0.76
+    ]
+  },
+  "CG_TOP_01": {
+    "base": [
+      164,
+      22,
+      36
+    ],
+    "kind": "basket",
+    "sleeve": [
+      0.88,
+      0.85,
+      0.78
+    ]
+  },
+  "SB_TOP_01": {
+    "base": [
+      58,
+      58,
+      62
+    ],
+    "kind": "vintage",
+    "sleeve": [
+      0.23,
+      0.23,
+      0.24
+    ]
+  },
+  "AH_TOP_02": {
+    "base": [
+      25,
+      39,
+      72
+    ],
+    "kind": "graphic",
+    "sleeve": [
+      0.1,
+      0.15,
+      0.28
+    ]
+  },
+  "CG_TOP_02": {
+    "base": [
+      24,
+      112,
+      59
+    ],
+    "kind": "racing",
+    "sleeve": [
+      0.09,
+      0.44,
+      0.23
+    ]
+  },
+  "SB_TOP_02": {
+    "base": [
+      228,
+      222,
+      206
+    ],
+    "kind": "patch",
+    "sleeve": [
+      0.89,
+      0.87,
+      0.81
+    ]
+  },
+  "AH_TOP_03": {
+    "base": [
+      31,
+      28,
+      32
+    ],
+    "kind": "leather",
+    "sleeve": [
+      0.12,
+      0.11,
+      0.125
+    ]
+  },
+  "CG_TOP_03": {
+    "base": [
+      23,
+      74,
+      156
+    ],
+    "kind": "fleece",
+    "sleeve": [
+      0.09,
+      0.29,
+      0.61
+    ]
+  },
+  "SB_TOP_03": {
+    "base": [
+      28,
+      26,
+      33
+    ],
+    "kind": "hoodie",
+    "sleeve": [
+      0.11,
+      0.1,
+      0.13
+    ]
+  },
+  "AH_BOTTOM_01": {
+    "base": [
+      40,
+      41,
+      44
+    ],
+    "kind": "twill"
+  },
+  "SB_BOTTOM_01": {
+    "base": [
+      52,
+      57,
+      59
+    ],
+    "kind": "cargo"
+  },
+  "CG_BOTTOM_02": {
+    "base": [
+      222,
+      75,
+      25
+    ],
+    "kind": "basketshort"
+  },
+  "SB_BOTTOM_02": {
+    "base": [
+      153,
+      152,
+      146
+    ],
+    "kind": "patchshort"
+  },
+  "AH_BOTTOM_02": {
+    "base": [
+      121,
+      34,
+      193
+    ],
+    "kind": "neonshort"
+  }
+}

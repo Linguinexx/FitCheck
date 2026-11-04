@@ -9,7 +9,7 @@ namespace FitCheck
         {
             if(streetwearModels.TryGetValue(id,out var model))return model;
             var json=Resources.Load<TextAsset>("Garments/Streetwear/"+id);if(json==null)return null;
-            model=JsonUtility.FromJson<BlenderGarmentAsset>(json.text);streetwearModels[id]=model;return model;
+            model=JsonUtility.FromJson<BlenderGarmentAsset>(json.text);if(id=="AH_TOP_02")model=SharedTeeVariant(model,StreetwearModel("AH_TOP_01"));streetwearModels[id]=model;return model;
         }
         void StreetwearParts(BlenderGarmentAsset model,Vector3 offset)
         {
@@ -18,7 +18,7 @@ namespace FitCheck
         bool BuildStreetwearTop(Garment top,Material sleeveMaterial)
         {
             var model=StreetwearModel(top.id);if(model==null)return false;
-            sleeveMaterial.color=model.sleeveColor;StreetwearParts(model,Vector3.zero);return true;
+            FinishCollectionSleeve(sleeveMaterial,model);StreetwearParts(model,Vector3.zero);return true;
         }
         bool BuildStreetwearBottom(Garment bottom)
         {
