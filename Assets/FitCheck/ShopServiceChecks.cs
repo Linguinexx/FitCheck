@@ -42,7 +42,7 @@ namespace FitCheck
                     string id=child.name.Substring("Peça na arara — ".Length);
                     if(!ids.Add(id))throw new Exception("Peça repetida na arara: "+id);
                     int drop=id.StartsWith("SB")?0:id.StartsWith("AH")?1:2;
-                    if(Mathf.Abs(child.localPosition.z-(-2+drop*3))>1.0f||Mathf.Abs(child.localPosition.x+6.9f)>.01f)throw new Exception("Peça fora do trilho: "+id);
+                    if(Mathf.Abs(child.localPosition.z-CityView.ShopRackCenter(drop))>CityView.ShopRackHalfLength-.25f||Mathf.Abs(child.localPosition.x+6.9f)>.01f)throw new Exception("Peça fora do trilho: "+id);
                 }
                 if(ids.Count!=9)throw new Exception("Araras sem os nove tops dos três drops");
                 MoveProof(new Vector2(0,6.3f),0,0);

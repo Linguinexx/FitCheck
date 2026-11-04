@@ -61,8 +61,8 @@ namespace FitCheck
             try{
                 studio.PlayerLook=CitizenAppearance(7);studio.HairOverride=0;studio.ExpressionOverride=(int)AvatarExpression.Skeptical;
                 studio.Apply(new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},-1);CivilianClothes(studio,7);
-                watcher=CopyAvatar(studio,"Fiscal do drip — observador da janela",new Vector3(-100.3f,4.05f,35.75f),0,false);
-                foreach(var part in watcher.parts)if(!part.head)part.node.SetActive(false);
+                watcher=CopyAvatar(studio,"Fiscal do drip — observador da janela",new Vector3(-100.3f,5.55f,35.25f),0,false);
+                watcher.root.localScale=Vector3.one*.72f;
             }finally{studio.PlayerLook=look;studio.HairOverride=hair;studio.ExpressionOverride=expression;}
         }
         void TickWatcher(float delta)

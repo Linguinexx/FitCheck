@@ -33,7 +33,6 @@ namespace FitCheck
                 Block(new Vector3(x,y,-1),new Vector3(.30f,.20f,.70f),i==0?new Color(.18f,.30f,.87f):Kaos,"Cloth",.07f);
                 Block(new Vector3(x,y-.12f,-1),new Vector3(.33f,.065f,.75f),Cream,"Rubber",.035f);
             }
-            Words("CHINELO NO FIO",new Vector3(-20,1.1f,5.28f),.031f,Cream);
             Bicycle(new Vector3(-61,0,15));
             // Farther stretches receive small printed posters, keeping the paving open.
             foreach(var p in new[]{new Vector3(-130,1.5f,5.8f),new Vector3(-33,1.5f,5.6f)}){

@@ -21,7 +21,7 @@ namespace FitCheck
             // Two northbound pedestrian passages, linked by a small civic square.
             Ground(-108,18,4.2f,34,-.039f,Cream,"CityStone",4.7f);
             Ground(-76,19,8.2f,34,-.039f,Cream,"CityStone",4.7f);
-            Ground(-93,28,35,10,-.038f,Cream,"EntryTile",1.2f);
+            Ground(-93,28,35,10,-.038f,Cream,"CityStone",4.7f);
             Ground(-96.5f,33,17,5,-.035f,Cream,"CityStone",4.7f);
             foreach(float x in new[]{-104.5f,-89}){Bench(x,26);Lamp(x,30.5f);}
             StreetPlanter(-100,23,12);StreetPlanter(-84,25,13);
@@ -55,10 +55,10 @@ namespace FitCheck
             // Physical closures are inside the ground apron; no visible edge drops into nothing.
             Ground(-60,7,230,170,-.26f,new Color(.22f,.24f,.18f),"Plaster",6);
             foreach(float x in new[]{-144.5f,26}){
-                Block(new Vector3(x,3.2f,7),new Vector3(.7f,6.4f,103),Teal,"CityBrick");
+                RoadBoundary(x);
                 obstacles.Add(new Rect(x-.4f,-44.5f,.8f,103));
                 for(int i=0;i<9;i++){
-                    float z=-38+i*11;
+                    float z=-38+i*11;if(z>-23&&z<-5)continue;
                     int seed=i;float sideX=x+(x<0?-7:7);int facing=x<0?1:-1;
                     PlaceCityModule(()=>Residence(0,0,3+seed%2,11,9.8f,seed%2==0?Peach:Teal,facing,seed+60),new Vector3(sideX,0,z));
                 }
@@ -74,7 +74,7 @@ namespace FitCheck
             }
             // Tall foliage behind the terminal walls softens the skyline without suggesting exits.
             foreach(float x in new[]{-142f,-119,-55,19}){
-                Foliage(new Vector3(x,6,-51),new Vector3(11,8,8),new Color(.14f,.23f,.15f),(int)-x);
+                RootedTree(new Vector3(x,0,-52),8.4f,(int)-x);
             }
         }
     }

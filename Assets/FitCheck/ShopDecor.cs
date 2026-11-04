@@ -5,9 +5,9 @@ namespace FitCheck
 {
     [Serializable] public class ShopDecor
     {
-        public int version=1,wall,floor,accent,poster;public bool plants=true;
-        public ShopDecor Copy(){return new ShopDecor{version=version,wall=wall,floor=floor,accent=accent,poster=poster,plants=plants};}
-        public void Validate(){if(version!=1||wall<0||wall>7||floor<0||floor>2||accent<0||accent>7||poster<0||poster>7)throw new ArgumentException("Decoração inválida");}
+        public int version=1,wall,floor,accent,poster,backdrop,backdropBase,led;public bool plants=true;
+        public ShopDecor Copy(){return new ShopDecor{version=version,wall=wall,floor=floor,accent=accent,poster=poster,backdrop=backdrop,backdropBase=backdropBase,led=led,plants=plants};}
+        public void Validate(){if(version!=1||wall<0||wall>7||floor<0||floor>2||accent<0||accent>7||poster<0||poster>7||backdrop<0||backdrop>7||backdropBase<0||backdropBase>7||led<0||led>7)throw new ArgumentException("Decoração inválida");}
     }
     public static class ShopDecorStore
     {
@@ -20,6 +20,8 @@ namespace FitCheck
     }
     public partial class CityView
     {
+        public static Color FittingLightColor(int choice)=>new[]{new Color(.58f,.08f,.91f),new Color(.89f,.024f,.075f),new Color(.95f,.06f,.43f),new Color(.07f,.23f,.89f),new Color(.025f,.72f,.59f),new Color(.14f,.85f,.18f),new Color(1,.60f,.06f),new Color(.95f,.92f,.83f)}[choice];
+        public static Color FittingBaseColor(int choice)=>new[]{new Color(.025f,.008f,.045f),new Color(.018f,.03f,.15f),new Color(.19f,.015f,.31f),new Color(.92f,.86f,.68f),new Color(.25f,.012f,.045f),new Color(.005f,.18f,.12f),new Color(.64f,.025f,.29f),new Color(.025f,.16f,.57f)}[choice];
         [SerializeField] ShopDecor activeDecor;[SerializeField] Transform decorPlants,decorArtwork;
         readonly System.Collections.Generic.Dictionary<Mesh,Color[]> decorOriginal=new System.Collections.Generic.Dictionary<Mesh,Color[]>();
         public ShopDecor ActiveDecor=>activeDecor;
@@ -29,6 +31,8 @@ namespace FitCheck
             var washes=new[]{Color.white,new Color(.54f,.88f,.52f),new Color(1,.80f,.39f),new Color(.70f,.74f,.75f),new Color(.66f,.36f,.94f),new Color(.28f,.52f,1),new Color(1,.32f,.21f),new Color(.10f,.88f,.68f)};
             var accents=new[]{new Color(.08f,.46f,.25f),new Color(.90f,.54f,.08f),new Color(.82f,.22f,.11f),new Color(.49f,.10f,.91f),new Color(.025f,.72f,.59f),new Color(.89f,.024f,.075f),new Color(.95f,.06f,.43f),new Color(.07f,.23f,.89f)};
             foreach(var r in GetComponentsInChildren<MeshRenderer>(true)){
+                if(r.name=="Painel abstrato do provador"){r.sharedMaterial.SetColor("_BackdropColor",FittingLightColor(value.backdrop));r.sharedMaterial.SetColor("_BackdropBase",FittingBaseColor(value.backdropBase));}
+                if(r.name.StartsWith("LED do provador "))r.sharedMaterial.SetColor("_DecorTint",FittingPurple);
                 if(r.name=="Arquitetura — CityStucco"||r.name=="Arquitetura — CityBrick")foreach(var m in r.sharedMaterials)m.SetColor("_DecorTint",washes[value.wall]);
                 if(r.name=="Arquitetura — ShopFloor")foreach(var m in r.sharedMaterials){
                     if(value.floor==0)AmbientSurfaces.Apply(m,"ShopFloor",true);
@@ -59,7 +63,7 @@ namespace FitCheck
     }
     public partial class FirstCustomer
     {
-        bool showShopDecor;int decorView;ShopDecor decorDraft,decorBefore;string decorPathLoaded;ShopDecor savedDecor;
+        bool showShopDecor;int decorView,decorTab;ShopDecor decorDraft,decorBefore;string decorPathLoaded;ShopDecor savedDecor;
         string ShopDecorPath=>Path.Combine(SessionFolder,"shop-style.json");
         ShopDecor CurrentShopDecor {
             get{if(savedDecor==null||decorPathLoaded!=ShopDecorPath){decorPathLoaded=ShopDecorPath;try{savedDecor=ShopDecorStore.Load(decorPathLoaded);}catch{savedDecor=new ShopDecor();message="Não foi possível ler a decoração. Você pode escolher outra.";}}return savedDecor;}
@@ -67,12 +71,12 @@ namespace FitCheck
         void OpenShopDecor()
         {
             if(stage!=Stage.City||!city.IsInterior||city.IsHome||ShopOpen||ShopSequenceActive||paused)return;
-            decorBefore=CurrentShopDecor.Copy();decorDraft=decorBefore.Copy();decorView=0;showShopDecor=true;city.StopWalk();cityFreeCursor=true;SyncCityCursor(true);Sound(0);
+            decorBefore=CurrentShopDecor.Copy();decorDraft=decorBefore.Copy();decorView=decorTab=0;showShopDecor=true;city.StopWalk();cityFreeCursor=true;SyncCityCursor(true);Sound(0);
             FrameShopDecor();
         }
         void FrameShopDecor(){
-            var positions=new[]{new Vector3(.6f,3.8f,-4.1f),new Vector3(1.5f,3.1f,.2f),new Vector3(-3,3,3)};
-            var targets=new[]{new Vector3(-.5f,2.1f,4.6f),new Vector3(-4.9f,1.8f,5.1f),new Vector3(-.8f,3.9f,8.7f)};
+            var positions=new[]{new Vector3(.6f,3.8f,-4.1f),new Vector3(1.5f,3.1f,.2f),new Vector3(-3,3,3),new Vector3(-4.9f,2.2f,5.9f)};
+            var targets=new[]{new Vector3(-.5f,2.1f,4.6f),new Vector3(-4.9f,1.8f,5.1f),new Vector3(-.8f,3.9f,8.7f),new Vector3(-4.9f,2.1f,8.59f)};
             cam.transform.position=city.transform.position+positions[decorView];cam.transform.LookAt(city.transform.position+targets[decorView]);cam.fieldOfView=decorView==0?66:55;city.FramePlayerForCamera(cam,true);
         }
         void CloseShopDecor(bool save)
@@ -86,19 +90,21 @@ namespace FitCheck
             Fill(new Rect(30,108,570,766),new Color(.055f,.06f,.055f,.98f));
             Txt(new Rect(55,130,510,48),"Sua loja. Seu jeito.",heading);
             Txt(new Rect(55,191,510,50),"Escolha os acabamentos antes de abrir.\nA prévia aparece na própria loja.",caption,muted);
-            string[][] names={new[]{"Original","Verde","Sol","Concreto","Uva","Azul","Coral","Turquesa"},new[]{"Original","Madeira","Cerâmica"},new[]{"Verde","Ocre","Terracota","Roxo","Turquesa","Kaos","Rosa","Azul"},GalleryArt.Names};
-            string[] labels={"Paredes","Piso","Cortina","Quadro"};int[] values={decorDraft.wall,decorDraft.floor,decorDraft.accent,decorDraft.poster};
-            float y=246;for(int row=0;row<4;row++){
+            string[] lights={"Roxo","Kaos","Rosa","Azul","Turquesa","Verde","Âmbar","Branco"};
+            for(int i=0;i<3;i++)if(Tap(new Rect(55+i*173,248,165,42),new[]{"Ambiente","Provador","Artes"}[i],decorTab==i)){decorTab=i;decorView=i==1?3:i==2?2:0;FrameShopDecor();}
+            string[][] names={new[]{"Original","Verde","Sol","Concreto","Uva","Azul","Coral","Turquesa"},new[]{"Original","Madeira","Cerâmica"},new[]{"Verde","Ocre","Terracota","Roxo","Turquesa","Kaos","Rosa","Azul"},GalleryArt.Names,new[]{"Preto","Marinho","Roxo","Creme","Vinho","Petróleo","Rosa","Azul"},lights};
+            string[] labels={"Paredes","Piso","Cortina","Quadro","GIF • cor do fundo","GIF • cor das formas"};int[] values={decorDraft.wall,decorDraft.floor,decorDraft.accent,decorDraft.poster,decorDraft.backdropBase,decorDraft.backdrop};
+            float y=316;foreach(int row in decorTab==0?new[]{0,1}:decorTab==1?new[]{2,4,5}:new[]{3}){
                 Txt(new Rect(55,y,510,26),labels[row],caption);
                 for(int i=0;i<names[row].Length;i++)if(Tap(new Rect(55+i%4*130,y+28+i/4*40,122,34),names[row][i],values[row]==i)){
-                    if(row==0)decorDraft.wall=i;else if(row==1)decorDraft.floor=i;else if(row==2)decorDraft.accent=i;else decorDraft.poster=i;city.ApplyShopDecor(decorDraft);
+                    if(row==0)decorDraft.wall=i;else if(row==1)decorDraft.floor=i;else if(row==2)decorDraft.accent=i;else if(row==3)decorDraft.poster=i;else if(row==4)decorDraft.backdropBase=i;else decorDraft.backdrop=i;city.ApplyShopDecor(decorDraft);
                 }
                 y+=40+Mathf.CeilToInt(names[row].Length/4f)*40;
             }
-            if(Tap(new Rect(55,708,510,45),decorDraft.plants?"Plantas: presentes":"Plantas: recolhidas")){decorDraft.plants=!decorDraft.plants;city.ApplyShopDecor(decorDraft);}
+            if(decorTab==0&&Tap(new Rect(55,708,510,45),decorDraft.plants?"Plantas: presentes":"Plantas: recolhidas")){decorDraft.plants=!decorDraft.plants;city.ApplyShopDecor(decorDraft);}
             if(Tap(new Rect(55,782,246,55),"Salvar decoração",true))CloseShopDecor(true);
             if(Tap(new Rect(319,782,246,55),"Cancelar"))CloseShopDecor(false);
-            for(int i=0;i<3;i++)if(Tap(new Rect(630+i*240,713,222,48),new[]{"Geral","Provador","Quadro"}[i],decorView==i)){decorView=i;FrameShopDecor();}
+            for(int i=0;i<4;i++)if(Tap(new Rect(620+i*195,713,182,48),new[]{"Geral","Cortina","Quadro","GIF animado"}[i],decorView==i)){decorView=i;FrameShopDecor();}
             Txt(new Rect(620,790,700,40),"Olhe a prévia. As mudanças pertencem a este save.",caption,paper);
         }
     }

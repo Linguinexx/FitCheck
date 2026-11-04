@@ -554,3 +554,23 @@ Aplicadas as oito novas artes fornecidas. Cinco horizontais em outdoors no resid
 Botões no formato arredondado da referência, com sombra e profundidade. Removidos encaixes laterais e contornos do estado normal/hover. Hover clareia o fundo; somente opções selecionadas recebem contorno em Kaos. Logo vermelha e tipografia atuais preservadas.
 
 Build StreetArtwork: 121,43 MB, zero erros/avisos. Prova nativa tools/street-artwork-proof.log terminou com código 0: 16 recursos, cinco outdoors horizontais com dois apoios cada, quatro cartazes, UV/proporção, percurso acessível, galeria interna, balões restritos à rua, decoração/cancelamento/reentrada e três saves isolados. Conferidas as cinco vistas dos outdoors, cartaz junto à galeria e menu real sem contorno nos botões neutros.
+
+## 03/11/2026 — Correções do mapa conforme capturas
+
+Piso externo substituído por uma superfície contínua cobrindo a área até além dos muros, com UVs globais e mesma escala de CityStone. Removidas sobreposições de calçada e a grande faixa de EntryTile do espaço cívico; estrada também usa projeção global e base contínua. Quadra e soleiras particulares mantêm limites próprios. Removido o letreiro solto CHINELO NO FIO junto ao café.
+
+Túneis nos extremos da avenida têm abertura real no muro, arco, paredes/abóbada, iluminação e fundo escuro. Carro atravessa e reaparece dentro do trecho oculto; jogador continua bloqueado pelos limites do bairro. Volumes de prédios que fechavam a via atrás dos portais foram retirados. Folhagem terminal antes atravessando muros substituída por copas menores inteiramente acima dos muros, com troncos. Novos canteiros/árvores só entram em pontos sem sobreposição com obstáculos.
+
+AP 03 recebeu fechamento traseiro, janelas, teto/assoalho do vestíbulo, acabamento da porta aberta e jardineiras, mantendo a soleira e o endereço. Três araras reposicionadas para -2,6 / 0,1 / 2,8 no eixo da parede. Postes e pés agora compartilham as mesmas coordenadas; rodízios e contraventamentos conectados. Roupas/cabides seguem as mesmas posições e a terceira arara termina mais de um metro antes da cortina. Nove tops distintos dos três drops preservados.
+
+Verificação inicial confirmou casa/bairro/loja e caminhada de 31,50 s na ida e 31,10 s na volta. Teste antigo de exposição ainda esperava as posições fixas anteriores das araras e foi atualizado para conferir as dimensões efetivas. Rodada final map-polish-release-proof terminou com código 0: piso/UV, folhagem, túneis exclusivos dos carros, nove peças fora da cortina, atendimento completo, galeria e isolamento de saves. Build final 121,43 MB, zero erros/avisos. Capturas finais de piso, AP 03 frente/trás, túneis, vegetação e araras inspecionadas.
+
+
+### NormalFlow — 03/11/2026
+Removido o Ground CityAsphalt de BackgroundDistrict em y=-0.04, coplanar à calçada contínua e responsável pela faixa atravessando bancos. Avenida e quadra preservadas. Removidas as três peças do catálogo sob a sacola; affordance de decoração aponta ao balcão. Cortina vazia passa a alternar abertura/fechamento, sem PreviewSession e sem alterar campanha. ShopDecor ganhou backdrop/led compatíveis com JSON antigo, materiais independentes, três abas e quarta câmera interna. HUD superior removido e pausa simplificada. Telas não oferecem viagem direta para casa/loja; retorno de painéis preserva o ambiente.
+
+Validação nativa final aprovada, incluindo percurso e serviço completo. Corrigido ainda reaproveitamento de cliente entre campanhas diferentes com mesmo índice: reconstrução da loja passa a considerar campanha/dia. Fontes, build publicado e ZIP conferidos.
+
+
+### GifGallery — 03/11/2026
+Corrigido observador sem corpo: avatar inteiro, escala .72 e posição sobre uma sacada ampliada com guarda-corpo lateral. Rodapé contínuo de tijolo fecha a porta residual abaixo dos expositores da galeria. Shader AbstractBackdrop ganha _BackdropBase independente de _BackdropColor, preservando textura e movimento descendente. ShopDecor armazena backdropBase além de backdrop; a interface oferece oito fundos e oito cores de formas. Campo legado led preservado para leitura de arquivos antigos; sem controle de luzes físicas.

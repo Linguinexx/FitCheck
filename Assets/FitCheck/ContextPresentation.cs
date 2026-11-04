@@ -30,7 +30,7 @@ namespace FitCheck
                 if(city.StreetInteraction==2)return Hint("E","Entrar em casa",origin+new Vector3(CityView.StreetHomeDoor.x,2,8.65f),new Vector3(2.1f,4,.25f));
             }else{
                 if(city.ShopInteraction==1){if(ShopOpen&&!city.CustomerWaitingAtCounter&&!progress.DayComplete)return default;return Hint("E",ShopActionLabel(),origin+new Vector3(4.4f,.85f,6.2f),new Vector3(3.0f,1.7f,1.5f));}
-                if(!ShopOpen&&Vector2.Distance(city.Position,new Vector2(2.1f,7.55f))<2)return Hint("F","Personalizar a loja",origin+new Vector3(2.1f,1.68f,6.35f),new Vector3(.76f,.13f,.86f));
+                if(!ShopOpen&&Vector2.Distance(city.Position,new Vector2(2.1f,7.55f))<2)return Hint("F","Personalizar a loja",origin+new Vector3(2.1f,1.58f,6.35f),new Vector3(1.7f,.15f,1.25f));
                 if(city.ShopInteraction==2)return Hint("E",ShopActionLabel(),origin+new Vector3(-4.9f,1.85f,5.15f),new Vector3(2.2f,3.6f,.3f));
                 if(city.ShopInteraction==3)return Hint("E","Sair da loja",origin+new Vector3(0,2.1f,-4.8f),new Vector3(2.8f,4.2f,.2f));
             }

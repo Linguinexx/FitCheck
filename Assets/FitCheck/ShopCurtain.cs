@@ -9,6 +9,8 @@ namespace FitCheck
         [SerializeField] float fittingProgress;[SerializeField] bool fittingOpening;
         public float FittingProgress=>fittingProgress;
         public bool FittingOpen=>fittingProgress>=1;
+        public bool FittingMoving=>fittingProgress!=(fittingOpening?1:0);
+        public bool FittingOpening=>fittingOpening;
         void BuildFittingCurtain(int side)
         {
             const int columns=36,rows=12;var vertices=new List<Vector3>();var uv=new List<Vector2>();var colors=new List<Color>();
@@ -42,9 +44,10 @@ namespace FitCheck
         }
         public void ResetFittingCurtain(){fittingProgress=0;fittingOpening=false;PoseFittingCurtain();}
         public void OpenFittingCurtain(){fittingOpening=true;}
+        public void ToggleFittingCurtain(){fittingOpening=!fittingOpening;}
         void AdvanceFittingCurtain(float delta)
         {
-            if(fittingOpening)fittingProgress=Mathf.MoveTowards(fittingProgress,1,delta/.72f);
+            fittingProgress=Mathf.MoveTowards(fittingProgress,fittingOpening?1:0,delta/.72f);
             PoseFittingCurtain();
         }
         void PoseFittingCurtain()

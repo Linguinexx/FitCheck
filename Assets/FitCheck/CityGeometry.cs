@@ -19,7 +19,7 @@ namespace FitCheck
             var batch=Get(texture);int index=batch.v.Count;var normal=Vector3.Cross(b-a,c-a).normalized;
             batch.v.AddRange(new[]{a,b,c,d});for(int i=0;i<4;i++){batch.n.Add(normal);batch.c.Add(color);}
             float width=Vector3.Distance(a,d)/repeat,height=Vector3.Distance(a,b)/repeat;
-            if((texture=="Wood"||texture=="ShopFloor"||texture=="HomeFloor"||texture=="EntryTile")&&Mathf.Abs(normal.y)>.9f)
+            if((texture=="Wood"||texture=="ShopFloor"||texture=="HomeFloor"||texture=="EntryTile"||texture=="CityStone"||texture=="CityAsphalt")&&Mathf.Abs(normal.y)>.9f)
                 batch.uv.AddRange(new[]{ProjectedUV(a,normal)/repeat,ProjectedUV(b,normal)/repeat,ProjectedUV(c,normal)/repeat,ProjectedUV(d,normal)/repeat});
             else batch.uv.AddRange(new[]{Vector2.zero,new Vector2(0,height),new Vector2(width,height),new Vector2(width,0)});
             batch.t.AddRange(new[]{index,index+1,index+2,index,index+2,index+3});
@@ -48,6 +48,7 @@ namespace FitCheck
         }
         void Ground(float x,float z,float width,float depth,float y,Color color,string texture="Plaster",float repeat=1)
         {
+            if(unifiedStreetPavement&&!IsInterior&&texture=="CityStone"&&y<.1f)return;
             Quad(new Vector3(x-width*.5f,y,z-depth*.5f),new Vector3(x-width*.5f,y,z+depth*.5f),new Vector3(x+width*.5f,y,z+depth*.5f),new Vector3(x+width*.5f,y,z-depth*.5f),color,texture,repeat);
         }
         void Rod(Vector3 a,Vector3 b,float radius,Color color,string texture="Wood",int sides=8)

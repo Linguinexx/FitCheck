@@ -35,7 +35,6 @@ namespace FitCheck
         {
             // A continuous level promenade, not a longer invisible corridor or slower player.
             Ground(-84,1.8f,120,24,-.041f,Cream,"CityStone",4.7f);
-            Ground(-88,-13.7f,126,5.2f,-.018f,Color.white,"CityAsphalt",4);
             Ground(-86,-18.4f,126,4.1f,-.035f,Cream,"CityStone",4.7f);
             Ground(-86,10,150,140,-.22f,new Color(.25f,.29f,.22f),"Plaster",6);
             Block(new Vector3(-86,-.01f,-10.95f),new Vector3(122,.25f,.30f),Cream,"Plaster",.045f);
@@ -98,6 +97,7 @@ namespace FitCheck
         {
             Shopfront(-96.5f,15,"GALERIA",Ink,true);
             Block(new Vector3(-96.5f,2.05f,5.67f),new Vector3(14.3f,3.2f,.22f),Ink,"Wood");
+            Block(new Vector3(-96.5f,.28f,5.59f),new Vector3(14.3f,.56f,.38f),Ink,"CityBrick");
             for(int i=0;i<3;i++){
                 float x=-101+i*4.5f;
                 Block(new Vector3(x,2.05f,5.46f),new Vector3(3.4f,2.5f,.15f),Cream,"Paper");

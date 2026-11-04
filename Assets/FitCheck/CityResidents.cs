@@ -19,7 +19,7 @@ namespace FitCheck
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
         public bool CustomerSpeaking;
-        const int ResidentArtRevision=21;
+        const int ResidentArtRevision=24;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
             if(IsInterior&&(cat==null||!cat.Ready))return false;

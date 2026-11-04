@@ -55,8 +55,7 @@ namespace FitCheck
                 if(!city.FittingOpen||!city.Free(new Vector2(-4.9f,5.15f)))throw new Exception("Cortina aberta bloqueia a passagem");
                 CaptureCurtainView(Path.Combine(folder,"shop-curtain-open.png"));
                 FinishShopFittingEntryIfReady();
-                if(stage!=Stage.Dressing||campaignBeforePreview==null)throw new Exception("Entrada não abriu prévia isolada depois da cortina");
-                outfit=new[]{"AH_TOP_01","AH_BOTTOM_01","AH_SHOES_01",""};Apply();
+                if(stage!=Stage.City||campaignBeforePreview!=null||shopFittingOpening)throw new Exception("Provador vazio abriu atendimento");
                 Home();storageOverride=proofStorage;
                 if(JsonUtility.ToJson(progress)!=before)throw new Exception("Prévia da loja alterou campanha");
                 EnterShop();if(city.FittingProgress!=0)throw new Exception("Cortina não fechou ao retornar");MoveProof(new Vector2(.4f,7.7f),180,7);SaveFirstPersonFrame(Path.Combine(folder,"shop-overview.png"));

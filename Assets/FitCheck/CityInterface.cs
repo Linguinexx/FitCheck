@@ -5,6 +5,7 @@ namespace FitCheck
     public partial class FirstCustomer
     {
         CityView city,street,shop;Color beforeCityBackground;CameraClearFlags beforeCityClearFlags;Material beforeCitySky;bool beforeCitySkyEnabled;
+        DayProgress shopBuiltCampaign;int shopBuiltDay;
         float beforeCityFov,beforeCityNearClip;bool cityFreeCursor,cityLookCaptured,cityDragLook;int cityLookReadyFrame;
         bool shopFittingOpening;
         static readonly bool CityProofMode=System.Array.IndexOf(System.Environment.GetCommandLineArgs(),"-city-proof")>=0;
@@ -13,7 +14,7 @@ namespace FitCheck
         {EnterSpace(false);}
         void EnterShop()
         {
-            bool resumeWork=stage==Stage.Post&&ShopOpen;
+            bool resumeWork=stage==Stage.Post&&ShopOpen||stage==Stage.Summary;
             shopService=false;EnterSpace(true);
             if(resumeWork){city.RestoreWalk(shopWorkPosition,shopWorkYaw,shopWorkPitch,mannequin);city.Frame(cam,true,0);}
             StartShopArrival();
@@ -28,10 +29,11 @@ namespace FitCheck
             studio.SetHome(false);beforeCityBackground=cam.backgroundColor;beforeCityFov=cam.fieldOfView;beforeCityNearClip=cam.nearClipPlane;
             studio.SetExploration(true);
             int nextCustomer=Mathf.Clamp(progress.posts.Count,0,8);
-            if(interior&&!home&&shop!=null&&shop.ShopCustomerIndex!=nextCustomer){shop.gameObject.SetActive(false);Destroy(shop.gameObject);shop=null;}
+            if(interior&&!home&&shop!=null&&(shop.ShopCustomerIndex!=nextCustomer||!ReferenceEquals(shopBuiltCampaign,progress)||shopBuiltDay!=progress.day)){shop.gameObject.SetActive(false);Destroy(shop.gameObject);shop=null;}
             city=home?homeRoom:interior?shop:street;
             if(city==null){city=new GameObject(home?"Casa — quarto do jogador":interior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(home)city.BuildHome();else if(interior)city.BuildShop(studio,nextCustomer);else city.Build(studio);if(home)homeRoom=city;else if(interior)shop=city;else street=city;}
             city.gameObject.SetActive(true);studio.PreviewProportions=false;studio.TallPreview=false;studio.HairOverride=-1;studio.ExpressionOverride=-1;
+            if(interior&&!home){shopBuiltCampaign=progress;shopBuiltDay=progress.day;}
             city.MouseLookScale=mouseSensitivity;
             if(interior&&!home)city.ApplyShopDecor(CurrentShopDecor);
             studio.PlayerLook=playerAppearance;studio.ApplyUniform(progress.uniform);city.ResetWalk(mannequin);city.PreparePlayerBody(studio);if(interior&&!home)city.ResetFittingCurtain();shopFittingOpening=false;stage=Stage.City;paused=false;showRequest=false;showDrops=false;
@@ -107,14 +109,13 @@ namespace FitCheck
         }
         static bool CityHitArea(Vector2 p)
         {
-            return new Rect(0,88,1440,812).Contains(p)&&!new Rect(28,100,415,65).Contains(p)&&!new Rect(1185,100,235,65).Contains(p);
+            return new Rect(0,0,1440,900).Contains(p);
         }
         void CityUI()
         {
             if(showShopDecor){ShopDecorUI();return;}
             if(ShopSequenceActive){ComicBubble(new Rect(455,740,530,125),ShopSequenceLabel,"DRIPLAB",1,false);return;}
             if(cityFreeCursor&&Tap(new Rect(38,111,350,48),"Clique para olhar  /  Tab")){cityFreeCursor=false;SyncCityCursor();}
-            if(cityFreeCursor&&Tap(new Rect(1200,111,203,48),"Voltar ao início"))ReturnToTitle();
             if(contextClock<regionUntil){RoundedPanel(new Rect(38,176,380,42),new Color(.035f,.03f,.035f,.84f));Txt(new Rect(52,183,352,28),contextRegion,caption,paper);}
             DrawAffordance();DrawAmbientBubble();ProcessCityEvent(Event.current);
         }
@@ -149,8 +150,8 @@ namespace FitCheck
         }
         string ShopActionLabel()
         {
-            if(shopFittingOpening)return "Abrindo o provador…";
-            switch(city.ShopInteraction){case 1:return progress.DayComplete?"Ver fechamento do expediente":!ShopOpen?"Abrir a loja":city.CustomerWaitingAtCounter?"Atender "+DayOne.Customers[progress.posts.Count].name:"Aguardando o cliente chegar…";case 2:return "Entrar no provador";case 3:return "Sair da loja";default:return "";}
+            if(shopFittingOpening)return city.FittingOpening?"Abrindo a cortina…":"Fechando a cortina…";
+            switch(city.ShopInteraction){case 1:return progress.DayComplete?"Ver fechamento do expediente":!ShopOpen?"Abrir a loja":city.CustomerWaitingAtCounter?"Atender "+DayOne.Customers[progress.posts.Count].name:"Aguardando o cliente chegar…";case 2:return city.FittingOpening?"Fechar a cortina":"Abrir a cortina";case 3:return "Sair da loja";default:return "";}
         }
         bool InteractShop()
         {
@@ -159,7 +160,7 @@ namespace FitCheck
             int action=city.ShopInteraction;if(action==0)return false;
             if(action==3){EnterStreetAt(CityView.StreetShopDoor,180);return true;}
             if(pendingPhotoBytes!=null&&!TrySave())return false;
-            if(action==2){shopFittingOpening=true;city.OpenFittingCurtain();return true;}
+            if(action==2){shopFittingOpening=true;city.ToggleFittingCurtain();return true;}
             if(progress.DayComplete){ExitCity();stage=Stage.Summary;return true;}
             if(!ShopOpen){OpenShopForDay();return true;}
             if(!city.CustomerWaitingAtCounter)return false;
@@ -168,8 +169,8 @@ namespace FitCheck
         }
         void FinishShopFittingEntryIfReady()
         {
-            if(!shopFittingOpening||paused||stage!=Stage.City||!city.FittingOpen)return;
-            ExitCity();stage=Stage.Welcome;PreviewSession();EnterDressing();UpdateCamera();SyncCityCursor();
+            if(!shopFittingOpening||paused||stage!=Stage.City||city.FittingMoving)return;
+            shopFittingOpening=false;
         }
     }
 }

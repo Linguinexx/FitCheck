@@ -387,3 +387,30 @@ Build 108,53 MB, zero erros/avisos; tools/print-style-proof.log terminou com có
 ### StreetArtwork — outdoors e botões da referência
 
 `-city-proof -street-art-review` verificou 16 artes, cinco outdoors com apoios, quatro cartazes externos, proporção/UV, rota residencial/comercial, preservação dos quadros internos, balões somente na rua, oito opções de decoração e saves isolados. tools/street-artwork-proof.log: código 0; build 121,43 MB, zero erros/avisos. Capturas reais em Captures/StreetArtwork: street-art-0 a street-art-5 e telas da interface. Botões neutros sem contorno, contorno apenas na seleção e relevo mantido, conforme referência do usuário.
+
+### MapPolish — fotos do usuário, túneis e araras
+
+CheckMapFinishing exige somente quatro vértices na base de calçada, UV global consistente, folhagem ao sul acima dos muros e bloqueio do jogador nos portais. Simula o carro atravessando os dois limites e o reaparecimento. CheckRackFit exige nove peças e limites de malha antes da cortina. Fluxo completo do atendimento valida alinhamento dos três drops com os trilhos reais, câmera, pausa, provador, saída e próximo cliente.
+
+HomeCommute e CityCompletion passaram em tools/map-polish-proof.log, medindo 31,50 / 31,10 s. A rodada inicial parou na expectativa antiga de coordenadas das araras; ela foi corrigida para as novas dimensões. A rodada final tools/map-polish-release-proof.log concluiu com código 0, incluindo atendimento completo, galeria e três saves isolados. Build final sem erros/avisos. Capturas em Captures/MapPolish: map-fixed-0 a map-fixed-5, rack-feet-connected e rack-curtain-clearance; vistas finais conferidas.
+
+
+### NormalFlow — revisão validada
+Compilação Unity 6000.6.7f1: 0 erros, 0 avisos, 121,44 MB (`tools/normal-flow-final-build.log`). Executável nativo com `-city-proof -normal-flow-review`: saída 0 (`tools/normal-flow-final-proof.log`).
+
+- Quatro alternâncias de cortina vazia: abre/fecha, pausa, continua em primeira pessoa, sem cliente novo, prévia ou alteração na campanha.
+- Cores independentes de GIF e LEDs nos materiais reais; Cancelar não grava, Salvar persiste e reentrada recupera. JSON antigo mantém valores válidos.
+- Capturas reais de UI: praça sem faixa, balcão sem catálogo sob a sacola, sem barra superior, pausa com três opções e aba Provador com prévia interna.
+- Regressões aprovadas: casa/bairro/loja, portas e retorno, guarda-roupa, FitFeed, abertura manual, cliente aguardando no balcão, acompanhamento ao provador, montagem, saída, postagem, próximo cliente, cancelamento e próximo dia; decoração, artes e três saves isolados.
+- A primeira rodada detectou cliente reaproveitado entre campanhas com mesmo índice; a loja agora invalida o cenário por campanha/dia. A rodada final completa passou após essa correção.
+
+Evidências: `Captures/NormalFlow/checks.txt`, `ui-plaza-no-strip.png`, `ui-counter-clean.png`, `ui-pause-simple.png`, `ui-fitting-lights.png`. Pacote `Builds/Windows-NormalFlow` e ZIP conferidos por hash dos fontes/binários e CRC.
+
+
+### GifGallery — validação final
+Unity 6000.6.7f1: compilação com 0 erros e 0 avisos, 121,44 MB (`tools/gif-gallery-build.log`). Executável com `-city-proof -gif-gallery-review`: saída 0 (`tools/gif-gallery-proof.log`).
+
+- Observador com corpo/pernas ativos, escala e altura apoiadas na sacada; base contínua da galeria oculta a antiga porta. Capturas nativas inspecionadas: `gallery-balcony-fixed.png` e `gallery-base-closed.png`.
+- Oito cores de fundo e oito de formas independentes no material real do GIF. Prévia roxo/verde e marinho/rosa, Cancelar, Salvar, reentrada e leitura dos arquivos antigos aprovados. Luzes físicas mantêm acabamento fixo.
+- Regressões aprovadas: alternância do provador vazio sem gerar clientes, campanha preservada, fluxo completo de atendimento, obras fornecidas, isolamento dos três saves, recuperação de backup e proteção de save corrompido.
+- Fontes, binários publicados e ZIP verificados por hash e CRC. Evidências em `Captures/GifGallery`; versão em `Builds/Windows-GifGallery/FitCheck.exe`.

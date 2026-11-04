@@ -75,7 +75,7 @@ Configurações está disponível no início e na pausa: sensibilidade do mouse 
 
 A decoração oferece oito cores de parede e oito de cortina, incluindo roxo, rosa, azul e turquesa. A cidade recebeu cores mais vivas, um morro com relevo e vegetação atrás da quadra, mural de passinho, espaço de batalha de rima, vinis, bicicleta e placas brasileiras em pontos específicos. O celular acompanha a mão do morador e a surpresa alterna uma reação breve com a boca em repouso.
 
-Build desta revisão: `Builds/Windows-StreetArtwork/FitCheck.exe`. Evidências e capturas reais da interface: `Captures/KaosCity`.
+Build desta revisão: `Builds/Windows-GifGallery/FitCheck.exe`. Evidências e capturas reais da interface: `Captures/KaosCity`.
 
 
 A revisão de identidade usa Montserrat nos textos e botões e Barlow Condensed nos títulos. As fontes e suas licenças acompanham o jogo em `Art/Fonts`. Botões secundários são neutros e reagem em Kaos ao mouse; a marca inicial vermelha tem movimento proporcional leve, desligado com movimento reduzido. O crédito do início é “A game by DripLab”.
@@ -92,3 +92,16 @@ Revisão GalleryFix: botões restaurados à aparência arredondada escura anteri
 
 
 Revisão StreetArtwork: cinco outdoors horizontais com estrutura/refletores distribuídos pelo trecho residencial, mercearia, oficina, quadra e casa de shows. Quatro cartazes ficam em fachadas e passagens. As artes inteiras e suas proporções são preservadas; o percurso permanece livre. Os botões seguem o formato arredondado da referência, com profundidade e contorno apenas nas opções selecionadas. O estado normal/hover não tem borda, encaixes ou recortes laterais.
+
+
+Revisão MapPolish: calçada externa contínua com escala/projeção de textura únicas, sem os remendos de chão e retângulos de terreno exposto. Palavra solta do café removida. Túneis modelados nos dois extremos da avenida permitem a passagem exclusiva do trânsito; o jogador permanece no bairro. O AP 03 recebeu parede traseira, janelas, teto do vestíbulo, acabamento da folha aberta e jardineiras. Copas que atravessavam muros foram substituídas por árvores menores enraizadas; novos canteiros ocupam áreas livres verificadas contra a arquitetura.
+
+Postes, bases, rodízios e roupas das araras usam posições comuns. As três araras foram redistribuídas com folga superior a um metro para a cortina, preservando os nove modelos de blusa. A reformulação artística do vestuário continua como etapa separada.
+
+
+Revisão NormalFlow: removida a faixa de asfalto sobreposta à calçada perto dos bancos e o objeto sob a sacola do balcão. No provador vazio, E somente abre/fecha a cortina; clientes continuam entrando pela porta e aguardando atendimento no balcão. F próximo ao balcão, antes de abrir a loja, permite personalizar a loja: aba Provador oferece cores independentes para cortina, fundo animado e LED, com prévia interna e salvar/cancelar por espaço.
+
+A barra fixa superior foi removida. Esc abre a pausa simplificada; o fechamento retorna à loja, e o FitFeed retorna ao quarto. Sem botões para viajar entre ambientes: use as portas do bairro. A cama cuida do descanso, o guarda-roupa da aparência/uniforme e a mesa do FitFeed. Executável atual: Builds/Windows-GifGallery/FitCheck.exe.
+
+
+Revisão GifGallery: o observador tem corpo completo e sacada dimensionada para apoiá-lo; a base da galeria foi fechada para ocultar a porta por trás. Em F → Provador, as duas escolhas do GIF são agora cor do fundo e cor das formas animadas, permitindo combinações como roxo/verde ou marinho/rosa. O padrão preto/roxo permanece disponível. A escolha de LED físico foi retirada da interface. As combinações possuem prévia, Cancelar e Salvar por espaço, com compatibilidade dos arquivos anteriores.

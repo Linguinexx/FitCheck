@@ -34,7 +34,7 @@ namespace FitCheck
                 CloseHomePanel();
                 if(stage!=Stage.City||!city.PlayerBodyReady||!city.IsHome)throw new Exception("Voltar ao quarto perdeu corpo/controle");
                 WalkWorldProof(CityView.HomeDesk);city.SetView(220,4);city.Frame(cam,true,0);SaveFirstPersonFrame(Path.Combine(folder,"home-shelf-supported.png"));
-                InteractHome();if(stage!=Stage.Home)throw new Exception("Celular inacessível");CloseHomePanel();
+                InteractHome();if(stage!=Stage.Retrospective)throw new Exception("Celular inacessível");CloseHomePanel();
                 WalkWorldProof(CityView.HomeBed);InteractHome();if(stage!=Stage.Home)throw new Exception("Cama inacessível");CloseHomePanel();
                 WalkWorldProof(CityView.HomeDoor);paused=true;if(InteractHome())throw new Exception("Pausa permitiu sair de casa");paused=false;
                 if(!InteractHome()||city.IsInterior||stage!=Stage.City||Vector2.Distance(city.Position,CityView.StreetHomeThreshold)>.01f)throw new Exception("Porta da casa não ligou ao vestíbulo residencial");

@@ -137,12 +137,12 @@ namespace FitCheck
         }
         void ShopFixtureDetails()
         {
-            for(int z=-2;z<=4;z+=3)for(int end=-1;end<=1;end+=2){
-                float pz=z+end*1.1f;
-                Rod(new Vector3(-7.2f,.10f,pz),new Vector3(-6.2f,.10f,pz),.045f,Ink,"CityMetal");
-                Rod(new Vector3(-7.2f,.25f,pz),new Vector3(-6.55f,.10f,pz),.032f,Ink,"CityMetal");
-                ShopRing(new Vector3(-6.22f,.07f,pz),Vector3.up*.06f,Vector3.forward*.06f,.025f,Ink);
-                for(float y=.45f;y<3;y+=.40f)Block(new Vector3(-7.15f,y,pz),new Vector3(.012f,.025f,.035f),Cream);
+            foreach(float z in ShopRackCenters)for(int end=-1;end<=1;end+=2){
+                float pz=z+end*ShopRackHalfLength;
+                Rod(new Vector3(-7.35f,.12f,pz),new Vector3(-6.45f,.12f,pz),.045f,Ink,"CityMetal");
+                Rod(new Vector3(-6.9f,.45f,pz),new Vector3(-6.45f,.12f,pz),.032f,Ink,"CityMetal");
+                foreach(float x in new[]{-7.30f,-6.50f})ShopRing(new Vector3(x,.035f,pz),Vector3.up*.06f,Vector3.forward*.06f,.025f,Ink);
+                for(float y=.45f;y<3;y+=.40f)Block(new Vector3(-6.94f,y,pz),new Vector3(.012f,.025f,.035f),Cream);
             }
             for(int support=0;support<4;support++){
                 float z=-2.3f+support*2.2f;

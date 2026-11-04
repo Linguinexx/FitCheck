@@ -95,12 +95,6 @@ namespace FitCheck
             bool modal=paused || settingsOpen || renderedStage==Stage.Confirm||pendingDeleteSlot>=0;
             GUI.enabled=!modal;
             if(renderedStage==Stage.Title)TitleUI();else{
-            // The header is deliberately quieter than the outfit.
-            Fill(new Rect(0,0,1440,88),new Color(.045f,.05f,.045f,.97f));
-            Txt(new Rect(38,22,280,45),"FIT CHECK",heading);
-            Txt(new Rect(244,33,180,28),"by DripLab",caption,muted);
-            Txt(new Rect(965,28,300,30),stage==Stage.Welcome?"SEUS PERSONAGENS":stage==Stage.City?(city.IsHome?"EM CASA":city.IsInterior?"DRIPLAB  /  LOJA":"PRAÇA DO ENCONTRO"):campaignBeforePreview!=null?"PRÉVIA  /  CAMPANHA PRESERVADA":"DIA 0"+progress.day+"  /  DRIPLAB",tiny,muted);
-            if(Tap(new Rect(1298,20,105,46),"Pausa"))paused=true;
             if(renderedStage==Stage.Welcome)WelcomeUI();
             if(renderedStage==Stage.Dialogue)DialogueUI();
             if(renderedStage==Stage.Dressing || renderedStage==Stage.Confirm)DressingUI();
@@ -259,7 +253,7 @@ namespace FitCheck
                 if(Tap(new Rect(1114,805,240,60),"Menu"))ReturnToTitle();
             }else if(fromHome){
                 if(Tap(new Rect(704,805,390,60),"Refazer nas condições originais",true))Replay();
-                if(Tap(new Rect(1114,805,240,60),"Voltar para casa"))GoHome();
+                if(Tap(new Rect(1114,805,240,60),"Voltar ao quarto"))CloseHomePanel();
             }else{
                 if(Tap(new Rect(704,805,390,60),progress.DayComplete?"Fechar expediente  →":"Próximo cliente  →",true)){if(progress.DayComplete)stage=Stage.Summary;else if(shopService){shopService=false;EnterShop();}else Begin();}
                 if(Tap(new Rect(1114,805,240,60),"Menu"))ReturnToTitle();

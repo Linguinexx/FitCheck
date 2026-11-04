@@ -65,13 +65,13 @@ namespace FitCheck
             Rod(new Vector3(-7.5f,4.38f,7.9f),new Vector3(7.5f,4.38f,7.9f),.065f,Kaos,"CityMetal");
             Rod(new Vector3(7.5f,4.38f,7.9f),new Vector3(7.5f,.2f,7.9f),.065f,Kaos,"CityMetal");
         }
+        static readonly float[] ShopRackCenters={-2.6f,.1f,2.8f};
+        public const float ShopRackHalfLength=1.2f;
+        public static float ShopRackCenter(int drop){return ShopRackCenters[drop];}
         void ShopFixtures()
         {
             // Back counter, with access around its left side rather than a blocked full-width wall.
             ShopDetailedCounter();
-            Block(new Vector3(2.1f,1.675f,6.35f),new Vector3(.7f,.065f,.8f),Kaos,"Paper");
-            Block(new Vector3(2.1f,1.715f,6.35f),new Vector3(.61f,.015f,.7f),Cream,"Paper");
-            Block(new Vector3(2.1f,1.727f,6.35f),new Vector3(.45f,.01f,.08f),Kaos,"Leather");
             Block(new Vector3(0,1.1f,8.70f),new Vector3(2.2f,2.2f,.30f),Cream,"CityStucco");
             obstacles.Add(new Rect(-1.1f,8.55f,2.2f,.4f));
             obstacles.Add(new Rect(1.45f,5.45f,5.9f,1.6f));
@@ -81,12 +81,12 @@ namespace FitCheck
             ShopDetailedTable();
             obstacles.Add(new Rect(-3.3f,-.75f,3.4f,2.1f));
             // Wall rail, hangers and shoe shelving.
-            for(int z=-2;z<=4;z+=3){
-                Rod(new Vector3(-6.9f,.05f,z-1.35f),new Vector3(-6.9f,3.1f,z-1.35f),.035f,Ink,"CityMetal");
-                Rod(new Vector3(-6.9f,.05f,z+1.35f),new Vector3(-6.9f,3.1f,z+1.35f),.035f,Ink,"CityMetal");
-                Rod(new Vector3(-6.9f,3.1f,z-1.35f),new Vector3(-6.9f,3.1f,z+1.35f),.035f,Ink,"CityMetal");
+            foreach(float z in ShopRackCenters){
+                Rod(new Vector3(-6.9f,.12f,z-ShopRackHalfLength),new Vector3(-6.9f,3.1f,z-ShopRackHalfLength),.035f,Ink,"CityMetal");
+                Rod(new Vector3(-6.9f,.12f,z+ShopRackHalfLength),new Vector3(-6.9f,3.1f,z+ShopRackHalfLength),.035f,Ink,"CityMetal");
+                Rod(new Vector3(-6.9f,3.1f,z-ShopRackHalfLength),new Vector3(-6.9f,3.1f,z+ShopRackHalfLength),.035f,Ink,"CityMetal");
             }
-            obstacles.Add(new Rect(-7.7f,-3.25f,1.8f,8.6f));
+            obstacles.Add(new Rect(-7.7f,-4.0f,1.8f,8.1f));
             for(int level=0;level<3;level++){
                 float y=.75f+level*1.05f;
                 ShopRoundedSolid(new Vector3(7.15f,y,1.1f),new Vector3(1.05f,.13f,7.9f),.16f,Cream,"Wood");
@@ -94,7 +94,7 @@ namespace FitCheck
                 ShopShoeBox(new Vector3(7.15f,y+.065f,3.6f),level==0?Ink:level==1?new Color(.20f,.34f,.22f):Cream);
             }
             obstacles.Add(new Rect(6.55f,-3,1.15f,8.0f));
-            int[] prints={1,7,3};for(int i=0;i<3;i++)FramedPrint("Quadro da arara "+i,new Vector3(-7.65f,3.92f,-2+i*3),-90,prints[i],new Vector2(2.1f,1.15f));
+            int[] prints={1,7,3};for(int i=0;i<3;i++)FramedPrint("Quadro da arara "+i,new Vector3(-7.65f,3.92f,ShopRackCenters[i]),-90,prints[i],new Vector2(2.1f,1.15f));
             FramedPrint("Quadro Crie — tênis",new Vector3(7.65f,3.96f,-.3f),90,4,new Vector2(1.8f,1.1f));
             FramedPrint("Quadro Get Rich — tênis",new Vector3(7.65f,3.96f,2.5f),90,6,new Vector2(1.8f,1.1f));
             // Seat near the entrance, outside the central path.
@@ -117,7 +117,7 @@ namespace FitCheck
             var panel=LiveBox("Painel abstrato do provador",new Vector3(-4.9f,2.1f,8.59f),new Vector3(2.3f,3.3f,.04f),Color.white,"CityMetal");
             var abstractMaterial=new Material(Resources.Load<Shader>("AbstractBackdrop"));abstractMaterial.mainTexture=Resources.Load<Texture2D>("Painted/AbstractFlow");assets.Add(abstractMaterial);
             panel.GetComponent<MeshRenderer>().sharedMaterial=abstractMaterial;
-            for(int side=-1;side<=1;side+=2)Block(new Vector3(-4.9f+side*1.25f,2.1f,8.50f),new Vector3(.045f,3.5f,.06f),FittingPurple,"CityGlow");
+            for(int side=-1;side<=1;side+=2)LiveBox("LED do provador "+side,new Vector3(-4.9f+side*1.25f,2.1f,8.50f),new Vector3(.045f,3.5f,.06f),Color.white,"CityGlow");
             Block(new Vector3(-6.7f,.55f,7.2f),new Vector3(.75f,.18f,1.5f),Cream,"Wood");
             obstacles.Add(new Rect(-7.15f,6.35f,.9f,1.7f));
         }
@@ -127,7 +127,7 @@ namespace FitCheck
             try{
                 string[] drops={"SB","AH","CG"};
                 for(int drop=0;drop<3;drop++)for(int piece=0;piece<3;piece++){
-                    float z=-2+drop*3+(piece-1)*.87f;
+                    float z=ShopRackCenters[drop]+(piece-1)*.68f;
                     var outfit=new[]{drops[drop]+"_TOP_0"+(piece+1),"SB_BOTTOM_01","SB_SHOES_01",""};
                     ShopGarment(studio,outfit,new Vector3(-6.9f,.70f,z),-90,false);
                     Rod(new Vector3(-6.9f,3.1f,z),new Vector3(-6.9f,2.98f,z),.018f,Cream,"CityMetal");
@@ -143,7 +143,7 @@ namespace FitCheck
         {
             studio.Apply(outfit,0);var display=CopyAvatar(studio,shoes?"Tênis em exposição":"Peça na arara",position,yaw,true);
             display.root.name+=(" — "+(shoes?outfit[2]:outfit[0]));
-            if(!shoes)display.root.localScale=new Vector3(.65f,1,1);
+            if(!shoes)display.root.localScale=new Vector3(.60f,1,1);
             foreach(var renderer in display.root.GetComponentsInChildren<MeshRenderer>()){
                 string n=renderer.name;
                 if(!shoes&&n=="Capuz")renderer.transform.localPosition-=Vector3.up*.32f;

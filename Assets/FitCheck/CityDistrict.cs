@@ -9,7 +9,6 @@ namespace FitCheck
         const float DistrictGroundFloor=4.7f,DistrictUpperFloor=4.1f;
         void BackgroundDistrict()
         {
-            Ground(0,24.2f,210,7,-.04f,Color.white,"CityAsphalt",4);
             Ground(0,29.4f,210,3.5f,-.035f,Cream,"CityStone",4.7f);
             for(int i=0;i<13;i++){
                 float x=-84+i*14,z=76+(i%3)*9;
@@ -18,7 +17,7 @@ namespace FitCheck
             }
             for(int side=1;side<=1;side+=2){
                 Ground(side*31.2f,1,4.4f,83,-.035f,Cream,"CityStone",4.7f);
-                for(int i=0;i<6;i++)Residence(side*(38+i%2*6),-29+i*11,2+i%2,12.8f,10.5f,i%2==0?Teal:Peach,-side,i+7);
+                for(int i=0;i<6;i++){if(i==1||i==2)continue;Residence(side*(38+i%2*6),-29+i*11,2+i%2,12.8f,10.5f,i%2==0?Teal:Peach,-side,i+7);}
             }
         }
         void Residence(float x,float z,int floors,float width,float depth,Color color,int sideFacing,int seed)
@@ -77,6 +76,13 @@ namespace FitCheck
         }
         void FrontBalcony(float x,float y,float z)
         {
+            if(Mathf.Abs(x+100.3f)<.01f){
+                Block(new Vector3(x,y,z-.25f),new Vector3(3.1f,.18f,1.7f),Cream);
+                for(int post=0;post<7;post++)Rod(new Vector3(x-1.45f+post*.4833f,y+.1f,z-1),new Vector3(x-1.45f+post*.4833f,y+.95f,z-1),.025f,Ink,"Leather",6);
+                Rod(new Vector3(x-1.45f,y+.95f,z-1),new Vector3(x+1.45f,y+.95f,z-1),.035f,Ink,"Leather",6);
+                foreach(float side in new[]{-1f,1f})Rod(new Vector3(x+side*1.45f,y+.95f,z-1),new Vector3(x+side*1.45f,y+.95f,z+.55f),.035f,Ink,"Leather",6);
+                return;
+            }
             Block(new Vector3(x,y,z),new Vector3(2.7f,.18f,.75f),Cream);
             for(int post=0;post<5;post++)Rod(new Vector3(x-1.2f+post*.6f,y+.1f,z-.34f),new Vector3(x-1.2f+post*.6f,y+.8f,z-.34f),.022f,Ink,"Leather",5);
             Rod(new Vector3(x-1.2f,y+.8f,z-.34f),new Vector3(x+1.2f,y+.8f,z-.34f),.03f,Ink,"Leather",5);

@@ -45,8 +45,7 @@ namespace FitCheck
             Txt(new Rect(490,330,460,45),"Seu atendimento continua daqui.",caption,muted);
             if(Tap(new Rect(490,398,460,58),"Retomar",true)){paused=false;cityFreeCursor=false;}
             if(Tap(new Rect(490,474,460,52),"Configurações"))OpenSettings(true);
-            if(Tap(new Rect(490,544,460,52),"Salvar novamente",false,activeSaveSlot>=0||ProofMode))TrySave();
-            if(Tap(new Rect(490,614,460,52),"Voltar ao início")){paused=false;ReturnToTitle();}
+            if(Tap(new Rect(490,544,460,52),"Voltar ao início")){paused=false;ReturnToTitle();}
         }
     }
 }

@@ -71,13 +71,16 @@ namespace FitCheck
         void EnterStreetAt(Vector2 position,float yaw)
         {if(stage==Stage.Home&&city!=null&&city.IsHome)ExitCity();EnterCity();city.RestoreWalk(position,yaw,-4,mannequin);city.Frame(cam,true,0);}
         void CloseHomePanel()
-        {stage=Stage.City;city=homeRoom;paused=false;cityFreeCursor=false;mannequin.gameObject.SetActive(true);studio.ApplyUniform(progress.uniform);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);SyncCityCursor(true);}
+        {
+            if(homeRoom!=null&&!homeRoom.gameObject.activeSelf){var position=homeRoom.Position;float yaw=homeRoom.ViewYaw,pitch=homeRoom.ViewPitch;EnterHome();city.RestoreWalk(position,yaw,pitch,mannequin);}
+            stage=Stage.City;city=homeRoom;paused=false;cityFreeCursor=false;mannequin.gameObject.SetActive(true);studio.ApplyUniform(progress.uniform);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);city.Frame(cam,true,0);SyncCityCursor(true);
+        }
         bool InteractHome()
         {
             if(paused||stage!=Stage.City||!city.IsHome)return false;
             int action=city.HomeInteraction;if(action==0)return false;
             if(action==1){EnterStreetAt(CityView.StreetHomeThreshold,180);homeDoorExitRemaining=.95f;return true;}
-            showWardrobe=action==2;homeWardrobeRotation=-12;stage=Stage.Home;cityFreeCursor=true;SyncCityCursor(true);return true;
+            showWardrobe=action==2;homeWardrobeRotation=-12;fromHome=true;stage=action==4?Stage.Retrospective:Stage.Home;cityFreeCursor=true;SyncCityCursor(true);return true;
         }
         bool InteractStreet()
         {

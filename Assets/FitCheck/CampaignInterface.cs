@@ -60,12 +60,9 @@ namespace FitCheck
             Txt(new Rect(48,260,500,125),intro,copy,muted);
             if(!showWardrobe){
                 if(!progress.DayComplete&&Tap(new Rect(48,413,500,60),"Voltar ao quarto  →",true))CloseHomePanel();
-                if(progress.DayComplete&&!progress.closed&&Tap(new Rect(48,413,500,60),"Concluir fechamento  →",true))stage=Stage.Summary;
+                if(progress.DayComplete&&!progress.closed)Txt(new Rect(48,413,500,80),"Feche o expediente no balcão da DripLab antes de descansar.",copy,muted);
                 if(progress.closed&&!progress.Complete&&Tap(new Rect(48,413,500,60),"Dormir e começar o próximo dia  →",true)){progress.Advance();TrySave();GoHome();}
                 if(progress.Complete&&Tap(new Rect(48,413,500,60),"Receber recompensas pendentes",true)){progress.Deliver();TrySave();}
-                if(Tap(new Rect(48,495,500,56),"Celular  /  FitFeed",false,progress.posts.Count>0)){fromHome=true;stage=Stage.Retrospective;}
-                if(Tap(new Rect(48,572,500,56),"Guarda-roupa  /  Uniformes"))showWardrobe=true;
-                if(Tap(new Rect(48,640,500,48),"Editar meu personagem"))OpenCreator(Stage.Home);
                 Txt(new Rect(48,700,500,40),"Reputação "+progress.reputation+"   /   "+progress.Available.Length+" peças disponíveis",copy,violet);
                 Txt(new Rect(48,755,500,44),progress.achievements.Count+" de 3 conquistas   /   "+progress.posts.Count+" de 9 publicações",caption,muted);
             }else{
@@ -75,7 +72,7 @@ namespace FitCheck
                     bool unlocked=i==0||progress.achievements.Contains(UniformAwards[i]);
                     if(Tap(new Rect(48,407+i*74,500,61),(progress.uniform==i?"✓ ":"")+UniformNames[i]+(unlocked?"":"  /  bloqueado"),progress.uniform==i,unlocked)){progress.uniform=i;studio.ApplyUniform(i);TrySave();}
                 }
-                if(Tap(new Rect(48,725,500,50),"Voltar"))showWardrobe=false;
+                if(Tap(new Rect(48,725,500,50),"Editar meu personagem"))OpenCreator(Stage.Home);
             }
             if(Tap(new Rect(48,817,200,45),"Menu principal"))ReturnToTitle();
             if(Tap(new Rect(260,817,288,45),"Voltar ao quarto"))CloseHomePanel();
@@ -100,7 +97,7 @@ namespace FitCheck
                 }
             }else{
                 Txt(new Rect(96,640,1200,90),progress.rewards.Count>0?"Peças conquistadas: "+string.Join("  /  ",progress.rewards):"Novos visuais podem melhorar sua Reputação. A campanha continua mesmo com notas baixas.",copy,violet);
-                if(Tap(new Rect(96,769,510,67),"Voltar para casa  →",true))GoHome();
+                if(Tap(new Rect(96,769,510,67),"Voltar à loja  →",true)){shopService=false;EnterShop();}
             }
             Txt(new Rect(645,779,680,70),message,caption,muted);
         }
@@ -109,7 +106,7 @@ namespace FitCheck
             Fill(new Rect(0,88,1440,812),surface);
             Txt(new Rect(48,117,900,55),progress.Complete?"A semana no seu olhar.":"FitFeed  /  Suas histórias",heading);
             Txt(new Rect(48,174,1110,35),progress.posts.Count+" publicações   /   Reputação "+progress.reputation+"   /   Abra uma foto para rever ou refazer em casa.",caption,muted);
-            if(Tap(new Rect(1190,120,200,48),"Voltar para casa"))GoHome();
+            if(Tap(new Rect(1190,120,200,48),"Voltar ao quarto"))CloseHomePanel();
             for(int i=0;i<progress.posts.Count;i++){
                 var rect=new Rect(48+(i%3)*453,232+(i/3)*211,430,193);Fill(rect,new Color(.14f,.115f,.18f));
                 var tex=FeedPhoto(progress.posts[i].photo);if(tex!=null)GUI.DrawTexture(new Rect(rect.x+10,rect.y+10,173,173),tex,ScaleMode.ScaleToFit);

@@ -40,7 +40,7 @@ namespace FitCheck
         {
             Ground(0,10,150,110,-.21f,new Color(.31f,.39f,.32f),"Plaster",8);
             Pavement();
-            Ground(0,-13.7f,150,5.2f,-.018f,Color.white,"CityAsphalt",4);
+            Ground(-53,-13.7f,206,5.2f,-.018f,Color.white,"CityAsphalt",4);
             Block(new Vector3(0,-.01f,-10.95f),new Vector3(56,.25f,.30f),Cream,"Plaster",.045f);
             for(int i=0;i<7;i++)Ground(-18,-15.7f+i*.65f,4.0f,.35f,-.012f,Cream,"Leather");
             for(int i=-5;i<=5;i++)Ground(i*5.2f,-14.7f,2.4f,.10f,-.010f,new Color(.77f,.65f,.36f),"Leather");
@@ -67,19 +67,11 @@ namespace FitCheck
                 var p=new Vector3(Mathf.Lerp(-24,26,a),9.7f-Mathf.Sin(a*Mathf.PI)*2,6.0f);var q=new Vector3(Mathf.Lerp(-24,26,b),9.7f-Mathf.Sin(b*Mathf.PI)*2,6.0f);Rod(p,q,.015f,Ink,"Leather",5);
             }
         }
+        bool unifiedStreetPavement;
         void Pavement()
         {
-            var batch=Get("CityStone");
-            for(int x=-29;x<29;x++)for(int z=-17;z<16;z++){
-                int index=batch.v.Count;var points=new[]{new Vector3(x,-.04f,z),new Vector3(x,-.04f,z+1),new Vector3(x+1,-.04f,z+1),new Vector3(x+1,-.04f,z)};
-                foreach(var p in points){
-                    float tree=new Vector2((p.x+11)/4.2f,(p.z+.7f)/3.1f).magnitude;
-                    float canopy=Mathf.Clamp01((3.8f-p.z)/2.0f)*Mathf.Clamp01((p.z-.6f)/1.5f)*Mathf.Clamp01((8.7f-Mathf.Abs(p.x-7.5f))/1.0f);
-                    float shade=1-.20f*(1-Mathf.SmoothStep(.2f,1,tree))-.15f*canopy;
-                    batch.v.Add(p);batch.n.Add(Vector3.up);batch.c.Add(Cream*shade);batch.uv.Add(new Vector2(p.x/4.7f,p.z/4.7f));
-                }
-                batch.t.AddRange(new[]{index,index+1,index+2,index,index+2,index+3});
-            }
+            unifiedStreetPavement=true;
+            Quad(new Vector3(WalkBounds.xMin-1,-.04f,WalkBounds.yMin-1),new Vector3(WalkBounds.xMin-1,-.04f,WalkBounds.yMax+1),new Vector3(WalkBounds.xMax+1,-.04f,WalkBounds.yMax+1),new Vector3(WalkBounds.xMax+1,-.04f,WalkBounds.yMin-1),Cream,"CityStone",4.7f);
         }
     }
 }
