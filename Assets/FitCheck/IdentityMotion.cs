@@ -3,11 +3,11 @@ namespace FitCheck
 {
     public partial class FirstCustomer
     {
-        void DrawAnimatedTitleLogo(Rect rect)
+        void DrawAnimatedTitleLogo(Rect rect,float? clock=null)
         {
-            float t=reducedMotion?0:titleSceneTime;float pulse=reducedMotion?1:1+.018f*Mathf.Sin(t*1.8f);
+            float t=reducedMotion?0:(clock??titleSceneTime);float pulse=reducedMotion?1:1+.018f*Mathf.Sin(t*1.8f);
             var r=new Rect(rect.center.x-rect.width*pulse/2,rect.center.y-rect.height*pulse/2+(reducedMotion?0:Mathf.Sin(t*1.2f)*3),rect.width*pulse,rect.height*pulse);
-            var old=GUI.color;GUI.color=new Color(0,0,0,.4f);GUI.DrawTexture(new Rect(r.x+3,r.y+5,r.width,r.height),titleLogo,ScaleMode.ScaleToFit);GUI.color=old;
+            var old=GUI.color;GUI.color=new Color(0,0,0,.4f*old.a);GUI.DrawTexture(new Rect(r.x+3,r.y+5,r.width,r.height),titleLogo,ScaleMode.ScaleToFit);GUI.color=old;
             GUI.DrawTexture(r,titleLogo,ScaleMode.ScaleToFit);
         }
     }

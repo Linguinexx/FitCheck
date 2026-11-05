@@ -1,5 +1,16 @@
 # DevLog
 
+## 04/11/2026 — Desempenho, frente da rua e loadings
+
+A atualização completa da loja caiu de 9,10 para 2,42 ms ao caminhar olhando para frente e de 9,02 para 4,60 ms olhando para baixo, no teste nativo da mesma máquina. Matrizes afins usam campos diretos; o corpo do jogador mantém movimento/relógios, mas só deforma as roupas quando pode entrar na câmera. A pose completa é restaurada imediatamente na vista para baixo e nas câmeras externas. Esses números medem CPU Update; o quadro completo continuou limitado a 60 FPS nas duas versões.
+
+A frente da rua recebeu a loja de discos SIDE B e uma oficina de bikes com residências superiores, vitrines, toldos, canteiros, banco e bicicleta. Geometria estática compartilha materiais e lotes existentes, mantendo 411 renderizadores. Percurso casa–loja permanece em 31,50/31,10 s. Texto do balão fixa a cor nos oito estados da GUI; capturas normal/hover são idênticas na área do texto.
+
+Jogar, abertura/criação de save e entradas/saídas de casa/loja usam uma cobertura de loading antes do trabalho de preparação. Logo vermelha reaproveita o pulso/flutuação do menu; fundo preto com diagonais Kaos discretas em teste; Loading com 0–3–0 pontos. Bloqueia movimento, interação repetida e pausa até o destino estar pronto; respeita movimento reduzido e restaura o cursor de menus/exploração. Sem porcentagem fictícia. O preparo atual de cada destino continua síncrono, sob a cobertura; não se trata de streaming assíncrono do mapa.
+
+Pendência solicitada: refazer os tênis em uma etapa própria; discutir referências e silhuetas antes de remodelar.
+
+
 ## 03/11/2026 — Cidade distribuída, moradores, corrida e loja personalizável
 
 O estúdio de seleção/criação passa a ocultar explicitamente seus renderizadores cenográficos durante a exploração, preservando avatar-fonte, câmera e luz. Sair restaura o cenário do menu. Corrige a seleção aparecendo distante no bairro, além do isolamento anterior da quitinete/fotos.

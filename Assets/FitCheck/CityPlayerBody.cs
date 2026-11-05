@@ -27,13 +27,15 @@ namespace FitCheck
                 for(int part=0;part<playerBody.parts.Count;part++)if(playerBody.parts[part].head||playerBody.root.GetChild(part).name=="Pescoço")playerHeadPieces.Add(playerBody.root.GetChild(part).gameObject);
                 foreach(var piece in playerHeadPieces)piece.SetActive(false);
                 for(int i=first;i<assets.Count;i++)playerBodyAssets.Add(assets[i]);
-                StepPlayerBody(0,0);
+                StepPlayerBody(0,0);EnsurePlayerPose();
             }finally{studio.Avatar.rotation=rotation;}
         }
         public void FramePlayerForCamera(Camera camera,bool external)
         {
             if(!PlayerBodyReady)return;
             PlayerBodyVisible=true;
+            // Final camera is authoritative, including the fitting-room follow.
+            if(external||ViewPitch>20)EnsurePlayerPose();
             bool showHead=external&&Vector3.Distance(camera.transform.position,playerBody.root.TransformPoint(new Vector3(0,2.8f,0)))>1.25f;
             foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(showHead&&PlayerFaceVisible(piece));
             if(shadow!=null){shadow.localPosition=new Vector3(Position.x,.005f,Position.y);shadow.gameObject.SetActive(external&&showHead);}
@@ -49,6 +51,15 @@ namespace FitCheck
             actor.root.localRotation=Quaternion.Euler(0,ViewYaw+180,0);
             var forward=Quaternion.Euler(0,ViewYaw,0)*Vector3.forward;
             actor.root.localPosition=new Vector3(Position.x,-.055f-dip,Position.y)-forward*.38f;
+            // A forward first-person camera cannot see the body below its frustum.
+            // Keep clocks/root movement live; recover the exact pose before it can
+            // enter view. The generous 20-degree threshold includes all clothing.
+            if(ViewPitch>20||PlayerHeadVisible)EnsurePlayerPose();
+        }
+        void EnsurePlayerPose()
+        {
+            var actor=playerBody;
+            float dip=actor.blend*(.035f+.005f*Mathf.Cos(actor.phase*Mathf.PI*4));
             if(playerPoseCycle!=actor.cycle||playerPosePhase!=actor.phase||playerPoseBlend!=actor.blend){
                 PoseResident(actor,4,dip);playerPoseCycle=actor.cycle;playerPosePhase=actor.phase;playerPoseBlend=actor.blend;playerPoseBlink=actor.blinkClock;
             }else if(playerPoseBlink!=actor.blinkClock){AdvanceStillBlink(actor,4,0);playerPoseBlink=actor.blinkClock;}

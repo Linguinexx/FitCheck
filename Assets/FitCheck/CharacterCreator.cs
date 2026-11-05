@@ -60,7 +60,7 @@ namespace FitCheck
             Txt(new Rect(1074,506,330,25),PlayerAppearance.ColorNames[creatorDraft.hairColor],tiny,muted);
             Txt(new Rect(1074,559,330,32),"Expressão",caption);
             for(int i=0;i<6;i++)if(CreatorButton(new Rect(1074+i%2*166,607+i/2*57,156,45),PlayerAppearance.FaceNames[i],creatorDraft.expression==i)){creatorDraft.expression=i;RefreshCreator();}
-            if(CreatorButton(new Rect(1074,809,330,58),"Salvar personagem",true,!string.IsNullOrWhiteSpace(creatorDraft.name)))SaveCreator();
+            if(CreatorButton(new Rect(1074,809,330,58),"Salvar personagem",true,!string.IsNullOrWhiteSpace(creatorDraft.name)))BeginLoading(()=>{SaveCreator();});
             if(CreatorButton(new Rect(28,808,320,54),"Voltar sem salvar"))CancelCreator();
             if(CreatorButton(new Rect(420,807,200,45),"↶ Girar")){rotation-=45;UpdateCamera();}
             if(CreatorButton(new Rect(640,807,200,45),"Girar ↷")){rotation+=45;UpdateCamera();}

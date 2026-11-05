@@ -7,7 +7,7 @@ namespace FitCheck
     public partial class FirstCustomer
     {
         // Proof-only IMGUI container: draw the real controls into the same native camera target.
-        void CaptureInterface(string path)
+        void CaptureInterface(string path,Vector2? pointer=null)
         {
             if(!ProofMode)throw new InvalidOperationException("Interface capture requires proof mode");
             var flags=BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic;var gui=typeof(GUIUtility);
@@ -20,7 +20,7 @@ namespace FitCheck
             try{
                 arrivalFade=0;photoFlash=0;cam.targetTexture=rt;cam.aspect=1.6f;cam.Render();RenderTexture.active=rt;
                 begin.Invoke(null,new[]{state});container=true;beginGui.Invoke(null,new object[]{0,entity,0});
-                Event.current=new Event{type=EventType.Repaint,mousePosition=new Vector2(-100,-100)};
+                Event.current=new Event{type=EventType.Repaint,mousePosition=pointer??new Vector2(-100,-100)};
                 GL.PushMatrix();pushed=true;GL.LoadPixelMatrix(0,1440,900,0);OnGUI();end.Invoke(null,null);container=false;
                 GL.Flush();RenderTexture.active=rt;tex.ReadPixels(new Rect(0,0,1440,900),0,0);tex.Apply();File.WriteAllBytes(path,tex.EncodeToPNG());
                 Debug.Log("FITCHECK_INTERFACE_CAPTURED: "+path);

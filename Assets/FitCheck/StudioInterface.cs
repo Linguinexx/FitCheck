@@ -69,7 +69,13 @@ namespace FitCheck
         void Fill(Rect r,Color c)
         {var old=GUI.color;GUI.color=c;GUI.DrawTexture(r,Texture2D.whiteTexture);GUI.color=old;}
         void Txt(Rect r,string text,GUIStyle style,Color? color=null)
-        {style.normal.textColor=color??paper;GUI.Label(r,text,style);}
+        {SetLabelInk(style,color??paper);GUI.Label(r,text,style);}
+        static void SetLabelInk(GUIStyle style,Color ink)
+        {
+            // Label hover inherits the skin color unless explicitly overridden.
+            style.normal.textColor=ink;style.hover.textColor=ink;style.active.textColor=ink;style.focused.textColor=ink;
+            style.onNormal.textColor=ink;style.onHover.textColor=ink;style.onActive.textColor=ink;style.onFocused.textColor=ink;
+        }
         void Rule(float x,float y,float w){Fill(new Rect(x,y,w,1),line);}
         bool Tap(Rect r,string label,bool primary=false,bool enabled=true)
         {
@@ -79,6 +85,7 @@ namespace FitCheck
         }
         void OnGUI()
         {
+            if(loadingActive){DrawLoadingScreen();return;}
             var originalMatrix=GUI.matrix;var originalEnabled=GUI.enabled;
             var originalColor=GUI.color;var originalContent=GUI.contentColor;var originalBackground=GUI.backgroundColor;
             GUI.color=Color.white;GUI.contentColor=Color.white;GUI.backgroundColor=Color.white;
@@ -125,6 +132,7 @@ namespace FitCheck
             if(settingsOpen)SettingsUI();
             DrawAchievement();
             DrawPresentation();
+            if(loadingActive)DrawLoadingScreen();
             GUI.matrix=originalMatrix;GUI.enabled=originalEnabled;
             GUI.color=originalColor;GUI.contentColor=originalContent;GUI.backgroundColor=originalBackground;
         }

@@ -20,7 +20,7 @@ namespace FitCheck
                 for(int i=0;i<6;i++){if(i==1||i==2)continue;Residence(side*(38+i%2*6),-29+i*11,2+i%2,12.8f,10.5f,i%2==0?Teal:Peach,-side,i+7);}
             }
         }
-        void Residence(float x,float z,int floors,float width,float depth,Color color,int sideFacing,int seed)
+        void Residence(float x,float z,int floors,float width,float depth,Color color,int sideFacing,int seed,bool commercial=false)
         {
             obstacles.Add(new Rect(x-width*.5f,z-depth*.5f,width,depth));
             float height=DistrictGroundFloor+(floors-1)*DistrictUpperFloor,front=z-depth*.5f;
@@ -35,6 +35,7 @@ namespace FitCheck
             for(int floor=0;floor<floors;floor++){
                 float y=floor==0?2.30f:DistrictGroundFloor+(floor-1)*DistrictUpperFloor+DistrictUpperFloor*.5f;
                 for(int bay=0;bay<3;bay++){
+                    if(commercial&&floor==0)continue;
                     float px=x+(bay-1)*3.8f;
                     if(floor==0&&bay==1)ResidenceDoor(px,front-.15f);
                     else{

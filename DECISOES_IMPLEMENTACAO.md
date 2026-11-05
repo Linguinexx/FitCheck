@@ -40,3 +40,10 @@ Revisão posterior: cliente espera apoiado na parede com um pé levantado e sorr
 Pendências adiadas por pedido do usuário (03/11/2026):
 - O lado da rua em frente à DripLab está vazio; planejar fachadas e detalhes de bairro, preservando passagem, escala e estilo gráfico. Não implementar agora.
 - No balão de fala do cliente, passar o mouse sobre o texto deixa as letras brancas e ilegíveis. Corrigir o estado de hover para manter contraste com o fundo do balão. Não implementar agora.
+
+
+## 04/11/2026 — Loadings e próxima revisão de calçados
+
+Loading aprovado para Jogar e entradas/saídas da casa/loja: logo vermelha com o efeito do menu, Loading com pontos abaixo. Usuário ainda considera fundo preto ou diagonais pretas/vermelhas; primeira implementação combina preto e diagonais Kaos discretas. Sem barra de progresso artificial. Manter o fluxo título → saves → criação/casa, a loja fechada até abertura manual e o percurso físico pelo bairro.
+
+**Pendente: refazer os tênis**, conforme solicitação do usuário. Modelos atuais não são a versão final; retomar referências e silhuetas antes da produção da nova coleção.

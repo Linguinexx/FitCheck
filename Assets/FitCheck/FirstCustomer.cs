@@ -82,19 +82,25 @@ namespace FitCheck
         }
         void Update()
         {
+            if(loadingActive){loadingClock+=Time.unscaledDeltaTime;return;}
+            ShopProbeMark(0);
             studio.Talking=stage==Stage.Dialogue&&!paused;
             if(city!=null)city.CustomerSpeaking=stage==Stage.Dialogue&&shopService&&!paused;
             var retro=cam.GetComponent<RetroCamera>();retro.ReducedMotion=reducedMotion;retro.Paused=paused;retro.Filter=retroFilter;
             studio.ReducedMotion=reducedMotion;studio.Animate(Time.deltaTime,!paused);
+            ShopProbeMark(1);
             if(stage==Stage.City)UpdateCity(Time.deltaTime);
+            ShopProbeMark(2);
             if(!paused){if(stage==Stage.Dialogue&&shopService)shopCameraTime+=Time.unscaledDeltaTime;if(shopDressingInStore)shopDressingTime+=Time.unscaledDeltaTime;}
             UpdateCamera();
+            ShopProbeMark(3);
             if(city!=null&&city.gameObject.activeInHierarchy)city.TickCat(Time.deltaTime,paused,reducedMotion,mutedAudio);
             FinishShopFittingEntryIfReady();
             AdvanceClock(Time.deltaTime);
             if(stage==Stage.Leaving && !paused) {transition+=Time.deltaTime; if(transition>1.2f) stage=Stage.Post;}
             TickPresentation(Time.unscaledDeltaTime);
             TickContext(Time.unscaledDeltaTime);
+            ShopProbeMark(4);
         }
         void AdvanceClock(float delta)
         {
@@ -116,7 +122,7 @@ namespace FitCheck
         }
         void SaveDay(){if(activeSaveSlot<0&&storageOverride==null)throw new InvalidOperationException("Selecione um save antes de salvar.");ProgressStore.Save(DayPath,progress);}
         void EnterDressing(){stage=Stage.Dressing;remaining=120;timerWarned=false;showRequest=false;}
-        void GoHome(){shopService=false;if(!playerAppearance.created){OpenCreator(Stage.Home);return;}fromHome=true;replayIndex=-1;showWardrobe=false;EnterHome();}
+        void GoHome(){if(DeferLoading(GoHome))return;shopService=false;if(!playerAppearance.created){OpenCreator(Stage.Home);return;}fromHome=true;replayIndex=-1;showWardrobe=false;EnterHome();}
         void Replay()
         {
             shopService=false;

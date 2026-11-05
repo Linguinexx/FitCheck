@@ -14,6 +14,7 @@ namespace FitCheck
         {EnterSpace(false);}
         void EnterShop()
         {
+            if(DeferLoading(EnterShop))return;
             bool resumeWork=stage==Stage.Post&&ShopOpen||stage==Stage.Summary;
             shopService=false;EnterSpace(true);
             if(resumeWork){city.RestoreWalk(shopWorkPosition,shopWorkYaw,shopWorkPitch,mannequin);city.Frame(cam,true,0);}
@@ -55,7 +56,7 @@ namespace FitCheck
         }
         void SyncCityCursor(bool apply=false)
         {
-            if(!apply||ProofMode||Application.isBatchMode)return;
+            if(!apply||ProofMode||Application.isBatchMode||loadingActive)return;
             // Cursor capture requested by a GUI click is applied on the next Update.
             // Locking inside OnGUI can be cancelled by the editor's button control.
             bool focused=CityInputFocused;
@@ -83,7 +84,7 @@ namespace FitCheck
         {
             // Reconcile after frame/UI work. A temporary editor/OS release must
             // never become the player's explicit Tab choice to free the pointer.
-            if(stage==Stage.City)SyncCityCursor(true);
+            if(stage==Stage.City&&!loadingActive)SyncCityCursor(true);
         }
         void UpdateCity(float delta)
         {
@@ -105,6 +106,7 @@ namespace FitCheck
             }
             if(!paused&&homeDoorExitRemaining>0&&!city.IsInterior){float exitStep=Mathf.Min(Mathf.Min(delta,.05f),homeDoorExitRemaining);homeDoorExitRemaining-=exitStep;input=new Vector2(0,-.55f);delta=exitStep;}
             city.SprintRequested=!ProofMode&&!paused&&!cityFreeCursor&&homeDoorExitRemaining<=0&&(Input.GetKey(KeyCode.LeftShift)||Input.GetKey(KeyCode.RightShift));
+            if(shopProbeActive)input=shopProbeMoving?new Vector2(0,Mathf.Sin(Time.frameCount*.06f)>0?.3f:-.3f):Vector2.zero;
             city.Step(input,delta,paused||shopFittingOpening||ShopSequenceActive,mannequin);
         }
         static bool CityHitArea(Vector2 p)
@@ -121,6 +123,7 @@ namespace FitCheck
         }
         void ProcessCityEvent(Event e)
         {
+            if(loadingActive)return;
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.F&&!showShopDecor){OpenShopDecor();if(showShopDecor)e.Use();return;}
             if(paused||stage!=Stage.City||ShopSequenceActive)return;
             if(ProcessCityDragLook(e))return;
@@ -155,7 +158,7 @@ namespace FitCheck
         }
         bool InteractShop()
         {
-            if(paused||stage!=Stage.City||!city.IsInterior||city.IsHome||ShopSequenceActive)return false;
+            if(loadingActive||paused||stage!=Stage.City||!city.IsInterior||city.IsHome||ShopSequenceActive)return false;
             if(shopFittingOpening)return true;
             int action=city.ShopInteraction;if(action==0)return false;
             if(action==3){EnterStreetAt(CityView.StreetShopDoor,180);return true;}

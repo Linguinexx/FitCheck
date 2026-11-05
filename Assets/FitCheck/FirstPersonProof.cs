@@ -18,7 +18,11 @@ namespace FitCheck
             string folder=FirstPersonProofOutput();Directory.CreateDirectory(folder);
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-entry-performance")>=0){yield return CheckEntryPerformance(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"PERFORMANCE_CAPTURED: home, street and shop cold/return entry timings and scene costs.");Application.Quit(0);yield break;}
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-garment-render-performance")>=0){yield return CheckGarmentRenderPerformance(folder);Application.Quit(0);yield break;}
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-gameplay-performance")>=0){yield return CheckShopGameplayPerformance(folder);Application.Quit(0);yield break;}
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-loading-review")>=0){yield return RunLoadingReview(folder);yield break;}
             try{
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-street-frontage-review")>=0){CheckStreetFrontage(folder);Application.Quit(0);yield break;}
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-performance-review")>=0){CheckGarmentFinishes(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-garment-finishes-review")>=0){CheckGarmentFinishes(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-wardrobe-finish-review")>=0){CheckWardrobeFinish(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-entry-regression")>=0){CheckEntryOptimization(folder);Application.Quit(0);yield break;}

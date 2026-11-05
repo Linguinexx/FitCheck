@@ -1,0 +1,34 @@
+{
+    "samples": [
+        {
+            "view": "standing",
+            "frame_median_ms": 16.666999086737633,
+            "frame_p95_ms": 16.667800024151802,
+            "update_median_ms": 8.813400000000001,
+            "studio_ms": 0.0419,
+            "player_ms": 4.465,
+            "actors_camera_ms": 4.2725,
+            "other_ms": 0.0114
+        },
+        {
+            "view": "walking-forward",
+            "frame_median_ms": 16.666999086737633,
+            "frame_p95_ms": 16.668105497956276,
+            "update_median_ms": 9.0995,
+            "studio_ms": 0.0399,
+            "player_ms": 4.5547,
+            "actors_camera_ms": 4.3937,
+            "other_ms": 0.0129
+        },
+        {
+            "view": "walking-look-down",
+            "frame_median_ms": 16.666999086737633,
+            "frame_p95_ms": 16.667701303958893,
+            "update_median_ms": 9.016,
+            "studio_ms": 0.0378,
+            "player_ms": 4.5243,
+            "actors_camera_ms": 4.3352,
+            "other_ms": 0.0124
+        }
+    ]
+}

@@ -10,7 +10,7 @@ namespace FitCheck
         public void Build(StudioView studio)
         {
             transform.position=Origin;
-            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();WestNeighbourhood();StreetCulture();NightDetails();StreetArtDisplays();NeighbourhoodPlanting();GeometryBatches=batches.Count;FinishGeometry();
+            BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();WestNeighbourhood();StreetCulture();OppositeShopFrontage();NightDetails();StreetArtDisplays();NeighbourhoodPlanting();GeometryBatches=batches.Count;FinishGeometry();
             marker=Disc("Destino na calçada",.27f,.27f,.19f,new Color(.36f,.76f,.65f));marker.gameObject.SetActive(false);
             shadow=Disc("Sombra do funcionário",.65f,.36f,0,new Color(.43f,.40f,.39f));
             BakeResident(studio,1,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-15.4f,-.055f,2.8f),-22);

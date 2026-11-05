@@ -11,7 +11,14 @@ namespace FitCheck
         static Matrix4x4 BoneMatrix(Vector3 origin,Quaternion rotation,Vector3 rest)
         {return Matrix4x4.TRS(origin-rotation*rest,rotation,Vector3.one);}
         static Matrix4x4 MixSkin(Matrix4x4 a,Matrix4x4 b,float t)
-        {for(int row=0;row<3;row++)for(int col=0;col<4;col++){int i=row+col*4;a[i]+=(b[i]-a[i])*t;}return a;}
+        {
+            // Skin transforms are affine. Direct fields avoid 36 checked indexer
+            // calls per blend, repeated for every clothing weight group.
+            a.m00+=(b.m00-a.m00)*t;a.m01+=(b.m01-a.m01)*t;a.m02+=(b.m02-a.m02)*t;a.m03+=(b.m03-a.m03)*t;
+            a.m10+=(b.m10-a.m10)*t;a.m11+=(b.m11-a.m11)*t;a.m12+=(b.m12-a.m12)*t;a.m13+=(b.m13-a.m13)*t;
+            a.m20+=(b.m20-a.m20)*t;a.m21+=(b.m21-a.m21)*t;a.m22+=(b.m22-a.m22)*t;a.m23+=(b.m23-a.m23)*t;
+            return a;
+        }
         void PoseCachedSkin(ResidentPart part,Resident actor,BodyPose body,LegPose leg,Vector3 shoulder,Vector3 elbowRest,Vector3 elbow,Quaternion upperArm,Quaternion forearm)
         {
             if(part.skinCache==null){

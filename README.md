@@ -10,6 +10,8 @@ Jogo 3D de montagem de looks streetwear em Unity **6000.6.7f1**. Arte em desenvo
 4. Ande até a porta de casa e pressione **E — Sair de casa**. Você sai pelo vestíbulo do residencial **AP 03**, na Rua das Lajes. O caminho direto segue pelo comércio até a DripLab; passagens laterais dão acesso à galeria, à quadra e à casa de shows. No bairro, caminhe até a porta sob o letreiro **DRIPLAB** e pressione **E — Entrar na DripLab**. O prédio RADIO é independente da casa.
 5. A loja começa fechada: passe por trás do balcão e pressione **E — Abrir a loja** quando estiver pronto. Ao terminar um dia, feche o expediente e volte para casa. A cama abre as opções de descanso; o guarda-roupa e a mesa dão acesso ao uniforme, à aparência e ao FitFeed.
 
+As trocas ao clicar em **Jogar**, abrir/criar um save e entrar/sair de casa ou da loja mostram a logo animada com **Loading** e pontos. Os comandos ficam bloqueados durante a preparação do destino; a opção de movimento reduzido mantém a identidade estática.
+
 Cada save mantém aparência, campanha e fotos separadas em `saves/slot-1`, `slot-2` ou `slot-3`, dentro da pasta de dados persistentes da Unity. Na primeira seleção, o progresso da versão anterior é copiado para o primeiro espaço; os arquivos originais e as fotos antigas permanecem preservados. **Excluir save** abre uma confirmação com o espaço e o nome do personagem; **Cancelar** mantém os arquivos e **Excluir definitivamente** libera somente o espaço escolhido. Um save excluído não volta a ser importado automaticamente da versão antiga.
 
 Na exploração, **WASD** move, **Shift** corre, **mouse** olha, **E** interage, **Esc** pausa e **Tab** libera ou captura o cursor. No Editor, dê foco à aba **Game**. Menus e provador usam o mouse livre.

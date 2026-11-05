@@ -96,7 +96,7 @@ namespace FitCheck
             if(titleLogo==null)titleLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-Red");
             if(titleLogo!=null)DrawAnimatedTitleLogo(new Rect(52,160,390,260));else Txt(new Rect(50,178,450,200),"FIT\nCHECK",display);
             Txt(new Rect(60,430,410,140),"Seu estilo.\nAs histórias da cidade.",heading);
-            if(Tap(new Rect(60,651,360,70),"Jogar  →",true))OpenSaveSelection();
+            if(Tap(new Rect(60,651,360,70),"Jogar  →",true))BeginLoading(OpenSaveSelection);
             if(Tap(new Rect(60,746,360,56),"Configurações"))OpenSettings(false);
             Txt(new Rect(60,832,420,55),"A game by DripLab",caption,paper);
         }
@@ -114,7 +114,7 @@ namespace FitCheck
                 Txt(new Rect(58,y+59,420,48),subtitle,caption,color);
             }
             var chosen=saveSlots[selectedSave]??new SaveSlotInfo();
-            if(Tap(new Rect(40,693,462,62),chosen.exists?"Continuar com este personagem  →":"Criar personagem  →",true,chosen.error==null))OpenSelectedSave();
+            if(Tap(new Rect(40,693,462,62),chosen.exists?"Continuar com este personagem  →":"Criar personagem  →",true,chosen.error==null))BeginLoading(()=>{OpenSelectedSave();});
             if(Tap(new Rect(40,776,180,48),"Voltar"))ReturnToTitle();
             if(Tap(new Rect(237,776,265,48),"Excluir save",false,chosen.exists))RequestSaveDeletion();
             Txt(new Rect(40,839,462,48),message.Length>0?message:"Até três saves. Cada personagem tem sua própria semana.",tiny,muted);

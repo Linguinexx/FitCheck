@@ -69,7 +69,7 @@ namespace FitCheck
         }
         void EnterHome(){shopService=false;EnterSpace(true,true);}
         void EnterStreetAt(Vector2 position,float yaw)
-        {if(stage==Stage.Home&&city!=null&&city.IsHome)ExitCity();EnterCity();city.RestoreWalk(position,yaw,-4,mannequin);city.Frame(cam,true,0);}
+        {if(DeferLoading(()=>EnterStreetAt(position,yaw)))return;if(stage==Stage.Home&&city!=null&&city.IsHome)ExitCity();EnterCity();city.RestoreWalk(position,yaw,-4,mannequin);city.Frame(cam,true,0);}
         void CloseHomePanel()
         {
             if(homeRoom!=null&&!homeRoom.gameObject.activeSelf){var position=homeRoom.Position;float yaw=homeRoom.ViewYaw,pitch=homeRoom.ViewPitch;EnterHome();city.RestoreWalk(position,yaw,pitch,mannequin);}
@@ -77,14 +77,14 @@ namespace FitCheck
         }
         bool InteractHome()
         {
-            if(paused||stage!=Stage.City||!city.IsHome)return false;
+            if(loadingActive||paused||stage!=Stage.City||!city.IsHome)return false;
             int action=city.HomeInteraction;if(action==0)return false;
-            if(action==1){EnterStreetAt(CityView.StreetHomeThreshold,180);homeDoorExitRemaining=.95f;return true;}
+            if(action==1){if(DeferLoading(()=>{EnterStreetAt(CityView.StreetHomeThreshold,180);homeDoorExitRemaining=.95f;}))return true;EnterStreetAt(CityView.StreetHomeThreshold,180);homeDoorExitRemaining=.95f;return true;}
             showWardrobe=action==2;homeWardrobeRotation=-12;fromHome=true;stage=action==4?Stage.Retrospective:Stage.Home;cityFreeCursor=true;SyncCityCursor(true);return true;
         }
         bool InteractStreet()
         {
-            if(paused||stage!=Stage.City||city.IsInterior||homeDoorExitRemaining>0)return false;
+            if(loadingActive||paused||stage!=Stage.City||city.IsInterior||homeDoorExitRemaining>0)return false;
             if(city.StreetInteraction==1){EnterShop();return true;}
             if(city.StreetInteraction==2){GoHome();return true;}return false;
         }
