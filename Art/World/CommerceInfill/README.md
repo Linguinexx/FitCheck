@@ -12,4 +12,4 @@ Fonte: Assets/FitCheck/CommerceInfill.cs. Todos os elementos entram nos lotes es
 
 Revisão nativa -city-proof -commerce-infill-review passou, saída 0. Adição medida de 13.644 triângulos e um lote. Acessos, colisões, sete moradores, locais de fotografia e caminhada de 31,75 s/31,18 s verificados. Capturas: Captures/CommerceInfill. Logs: tools/commerce-infill-build.log e tools/commerce-infill-proof.log no workspace. Orçamento de geometria não é medição de FPS.
 
-FitFeed foi adiado pelo usuário. O espaço entre SIDE B e AO VIVO segue pendente.
+FitFeed foi adiado pelo usuário. O espaço entre SIDE B e AO VIVO foi preenchido na etapa seguinte, documentada em ../MusicInfill/README.md.

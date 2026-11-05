@@ -10,6 +10,7 @@ namespace FitCheck
             PlaceCityModule(()=>OppositeCommerce(false),new Vector3(12,0,-28),true);
             StreetPlanter(-19,-21,41);StreetPlanter(23,-21,42);
             Bench(-9,-20.5f);Bicycle(new Vector3(17,0,-21.8f));Lamp(1,-20.8f);
+            FillMusicGap();
         }
         void OppositeCommerce(bool records)
         {

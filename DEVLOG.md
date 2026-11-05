@@ -1,5 +1,11 @@
 # DevLog
 
+## 05/11/2026 — Ligação musical entre SIDE B e AO VIVO
+
+O vazio recebeu o estúdio SOM/LADO B, vitrine com equipamento e caixote de discos, além de uma passagem lateral para um pátio de rima. Palco, microfone/caixas, mural, banco, árvore com canteiro, bicicleta e bandeirolas completam o trecho. A entrada e o retorno ficam livres, sem alterar a calçada contínua ou abrir o perímetro.
+
+Adição medida de 7.472 triângulos estáticos, sem novos lotes de material, texturas, atores ou Unity Lights. Duas fontes usam o campo noturno existente. Letreiro ajustado para ficar acima do toldo e luminária física no muro. Revisão nativa final passou: cinco acessos, corredor lateral, colisões, trajeto casa–loja de 30–45 s, moradores e marcos/fotos existentes. Capturas em Captures/MusicInfill. FitFeed continua adiado; roupas comuns do player permanecem pendentes.
+
 ## 05/11/2026 — Comércio entre a mercearia e a oficina
 
 FitFeed adiado a pedido do usuário. O trecho vazio recebeu fachadas de barbearia, lavanderia e consertos, com vitrines, toldos, plantas e letreiros próprios em textura. Árvores/banco ocupam a margem da passagem; as placas existentes foram reposicionadas para a travessa traseira. O acesso à galeria e quadra permanece aberto.
