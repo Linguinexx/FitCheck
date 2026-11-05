@@ -1,0 +1,41 @@
+[
+  {
+    "id": "AH_SHOES_01",
+    "input": "Blue sneaker\\Blue_sneaker.fbx",
+    "sha256": "099b15f75304fd15d2d3c408096ed4db99952d0c6de66bde2f07602ae320185a",
+    "input_triangles": 501558,
+    "runtime_triangles": 2500,
+    "texture": 512,
+    "toe_sign": -1,
+    "toe_height_positive": 0.3883209228515625,
+    "toe_height_negative": 0.23512262105941772,
+    "target_width": 0.41,
+    "target_height": 0.345
+  },
+  {
+    "id": "SB_SHOES_01",
+    "input": "Fire sneaker\\Fire_sneaker.fbx",
+    "sha256": "938b971fa3433833ea8ee10b422f3d1a55de8dd767b3ae597e55a720e82a4291",
+    "input_triangles": 501604,
+    "runtime_triangles": 2500,
+    "texture": 512,
+    "toe_sign": -1,
+    "toe_height_positive": 0.43072509765625,
+    "toe_height_negative": 0.26398271322250366,
+    "target_width": 0.44,
+    "target_height": 0.375
+  },
+  {
+    "id": "CG_SHOES_01",
+    "input": "Green sneaker\\tripo_convert_62d18939-a902-4d99-ac56-bbfefa1e9e50.fbx",
+    "sha256": "1c3fdb5835880fd8c61840058e3696f1265129a1ece6dd62c51bfbbbbe706186",
+    "input_triangles": 501282,
+    "runtime_triangles": 2500,
+    "texture": 512,
+    "toe_sign": -1,
+    "toe_height_positive": 0.4194793701171875,
+    "toe_height_negative": 0.2865447998046875,
+    "target_width": 0.44,
+    "target_height": 0.37
+  }
+]

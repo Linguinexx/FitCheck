@@ -35,6 +35,8 @@ namespace FitCheck
         }
         void BuildCivilianShoes(int id,int side)
         {
+            if(civilianShoeModel==null){var json=Resources.Load<TextAsset>("Garments/Civilian/CIV_SHOES_BASE");if(json!=null)civilianShoeModel=JsonUtility.FromJson<BlenderGarmentAsset>(json.text);}
+            if(civilianShoeModel!=null){BuildCachedClothing(civilianShoeModel,"CIV_SHOES_BASE","Garments/Civilian/CIV_SHOES_BASE",2,new Vector3(side*.24f,0,0));return;}
             var item=new Garment("CIV_SHOES","Tênis cotidiano","CIVIL",2,Color.white,true);var shape=Sneaker(item);float x=side*.24f;
             // A simple court silhouette with a stitched sole, suede/cloth upper and laces.
             shape.w=new[]{.115f,.16f,.175f,.185f,.18f,.14f,.085f};shape.h=new[]{.08f,.13f,.12f,.09f,.06f,.035f,.022f};shape.y=new[]{.285f,.30f,.29f,.26f,.235f,.225f,.225f};
@@ -44,6 +46,7 @@ namespace FitCheck
             var lace=Material(new Color(.85f,.83f,.75f));FinishCivilianMaterial(lace);
             for(int i=0;i<3;i++){float z=.025f-i*.075f;Tube("Cadarço",new[]{new Vector3(x-.07f,ShoeTop(shape,-.07f,z)+.008f,z),new Vector3(x,ShoeTop(shape,0,z)+.008f,z+.012f),new Vector3(x+.07f,ShoeTop(shape,.07f,z)+.008f,z)},.006f,lace,clothes);}
         }
+        static BlenderGarmentAsset civilianShoeModel;
         static void FinishCollectionMaterial(Material material,string id)
         {
             var weave=Resources.Load<Texture2D>("Surfaces/Fabric030");material.SetTexture("_FabricTex",weave);material.SetFloat("_FabricWeight",id.Contains("_SHOES_")?.025f:id=="CG_TOP_03"?.20f:id=="AH_TOP_03"?.055f:id=="AH_TOP_01"?.18f:.11f);material.SetFloat("_Motion",0);

@@ -47,7 +47,7 @@ namespace FitCheck
         }
         int LoadingDotCount(float clock)
         {int phase=Mathf.FloorToInt(clock/.14f)%6;return phase<=3?phase:6-phase;}
-        float LoadingDiagonalOffset(float clock)=>reducedMotion?0:Mathf.Repeat(clock*180,760);
+        float LoadingDiagonalOffset(float clock)=>reducedMotion?0:Mathf.Repeat(clock*24,400);
         void DrawLoadingScreen()
         {
             var matrix=GUI.matrix;var color=GUI.color;var content=GUI.contentColor;bool enabled=GUI.enabled;
@@ -59,15 +59,11 @@ namespace FitCheck
                 GUI.matrix=Matrix4x4.TRS(new Vector3((Screen.width-1440*scale)/2,(Screen.height-900*scale)/2,0),Quaternion.identity,Vector3.one*scale);
                 var basis=GUI.matrix;
                 float drift=LoadingDiagonalOffset(loadingClock);
-                GUI.matrix=basis*Matrix4x4.Translate(new Vector3(720,450,0))*Matrix4x4.Rotate(Quaternion.Euler(0,0,26))*Matrix4x4.Translate(new Vector3(-720,-450,0));
-                for(int stripe=-4;stripe<7;stripe++){
-                    float x=stripe*400-180;
-                    Fill(new Rect(x,-2400,155,4800),new Color(227/255f,6/255f,19/255f,.065f*loadingOpacity));
-                    // Finite brighter strokes give a visible cue along the diagonal,
-                    // instead of an infinite band whose sideways/downward drift is ambiguous.
-                    for(int dash=-3;dash<4;dash++)Fill(new Rect(x,dash*760+drift-900+(stripe%2)*160,155,430),new Color(227/255f,6/255f,19/255f,.12f*loadingOpacity));
+                for(int stripe=-4;stripe<8;stripe++){
+                    var r=new Rect(stripe*400+drift-180,-650,155,2200);
+                    GUIUtility.RotateAroundPivot(26,new Vector2(720,450));
+                    Fill(r,new Color(227/255f,6/255f,19/255f,.12f*loadingOpacity));GUI.matrix=basis;
                 }
-                GUI.matrix=basis;
                 if(titleLogo==null)titleLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-Red");
                 GUI.color=new Color(1,1,1,loadingOpacity);
                 if(titleLogo!=null)DrawAnimatedTitleLogo(new Rect(485,235,470,320),loadingClock);

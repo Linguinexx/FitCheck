@@ -33,7 +33,7 @@ namespace FitCheck
                 yield return null;
                 if(calls!=0)throw new Exception("Destination ran before a covered frame");
                 foreach(float clock in new[]{.05f,.45f,.74f}){loadingClock=clock;CaptureInterface(Path.Combine(folder,"loading-"+Mathf.RoundToInt(clock*100)+".png"));}
-                if(!reducedMotion&&LoadingDiagonalOffset(1.05f)<=LoadingDiagonalOffset(.05f)+100)throw new Exception("Loading diagonals do not descend visibly");
+                if(!reducedMotion&&LoadingDiagonalOffset(1.05f)<=LoadingDiagonalOffset(.05f)+20)throw new Exception("Loading stripes lost their lateral movement");
                 loadingClock=0;
                 while(loadingActive)yield return null;
                 if(Time.realtimeSinceStartup-loadingStarted<LoadingMinimumSeconds)throw new Exception("Loading disappeared before its minimum readable time");

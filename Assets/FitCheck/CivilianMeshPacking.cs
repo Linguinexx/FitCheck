@@ -24,7 +24,7 @@ namespace FitCheck
                 }
                 sources.Add(r);
             }
-            if(sources.Count==0)return;var combined=builder.Build(meshName);garmentAssets.Add(combined);var node=new GameObject(name);node.transform.SetParent(parent,false);node.AddComponent<MeshFilter>().sharedMesh=combined;node.AddComponent<MeshRenderer>().sharedMaterials=materials.ToArray();
+            if(sources.Count==0||category==1&&sources.Count==1)return;var combined=builder.Build(meshName);garmentAssets.Add(combined);var node=new GameObject(name);node.transform.SetParent(parent,false);node.AddComponent<MeshFilter>().sharedMesh=combined;node.AddComponent<MeshRenderer>().sharedMaterials=materials.ToArray();
             foreach(var r in sources){r.gameObject.SetActive(false);Destroy(r.gameObject);}
         }
     }

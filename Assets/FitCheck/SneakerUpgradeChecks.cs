@@ -28,6 +28,7 @@ namespace FitCheck
         }
         void CheckSneakerUpgrade(string folder)
         {
+            CheckBaseSneaker(folder);
             CheckSpeechTail(folder);
             foreach(string id in CollectionShoes){
                 var model=JsonUtility.FromJson<BlenderGarmentAsset>(Resources.Load<TextAsset>("Garments/Streetwear/"+id).text);
@@ -43,7 +44,7 @@ namespace FitCheck
                 Debug.Log("SNEAKER_V2_BUDGET: "+id+"; "+triangles+" triangles per shoe; "+renderers+" renderers per pair; 512 atlas.");
             }
             CheckStreetwearCollection(folder);
-            File.WriteAllText(Path.Combine(folder,"sneaker-checks.txt"),"SNEAKER_V2_PASSED: Blender sources/512 atlases, three preserved IDs, bounded geometry and six single-material meshes per pair, 63 mixed fits, thumbnails, native lookbook, moving player feet, connected counter speech and no contextual floating tail.");
+            File.WriteAllText(Path.Combine(folder,"sneaker-checks.txt"),"SNEAKER_V2_PASSED: Blender sources/512 atlases, three preserved IDs, bounded geometry and at most six single-material meshes per pair, 63 mixed fits, thumbnails, native lookbook, moving player feet, connected counter speech and no contextual floating tail.");
         }
     }
 }

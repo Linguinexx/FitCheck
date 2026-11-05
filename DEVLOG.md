@@ -1,5 +1,13 @@
 # DevLog
 
+## 05/11/2026 — Modelos fornecidos e tênis cotidiano
+
+Os três tênis Blue/Fire/Green fornecidos pelo usuário substituem as versões anteriores do catálogo, após otimização no Blender para 2.500/2.500/2.496 triângulos por pé, atlas 512 e um material por pé. Originais intactos fora de Assets; editáveis em Art/Garments/SuppliedSneakers. Corrigida a preservação dos eixos/unidades no bake de FBX com malha na raiz.
+
+O novo Base sneaker é independente do catálogo e passa a equipar os civis: 501.384 → 1.200 triângulos por pé, textura 512, um material por pé e templates em cache. Fonte em Art/Garments/BaseSneaker; nove visuais e movimento completo verificados na revisão nativa. A revisão das roupas dos clientes antes do atendimento e dos trajes comuns do player continua pendente.
+
+Por pedido do usuário, o loading volta às faixas diagonais contínuas deslizando lateralmente; mantém logo, pontos e duração de dois segundos. Demais anotações de retomada em PROXIMOS_PASSOS.md.
+
 ## 05/11/2026 — Tênis Blender e ajustes de apresentação
 
 Sidewalk recebe lona/denim e estrela, Garage Session usa forma de skate escura com cadarços largos laranja, e Daily Steps recebe volume verde e painéis heatmap. Três fontes editáveis no Blender, FBX/UV, atlas 512 e JSON importado pela Unity; IDs, critérios, desbloqueios e calçados civis preservados. Total de triângulos dos três modelos cai de 4.916 para 3.178.

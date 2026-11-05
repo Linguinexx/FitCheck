@@ -1,5 +1,7 @@
 # Sneaker collection — 2026-11-05
 
+Previous hand-authored version, preserved for recovery. Runtime shoes now use the optimized user-supplied models documented in ../SuppliedSneakers/README.md. Running this older generator would replace the current runtime exports.
+
 Editable source: SneakerCollection.blend. Generator: model_sneakers.py, executed with Blender 5.0 in background mode. It creates a separate scene and does not modify the character source.
 
 - AH_SHOES_01 / Sidewalk: cream canvas, denim toe/heel and sewn star; interpreted from the two court/star references.

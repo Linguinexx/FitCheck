@@ -7,8 +7,8 @@ namespace FitCheck.Editor
 {
     public class StreetwearImporter:AssetPostprocessor
     {
-        void OnPreprocessModel(){if(!assetPath.Contains("Garments/Streetwear/"))return;var m=(ModelImporter)assetImporter;m.isReadable=true;m.importAnimation=false;m.globalScale=1;m.meshCompression=ModelImporterMeshCompression.Off;}
-        void OnPreprocessTexture(){if(!assetPath.Contains("Garments/Streetwear/"))return;var t=(TextureImporter)assetImporter;t.filterMode=FilterMode.Point;t.textureCompression=TextureImporterCompression.Compressed;t.maxTextureSize=512;t.mipmapEnabled=true;}
+        void OnPreprocessModel(){if(!assetPath.Contains("Garments/Streetwear/")&&!assetPath.Contains("Garments/Civilian/"))return;var m=(ModelImporter)assetImporter;m.isReadable=true;m.importAnimation=false;m.globalScale=1;m.meshCompression=ModelImporterMeshCompression.Off;}
+        void OnPreprocessTexture(){if(!assetPath.Contains("Garments/Streetwear/")&&!assetPath.Contains("Garments/Civilian/"))return;var t=(TextureImporter)assetImporter;t.filterMode=FilterMode.Point;t.textureCompression=TextureImporterCompression.Compressed;t.maxTextureSize=512;t.mipmapEnabled=true;}
     }
     public static class StreetwearBake
     {
@@ -24,7 +24,8 @@ namespace FitCheck.Editor
                 AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceUpdate);var model=AssetDatabase.LoadAssetAtPath<GameObject>(path);var parts=new List<BlenderGarmentPart>();int triangles=0;
                 foreach(var filter in model.GetComponentsInChildren<MeshFilter>()){
                     if(filter.name.StartsWith("BIND_PREVIEW"))continue;
-                    var mesh=filter.sharedMesh;var matrix=model.transform.worldToLocalMatrix*filter.transform.localToWorldMatrix;var v=mesh.vertices;var n=mesh.normals;var uv=mesh.uv;var tris=mesh.triangles;var mat=filter.GetComponent<MeshRenderer>().sharedMaterial;
+                    var mesh=filter.sharedMesh;// A single-mesh FBX stores its unit/axis correction on the mesh root itself.
+                    var matrix=filter.transform==model.transform?filter.transform.localToWorldMatrix:model.transform.worldToLocalMatrix*filter.transform.localToWorldMatrix;var v=mesh.vertices;var n=mesh.normals;var uv=mesh.uv;var tris=mesh.triangles;var mat=filter.GetComponent<MeshRenderer>().sharedMaterial;
                     var groups=new Dictionary<int,List<int>>{{-1,new List<int>()},{0,new List<int>()},{1,new List<int>()}};
                     for(int i=0;i<tris.Length;i+=3){var c=matrix.MultiplyPoint3x4((v[tris[i]]+v[tris[i+1]]+v[tris[i+2]])/3);int group=slot==1&&c.y<1.19f?(c.x<0?-1:1):0;groups[group].AddRange(new[]{tris[i],tris[i+1],tris[i+2]});}
                     foreach(var pair in groups){int count=pair.Value.Count;if(count==0)continue;var pv=new Vector3[count];var pn=new Vector3[count];var pu=new Vector2[count];var pt=new int[count];
@@ -36,7 +37,7 @@ namespace FitCheck.Editor
                 if(parts.Count==0||triangles>20000)throw new Exception("Malha inválida: "+id+" / "+triangles);
                 float min=100,max=-100;foreach(var p in parts)foreach(var point in p.vertices){min=Mathf.Min(min,point.y);max=Mathf.Max(max,point.y);}
                 if(slot==0&&(min<1.20f||max>2.60f)||slot==1&&(min<.15f||max>1.50f)||slot==2&&(min<.05f||max>.65f))throw new Exception("Eixos/escala incorretos: "+id+" "+min+".."+max);
-                int index=Array.IndexOf(tops,id);var asset=new BlenderGarmentAsset{id=id,slot=slot,source=slot==2?"Blender — SneakerCollection.blend":"Blender — StreetwearCollection.blend",sleeveColor=index>=0?sleeves[index]:Color.white,parts=parts.ToArray()};
+                int index=Array.IndexOf(tops,id);var asset=new BlenderGarmentAsset{id=id,slot=slot,source=slot==2?"Blender — SuppliedSneakerCollection.blend":"Blender — StreetwearCollection.blend",sleeveColor=index>=0?sleeves[index]:Color.white,parts=parts.ToArray()};
                 File.WriteAllText(Path.ChangeExtension(path,".json"),JsonUtility.ToJson(asset));assets++;total+=triangles;Debug.Log("STREETWEAR_BAKED: "+id+"; "+triangles+" triangles");
             }
             if(assets!=(onlyShoes?3:17))throw new Exception("Coleção incompleta: "+assets);AssetDatabase.Refresh();Debug.Log("STREETWEAR_COLLECTION_READY: "+assets+" pieces; "+total+" triangles total");
