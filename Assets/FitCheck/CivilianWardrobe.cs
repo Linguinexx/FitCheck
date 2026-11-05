@@ -46,7 +46,7 @@ namespace FitCheck
         }
         static void FinishCollectionMaterial(Material material,string id)
         {
-            var weave=Resources.Load<Texture2D>("Surfaces/Fabric030");material.SetTexture("_FabricTex",weave);material.SetFloat("_FabricWeight",id=="CG_TOP_03"?.20f:id=="AH_TOP_03"?.055f:id=="AH_TOP_01"?.18f:.11f);material.SetFloat("_Motion",0);
+            var weave=Resources.Load<Texture2D>("Surfaces/Fabric030");material.SetTexture("_FabricTex",weave);material.SetFloat("_FabricWeight",id.Contains("_SHOES_")?.025f:id=="CG_TOP_03"?.20f:id=="AH_TOP_03"?.055f:id=="AH_TOP_01"?.18f:.11f);material.SetFloat("_Motion",0);
         }
         void FinishCollectionSleeve(Material material,BlenderGarmentAsset model)
         {

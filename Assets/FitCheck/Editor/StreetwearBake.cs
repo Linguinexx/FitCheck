@@ -12,6 +12,7 @@ namespace FitCheck.Editor
     }
     public static class StreetwearBake
     {
+        static bool onlyShoes;
         static readonly Color[] sleeves={new Color(.87f,.84f,.76f),new Color(.88f,.85f,.78f),new Color(.23f,.23f,.24f),new Color(.10f,.15f,.28f),new Color(.09f,.44f,.23f),new Color(.89f,.87f,.81f),new Color(.12f,.11f,.125f),new Color(.09f,.29f,.61f),new Color(.11f,.10f,.13f)};
         static readonly string[] tops={"AH_TOP_01","CG_TOP_01","SB_TOP_01","AH_TOP_02","CG_TOP_02","SB_TOP_02","AH_TOP_03","CG_TOP_03","SB_TOP_03"};
         [MenuItem("Tools/Fit Check/Bake Blender streetwear collection")]
@@ -19,7 +20,7 @@ namespace FitCheck.Editor
         {
             int assets=0,total=0;
             foreach(var raw in Directory.GetFiles("Assets/Resources/Garments/Streetwear","*.fbx")){
-                string path=raw.Replace('\\','/');string id=Path.GetFileNameWithoutExtension(path);int slot=id.Contains("_TOP_")?0:id.Contains("_BOTTOM_")?1:2;
+                string path=raw.Replace('\\','/');string id=Path.GetFileNameWithoutExtension(path);int slot=id.Contains("_TOP_")?0:id.Contains("_BOTTOM_")?1:2;if(onlyShoes&&slot!=2)continue;
                 AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceUpdate);var model=AssetDatabase.LoadAssetAtPath<GameObject>(path);var parts=new List<BlenderGarmentPart>();int triangles=0;
                 foreach(var filter in model.GetComponentsInChildren<MeshFilter>()){
                     if(filter.name.StartsWith("BIND_PREVIEW"))continue;
@@ -35,11 +36,12 @@ namespace FitCheck.Editor
                 if(parts.Count==0||triangles>20000)throw new Exception("Malha inválida: "+id+" / "+triangles);
                 float min=100,max=-100;foreach(var p in parts)foreach(var point in p.vertices){min=Mathf.Min(min,point.y);max=Mathf.Max(max,point.y);}
                 if(slot==0&&(min<1.20f||max>2.60f)||slot==1&&(min<.15f||max>1.50f)||slot==2&&(min<.05f||max>.65f))throw new Exception("Eixos/escala incorretos: "+id+" "+min+".."+max);
-                int index=Array.IndexOf(tops,id);var asset=new BlenderGarmentAsset{id=id,slot=slot,source="Blender — StreetwearCollection.blend",sleeveColor=index>=0?sleeves[index]:Color.white,parts=parts.ToArray()};
+                int index=Array.IndexOf(tops,id);var asset=new BlenderGarmentAsset{id=id,slot=slot,source=slot==2?"Blender — SneakerCollection.blend":"Blender — StreetwearCollection.blend",sleeveColor=index>=0?sleeves[index]:Color.white,parts=parts.ToArray()};
                 File.WriteAllText(Path.ChangeExtension(path,".json"),JsonUtility.ToJson(asset));assets++;total+=triangles;Debug.Log("STREETWEAR_BAKED: "+id+"; "+triangles+" triangles");
             }
-            if(assets!=17)throw new Exception("Coleção incompleta: "+assets);AssetDatabase.Refresh();Debug.Log("STREETWEAR_COLLECTION_READY: "+assets+" pieces; "+total+" triangles total");
+            if(assets!=(onlyShoes?3:17))throw new Exception("Coleção incompleta: "+assets);AssetDatabase.Refresh();Debug.Log("STREETWEAR_COLLECTION_READY: "+assets+" pieces; "+total+" triangles total");
         }
+        public static void BakeShoesAndBuild(){onlyShoes=true;try{Bake();}finally{onlyShoes=false;}CitySliceBuild.Build();}
         public static void BakeAndBuild(){Bake();CitySliceBuild.Build();}
     }
 }

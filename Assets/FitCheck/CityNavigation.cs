@@ -25,21 +25,26 @@ namespace FitCheck
         Transform marker,shadow;
         public string Place=>NeighbourhoodName(Position);
         public bool Free(Vector2 p){return WorldFree(p)&&!ResidentBlocks(p)&&!VehicleBlocks(p);}
-        bool WorldFree(Vector2 p)
+        bool WorldFree(Vector2 p,float clearance=0)
         {
+            float radius=Radius+clearance;
             var bounds=IsHome?HomeBounds:IsInterior?ShopBounds:WalkBounds;
             if(IsInterior&&!IsHome&&FittingCurtainBlocks(p))return false;
-            if(p.x<bounds.xMin+Radius||p.x>bounds.xMax-Radius||p.y<bounds.yMin+Radius||p.y>bounds.yMax-Radius)return false;
-            foreach(var box in obstacles)if(p.x>box.xMin-Radius&&p.x<box.xMax+Radius&&p.y>box.yMin-Radius&&p.y<box.yMax+Radius)return false;return true;
+            if(p.x<bounds.xMin+radius||p.x>bounds.xMax-radius||p.y<bounds.yMin+radius||p.y>bounds.yMax-radius)return false;
+            foreach(var box in obstacles)if(p.x>box.xMin-radius&&p.x<box.xMax+radius&&p.y>box.yMin-radius&&p.y<box.yMax+radius)return false;return true;
         }
+        bool PlanningFree(Vector2 p)=>WorldFree(p,.04f)&&!ResidentBlocks(p)&&!VehicleBlocks(p);
         bool ClearLine(Vector2 a,Vector2 b)
-        {int count=Mathf.CeilToInt(Vector2.Distance(a,b)/.13f);for(int i=0;i<=count;i++)if(!Free(Vector2.Lerp(a,b,count==0?0:i/(float)count)))return false;return true;}
+        {
+            int count=Mathf.CeilToInt(Vector2.Distance(a,b)/.08f);
+            for(int i=0;i<=count;i++){var p=Vector2.Lerp(a,b,count==0?0:i/(float)count);if(!Free(p)||i>1&&i<count-1&&!PlanningFree(p))return false;}return true;
+        }
         Vector2Int CellAt(Vector2 p){return new Vector2Int(Mathf.RoundToInt(p.x/Cell),Mathf.RoundToInt(p.y/Cell));}
         Vector2 AtCell(Vector2Int p){return new Vector2(p.x*Cell,p.y*Cell);}
         bool NearCell(Vector2 p,out Vector2Int result)
         {
             var center=CellAt(p);result=center;float best=float.MaxValue;
-            for(int x=-2;x<=2;x++)for(int y=-2;y<=2;y++){var cell=center+new Vector2Int(x,y);var point=AtCell(cell);float distance=(p-point).sqrMagnitude;if(distance<best&&Free(point)&&ClearLine(p,point)){result=cell;best=distance;}}
+            for(int x=-2;x<=2;x++)for(int y=-2;y<=2;y++){var cell=center+new Vector2Int(x,y);var point=AtCell(cell);float distance=(p-point).sqrMagnitude;if(distance<best&&PlanningFree(point)&&ClearLine(p,point)){result=cell;best=distance;}}
             return best<float.MaxValue;
         }
         public bool PlanRoute(Vector2 start,Vector2 end,List<Vector2> output)
@@ -48,7 +53,7 @@ namespace FitCheck
             Vector2Int source,goal;if(!NearCell(start,out source)||!NearCell(end,out goal))return false;
             var queue=new Queue<Vector2Int>();var previous=new Dictionary<Vector2Int,Vector2Int>();queue.Enqueue(source);previous[source]=source;
             var directions=new[]{Vector2Int.up,Vector2Int.right,Vector2Int.down,Vector2Int.left};bool found=false;
-            while(queue.Count>0){var cell=queue.Dequeue();if(cell==goal){found=true;break;}foreach(var d in directions){var next=cell+d;if(previous.ContainsKey(next)||!Free(AtCell(next)))continue;previous[next]=cell;queue.Enqueue(next);}}
+            while(queue.Count>0){var cell=queue.Dequeue();if(cell==goal){found=true;break;}foreach(var d in directions){var next=cell+d;if(previous.ContainsKey(next)||!PlanningFree(AtCell(next)))continue;previous[next]=cell;queue.Enqueue(next);}}
             if(!found)return false;var raw=new List<Vector2>{end};var cursor=goal;
             while(true){raw.Add(AtCell(cursor));if(cursor==source)break;cursor=previous[cursor];}raw.Add(start);raw.Reverse();
             int index=0;while(index<raw.Count-1){int next=raw.Count-1;while(next>index+1&&!ClearLine(raw[index],raw[next]))next--;if(!ClearLine(raw[index],raw[next])){output.Clear();return false;}output.Add(raw[next]);index=next;}return output.Count>0;
@@ -84,6 +89,7 @@ namespace FitCheck
         }
         public void Frame(Camera camera,bool reduced,float delta)
         {
+            BindNightLighting();
             if(delta>0){float step=Mathf.Min(delta,.05f);TickResidents(step);if(IsInterior){if(!IsHome)AdvanceFittingCurtain(step);}else{TickTraffic(step);if(!reduced)AnimateAtmosphere(step);}}
             StepPlayerBody(0,0);
             camera.orthographic=false;camera.fieldOfView=ViewFieldOfView;camera.nearClipPlane=.08f;

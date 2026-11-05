@@ -20,6 +20,7 @@ namespace FitCheck
         }
         void BuildStreetCar()
         {
+            BuildCarWheelAssets(out var wheelMesh,out var wheelMaterials);
             // Chamfered hatchback body, sloped cabin and separated glass panels.
             var outline=new[]{new Vector2(-1.86f,-.57f),new Vector2(-1.61f,-.81f),new Vector2(1.49f,-.81f),new Vector2(1.87f,-.56f),new Vector2(1.87f,.56f),new Vector2(1.49f,.81f),new Vector2(-1.61f,.81f),new Vector2(-1.86f,.57f)};
             var faces=new List<Vector3[]>();
@@ -40,12 +41,10 @@ namespace FitCheck
                 LiveBox("Carro — friso",new Vector3(-.05f,.68f,side*.823f),new Vector3(2.65f,.055f,.035f),Ink,"Rubber",traffic);
                 LiveBox("Carro — maçaneta",new Vector3(.05f,.88f,side*.83f),new Vector3(.22f,.045f,.04f),Cream,"Leather",traffic);
                 foreach(float x in new[]{-1.15f,1.18f}){
-                    var go=GameObject.CreatePrimitive(PrimitiveType.Cylinder);go.name="Carro — roda e calota";Destroy(go.GetComponent<Collider>());
-                    go.transform.SetParent(traffic,false);go.transform.localPosition=new Vector3(x,.40f,side*.81f);go.transform.localScale=new Vector3(.67f,.13f,.67f);go.transform.localRotation=Quaternion.Euler(90,0,0);
-                    var mesh=Instantiate(go.GetComponent<MeshFilter>().sharedMesh);var colors=new Color[mesh.vertexCount];for(int i=0;i<colors.Length;i++)colors[i]=new Color(.08f,.075f,.07f);mesh.colors=colors;assets.Add(mesh);go.GetComponent<MeshFilter>().sharedMesh=mesh;
-                    var material=CityMaterial("Rubber");assets.Add(material);go.GetComponent<MeshRenderer>().sharedMaterial=material;trafficWheels.Add(go.transform);
-                    LiveBox("Calota",new Vector3(0,side*.99f,0),new Vector3(.36f,.03f,.36f),new Color(.52f,.49f,.42f),"Leather",go.transform);
-                    LiveBox("Raio da calota",new Vector3(0,side*1.02f,0),new Vector3(.11f,.04f,.60f),Cream,"Leather",go.transform);
+                    var wheel=new GameObject("Carro — pneu e aro de cinco raios");wheel.transform.SetParent(traffic,false);
+                    wheel.transform.localPosition=new Vector3(x,.40f,side*.81f);wheel.transform.localRotation=Quaternion.Euler(90,0,0);
+                    wheel.AddComponent<MeshFilter>().sharedMesh=wheelMesh;
+                    wheel.AddComponent<MeshRenderer>().sharedMaterials=wheelMaterials;trafficWheels.Add(wheel.transform);
                 }
             }
             CarSurface("Carro — para-brisa",new[]{new[]{new Vector3(.91f,1.08f,-.65f),new Vector3(.32f,1.60f,-.53f),new Vector3(.32f,1.60f,.53f),new Vector3(.91f,1.08f,.65f)}},glass);

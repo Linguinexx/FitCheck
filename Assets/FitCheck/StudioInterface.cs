@@ -85,6 +85,7 @@ namespace FitCheck
         }
         void OnGUI()
         {
+            if(ProofMode&&speechProofActive){DrawSpeechProof();return;}
             if(loadingActive){DrawLoadingScreen();return;}
             var originalMatrix=GUI.matrix;var originalEnabled=GUI.enabled;
             var originalColor=GUI.color;var originalContent=GUI.contentColor;var originalBackground=GUI.backgroundColor;

@@ -29,7 +29,7 @@ namespace FitCheck
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
         public bool CustomerSpeaking;
-        const int ResidentArtRevision=30;
+        const int ResidentArtRevision=31;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
             if(IsInterior&&(cat==null||!cat.Ready))return false;
@@ -78,7 +78,8 @@ namespace FitCheck
                         float desiredSpeed=alignment>(actor.oneShot?55:32)?0:Mathf.Min(maxSpeed,passingCorner?maxSpeed:distance*3.3f);
                         actor.speed=Mathf.MoveTowards(actor.speed,desiredSpeed,delta*2.7f);
                         var next=Vector2.MoveTowards(current,destination,delta*actor.speed);
-                        bool occupied=!actor.oneShot&&Vector2.Distance(next,Position)<1.0f;
+                        // The avoidance circle must cover the rectangular collision envelope (.78 x .73).
+                        bool occupied=!actor.oneShot&&Vector2.Distance(next,Position)<1.16f;
                         foreach(var other in residents){if(other==actor||!other.root.gameObject.activeSelf)continue;var p=other.root.localPosition;if(Vector2.Distance(next,new Vector2(p.x,p.z))<1.0f)occupied=true;}
                         if(!occupied){
                             travelled=Vector2.Distance(next,current);actor.walking=travelled>.00001f;pos.x=next.x;pos.z=next.y;

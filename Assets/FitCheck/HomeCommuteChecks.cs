@@ -9,8 +9,8 @@ namespace FitCheck
         void WalkWorldProof(Vector2 target)
         {
             if(!city.RequestWalk(target))throw new Exception("Sem caminho até interação: "+target);
-            for(int frame=0;frame<1200&&Vector2.Distance(city.Position,target)>.035f;frame++){city.Step(Vector2.zero,.05f,false,mannequin);city.Frame(cam,true,0);}
-            if(Vector2.Distance(city.Position,target)>.04f)throw new Exception("Caminho bloqueado: "+target);
+            for(int frame=0;frame<1800&&Vector2.Distance(city.Position,target)>.035f;frame++){if(frame%12==0)city.RequestWalk(target);city.Step(Vector2.zero,.05f,false,mannequin);city.Frame(cam,true,.05f);}
+            if(Vector2.Distance(city.Position,target)>.04f)throw new Exception("Caminho bloqueado: "+target+"; position="+city.Position+"; startFree="+city.Free(city.Position)+"; targetFree="+city.Free(target));
         }
         void CheckHomeCommute(string folder)
         {

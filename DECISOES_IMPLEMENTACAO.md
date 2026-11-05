@@ -46,4 +46,9 @@ Pendências adiadas por pedido do usuário (03/11/2026):
 
 Loading aprovado para Jogar e entradas/saídas da casa/loja: logo vermelha com o efeito do menu, Loading com pontos abaixo. Usuário ainda considera fundo preto ou diagonais pretas/vermelhas; primeira implementação combina preto e diagonais Kaos discretas. Sem barra de progresso artificial. Manter o fluxo título → saves → criação/casa, a loja fechada até abertura manual e o percurso físico pelo bairro.
 
-**Pendente: refazer os tênis**, conforme solicitação do usuário. Modelos atuais não são a versão final; retomar referências e silhuetas antes da produção da nova coleção.
+**Tênis refeitos em 05/11/2026**, usando as quatro referências fornecidas em refs roupas/refs tenis. Três modelos Blender mantêm os IDs e desbloqueios; fonte editável em Art/Garments/SneakerCollection.
+
+
+## 05/11/2026 — Ajustes de movimento e balões
+
+Loading mantém dois segundos; destaques finitos percorrem a inclinação das faixas em vez de depender da translação de linhas infinitas. Balões ambientais e legendas de acompanhamento do cliente ficam sem a ponta solta; no balcão a ponta lateral continua conectada. O usuário ofereceu modelos de IA como alternativa futura e pediu continuar a produção Blender atual.

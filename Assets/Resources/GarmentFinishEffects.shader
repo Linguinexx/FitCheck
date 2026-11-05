@@ -27,6 +27,7 @@ Shader "FitCheck/Selective Garment Finishes"
             #pragma fragment frag
             #pragma target 3.0
             #include "UnityCG.cginc"
+            #include "CityLighting.cginc"
             sampler2D _MainTex,_FabricTex;float4 _Color,_MainTex_TexelSize;float _GarmentFinishesEnabled;float _GarmentFinish;float _TexScale,_Motion,_Glow,_PaintFrame,_SmoothLight,_NightCity,_HairFlow,_FabricWeight;
             struct v2f{float4 pos:SV_POSITION;float2 uv:TEXCOORD0;float3 normal:TEXCOORD1;float3 world:TEXCOORD2;float3 view:TEXCOORD3;};
             v2f vert(appdata_base v)
@@ -54,7 +55,7 @@ Shader "FitCheck/Selective Garment Finishes"
                 // would reintroduce visible time steps in these subtle textures.
                 float3 colorA=floor(saturate(_Color.rgb*paintA*shade+_Color.rgb*_Glow*.55)*31+.5)/31;
                 float3 colorB=floor(saturate(_Color.rgb*paintB*shade+_Color.rgb*_Glow*.55)*31+.5)/31;
-                float2 p=i.world.xz-float2(200,0);float localLight=.55+.25*exp(-dot(p-float2(-17,3),p-float2(-17,3))/30)+.20*exp(-dot(p-float2(10,1),p-float2(10,1))/70);
+                float3 localLight=float3(.52,.55,.60)+CityLightAt(i.world)*.66;
                 float3 result=lerp(colorA,colorB,blend)*lerp(1,localLight,_NightCity);
                 float3 normal=normalize(i.normal),view=normalize(i.view);float rim=1-saturate(dot(normal,view));
                 if(_GarmentFinishesEnabled>.5&&_GarmentFinish>.5&&_GarmentFinish<1.5){

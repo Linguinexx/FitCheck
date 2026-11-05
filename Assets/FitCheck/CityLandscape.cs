@@ -29,6 +29,7 @@ namespace FitCheck
         }
         void Lamp(float x,float z)
         {
+            AddNightSource(new Vector3(x+.75f,5.50f,z),new Color(1,.67f,.32f),8.3f,.74f,.65f);
             Rod(new Vector3(x,0,z),new Vector3(x,5.7f,z),.07f,Ink,"Leather");
             Rod(new Vector3(x,5.7f,z),new Vector3(x+.75f,5.75f,z),.065f,Ink,"Leather");
             Block(new Vector3(x+.75f,5.68f,z),new Vector3(.88f,.19f,.40f),Ink,"Leather");
@@ -54,9 +55,9 @@ namespace FitCheck
             Foliage(new Vector3(-12.4f,8.4f,-.1f),new Vector3(2.0f,1.5f,1.9f),new Color(.33f,.49f,.28f),5);
             Bench(-10.3f,-4.5f);Bench(-18.7f,1.4f);
             Palm(-22.3f,-4.6f,1);Palm(17.8f,2.1f,2);Lamp(-2.5f,-4.0f);Lamp(17.5f,-7.0f);
-            foreach(float x in new[]{-1.0f,17.1f}){
+            foreach(float x in new[]{FacadePlanterLeft,FacadePlanterRight}){
                 Block(new Vector3(x,.38f,2.2f),new Vector3(1.4f,.76f,1.7f),Peach);
-                Foliage(new Vector3(x,1.10f,2.2f),new Vector3(.70f,.65f,.78f),Teal,3);obstacles.Add(new Rect(x-.75f,1.3f,1.5f,1.8f));
+                Foliage(new Vector3(x,1.10f,2.2f),new Vector3(.70f,.65f,.78f),LeafGreen,3);obstacles.Add(new Rect(x-.75f,1.3f,1.5f,1.8f));
             }
             // Park name on a low ceramic marker, not a floating mission marker.
             Block(new Vector3(-3.8f,.72f,-.45f),new Vector3(2.4f,1.4f,.30f),Teal);

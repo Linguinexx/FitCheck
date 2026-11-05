@@ -59,18 +59,21 @@ namespace FitCheck
         void ComicBubble(Rect rect,string text,string speaker,float age,bool tailLeft=true)
         {
             float a=reducedMotion?1:Mathf.SmoothStep(0,1,age/.20f);
+            if(a<.001f)return;
             float pop=reducedMotion?0:Mathf.Sin(Mathf.Clamp01(age/.42f)*Mathf.PI)*.055f;
             float scale=.82f+.18f*a+pop;
             var r=new Rect(rect.center.x-rect.width*scale/2,rect.center.y-rect.height*scale/2,rect.width*scale,rect.height*scale);
             var originalMatrix=GUI.matrix;if(!reducedMotion)GUIUtility.RotateAroundPivot(Mathf.Sin(Mathf.Clamp01(age/.38f)*Mathf.PI)*-1.4f,r.center);
             float radius=Mathf.Min(58,r.height*.3f);
-            RoundedPanel(new Rect(r.x+5,r.y+7,r.width,r.height),new Color(0,0,0,.48f),radius);
+            RoundedPanel(new Rect(r.x+5,r.y+7,r.width,r.height),new Color(0,0,0,.48f*a),radius);
             RoundedPanel(r,new Color(.99f,.975f,.93f,a),radius);RoundedPanel(r,new Color(.06f,.045f,.055f,a),radius,3);
+            if(tailLeft){
             if(bubbleTail==null){bubbleTail=new Texture2D(32,32,TextureFormat.RGBA32,false){filterMode=FilterMode.Bilinear};var pixels=new Color[1024];for(int y=0;y<32;y++)for(int x=0;x<32;x++)pixels[y*32+x]=new Color(1,1,1,x>=Mathf.Abs(y-15.5f)*2?1:0);bubbleTail.SetPixels(pixels);bubbleTail.Apply();}
             var tail=new Rect(tailLeft?r.x-17:r.x+r.width*.28f,tailLeft?r.y+r.height*.58f:r.yMax-11,23,28);var matrix=GUI.matrix;var color=GUI.color;
             if(!tailLeft)GUIUtility.RotateAroundPivot(-90,tail.center);
             GUI.color=new Color(.06f,.045f,.055f,a);GUI.DrawTexture(new Rect(tail.x-3,tail.y-3,tail.width+6,tail.height+6),bubbleTail);
             GUI.color=new Color(.99f,.975f,.93f,a);GUI.DrawTexture(tail,bubbleTail);GUI.color=color;GUI.matrix=matrix;
+            }
             for(int y=0;y<3;y++)for(int x=0;x<5-y;x++)RoundedPanel(new Rect(r.xMax-38-x*7,r.y+20+y*7,2.5f,2.5f),new Color(.16f,.10f,.13f,.14f*a),2);
             var old=GUI.color;GUI.color=new Color(1,1,1,a);
             Txt(new Rect(r.x+25,r.y+22,r.width-60,24),speaker,tiny,CreatorRed);

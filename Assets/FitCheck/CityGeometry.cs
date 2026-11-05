@@ -13,6 +13,8 @@ namespace FitCheck
         readonly Dictionary<string,Batch> batches=new Dictionary<string,Batch>();
         [SerializeField] List<Object> assets=new List<Object>();
         static readonly Color Kaos=new Color(227/255f,6/255f,19/255f),Ink=new Color(.075f,.085f,.095f),Cream=new Color(.94f,.91f,.82f),Peach=new Color(.66f,.23f,.19f),Teal=new Color(.38f,.35f,.30f),Violet=Kaos;
+        const float FacadePlanterLeft=.05f,FacadePlanterRight=14.95f;
+        static readonly Color LeafGreen=new Color(.16f,.57f,.20f);
         Batch Get(string texture){if(texture=="Plaster")texture="CityStucco";Batch b;if(!batches.TryGetValue(texture,out b)){b=new Batch();batches[texture]=b;}return b;}
         void Quad(Vector3 a,Vector3 b,Vector3 c,Vector3 d,Color color,string texture="Plaster",float repeat=1)
         {

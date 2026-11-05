@@ -1,0 +1,10 @@
+{
+  "authoring": "Blender 5.0",
+  "triangles": {
+    "AH_SHOES_01": 1118,
+    "SB_SHOES_01": 1114,
+    "CG_SHOES_01": 946
+  },
+  "texture_size": 512,
+  "references": "User-supplied refs roupas/refs tenis; interpreted silhouettes and textile construction, no imported product photograph."
+}

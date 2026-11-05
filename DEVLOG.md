@@ -1,5 +1,14 @@
 # DevLog
 
+## 05/11/2026 — Tênis Blender e ajustes de apresentação
+
+Sidewalk recebe lona/denim e estrela, Garage Session usa forma de skate escura com cadarços largos laranja, e Daily Steps recebe volume verde e painéis heatmap. Três fontes editáveis no Blender, FBX/UV, atlas 512 e JSON importado pela Unity; IDs, critérios, desbloqueios e calçados civis preservados. Total de triângulos dos três modelos cai de 4.916 para 3.178.
+
+O loading de dois segundos passa a mostrar destaques finitos percorrendo a inclinação das faixas. Balões contextuais não desenham ponta solta; diálogo de balcão mantém a ponta conectada. Sombra respeita a opacidade de entrada. Ajustado o afastamento dos moradores para cobrir toda a área retangular de colisão com o jogador.
+
+Validação nativa: 63 combinações de roupas/sete perfis, modelos e texturas dentro do orçamento, corpo em movimento, comparação dos pixels fora do balão, oito loadings, percurso casa–loja, atendimento e saves independentes.
+
+
 ## 04/11/2026 — Desempenho, frente da rua e loadings
 
 A atualização completa da loja caiu de 9,10 para 2,42 ms ao caminhar olhando para frente e de 9,02 para 4,60 ms olhando para baixo, no teste nativo da mesma máquina. Matrizes afins usam campos diretos; o corpo do jogador mantém movimento/relógios, mas só deforma as roupas quando pode entrar na câmera. A pose completa é restaurada imediatamente na vista para baixo e nas câmeras externas. Esses números medem CPU Update; o quadro completo continuou limitado a 60 FPS nas duas versões.

@@ -56,7 +56,7 @@ namespace FitCheck
             for(int i=0;i<5;i++){
                 float x=-22+i*2.5f;
                 Block(new Vector3(x,9.65f,6.5f),new Vector3(1.7f,.6f,1.0f),Cream);
-                Foliage(new Vector3(x,10.25f,6.5f),new Vector3(.9f,.6f,.65f),Teal,i);
+                Foliage(new Vector3(x,10.25f,6.5f),new Vector3(.9f,.6f,.65f),LeafGreen,i);
             }
             for(int i=0;i<3;i++){
                 float x=-19.5f+i*2.7f;
