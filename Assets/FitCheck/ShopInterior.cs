@@ -16,7 +16,7 @@ namespace FitCheck
         {
             interior=true;shopCustomerIndex=customer;transform.position=new Vector3(400,0,0);
             ShopShell();ShopFixtures();ShopFittingRoom();ShopMerchandise(studio);
-            BakeResident(studio,customer,ShopArrivalOutfit,new Vector3(.65f,-.055f,-4.3f),0);
+            BakeResident(studio,customer,Catalog.Default,new Vector3(.65f,-.055f,-4.3f),0,false,true);
             residents[0].root.name="Cliente — "+DayOne.Customers[customer].name;
             SetCustomerVisible(false);
             BakeResident(studio,0,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-.8f,-.055f,7.96f),0,true);

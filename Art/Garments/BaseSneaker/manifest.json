@@ -2,7 +2,7 @@
   "input": "refs roupas\\modelos tenis\\Base sneaker\\Base_sneaker.fbx",
   "sha256": "a3b071c644fc54e89c819a9358526ae5ba40e0c5a4c261b7577e2584bce8fcc7",
   "input_triangles": 501384,
-  "runtime_triangles": 1200,
+  "runtime_triangles": 2400,
   "texture": 512,
   "toe_sign": -1,
   "source_bounds": [

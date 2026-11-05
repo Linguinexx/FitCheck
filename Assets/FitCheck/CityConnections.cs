@@ -25,11 +25,11 @@ namespace FitCheck
             Ground(-96.5f,33,17,5,-.035f,Cream,"CityStone",4.7f);
             foreach(float x in new[]{-104.5f,-89}){Bench(x,26);Lamp(x,30.5f);}
             StreetPlanter(-100,23,12);StreetPlanter(-84,25,13);
-            // Art walls make the former gallery frontage a public passage, not an empty lot.
+            // Art walls face the cross street behind the new local storefronts.
             foreach(float x in new[]{-103,-91}){
-                Block(new Vector3(x,1.2f,10),new Vector3(3.2f,2.4f,.3f),Cream,"CityBrick");
-                Words("LADO B",new Vector3(x,1.5f,9.82f),.055f,Kaos);
-                obstacles.Add(new Rect(x-1.7f,9.7f,3.4f,.6f));
+                Block(new Vector3(x,1.2f,17.8f),new Vector3(3.2f,2.4f,.3f),Cream,"CityBrick");
+                Words("LADO B",new Vector3(x,1.5f,17.62f),.055f,Kaos);
+                obstacles.Add(new Rect(x-1.7f,17.5f,3.4f,.6f));
             }
             Ground(-49,-18,30,6,-.033f,Cream,"CityStone",4.7f);
             for(int i=0;i<7;i++)Ground(-53,-15.7f+i*.65f,4,.35f,-.010f,Cream,"Leather");

@@ -30,10 +30,11 @@ negative=sorted(p.z for p in points if p.x<lo.x+size.x*.22)
 toe=1 if positive[int(len(positive)*.9)]<negative[int(len(negative)*.9)] else -1
 for v in o.data.vertices:
     p=v.co.copy()
-    v.co=(-toe*(p.y-(lo.y+hi.y)*.5)*.385/size.y,toe*(p.x-(lo.x+hi.x)*.5)*.80/size.x+.10,.095+(p.z-lo.z)*.32/size.z)
+    scale=.80/size.x
+    v.co=(-toe*(p.y-(lo.y+hi.y)*.5)*scale,toe*(p.x-(lo.x+hi.x)*.5)*scale+.10,.095+(p.z-lo.z)*scale)
 before=sum(len(p.vertices)-2 for p in o.data.polygons)
-if before>1200:
-    modifier=o.modifiers.new('Everyday NPC budget','DECIMATE'); modifier.ratio=1200/before;modifier.use_collapse_triangulate=True
+if before>2400:
+    modifier=o.modifiers.new('Everyday NPC budget','DECIMATE'); modifier.ratio=2400/before;modifier.use_collapse_triangulate=True
     bpy.ops.object.modifier_apply(modifier=modifier.name)
 bm=bmesh.new();bm.from_mesh(o.data);bmesh.ops.triangulate(bm,faces=list(bm.faces));bmesh.ops.recalc_face_normals(bm,faces=bm.faces);bm.to_mesh(o.data);bm.free()
 for p in o.data.polygons:p.use_smooth=True

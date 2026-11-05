@@ -45,12 +45,12 @@ namespace FitCheck
             var material=new Material(Resources.Load<Shader>("CityPaint"));material.mainTexture=Resources.Load<Texture2D>("Painted/Leather");material.SetFloat("_Motion",0);assets.Add(material);
             var go=new GameObject(name);go.transform.SetParent(transform,false);go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=material;return go.transform;
         }
-        void BakeResident(StudioView studio,int customer,string[] outfit,Vector3 position,float yaw,bool wallLean=false)
+        void BakeResident(StudioView studio,int customer,string[] outfit,Vector3 position,float yaw,bool wallLean=false,bool everyday=false)
         {
             int oldHair=studio.HairOverride,oldExpression=studio.ExpressionOverride;bool oldPreview=studio.PreviewProportions,oldTall=studio.TallPreview;var rotation=studio.Avatar.rotation;var oldLook=studio.PlayerLook;
             try{
                 studio.HairOverride=-1;studio.ExpressionOverride=-1;studio.PreviewProportions=false;studio.TallPreview=false;studio.Avatar.rotation=Quaternion.identity;
-                if(!IsInterior){studio.PlayerLook=CitizenAppearance(customer);studio.ApplyCivilian(customer);}else studio.Apply(outfit,customer);
+                if(!IsInterior){studio.PlayerLook=CitizenAppearance(customer);studio.ApplyCivilian(customer);}else if(everyday)studio.ApplyCivilian(customer,true);else studio.Apply(outfit,customer);
                 if(wallLean)studio.SetShopAttitude();
                 var actor=CopyAvatar(studio,"Morador — "+DayOne.Customers[customer].name,position,yaw,false);residents.Add(actor);
                 if(wallLean)ConfigureShopLean(actor);

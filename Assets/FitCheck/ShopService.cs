@@ -5,7 +5,6 @@ namespace FitCheck
     public partial class CityView
     {
         public static readonly Vector3 ShopDressingPosition=new Vector3(-4.9f,-.055f,6.4f);
-        public static string[] ShopArrivalOutfit=>new[]{"SB_TOP_01","AH_BOTTOM_01","AH_SHOES_01",""};
         public bool CustomerHasEntered {get;private set;}
         bool customerWaiting;
         public bool CustomerWaitingAtCounter=>customerWaiting&&CustomerVisible;
@@ -91,7 +90,7 @@ namespace FitCheck
             var p=cam.transform.position;var r=cam.transform.rotation;float fov=cam.fieldOfView;
             stage=Stage.Welcome;Begin();shopService=stage==Stage.Dialogue;
             if(!shopService)return;
-            outfit=CityView.ShopArrivalOutfit;Apply();
+            outfit=Catalog.Default;Apply();
             cam.transform.SetPositionAndRotation(p,r);cam.fieldOfView=fov;CaptureShopCamera();FrameShopDialogue();
         }
         void ProceedToFitting()

@@ -33,7 +33,7 @@ namespace FitCheck
                 city.Look(new Vector2(12,-6));city.Step(new Vector2(-1,0),.05f,false,mannequin);city.Frame(cam,true,1/30f);UpdateShopSequence(1/30f);
                 if(Vector2.Distance(city.Position,CityView.ShopCounter)<.1f||cam.transform.position==openingPosition)throw new Exception("Jogador não pode andar/olhar durante chegada");
                 SettleShopArrival();
-                city.ValidateShopRoles();var waitingPosition=city.ResidentPosition(0);
+                city.ValidateShopRoles();city.CheckCustomerClothing(true);string arrivalIdentity=city.CustomerIdentitySignature();var waitingPosition=city.ResidentPosition(0);
                 if(!city.CustomerWaitingAtCounter||Vector2.Distance(new Vector2(waitingPosition.x,waitingPosition.z),CityView.ShopCustomerQueue)>.06f)throw new Exception("Cliente não parou na frente do balcão");
                 for(int frame=0;frame<120;frame++){city.Frame(cam,true,1/30f);UpdateShopSequence(1/30f);city.ValidateShopRoles();}
                 if(stage!=Stage.City||shopService||!city.CustomerWaitingAtCounter||Vector3.Distance(waitingPosition,city.ResidentPosition(0))>.001f)throw new Exception("Cliente não aguardou atendimento do jogador");
@@ -50,7 +50,7 @@ namespace FitCheck
                 MoveProof(CityView.ShopCounter,180,0);InteractShop();question=1;
                 if(!shopService||stage!=Stage.Dialogue)throw new Exception("Conversa não inicia atendimento da loja");
                 shopCameraTime=.5f;FrameShopDialogue();SaveFirstPersonFrame(Path.Combine(folder,"service-conversation.png"));
-                ProceedToFitting();
+                city.CheckCustomerClothing(true);ProceedToFitting();
                 var employeePosition=city.PlayerBodyPosition;
                 if(stage!=Stage.City||shopSequence!=ShopSequence.WalkingToFitting)throw new Exception("Cliente não foi ao provador depois da conversa");
                 int originalCustomer=customer;customer=3;AdvanceClock(4);customer=originalCustomer;
@@ -64,7 +64,7 @@ namespace FitCheck
                 for(int i=0;i<1400&&stage==Stage.City;i++){
                     var beforeCamera=cam.transform.position;var beforeRotation=cam.transform.rotation;
                     city.Frame(cam,true,1/30f);UpdateShopSequence(1/30f);
-                    city.CheckResidents();
+                    city.CheckResidents();if(city.CustomerVisible)city.CheckCustomerClothing(true);
                     city.ValidateShopRoles();
                     if(!city.PlayerBodyVisible||Vector3.Distance(employeePosition,city.PlayerBodyPosition)>.001f)throw new Exception("Jogador sumiu ou saiu do balcão durante acompanhamento");
                     if(i==65&&!city.PlayerHeadVisible)throw new Exception("Jogador ficou sem cabeça na câmera externa");
@@ -95,6 +95,7 @@ namespace FitCheck
                 if(mannequin.position!=dressingPosition||Quaternion.Angle(mannequin.rotation,Quaternion.Euler(0,90,0))>.01f)throw new Exception("Rotação levou o cliente para fora do provador");rotation=0;
                 outfit=new[]{"AH_TOP_01","AH_BOTTOM_01","AH_SHOES_01",""};Apply();Submit();
                 if(shopSequence!=ShopSequence.ShowingFinishedFit||stage!=Stage.City||!city.RuntimeReady)throw new Exception("Cliente não apresenta o fit antes de sair");
+                city.CheckCustomerClothing(false);if(city.CustomerIdentitySignature()!=arrivalIdentity)throw new Exception("Clothing change replaced customer identity");
                 if(Vector3.Distance(employeePosition,city.PlayerBodyPosition)>.001f)throw new Exception("Preparar saída teleportou jogador para a porta");
                 for(int i=0;i<1600&&stage==Stage.City;i++){
                     city.Frame(cam,true,1/30f);UpdateShopSequence(1/30f);
@@ -106,7 +107,7 @@ namespace FitCheck
                 if(shopDressingInStore||mannequin.position!=Vector3.zero)throw new Exception("Provador físico não foi encerrado ao finalizar");
                 EnterShop();if(Vector2.Distance(new Vector2(employeePosition.x,employeePosition.z),new Vector2(city.PlayerBodyPosition.x,city.PlayerBodyPosition.z))>.001f)throw new Exception("Próximo cliente teleportou jogador para a porta");
                 Home();GoHome();if(shopService)throw new Exception("Atendimento vazou para a casa/repetição");Home();EnterShop();SettleShopArrival();
-                if(city.ShopCustomerIndex!=1)throw new Exception("Próximo cliente não corresponde ao próximo pedido");
+                if(city.ShopCustomerIndex!=1)throw new Exception("Próximo cliente não corresponde ao próximo pedido");city.CheckCustomerClothing(true);
                 MoveProof(CityView.ShopCounter,0,0);InteractShop();ProceedToFitting();
                 for(int i=0;i<30;i++){city.Frame(cam,true,1/30f);UpdateShopSequence(1/30f);}
                 Home();if(shop!=null||shopDressingInStore||mannequin.position!=Vector3.zero||progress.posts.Count!=1)throw new Exception("Cancelar caminhada deixou atendimento parcial na loja");

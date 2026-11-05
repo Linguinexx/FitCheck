@@ -75,7 +75,7 @@ namespace FitCheck
             DirectionBoard(-120,-5.6f);DirectionBoard(-82,-5.6f);DirectionBoard(-28,-5.6f);
             Block(new Vector3(-144.6f,1.4f,2.5f),new Vector3(.4f,2.8f,24),Teal,"CityBrick");
             obstacles.Add(new Rect(-145, -9.5f,.7f,24));
-            CityConnections();CloseCityEdges();
+            CityConnections();FillCommerceGap();CloseCityEdges();
         }
         void StreetBuilding(float x,float width,int floors,Color color,int seed)
         {

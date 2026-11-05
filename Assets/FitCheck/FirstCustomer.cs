@@ -59,7 +59,7 @@ namespace FitCheck
             studio=new GameObject("Estúdio Fit Check").AddComponent<StudioView>();
             studio.PlayerLook=playerAppearance;studio.Build();cam=studio.Camera;mannequin=studio.Avatar;Apply();UpdateCamera();
         }
-        void Apply(){studio.Apply(outfit,customer);}
+        void Apply(){if(shopService&&stage==Stage.Dialogue)studio.ApplyCivilian(customer,true);else studio.Apply(outfit,customer);}
         void UpdateCamera()
         {
             if(stage==Stage.Title&&titleSceneActive){FrameLiveTitle(Time.unscaledDeltaTime);return;}

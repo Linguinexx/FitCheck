@@ -1,5 +1,19 @@
 # DevLog
 
+## 05/11/2026 — Comércio entre a mercearia e a oficina
+
+FitFeed adiado a pedido do usuário. O trecho vazio recebeu fachadas de barbearia, lavanderia e consertos, com vitrines, toldos, plantas e letreiros próprios em textura. Árvores/banco ocupam a margem da passagem; as placas existentes foram reposicionadas para a travessa traseira. O acesso à galeria e quadra permanece aberto.
+
+Adição de 13.644 triângulos estáticos e um lote de material/atlas 512×256, reutilizando os demais materiais. Três fontes no campo de iluminação existente, sem Light ou sombras em tempo real. Revisão nativa passou: colisões, seis acessos, moradores, locais de foto e trajeto casa–loja de 31,75 s na ida e 31,18 s na volta. Capturas em Captures/CommerceInfill; fonte em CommerceInfill.cs.
+
+## 05/11/2026 — Clientes com roupa cotidiana antes do provador
+
+Chegada e diálogo deixam de usar o conjunto fixo da coleção: cada cliente recebe um visual cotidiano e o tênis padrão. A aplicação preserva o perfil original de rosto/cabelo/expressão e as proporções. Somente a montagem do fit usa as peças selecionáveis da DripLab; o resultado acompanha a saída. Frequentador, catálogo, critérios, desbloqueios e inventário preservados. Recursos existentes reutilizados, sem nova coleção ou textura. Revisão nativa em Captures/CustomerArrivals.
+
+## 05/11/2026 — Correção das proporções do tênis cotidiano
+
+Após o usuário apontar diferença em relação ao modelo fornecido, removida a escala independente dos eixos: o comprimento continua 0,80, mas largura/altura agora preservam a proporção original. A primeira versão alargava e achatava a forma. Redução ajustada de 1.200 para 2.400 triângulos por pé para conservar melhor cadarços e sola; mantém 512 e um material por pé. Revisão focada passou: proporções originais, nove visuais civis, movimento completo e piscadas. Capturas em Captures/BaseSneakerFit. Sem mudança no catálogo da loja.
+
 ## 05/11/2026 — Modelos fornecidos e tênis cotidiano
 
 Os três tênis Blue/Fire/Green fornecidos pelo usuário substituem as versões anteriores do catálogo, após otimização no Blender para 2.500/2.500/2.496 triângulos por pé, atlas 512 e um material por pé. Originais intactos fora de Assets; editáveis em Art/Garments/SuppliedSneakers. Corrigida a preservação dos eixos/unidades no bake de FBX com malha na raiz.

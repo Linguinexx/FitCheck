@@ -8,7 +8,7 @@ namespace FitCheck.Editor
     public class StreetwearImporter:AssetPostprocessor
     {
         void OnPreprocessModel(){if(!assetPath.Contains("Garments/Streetwear/")&&!assetPath.Contains("Garments/Civilian/"))return;var m=(ModelImporter)assetImporter;m.isReadable=true;m.importAnimation=false;m.globalScale=1;m.meshCompression=ModelImporterMeshCompression.Off;}
-        void OnPreprocessTexture(){if(!assetPath.Contains("Garments/Streetwear/")&&!assetPath.Contains("Garments/Civilian/"))return;var t=(TextureImporter)assetImporter;t.filterMode=FilterMode.Point;t.textureCompression=TextureImporterCompression.Compressed;t.maxTextureSize=512;t.mipmapEnabled=true;}
+        void OnPreprocessTexture(){if(assetPath=="Assets/Resources/CommerceSigns.png"){var sign=(TextureImporter)assetImporter;sign.maxTextureSize=512;sign.mipmapEnabled=true;sign.alphaIsTransparency=true;sign.wrapMode=TextureWrapMode.Clamp;return;}if(!assetPath.Contains("Garments/Streetwear/")&&!assetPath.Contains("Garments/Civilian/"))return;var t=(TextureImporter)assetImporter;t.filterMode=FilterMode.Point;t.textureCompression=TextureImporterCompression.Compressed;t.maxTextureSize=512;t.mipmapEnabled=true;}
     }
     public static class StreetwearBake
     {

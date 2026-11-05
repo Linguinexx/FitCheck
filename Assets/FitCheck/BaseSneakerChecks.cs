@@ -11,9 +11,11 @@ namespace FitCheck
             var json=Resources.Load<TextAsset>("Garments/Civilian/CIV_SHOES_BASE");
             if(json==null)throw new Exception("Everyday sneaker missing");
             var model=JsonUtility.FromJson<BlenderGarmentAsset>(json.text);int triangles=0;
-            foreach(var part in model.parts){triangles+=part.triangles.Length/3;foreach(var p in part.vertices)if(p.y<.09f||p.y>.42f||p.z<-.51f||p.z>.31f)throw new Exception("Everyday sneaker axes/scale invalid");}
+            var bounds=new Bounds();bool first=true;
+            foreach(var part in model.parts){triangles+=part.triangles.Length/3;foreach(var p in part.vertices){if(p.y<.09f||p.y>.49f||p.z<-.51f||p.z>.31f)throw new Exception("Everyday sneaker axes/scale invalid");if(first){bounds=new Bounds(p,Vector3.zero);first=false;}else bounds.Encapsulate(p);}}
+            if(Mathf.Abs(bounds.size.x/bounds.size.z-.40146f)>.015f||Mathf.Abs(bounds.size.y/bounds.size.z-.47678f)>.015f)throw new Exception("Everyday sneaker original proportions changed");
             var texture=Resources.Load<Texture2D>("Garments/Civilian/CIV_SHOES_BASE");
-            if(triangles>1200||triangles<100||texture==null||texture.width!=512||texture.mipmapCount<2)throw new Exception("Everyday sneaker exceeded budget or lost texture");
+            if(triangles>2400||triangles<100||texture==null||texture.width!=512||texture.mipmapCount<2)throw new Exception("Everyday sneaker exceeded budget or lost texture");
             var look=studio.PlayerLook;var tiles=new List<string>();
             try{
                 for(int id=0;id<9;id++){

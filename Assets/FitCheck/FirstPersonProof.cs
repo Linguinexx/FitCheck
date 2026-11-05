@@ -21,6 +21,9 @@ namespace FitCheck
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-gameplay-performance")>=0){yield return CheckShopGameplayPerformance(folder);Application.Quit(0);yield break;}
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-loading-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-road-polish-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-night-lighting-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-sneaker-v2-review")>=0){yield return RunLoadingReview(folder);yield break;}
             try{
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-commerce-infill-review")>=0){CheckCommerceInfill(folder);Application.Quit(0);yield break;}
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-customer-arrivals-review")>=0){CheckCustomerArrivals(folder);Application.Quit(0);yield break;}
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-base-sneaker-review")>=0){CheckBaseSneaker(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"SHOP_REVIEW_PASSED: supplied everyday shoe proportions, bounded geometry and material budget, nine civilian looks, full body motion and blinks.");Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-street-frontage-review")>=0){CheckStreetFrontage(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-performance-review")>=0){CheckGarmentFinishes(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-garment-finishes-review")>=0){CheckGarmentFinishes(folder);Application.Quit(0);yield break;}
