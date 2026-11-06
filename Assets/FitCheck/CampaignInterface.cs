@@ -15,6 +15,8 @@ namespace FitCheck
         static readonly Color FeedBackground=new Color(.045f,.04f,.045f),FeedCardColor=new Color(.095f,.083f,.091f),
             FeedInset=new Color(.067f,.058f,.065f),FeedAccent=new Color(1f,.34f,.39f);
         Vector2 fitFeedScroll;
+        static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","Kaio","SeuJota","Lia","Julia","NinaFaisca"};
+        Texture2D[] feedPortraits;
         void InvalidateFeedPhoto(string path){if(feedPhotos.TryGetValue(path,out var tex)){Destroy(tex);feedPhotos.Remove(path);}}
         Texture2D FeedPhoto(string path)
         {
@@ -140,8 +142,8 @@ namespace FitCheck
                 int index=progress.posts.Count-1-row;
                 var post=progress.posts[index];var client=DayOne.Customers[index];
                 RoundedPanel(new Rect(5,y,634,747),FeedCardColor,13);
-                FeedByline(new Rect(24,y+14,592,52),index);
-                var image=new Rect(42,y+76,560,560);
+                FeedByline(new Rect(24,y+14,592,68),index);
+                var image=new Rect(52,y+98,540,540);
                 FitFeedImage(image,FeedPhoto(post.photo));
                 if(GUI.Button(image,GUIContent.none,GUIStyle.none)){Sound(0);opened=index;}
                 Txt(new Rect(27,y+644,574,44),client.caption,caption,paper);
@@ -153,11 +155,16 @@ namespace FitCheck
         }
         void FeedByline(Rect r,int index)
         {
+            if(feedPortraits==null)feedPortraits=FeedPortraitNames.Select(name=>Resources.Load<Texture2D>("Artwork/PhoneAndProfiles/"+name)).ToArray();
             var client=DayOne.Customers[index];
-            RoundedPanel(new Rect(r.x,r.y+4,44,44),CreatorRed,22);
-            Txt(new Rect(r.x+2,r.y+5,40,42),client.name.Substring(0,1),action,paper);
-            Txt(new Rect(r.x+55,r.y,r.width-62,28),client.name,copy,paper);
-            Txt(new Rect(r.x+55,r.y+29,r.width-62,24),client.location+"  •  DIA 0"+(index/3+1),tiny,muted);
+            var avatar=new Rect(r.x,r.y,68,68);
+            if(feedPortraits[index]!=null)GUI.DrawTexture(avatar,feedPortraits[index],ScaleMode.ScaleToFit,true);
+            else{
+                RoundedPanel(avatar,FeedInset,34);
+                Txt(avatar,client.name.Substring(0,1),action,paper);
+            }
+            Txt(new Rect(r.x+82,r.y+3,r.width-82,38),client.name,heading,paper);
+            Txt(new Rect(r.x+82,r.y+42,r.width-82,23),client.location+"  •  DIA 0"+(index/3+1),tiny,muted);
         }
         void FitFeedImage(Rect r,Texture2D image)
         {

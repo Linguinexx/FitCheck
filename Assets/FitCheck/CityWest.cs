@@ -37,9 +37,6 @@ namespace FitCheck
             Ground(-84,1.8f,120,24,-.041f,Cream,"CityStone",4.7f);
             Ground(-86,-18.4f,126,4.1f,-.035f,Cream,"CityStone",4.7f);
             Ground(-86,10,150,140,-.22f,new Color(.25f,.29f,.22f),"Plaster",6);
-            Block(new Vector3(-86,-.01f,-10.95f),new Vector3(122,.25f,.30f),Cream,"Plaster",.045f);
-            for(int i=0;i<24;i++)Ground(-143+i*7.8f,-14.7f,2.4f,.10f,-.01f,new Color(.77f,.65f,.36f),"Leather");
-            foreach(float x in new[]{-124.8f,-76,-36})for(int i=0;i<7;i++)Ground(x,-15.7f+i*.65f,3.6f,.35f,-.012f,Cream,"Leather");
 
             PlaceCityModule(ResidentialEntrance,new Vector3(-120,0,0));
             StreetBuilding(-137,12,2,new Color(.65f,.45f,.35f),1);

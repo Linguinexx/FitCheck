@@ -32,7 +32,6 @@ namespace FitCheck
                 obstacles.Add(new Rect(x-1.7f,17.5f,3.4f,.6f));
             }
             Ground(-49,-18,30,6,-.033f,Cream,"CityStone",4.7f);
-            for(int i=0;i<7;i++)Ground(-53,-15.7f+i*.65f,4,.35f,-.010f,Cream,"Leather");
             foreach(float x in new[]{-61,-37})Lamp(x,-18.3f);
             StreetPoster(-63,-18,3);StreetPoster(-36,-20,4);
             // Ordinary residential cross street, with enough room to circle the blocks.

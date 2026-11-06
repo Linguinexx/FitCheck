@@ -24,7 +24,7 @@ namespace FitCheck
                 case 1:return Hint("E","Sair de casa",origin+new Vector3(0,2,-4.4f),new Vector3(2.2f,4,.2f));
                 case 2:return Hint("E","Trocar de roupa",origin+new Vector3(4.4f,1.8f,2.9f),new Vector3(1.8f,3.6f,1.4f));
                 case 3:return Hint("E","Descansar / organizar o dia",origin+new Vector3(-3.4f,.7f,2.3f),new Vector3(2.3f,1.4f,3.5f));
-                case 4:return Hint("E","Abrir FitFeed",origin+new Vector3(-3.3f,1.5f,-2.6f),new Vector3(.45f,.2f,.75f));
+                case 4:return Hint("E","Abrir FitFeed",origin+CityView.HomePhonePosition,new Vector3(.75f,.2f,.45f));
             }}else if(!city.IsInterior){
                 if(city.StreetInteraction==1)return Hint("E","Entrar na DripLab",origin+new Vector3(10.4f,2,3.3f),new Vector3(2.2f,4,.3f));
                 if(city.StreetInteraction==2)return Hint("E","Entrar em casa",origin+new Vector3(CityView.StreetHomeDoor.x,2,8.65f),new Vector3(2.1f,4,.25f));

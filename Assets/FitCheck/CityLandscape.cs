@@ -4,6 +4,35 @@ namespace FitCheck
 {
     public partial class CityView
     {
+        const float AvenueCenterZ=-13.7f;
+        static readonly Vector2[] AvenueCrossings={
+            new Vector2(-124.8f,3.6f),new Vector2(-76,3.6f),new Vector2(-53,4),
+            new Vector2(-36,3.6f),new Vector2(-18,4)
+        };
+
+        void AvenueMarkings()
+        {
+            const float roadLeft=-144.5f,roadRight=26f,dashLength=2.4f,dashPitch=5.8f,crossingClearance=.65f;
+            var yellow=new Color(.77f,.65f,.36f);
+            float sectionStart=roadLeft;
+            for(int i=0;i<=AvenueCrossings.Length;i++){
+                bool hasCrossing=i<AvenueCrossings.Length;
+                var crossing=hasCrossing?AvenueCrossings[i]:default;
+                float sectionEnd=hasCrossing?crossing.x-crossing.y*.5f-crossingClearance:roadRight;
+                float length=sectionEnd-sectionStart;
+                for(int side=-1;side<=1;side+=2)
+                    Block(new Vector3((sectionStart+sectionEnd)*.5f,-.01f,AvenueCenterZ+side*2.75f),new Vector3(length,.25f,.30f),Cream,"Plaster",.045f);
+                int count=Mathf.Max(0,Mathf.FloorToInt((length-dashLength)/dashPitch)+1);
+                float first=(sectionStart+sectionEnd-(count-1)*dashPitch)*.5f;
+                for(int dash=0;dash<count;dash++)
+                    Ground(first+dash*dashPitch,AvenueCenterZ,dashLength,.10f,-.010f,yellow,"Leather");
+                if(!hasCrossing)break;
+                for(int stripe=-3;stripe<=3;stripe++)
+                    Ground(crossing.x,AvenueCenterZ+stripe*.65f,crossing.y,.35f,-.012f,Cream,"Leather");
+                sectionStart=crossing.x+crossing.y*.5f+crossingClearance;
+            }
+        }
+
         void Bench(float x,float z)
         {
             for(int side=-1;side<=1;side+=2){Block(new Vector3(x+side*1.75f,.43f,z),new Vector3(.12f,.86f,.75f),Ink,"Leather");Block(new Vector3(x+side*1.75f,.9f,z+.33f),new Vector3(.12f,1.7f,.12f),Ink,"Leather");}
@@ -41,10 +70,8 @@ namespace FitCheck
         {
             Ground(0,10,150,110,-.21f,new Color(.31f,.39f,.32f),"Plaster",8);
             Pavement();
-            Ground(-53,-13.7f,206,5.2f,-.018f,Color.white,"CityAsphalt",4);
-            Block(new Vector3(0,-.01f,-10.95f),new Vector3(56,.25f,.30f),Cream,"Plaster",.045f);
-            for(int i=0;i<7;i++)Ground(-18,-15.7f+i*.65f,4.0f,.35f,-.012f,Cream,"Leather");
-            for(int i=-5;i<=5;i++)Ground(i*5.2f,-14.7f,2.4f,.10f,-.010f,new Color(.77f,.65f,.36f),"Leather");
+            Ground(-53,AvenueCenterZ,206,5.2f,-.018f,Color.white,"CityAsphalt",4);
+            AvenueMarkings();
             Block(new Vector3(-10.3f,.30f,-.7f),new Vector3(7.8f,.60f,5.1f),Cream,"Plaster",.4f);
             Ground(-10.3f,-.7f,7.25f,4.55f,.62f,new Color(.27f,.30f,.19f),"Plaster",2);
             obstacles.Add(new Rect(-14.2f,-3.25f,7.8f,5.1f));

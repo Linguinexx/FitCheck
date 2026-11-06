@@ -8,6 +8,7 @@ namespace FitCheck
         public bool IsHome=>homeInterior;
         public static readonly Rect HomeBounds=new Rect(-5.5f,-4.5f,11,9);
         public static readonly Vector2 HomeSpawn=new Vector2(0,.2f),HomeDoor=new Vector2(0,-3.5f),HomeBed=new Vector2(-1.5f,2.6f),HomeWardrobe=new Vector2(3,2),HomeDesk=new Vector2(-2.1f,-2.2f);
+        public static readonly Vector3 HomePhonePosition=new Vector3(-3.3f,1.49f,-2.6f);
         public static readonly Vector2 StreetHomeDoor=new Vector2(-124.8f,7.65f),StreetHomeThreshold=new Vector2(-124.8f,9.9f),StreetShopDoor=new Vector2(10.4f,2.1f);
         public void BuildHome()
         {
@@ -35,8 +36,7 @@ namespace FitCheck
             obstacles.Add(new Rect(3.55f,2.25f,1.7f,1.3f));
             Block(new Vector3(-3.8f,1.32f,-2.65f),new Vector3(2.5f,.16f,1.3f),new Color(.61f,.43f,.27f),"Wood");
             foreach(float x in new[]{-4.8f,-2.8f})foreach(float z in new[]{-3.1f,-2.2f})Block(new Vector3(x,.65f,z),new Vector3(.09f,1.3f,.09f),Ink,"CityMetal");
-            Block(new Vector3(-3.3f,1.46f,-2.6f),new Vector3(.33f,.06f,.62f),Ink,"Rubber",.04f);
-            Block(new Vector3(-3.3f,1.50f,-2.6f),new Vector3(.26f,.01f,.49f),new Color(.45f,.15f,.50f),"CityGlow");
+            BuildHomePhone();
             Block(new Vector3(-4.5f,1.52f,-2.7f),new Vector3(.7f,.23f,.52f),Kaos,"Paper");
             obstacles.Add(new Rect(-5.05f,-3.3f,2.5f,1.3f));
             // Door, poster, night window, shelf, and a rug give each corner a purpose.
@@ -62,6 +62,25 @@ namespace FitCheck
             DecorateHome(walnut,petrol);
             BuildCat(new Vector3(-3.4f,1.055f,1.6f),240);
             GeometryBatches=batches.Count;FinishGeometry();motionRigVersion=ResidentArtRevision;
+        }
+        void BuildHomePhone()
+        {
+            Block(HomePhonePosition-Vector3.up*.03f,new Vector3(.62f,.06f,.33f),Ink,"Rubber",.04f);
+            var center=HomePhonePosition+Vector3.up*.002f;
+            const float halfHeight=.245f,halfWidth=.13f;
+            var mesh=new Mesh{name="Tela do celular — wallpaper",
+                vertices=new[]{
+                    new Vector3(halfHeight,0,-halfWidth),new Vector3(-halfHeight,0,-halfWidth),
+                    new Vector3(-halfHeight,0,halfWidth),new Vector3(halfHeight,0,halfWidth)
+                },
+                uv=new[]{Vector2.zero,Vector2.up,Vector2.one,Vector2.right},triangles=new[]{0,1,2,0,2,3}};
+            mesh.RecalculateNormals();mesh.RecalculateBounds();assets.Add(mesh);
+            var screen=new GameObject("Tela do celular");
+            screen.transform.SetParent(transform,false);screen.transform.localPosition=center;
+            screen.AddComponent<MeshFilter>().sharedMesh=mesh;
+            var material=new Material(Resources.Load<Shader>("Artwork"));
+            material.mainTexture=Resources.Load<Texture2D>("Artwork/PhoneAndProfiles/Wallpaper");
+            assets.Add(material);screen.AddComponent<MeshRenderer>().sharedMaterial=material;
         }
         void DecorateHome(Color walnut,Color petrol)
         {

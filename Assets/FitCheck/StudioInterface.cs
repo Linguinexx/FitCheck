@@ -260,8 +260,8 @@ namespace FitCheck
                 if(fromHome&&Tap(new Rect(1132,78,245,44),"← Voltar ao feed")){stage=Stage.Retrospective;return;}
             }
             RoundedPanel(new Rect(60,158,614,679),FeedCardColor,13);
-            FeedByline(new Rect(82,169,568,54),customer);
-            FitFeedImage(new Rect(91,230,552,552),photo);
+            FeedByline(new Rect(82,169,568,68),customer);
+            FitFeedImage(new Rect(101,250,532,532),photo);
             Txt(new Rect(84,790,566,39),Customer.caption,caption,paper);
 
             RoundedPanel(new Rect(705,158,672,598),FeedCardColor,13);
