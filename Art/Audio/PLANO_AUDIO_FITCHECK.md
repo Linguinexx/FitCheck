@@ -196,6 +196,24 @@ audio recebidos/
 
 ## Ordem prática de coleta
 
+### Coletados na playlist
+
+Os itens abaixo foram confirmados na [playlist FitCheck by DripLab](https://pixabay.com/accounts/playlists/34612170/). Os usos são propostas para triagem. Download, conferência de licença, edição e validação de loop ainda estão pendentes.
+
+| Status | Uso sugerido | Áudio no Pixabay |
+|---|---|---|
+| Coletado | `mus_menu` | [Beautiful Boom Bap](https://pixabay.com/music/beats-beautiful-boom-bap-113776/) |
+| Coletado | `mus_bairro_noite` | [Jazzy Hip Hop Boom Bap](https://pixabay.com/music/beats-jazzy-hip-hop-boom-bap-111861/) |
+| Coletado | `mus_loja` | [Boom Bap Old School Groove](https://pixabay.com/music/electronic-boom-bap-old-school-groove-573879/) |
+| Coletado | `mus_quarto` | [Soulful Boom Bap](https://pixabay.com/music/beats-soulful-boom-bap-113773/) |
+| Coletado | `amb_bairro_noite` | [Night City Side Street with Passing Cars and Distant Urban Ambience](https://pixabay.com/sound-effects/city-night-city-side-street-with-passing-cars-and-distant-urban-ambience-339223/) |
+| Coletado | Base para `amb_quarto_noite` | [City Ambience Distant Stereo](https://pixabay.com/sound-effects/city-city-ambience-distant-stereo-49251/) |
+| Coletado | Fonte para recortar os apoios de `step_loja` | [Footsteps on Tile](https://pixabay.com/sound-effects/household-footsteps-on-tile-31653/) |
+| Coletado | Fonte para recortar os apoios de `step_calcada` | [concrete footsteps 1](https://pixabay.com/sound-effects/film-special-effects-concrete-footsteps-1-6265/) |
+| Coletado | Fonte para abertura e fechamento de porta | [door-open-close](https://pixabay.com/sound-effects/household-door-open-close-45475/) |
+
+### Sequência de coleta e revisão
+
 1. Quatro músicas principais e três fundos (cidade, loja, quarto).
 2. Cliques/confirmar/voltar/indisponível; passos na calçada, loja e madeira; portas, sininho, cortina e troca de tecido.
 3. Seis bancos de fala, com seis sílabas cada; foto, publicação, quatro resultados, desbloqueio e conquista.
