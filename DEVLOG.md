@@ -1,5 +1,17 @@
 # DevLog
 
+## 05/11/2026 — Teaser atualizado com o fluxo do jogo
+
+Nova edição de 48 s em 720p/30 fps, feita com 15 clipes novos de captura nativa. A sequência mostra criação, casa, bairro atual, abrir loja, pedido, ida ao provador, montagem, cliente com o fit final, foto/nota e Fubá. Interfaces reais e resultado 10/10 obtido pelas regras; sem lista de funcionalidades futuras. Logo Selo Kaos e fontes do projeto.
+
+Captura isolada, texturas de leitura reutilizadas, fonte em CurrentTeaserCapture.cs. Edição/validação em Art/Video/TeaserAtual; MP4 e editável em Captures/TeaserAtual. Reutilizada a trilha original da edição anterior, com efeitos atuais e miado do jogo. MP4 H.264/AAC decodificado e validado; Teste 01 e saves preservados. Nenhuma trilha nova integrada ao gameplay.
+
+## 05/11/2026 — Primeira entrega de teste Windows
+
+Organizada a Teste 01 com executável, ZIP, LEIA-ME, roteiro, modelo de relato e metadados de origem/validação. Identificação do aplicativo preservada para não mudar o local dos saves. Pacote sem saves, sessões de teste ou fontes. Conteúdo pendente explicitado: trajes comuns do player, quarto, nova UI do FitFeed e áudio definitivo.
+
+Compilação Unity 6000.6.7f1 e revisão do executável Windows/D3D11 passaram (saída 0): bairro e trajeto, personalização, gato/miado, tênis civis/coleção, 63 combinações de roupa, oito loadings, casa/loja, atendimento/saída/próximo cliente, troca de dia e três saves independentes. Logs tools/test01-final-build.log e tools/test01-proof.log; capturas em Captures/Test01. Fontes/instruções de entrega em Art/Releases/Test01. Próxima validação é o teste manual do grupo em seus computadores.
+
 ## 05/11/2026 — Ligação musical entre SIDE B e AO VIVO
 
 O vazio recebeu o estúdio SOM/LADO B, vitrine com equipamento e caixote de discos, além de uma passagem lateral para um pátio de rima. Palco, microfone/caixas, mural, banco, árvore com canteiro, bicicleta e bandeirolas completam o trecho. A entrada e o retorno ficam livres, sem alterar a calçada contínua ou abrir o perímetro.

@@ -19,8 +19,9 @@ namespace FitCheck
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-entry-performance")>=0){yield return CheckEntryPerformance(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"PERFORMANCE_CAPTURED: home, street and shop cold/return entry timings and scene costs.");Application.Quit(0);yield break;}
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-garment-render-performance")>=0){yield return CheckGarmentRenderPerformance(folder);Application.Quit(0);yield break;}
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-gameplay-performance")>=0){yield return CheckShopGameplayPerformance(folder);Application.Quit(0);yield break;}
-            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-loading-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-road-polish-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-night-lighting-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-sneaker-v2-review")>=0){yield return RunLoadingReview(folder);yield break;}
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-test-build-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-loading-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-road-polish-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-night-lighting-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-sneaker-v2-review")>=0){yield return RunLoadingReview(folder);yield break;}
             try{
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-current-teaser")>=0){CaptureCurrentTeaser(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-music-infill-review")>=0){CheckMusicInfill(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-commerce-infill-review")>=0){CheckCommerceInfill(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-customer-arrivals-review")>=0){CheckCustomerArrivals(folder);Application.Quit(0);yield break;}

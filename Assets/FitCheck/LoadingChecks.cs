@@ -21,7 +21,8 @@ namespace FitCheck
         {
             var oldProgress=progress;var oldLook=playerAppearance;string oldStorage=storageOverride,oldLibrary=saveLibraryOverride;bool oldReduced=reducedMotion;
             try{
-                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-sneaker-v2-review")>=0)CheckSneakerUpgrade(folder);
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-test-build-review")>=0){CheckMusicInfill(folder);CheckShopDecoration(folder);CheckCatCompanion(folder);}
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-sneaker-v2-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-test-build-review")>=0)CheckSneakerUpgrade(folder);
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-night-lighting-review")>=0)CheckNightLighting(folder);
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-road-polish-review")>=0)CheckRoadPolish(folder);
                 Home();progress=new DayProgress();playerAppearance=new PlayerAppearance();
@@ -66,6 +67,7 @@ namespace FitCheck
                 CheckHomeCommute(folder);CheckShopServiceFlow(folder);CheckSaveSlots(folder);
                 File.WriteAllText(Path.Combine(folder,"checks.txt"),"SHOP_REVIEW_PASSED: branded native loading, animated menu logo, reversible dots, duplicate/input blocking, frame before destination construction, Play/save/creator/home/street/shop round trip, reduced motion, full home/service/save regression.");
                 Debug.Log("LOADING_REVIEW_PASSED: all eight transitions, input gating, dots, reduced motion, home/service/save regression.");
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-test-build-review")>=0){File.WriteAllText(Path.Combine(folder,"checks.txt"),"TEST_BUILD_01_PASSED: current neighborhood and timed commute, shop decoration, cat/meow, civilian and collection sneakers, 63 clothing combinations, eight loadings, home/store routes, full customer service and three independent saves.");Debug.Log("TEST_BUILD_01_PASSED: complete native test-build review; isolated test storage.");}
             }finally{loadingTestEnabled=false;Home();progress=oldProgress;playerAppearance=oldLook;storageOverride=oldStorage;saveLibraryOverride=oldLibrary;reducedMotion=oldReduced;}
         }
     }

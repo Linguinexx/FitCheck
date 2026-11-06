@@ -6,6 +6,7 @@ namespace FitCheck
 {
     public partial class FirstCustomer
     {
+        Texture2D interfaceVideoTexture;
         // Proof-only IMGUI container: draw the real controls into the same native camera target.
         void CaptureInterface(string path,Vector2? pointer=null)
         {
@@ -15,19 +16,21 @@ namespace FitCheck
             var begin=gui.GetMethod("BeginContainer",flags);var end=gui.GetMethod("EndContainer",flags);var beginGui=gui.GetMethod("BeginGUI",flags);
             var entity=typeof(UnityEngine.Object).GetMethod("GetEntityId",BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic).Invoke(this,null);
             var previousTarget=cam.targetTexture;var active=RenderTexture.active;float aspect=cam.aspect;
-            var rt=RenderTexture.GetTemporary(1440,900,24,RenderTextureFormat.ARGB32);var tex=new Texture2D(1440,900,TextureFormat.RGB24,false);bool container=false,pushed=false;
+            bool jpeg=path.EndsWith(".jpg",StringComparison.OrdinalIgnoreCase);
+            if(jpeg&&interfaceVideoTexture==null)interfaceVideoTexture=new Texture2D(1440,900,TextureFormat.RGB24,false);
+            var rt=RenderTexture.GetTemporary(1440,900,24,RenderTextureFormat.ARGB32);var tex=jpeg?interfaceVideoTexture:new Texture2D(1440,900,TextureFormat.RGB24,false);bool container=false,pushed=false;
             float fade=arrivalFade,flash=photoFlash;var oldEvent=Event.current;
             try{
                 arrivalFade=0;photoFlash=0;cam.targetTexture=rt;cam.aspect=1.6f;cam.Render();RenderTexture.active=rt;
                 begin.Invoke(null,new[]{state});container=true;beginGui.Invoke(null,new object[]{0,entity,0});
                 Event.current=new Event{type=EventType.Repaint,mousePosition=pointer??new Vector2(-100,-100)};
                 GL.PushMatrix();pushed=true;GL.LoadPixelMatrix(0,1440,900,0);OnGUI();end.Invoke(null,null);container=false;
-                GL.Flush();RenderTexture.active=rt;tex.ReadPixels(new Rect(0,0,1440,900),0,0);tex.Apply();File.WriteAllBytes(path,tex.EncodeToPNG());
-                Debug.Log("FITCHECK_INTERFACE_CAPTURED: "+path);
+                GL.Flush();RenderTexture.active=rt;tex.ReadPixels(new Rect(0,0,1440,900),0,0);tex.Apply();File.WriteAllBytes(path,jpeg?tex.EncodeToJPG(87):tex.EncodeToPNG());
+                if(!jpeg)Debug.Log("FITCHECK_INTERFACE_CAPTURED: "+path);
             }finally{
                 if(container)try{end.Invoke(null,null);}catch{}
                 if(pushed)GL.PopMatrix();if(oldEvent!=null)Event.current=oldEvent;(state as IDisposable)?.Dispose();arrivalFade=fade;photoFlash=flash;
-                cam.targetTexture=previousTarget;cam.aspect=aspect;RenderTexture.active=active;RenderTexture.ReleaseTemporary(rt);Destroy(tex);
+                cam.targetTexture=previousTarget;cam.aspect=aspect;RenderTexture.active=active;RenderTexture.ReleaseTemporary(rt);if(!jpeg)Destroy(tex);
             }
         }
         void CaptureKaosInterfaceReview(string folder)

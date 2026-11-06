@@ -1,0 +1,22 @@
+FIT CHECK — TESTE 01 — RELATO
+
+Nome/apelido do testador (opcional):
+Data:
+Windows / CPU / GPU / RAM (se souber):
+Resolução usada:
+
+Local e situação (casa/rua/loja/menu; dia/cliente):
+O que tentou fazer:
+Passos para repetir:
+1.
+2.
+3.
+
+O que esperava:
+O que aconteceu:
+Ocorreu uma vez ou sempre?
+Impede continuar ou tem como contornar?
+
+Se for desempenho: ao entrar ou durante o jogo? Imagem engasgando ou câmera lenta?
+Captura/vídeo anexado:
+Outras observações:

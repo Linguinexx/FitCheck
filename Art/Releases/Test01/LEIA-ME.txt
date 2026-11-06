@@ -1,0 +1,54 @@
+FIT CHECK — TESTE 01
+Windows 64 bits | 05/11/2026 | Unity 6000.6.7f1
+
+COMO ABRIR
+1. Extraia o ZIP inteiro para uma pasta do computador.
+2. Abra FitCheck.exe dentro de Windows-Test01.
+3. Mantenha FitCheck_Data, UnityPlayer.dll e os demais arquivos ao lado do executável.
+Não é necessário abrir a Unity para jogar.
+
+COMEÇANDO
+Jogar abre a seleção de até três saves. Escolha um existente ou crie um personagem
+num espaço vazio. Para testar desde o começo, prefira um espaço vazio; preserve
+os saves que já usa. A exclusão de um save pede confirmação.
+
+Você começa em casa, em primeira pessoa. Saia pela porta, siga as placas até a
+DripLab e entre na loja. A loja começa fechada: vá ao balcão e interaja para abrir.
+O cliente entra e espera ser atendido. Converse com ele; depois ele segue para o
+provador, onde você monta e confirma o fit. Ao finalizar, confira foto e resultado.
+O dia tem três atendimentos. Os saves são gravados durante o progresso.
+
+CONTROLES
+W A S D / setas: andar. Mouse: olhar ao redor.
+Shift: correr. E: interagir com o objeto/personagem próximo que está olhando.
+Esc: pausar/retomar ou cancelar uma tela conforme o contexto.
+Tab: alternar cursor na exploração; clique na cena para retomar o olhar.
+F: personalizar a loja enquanto estiver fechada.
+Menus e montagem de fit usam o mouse. Alt+F4 fecha o aplicativo.
+Sensibilidade do mouse fica em Configurações.
+
+O QUE ESTA VERSÃO INCLUI
+Menu da fachada, saves e criação de personagem; casa, bairro e loja;
+atendimento/provador, roupas e tênis; cidade noturna, comércio e pátio de rima;
+personalização da loja; Fubá em casa e na loja; campanha-base e resultados.
+
+O QUE AINDA ESTÁ EM DESENVOLVIMENTO
+- Trajes comuns próprios para o player.
+- Melhoria da decoração do quarto.
+- Reformulação visual do FitFeed, que ainda usa a interface atual.
+- Áudio definitivo: vários efeitos são provisórios; a trilha planejada ainda não
+  foi integrada. O miado gravado do Fubá já está presente.
+- Refinamento de cabelos, roupas, animações e desempenho conforme os testes.
+
+TESTE E FEEDBACK
+Use ROTEIRO-DE-TESTE.md e RELATO-DE-BUG.txt incluídos nesta pasta.
+Se houver travamento, anote local, ação e se ocorreu ao entrar ou durante o jogo.
+Uma captura/vídeo curto e a configuração do computador ajudam a reproduzir.
+
+SAVES E PRIVACIDADE DO PACOTE
+Este ZIP não contém saves de jogadores, sessões de teste, caches ou código-fonte.
+Esta versão mantém a identificação anterior do aplicativo e pode reconhecer seus
+saves locais. Reinstalar/extrair o ZIP não é um procedimento de apagar progresso.
+
+VERSÃO
+Identificação e validação em VERSAO.json. Créditos e licenças acompanham o pacote.
