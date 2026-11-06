@@ -60,7 +60,8 @@ namespace FitCheck
                 for(int i=0;i<=ArmSides;i++){
                     float angle=i*Mathf.PI*2/ArmSides+sleevePhase;var radial=across*Mathf.Cos(angle)*rx+forward*Mathf.Sin(angle)*rz;
                     v.Add(center+radial-TorsoPivot);n.Add((across*Mathf.Cos(angle)/rx+forward*Mathf.Sin(angle)/rz).normalized);
-                    uv.Add(new Vector2(i/(float)ArmSides*Mathf.PI*(rx+rz)/AvatarTileSize,length/AvatarTileSize));
+                    uv.Add(sleeve&&top.id=="PLAYER_RED_TOP_03"?new Vector2(i/(float)ArmSides,r/(float)(samples.Count-1)):
+                        new Vector2(i/(float)ArmSides*Mathf.PI*(rx+rz)/AvatarTileSize,length/AvatarTileSize));
                 }
             }
             for(int r=0;r<samples.Count-1;r++)for(int i=0;i<ArmSides;i++){

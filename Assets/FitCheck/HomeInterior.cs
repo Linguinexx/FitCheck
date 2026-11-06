@@ -9,6 +9,7 @@ namespace FitCheck
         public static readonly Rect HomeBounds=new Rect(-5.5f,-4.5f,11,9);
         public static readonly Vector2 HomeSpawn=new Vector2(0,.2f),HomeDoor=new Vector2(0,-3.5f),HomeBed=new Vector2(-1.5f,2.6f),HomeWardrobe=new Vector2(3,2),HomeDesk=new Vector2(-2.1f,-2.2f);
         public static readonly Vector3 HomePhonePosition=new Vector3(-3.3f,1.49f,-2.6f);
+        public static readonly Vector3 HomeWardrobeCenter=new Vector3(4.4f,1.8f,3.875f);
         static readonly Vector3 HomeMirrorCenter=new Vector3(5.39f,1.83f,1.36f);
         const float HomeMirrorHalfWidth=.59f,HomeMirrorHalfHeight=1.62f;
         readonly Plane[] mirrorViewPlanes=new Plane[6];
@@ -36,10 +37,10 @@ namespace FitCheck
             Block(new Vector3(-3.4f,.85f,4.05f),new Vector3(2.3f,1.6f,.16f),walnut,"Wood");
             for(int i=0;i<10;i++)Block(new Vector3(-4.37f+i*.215f,1.11f,3.93f),new Vector3(.115f,.99f,.08f),walnut*1.16f,"Wood",.016f);
             obstacles.Add(new Rect(-4.5f,.6f,2.2f,3.5f));
-            Block(new Vector3(4.4f,1.8f,2.9f),new Vector3(1.65f,3.6f,1.25f),new Color(.35f,.23f,.15f),"Wood",.09f);
-            Block(new Vector3(4.4f,1.9f,2.24f),new Vector3(.035f,3.3f,.04f),Ink,"CityMetal");
-            foreach(float x in new[]{4.2f,4.6f})Rod(new Vector3(x,1.65f,2.18f),new Vector3(x,2.12f,2.18f),.03f,Cream,"CityMetal");
-            obstacles.Add(new Rect(3.55f,2.25f,1.7f,1.3f));
+            Block(HomeWardrobeCenter,new Vector3(1.65f,3.6f,1.25f),new Color(.35f,.23f,.15f),"Wood",.09f);
+            Block(HomeWardrobeCenter+new Vector3(0,.1f,-.66f),new Vector3(.035f,3.3f,.04f),Ink,"CityMetal");
+            foreach(float x in new[]{-.2f,.2f})Rod(HomeWardrobeCenter+new Vector3(x,-.15f,-.72f),HomeWardrobeCenter+new Vector3(x,.32f,-.72f),.03f,Cream,"CityMetal");
+            obstacles.Add(new Rect(HomeWardrobeCenter.x-.85f,HomeWardrobeCenter.z-.65f,1.7f,1.3f));
             Block(new Vector3(-3.8f,1.32f,-2.65f),new Vector3(2.5f,.16f,1.3f),new Color(.61f,.43f,.27f),"Wood");
             foreach(float x in new[]{-4.8f,-2.8f})foreach(float z in new[]{-3.1f,-2.2f})Block(new Vector3(x,.65f,z),new Vector3(.09f,1.3f,.09f),Ink,"CityMetal");
             BuildHomePhone();

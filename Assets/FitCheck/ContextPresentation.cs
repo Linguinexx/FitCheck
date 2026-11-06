@@ -22,7 +22,7 @@ namespace FitCheck
             if(city.CatInteraction(cam))return Hint("E","Fazer carinho em Fubá",city.Cat.transform.position+Vector3.up*.35f,new Vector3(1.5f,.8f,1));
             if(city.IsHome){switch(city.HomeInteraction){
                 case 1:return Hint("E","Sair de casa",origin+new Vector3(0,2,-4.4f),new Vector3(2.2f,4,.2f));
-                case 2:return Hint("E","Trocar de roupa",origin+new Vector3(4.4f,1.8f,2.9f),new Vector3(1.8f,3.6f,1.4f));
+                case 2:return Hint("E","Trocar de roupa",origin+CityView.HomeWardrobeCenter,new Vector3(1.8f,3.6f,1.4f));
                 case 3:return Hint("E","Descansar / organizar o dia",origin+new Vector3(-3.4f,.7f,2.3f),new Vector3(2.3f,1.4f,3.5f));
                 case 4:return Hint("E","Abrir FitFeed",origin+CityView.HomePhonePosition,new Vector3(.75f,.2f,.45f));
             }}else if(!city.IsInterior){

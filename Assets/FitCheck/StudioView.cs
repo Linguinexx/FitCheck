@@ -129,7 +129,8 @@ namespace FitCheck
         {if(house!=null)house.gameObject.SetActive(home);if(home==inHome)return;inHome=home;Avatar.position=home?new Vector3(100,0,0):Vector3.zero;framingNow=home?-.95f:.9f;}
         public void ApplyUniform(int uniform)
         {
-            Apply(Catalog.Default,-1);buildingGarments=true;
+            if(uniform==1){Apply(Catalog.Default,-1,RedPlayerPieces);return;}
+            Apply(Catalog.Default,-1,uniform==0?InitialPlayerPieces:null);buildingGarments=true;
             var color=new[]{new Color(.89f,.024f,.075f),new Color(.18f,.12f,.24f),new Color(.85f,.81f,.7f),new Color(.12f,.34f,.24f)}[Mathf.Clamp(uniform,0,3)];
             var fabric=Material(color);
             foreach(var r in clothes.GetComponentsInChildren<Renderer>())if(r.name=="Camiseta com caimento"||r.name=="Manga")r.sharedMaterial=fabric;
@@ -138,7 +139,8 @@ namespace FitCheck
         }
         public PlayerAppearance PlayerLook;
         bool applyingPlayer;
-        public void Apply(string[] outfit,int customer)
+        public void Apply(string[] outfit,int customer){Apply(outfit,customer,null);}
+        void Apply(string[] outfit,int customer,Garment[] playerPieces)
         {
             applyingPlayer=customer<0&&PlayerLook!=null;
             RestoreCalfBindings();clothingInstanceMaterials.Clear();
@@ -150,10 +152,11 @@ namespace FitCheck
             skin.color=new[]{new Color(.67f,.40f,.23f),new Color(.94f,.72f,.58f),new Color(.25f,.135f,.085f),new Color(.76f,.60f,.40f),new Color(.53f,.33f,.23f),new Color(.38f,.205f,.13f),new Color(.62f,.4f,.27f)}[profile];
             if(applyingPlayer)skin.color=PlayerAppearance.SkinColors[PlayerLook.skin];
             SetFaceProfile(profile);if(applyingPlayer)ApplyExpression((AvatarExpression)PlayerLook.expression);
-            BuildHair(profile,Catalog.Get(outfit[3]));
+            var headwear=playerPieces?[3]??Catalog.Get(outfit[3]);
+            BuildHair(profile,headwear);
             int civilianProfile=civilianWardrobe>=0?civilianWardrobe:Mathf.Clamp(customer,0,8);
             bool originalTop=Catalog.IsArrivalPiece(outfit[0]),originalBottom=Catalog.IsArrivalPiece(outfit[1]),originalShoes=Catalog.IsArrivalPiece(outfit[2]);
-            var t=originalTop?CivilianTop(civilianProfile):Catalog.Get(outfit[0]);var cloth=Material(t.color);
+            var t=playerPieces?[0]??(originalTop?CivilianTop(civilianProfile):Catalog.Get(outfit[0]));var cloth=Material(t.color);
             cloth.SetFloat("_Outline",0);
             bool blenderTop=originalTop?BuildCivilianTop(t,cloth,civilianProfile):BuildStreetwearTop(t,cloth);
             if(!blenderTop){
@@ -173,7 +176,7 @@ ShirtBody(t,cloth);
                 if(t.drop!="COMMON GROUND")Form("Capuz",new Vector3(0,2.38f,.26f),new Vector3(.61f,.62f,.32f),cloth,clothes);
             }
             }
-            var b=originalBottom?CivilianBottom(civilianProfile):Catalog.Get(outfit[1]);var denim=Material(b.color);if(originalBottom)FinishCivilianMaterial(denim,"Denim");
+            var b=playerPieces?[1]??(originalBottom?CivilianBottom(civilianProfile):Catalog.Get(outfit[1]));var denim=Material(b.color);if(originalBottom)FinishCivilianMaterial(denim,"Denim");
             foreach(Transform part in Avatar){
                 if(part.name=="Canela")part.gameObject.SetActive(b.shorts);
             }
@@ -186,9 +189,9 @@ ShirtBody(t,cloth);
                 if(b.id=="CG_BOTTOM_01")Box("Faixa lateral",new Vector3(side*.423f,.88f,0),new Vector3(.018f,.82f,.08f),Material(new Color(.8f,.75f,.6f)),clothes);
                 if(b.id=="SB_BOTTOM_02")Box("Painel Remix",new Vector3(side*.23f,1.03f,-.244f),new Vector3(.32f,.3f,.02f),Material(side<0?new Color(.32f,.32f,.34f):new Color(.65f,.65f,.67f)),clothes);
                 }
-                if(originalShoes)BuildCivilianShoes(civilianProfile,side);else BuildShoes(Catalog.Get(outfit[2]),side);
+                if(originalShoes)BuildCivilianShoes(civilianProfile,side);else BuildShoes(playerPieces?[2]??Catalog.Get(outfit[2]),side);
             }
-            BuildHeadwear(Catalog.Get(outfit[3]));
+            BuildHeadwear(headwear);
             var headScale=HeadProportion(profile);
             foreach(Transform part in hair){
                 var p=part.localPosition;p.x*=headScale.x;p.y=2.8f+(p.y-2.8f)*headScale.y+HeadLift(profile);part.localPosition=p;

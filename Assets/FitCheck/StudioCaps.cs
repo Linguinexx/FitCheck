@@ -60,6 +60,15 @@ namespace FitCheck
             Surface("Gorro",v,t,uv,null,new Vector3(0,3.27f,0),Vector3.one,knit,clothes);
             RoundedLoft("Dobra do gorro",new Vector3(0,3.24f,0),new Vector3(.96f,.16f,.96f),SurfaceMaterial(item.color*1.22f,"Knit"),clothes,
                 new[]{0f,.08f,.20f,.80f,.94f,1f},new[]{.94f,.99f,1f,.96f,.93f,.90f},48);
+            if(item.id=="PLAYER_RED_BEANIE"){
+                var thread=SurfaceMaterial(new Color(.82f,.80f,.75f),"Knit");
+                for(int side=-1;side<=1;side+=2){
+                    var path=new[]{new Vector3(side*.29f,3.216f,-.393f),new Vector3(side*.18f,3.263f,-.454f),
+                        new Vector3(side*.09f,3.235f,-.482f),new Vector3(0,3.272f,-.482f)};
+                    Tube("Gorro — bordado claro",path,.0075f,thread,clothes,origin:new Vector3(0,3.24f,0));
+                }
+                return;
+            }
             BeaniePatch("Etiqueta do gorro",.11f,.07f,.004f,new Color(.82f,.79f,.69f));
             BeaniePatch("Marca do gorro",.055f,.014f,.006f,new Color(.12f,.10f,.17f));
         }
