@@ -40,6 +40,16 @@ namespace FitCheck.Editor
             int credit=floor.reputation;floor.Improve(1,Solutions[1]);if(floor.reputation!=credit)throw new Exception("Ganho infinito");
             var falling=new DayProgress();falling.Add(new Attempt{outfit=Solutions[0]});falling.Add(new Attempt{outfit=Catalog.Default});falling.Add(new Attempt{outfit=Catalog.Default});falling.Close();
             if(!falling.reached.Contains(100)||!falling.rewards.Contains("Night Route"))throw new Exception("Marco perdido após queda");
+            var greetings=new DayProgress();
+            if(greetings.RegisterCustomerGreeting(0))throw new Exception("Cumprimento antes do atendimento");
+            for(int i=0;i<3;i++)greetings.Add(new Attempt{outfit=Catalog.Default});
+            if(!greetings.RegisterCustomerGreeting(0)||greetings.RegisterCustomerGreeting(0))throw new Exception("Cumprimento duplicado");
+            greetings.Close();greetings.Advance();
+            greetings=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(greetings));
+            for(int i=3;i<6;i++)greetings.Add(new Attempt{outfit=Catalog.Default});
+            if(greetings.RegisterCustomerGreeting(0)||greetings.RegisterCustomerGreeting(4)||!greetings.RegisterCustomerGreeting(3)||
+                greetings.UniformUnlocked(DayProgress.NeighbourhoodUniform)||!greetings.RegisterCustomerGreeting(5)||
+                !greetings.UniformUnlocked(DayProgress.NeighbourhoodUniform))throw new Exception("Figurinha do Bairro não contou três clientes distintos");
             var legacy=new DayProgress();legacy.Add(new Attempt{outfit=Solutions[0]});legacy.version=1;legacy.posts[0].available=null;
             var migrated=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(legacy));migrated.Validate();if(migrated.version!=2||migrated.posts[0].available.Length!=11)throw new Exception("Migração inválida");
             foreach(var top in Catalog.Items.Where(g=>g.slot==0))foreach(var bottom in Catalog.Items.Where(g=>g.slot==1))foreach(var shoes in Catalog.Items.Where(g=>g.slot==2))foreach(var head in new[]{"","AH_HEAD_01","CG_HEAD_01"})for(int i=0;i<9;i++){

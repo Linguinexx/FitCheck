@@ -43,6 +43,20 @@ namespace FitCheck
                 Tube("Boné — costura de painel",path,.0035f,edge,clothes,origin:new Vector3(0,2.8f,0));
             }
             BuildBill(structured,denim?fabric:SurfaceMaterial(structured?item.color:new Color(.15f,.32f,.22f),"Cloth"));
+            if(item.id==NeighbourhoodCap){
+                var origin=new Vector3(0,2.8f,0);
+                for(int i=0;i<3;i++){
+                    float a=-.34f+i*.30f;
+                    var vertices=new List<Vector3>();
+                    foreach(var point in new[]{new Vector2(a,.78f),new Vector2(a,.57f),new Vector2(a+.24f,.57f),new Vector2(a+.24f,.78f)}){
+                        var p=CapPoint(point.x,point.y,false)-origin;
+                        vertices.Add(p+p.normalized*.012f);
+                    }
+                    var color=i==0?new Color(.88f,.18f,.23f):i==1?new Color(.93f,.82f,.58f):new Color(.15f,.65f,.54f);
+                    Surface("Boné — adesivo",vertices,new List<int>{0,1,2,0,2,3},
+                        new List<Vector2>{Vector2.zero,Vector2.up,Vector2.one,Vector2.right},null,origin,Vector3.one,SurfaceMaterial(color),clothes);
+                }
+            }
             Box("Boné — ajuste traseiro",new Vector3(0,3.005f,.555f),new Vector3(.24f,.047f,.025f),edge,clothes);
         }
         void BuildPlayerGlasses()
@@ -83,6 +97,23 @@ namespace FitCheck
             Surface("Gorro",v,t,uv,null,new Vector3(0,3.27f,0),Vector3.one,knit,clothes);
             RoundedLoft("Dobra do gorro",new Vector3(0,3.24f,0),new Vector3(.96f,.16f,.96f),SurfaceMaterial(item.color*1.22f,"Knit"),clothes,
                 new[]{0f,.08f,.20f,.80f,.94f,1f},new[]{.94f,.99f,1f,.96f,.93f,.90f},48);
+            if(item.id==FubaHood){
+                var inner=SurfaceMaterial(new Color(.94f,.61f,.48f),"Knit");
+                var origin=new Vector3(0,2.8f,0);
+                for(int side=-1;side<=1;side+=2){
+                    var a=new Vector3(side*.13f,.66f,-.16f);
+                    var b=new Vector3(side*.41f,.62f,-.15f);
+                    var tip=new Vector3(side*.40f,.94f,-.07f);
+                    var back=new Vector3(side*.28f,.66f,.18f);
+                    Surface("Capuz Fubá — orelha",new List<Vector3>{a,b,tip,back},
+                        side>0?new List<int>{0,2,1,0,3,2,1,2,3,0,1,3}:new List<int>{0,1,2,0,2,3,1,3,2,0,3,1},
+                        new List<Vector2>{Vector2.zero,Vector2.right,Vector2.up,Vector2.one},null,origin,Vector3.one,knit,clothes);
+                    var center=(a+b+tip)/3+Vector3.back*.012f;
+                    Surface("Capuz Fubá — interior da orelha",new List<Vector3>{Vector3.Lerp(center,a,.68f),Vector3.Lerp(center,b,.68f),Vector3.Lerp(center,tip,.68f)},
+                        side>0?new List<int>{0,2,1}:new List<int>{0,1,2},new List<Vector2>{Vector2.zero,Vector2.right,Vector2.up},null,origin,Vector3.one,inner,clothes);
+                }
+                return;
+            }
             if(item.id=="PLAYER_RED_BEANIE"){
                 var thread=SurfaceMaterial(new Color(.82f,.80f,.75f),"Knit");
                 for(int side=-1;side<=1;side+=2){
@@ -94,6 +125,24 @@ namespace FitCheck
             }
             BeaniePatch("Etiqueta do gorro",.11f,.07f,.004f,new Color(.82f,.79f,.69f));
             BeaniePatch("Marca do gorro",.055f,.014f,.006f,new Color(.12f,.10f,.17f));
+        }
+        void BuildFubaSuitDetails(Material fur)
+        {
+            var cream=SurfaceMaterial(new Color(.95f,.78f,.51f),"Knit");
+            var stripe=SurfaceMaterial(new Color(.43f,.17f,.055f),"Knit");
+            Ellipsoid("BlenderTopo Barriga Fubá",new Vector3(0,1.78f,-.259f),new Vector3(.60f,.67f,.13f),cream,clothes,20,12);
+            var tail=new[]{new Vector3(.04f,1.44f,.23f),new Vector3(.06f,1.33f,.40f),new Vector3(.11f,1.18f,.56f),
+                new Vector3(.20f,1.15f,.72f),new Vector3(.30f,1.22f,.82f),new Vector3(.34f,1.34f,.86f)};
+            Tube("BlenderTopo Cauda Fubá",tail,.077f,fur,clothes);
+            Tube("BlenderTopo Faixa da cauda",new[]{Vector3.Lerp(tail[3],tail[4],.45f),tail[4],tail[5]},.079f,stripe,clothes);
+        }
+        void BuildFubaPaw(int side,Material fur)
+        {
+            float x=side*.24f;
+            var cream=SurfaceMaterial(new Color(.95f,.78f,.51f),"Knit");
+            Ellipsoid("Tênis — pata Fubá",new Vector3(x,.25f,-.10f),new Vector3(.41f,.32f,.68f),fur,clothes,16,10);
+            for(int i=-1;i<=1;i++)
+                Ellipsoid("Tênis — dedo Fubá",new Vector3(x+i*.099f,.208f,-.355f),new Vector3(.127f,.20f,.20f),cream,clothes,12,8);
         }
         void BeaniePatch(string name,float width,float height,float offset,Color color)
         {

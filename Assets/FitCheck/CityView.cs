@@ -19,6 +19,21 @@ namespace FitCheck
         DayProgress fitFeedCampaign;
         int fitFeedDay;
 
+        public bool TryLookAtPostedCustomer(Camera camera,DayProgress campaign,out int index,out Vector3 target)
+        {
+            index=-1;target=Vector3.zero;
+            float best=.91f;
+            foreach(var entry in fitFeedResidents){
+                if(!entry.actor.root.gameObject.activeInHierarchy||campaign.GreetedCustomer(entry.index))continue;
+                var point=entry.actor.root.position+Vector3.up*2.35f;
+                var offset=point-camera.transform.position;
+                float alignment=Vector3.Dot(camera.transform.forward,offset.normalized);
+                if(offset.sqrMagnitude>12.25f||alignment<=best)continue;
+                index=entry.index;target=point;best=alignment;
+            }
+            return index>=0;
+        }
+
         public void HideFitFeedResidents()
         {
             foreach(var entry in fitFeedResidents)entry.actor.root.gameObject.SetActive(false);

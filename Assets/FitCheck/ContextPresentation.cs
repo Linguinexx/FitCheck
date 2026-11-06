@@ -5,6 +5,18 @@ namespace FitCheck
     {
         struct WorldHint {public string key,label;public Bounds bounds;public bool valid;}
         float contextClock,regionUntil,speechAge,answerAge;string contextRegion="",speechRequestKey="",speechAnswerKey="";Texture2D bubbleTail;
+        float greetedAt;
+        int greetedIndex=-1;
+        bool TryGreetPostedCustomer()
+        {
+            if(!StreetBubblesAllowed||!city.TryLookAtPostedCustomer(cam,progress,out int index,out _))return false;
+            bool alreadyUnlocked=progress.UniformUnlocked(DayProgress.NeighbourhoodUniform);
+            if(!progress.RegisterCustomerGreeting(index))return false;
+            greetedIndex=index;greetedAt=contextClock;
+            if(!alreadyUnlocked&&progress.UniformUnlocked(DayProgress.NeighbourhoodUniform))notices.Enqueue(DayProgress.NeighbourhoodAward);
+            TrySave();
+            return true;
+        }
         void TickContext(float delta)
         {
             if(!paused){contextClock+=delta;speechAge+=delta;answerAge+=delta;}
@@ -28,6 +40,8 @@ namespace FitCheck
             }}else if(!city.IsInterior){
                 if(city.StreetInteraction==1)return Hint("E","Entrar na DripLab",origin+new Vector3(10.4f,2,3.3f),new Vector3(2.2f,4,.3f));
                 if(city.StreetInteraction==2)return Hint("E","Entrar em casa",origin+new Vector3(CityView.StreetHomeDoor.x,2,8.65f),new Vector3(2.1f,4,.25f));
+                if(city.TryLookAtPostedCustomer(cam,progress,out int index,out Vector3 point))
+                    return Hint("E","Cumprimentar "+DayOne.Customers[index].name,point-Vector3.up*.65f,new Vector3(1.3f,3.25f,1.2f));
             }else{
                 if(!shopFittingOpening&&city.LookingAtShopGuide(cam))return Hint("E","Conversar com "+CityView.ShopGuideName,city.ShopGuideTarget-Vector3.up*.8f,new Vector3(1.2f,3.4f,1));
                 if(city.ShopInteraction==1){if(ShopOpen&&!city.CustomerWaitingAtCounter&&!progress.DayComplete)return default;return Hint("E",ShopActionLabel(),origin+new Vector3(4.4f,.82f,6.15f),new Vector3(5.95f,1.64f,1.62f));}
@@ -107,7 +121,12 @@ namespace FitCheck
         bool StreetBubblesAllowed=>stage==Stage.City&&city!=null&&city.gameObject.activeInHierarchy&&!city.IsInterior;
         void DrawAmbientBubble()
         {
-            if(!StreetBubblesAllowed||CurrentWorldHint().valid)return;
+            if(!StreetBubblesAllowed)return;
+            if(greetedIndex>=0&&contextClock-greetedAt<2.8f){
+                ComicBubble(new Rect(487,697,466,122),"Valeu pelo look! Bom te ver por aqui.",DayOne.Customers[greetedIndex].name,contextClock-greetedAt,false);
+                return;
+            }
+            if(CurrentWorldHint().valid)return;
             int nearest=-1;float distance=8;
             for(int i=0;i<CityView.StreetResidentCount;i++){
                 var p=city.ResidentPosition(i);float d=Vector2.Distance(city.Position,new Vector2(p.x,p.z));var view=cam.WorldToViewportPoint(city.transform.position+p+Vector3.up*3.2f);

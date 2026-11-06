@@ -13,6 +13,8 @@ namespace FitCheck
     }
     public static class DayOne
     {
+        static readonly int[] CustomerProfiles={0,1,2,3,0,4,1,3,5};
+        internal static int CustomerProfile(int index)=>CustomerProfiles[index];
         internal const string KaioName="Kaio", GalleryArtistName="Lia", ShowRegularName="Júlia";
         public static readonly CustomerRequest[] Customers = new CustomerRequest[] {
             new CustomerRequest("DAY01_K7_TUTORIAL", KaioName,

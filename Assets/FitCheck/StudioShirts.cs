@@ -6,6 +6,27 @@ namespace FitCheck
     public partial class StudioView
     {
         const int ShirtSides=32;
+        void BuildPosterJacket()
+        {
+            var paper=SurfaceMaterial(new Color(.94f,.84f,.59f),"Cloth");
+            var red=SurfaceMaterial(new Color(.84f,.17f,.22f),"Cloth");
+            var teal=SurfaceMaterial(new Color(.15f,.59f,.54f),"Cloth");
+            for(int side=-1;side<=1;side+=2){
+                for(int i=0;i<5;i++){
+                    float x=-.30f+i*.15f,y=1.72f+(i%3)*.10f,z=side*(.305f-.045f*Mathf.Abs(x)/.30f);
+                    var vertices=new List<Vector3>{
+                        new Vector3(x-.09f,y-.12f,z),new Vector3(x-.076f,y+.11f,z),
+                        new Vector3(x+.104f,y+.081f,z),new Vector3(x+.069f,y-.12f,z),
+                        new Vector3(x+.018f,y-.091f,z)};
+                    Surface("BlenderTopo Cartaz rasgado",vertices,
+                        side<0?new List<int>{0,1,2,0,2,4,2,3,4}:new List<int>{0,2,1,0,4,2,2,4,3},
+                        new List<Vector2>{Vector2.zero,Vector2.up,Vector2.one,Vector2.right,new Vector2(.62f,.12f)},
+                        null,Vector3.zero,Vector3.one,i%3==0?paper:i%3==1?red:teal,clothes);
+                    Box("BlenderTopo Tipografia do cartaz",new Vector3(x,y+.028f,z+side*.008f),
+                        new Vector3(.104f,.026f,.009f),i%3==0?teal:paper,clothes);
+                }
+            }
+        }
         static Vector3 ShirtPoint(int row,int column,bool loose)
         {
             float[] heights={1.37f,1.44f,1.75f,loose?1.84f:1.89f,2.0f,loose?2.12f:2.14f,2.23f};

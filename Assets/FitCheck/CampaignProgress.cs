@@ -14,9 +14,31 @@ namespace FitCheck
         public List<int> reached=new List<int>();
         public List<string> rewards=new List<string>();
         public List<string> achievements=new List<string>();
-        static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes"};
+        public const int FubaUniform=4,FubaPetGoal=8;
+        public const string FubaAward="Amigo do Fubá";
+        public int fubaPets;
+        public const int NeighbourhoodUniform=5;
+        public const string NeighbourhoodAward="Figurinha do Bairro";
+        public int greetedCustomerProfiles;
+        static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes",FubaAward,NeighbourhoodAward};
         public bool UniformUnlocked(int index)=>index>=0&&index<UniformAwards.Length&&(index==0||achievements.Contains(UniformAwards[index]));
         public int EquippedUniform=>UniformUnlocked(uniform)?uniform:0;
+        public bool GreetedCustomer(int index)=>(greetedCustomerProfiles&(1<<DayOne.CustomerProfile(index)))!=0;
+        public bool RegisterCustomerGreeting(int index)
+        {
+            if(index<(day-1)*3||index>=posts.Count||GreetedCustomer(index))return false;
+            greetedCustomerProfiles|=1<<DayOne.CustomerProfile(index);
+            int count=0;
+            for(int flags=greetedCustomerProfiles;flags!=0;flags&=flags-1)count++;
+            if(count>=3)Unlock(NeighbourhoodAward);
+            return true;
+        }
+        public bool RegisterFubaPet()
+        {
+            if(UniformUnlocked(FubaUniform)||fubaPets>=FubaPetGoal)return false;
+            if(++fubaPets==FubaPetGoal)Unlock(FubaAward);
+            return true;
+        }
         public static readonly int[] Milestones={100,200,300,450,600};
         public static readonly string[][] RewardNames={new[]{"Night Route","Remix"},new[]{"Court Lines","Daily Steps"},new[]{"Closing Time","Independent"},new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"}};
         public bool DayComplete=>posts.Count==day*3;

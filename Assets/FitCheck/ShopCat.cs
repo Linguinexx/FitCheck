@@ -101,6 +101,13 @@ namespace FitCheck
     public partial class FirstCustomer
     {
         bool TryPetCat()
-        {if(paused||stage!=Stage.City||ShopSequenceActive||homeDoorExitRemaining>0||!city.CatInteraction(cam))return false;city.Cat.Pet(mutedAudio);return true;}
+        {
+            if(paused||stage!=Stage.City||ShopSequenceActive||homeDoorExitRemaining>0||!city.CatInteraction(cam))return false;
+            if(city.Cat.Pet(mutedAudio)&&progress.RegisterFubaPet()){
+                if(progress.UniformUnlocked(DayProgress.FubaUniform))notices.Enqueue(DayProgress.FubaAward+" · "+FubaUniformName);
+                TrySave();
+            }
+            return true;
+        }
     }
 }

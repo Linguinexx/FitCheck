@@ -31,7 +31,21 @@ namespace FitCheck
             new Garment("PLAYER_BLUE_SHOES","Tênis marrom","CIVIL",2,new Color(.28f,.20f,.16f),true),
             new Garment("PLAYER_BLUE_CAP","Boné jeans","CIVIL",3,new Color(.23f,.34f,.46f),true){cap=true}
         };
-        static readonly Garment[][] PlayerUniforms={InitialPlayerPieces,RedPlayerPieces,PinkPlayerPieces,BluePlayerPieces};
+        const string FubaTop="PLAYER_FUBA_TOP_03",FubaHood="PLAYER_FUBA_HOOD";
+        static readonly Color FubaFur=new Color(.78f,.38f,.12f);
+        static readonly Garment[] FubaPlayerPieces={
+            new Garment(FubaTop,"Macacão felino","CIVIL",0,FubaFur,false,true),
+            new Garment("PLAYER_FUBA_BOTTOM","Macacão felino","CIVIL",1,FubaFur,false,true),
+            null,
+            new Garment(FubaHood,"Capuz felino","CIVIL",3,FubaFur,false)
+        };
+        const string NeighbourhoodTop="PLAYER_POSTER_TOP_03",NeighbourhoodCap="PLAYER_POSTER_CAP";
+        static readonly Garment[] NeighbourhoodPieces={
+            new Garment(NeighbourhoodTop,"Jaqueta lambe-lambe","CIVIL",0,new Color(.15f,.18f,.17f),true,true),
+            PlayerWashedDenim,InitialPlayerPieces[2],
+            new Garment(NeighbourhoodCap,"Boné de adesivos","CIVIL",3,new Color(.13f,.15f,.16f),true){cap=true}
+        };
+        static readonly Garment[][] PlayerUniforms={InitialPlayerPieces,RedPlayerPieces,PinkPlayerPieces,BluePlayerPieces,FubaPlayerPieces,NeighbourhoodPieces};
         bool BuildBlenderBaggy(Garment item)
         {
             if(item==PlayerWashedDenim||item==PlayerBlueDenim){
