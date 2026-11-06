@@ -12,9 +12,34 @@ namespace FitCheck
         static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes"};
         static readonly string[] UniformNames={"Equipe DripLab","Primeiro Expediente","Visual Perfeito","Sintonia"};
         readonly Dictionary<string,Texture2D> feedPhotos=new Dictionary<string,Texture2D>();
-        static readonly Color FeedBackground=new Color(.045f,.04f,.045f),FeedCardColor=new Color(.095f,.083f,.091f),
+        static readonly Color FeedBackground=new Color32(23,21,25,255),FeedCardColor=new Color32(33,30,35,255),
+            FeedPaper=new Color32(247,244,239,255),FeedMuted=new Color32(165,159,168,255),
+            FeedDivider=new Color32(56,51,58,255),
             FeedInset=new Color(.067f,.058f,.065f),FeedAccent=new Color(1f,.34f,.39f);
         Vector2 fitFeedScroll;
+        Texture2D feedWhiteLogo;
+        GUIStyle feedTitle, feedName, feedMetric, feedIntro, feedCopy, feedSmall, feedTag, feedRightTag, feedScore;
+
+        void FeedStyles()
+        {
+            if(feedTitle!=null)return;
+            feedTitle=FeedStyle(display,57);
+            feedName=FeedStyle(heading,24);
+            feedMetric=FeedStyle(display,32);
+            feedIntro=FeedStyle(copy,27);
+            feedCopy=FeedStyle(copy,16);
+            feedSmall=FeedStyle(copy,14);
+            feedTag=FeedStyle(tiny,11);
+            feedRightTag=FeedStyle(tiny,11);
+            feedRightTag.alignment=TextAnchor.UpperRight;
+            feedScore=FeedStyle(action,19);
+            feedScore.alignment=TextAnchor.UpperLeft;
+        }
+
+        static GUIStyle FeedStyle(GUIStyle basis,int size)
+        {
+            return new GUIStyle(basis){fontSize=size,padding=new RectOffset()};
+        }
         static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","Kaio","SeuJota","Lia","Julia","NinaFaisca"};
         Texture2D[] feedPortraits;
         void InvalidateFeedPhoto(string path){if(feedPhotos.TryGetValue(path,out var tex)){Destroy(tex);feedPhotos.Remove(path);}}
@@ -116,41 +141,72 @@ namespace FitCheck
         }
         void RetrospectiveUI()
         {
+            FeedStyles();
+            int count=progress.posts.Count;
             Fill(new Rect(0,0,1440,900),FeedBackground);
-            Fill(new Rect(96,126,38,4),CreatorRed);
-            Txt(new Rect(92,145,386,108),"FitFeed",display,paper);
-            Txt(new Rect(96,250,337,72),progress.Complete?"A semana no seu olhar.":"Os looks da DripLab pelo bairro.",copy,muted);
-            RoundedPanel(new Rect(96,346,326,108),FeedCardColor,12);
-            Txt(new Rect(114,366,137,44),progress.posts.Count.ToString("00"),heading,paper);
-            Txt(new Rect(265,366,137,44),progress.reputation.ToString(),heading,paper);
-            Txt(new Rect(116,412,137,26),"PUBLICAÇÕES",tiny,muted);
-            Txt(new Rect(267,412,137,26),"REPUTAÇÃO",tiny,muted);
-            if(Tap(new Rect(96,778,326,52),"← Voltar ao quarto")){CloseHomePanel();return;}
-            Txt(new Rect(510,75,590,35),"PUBLICAÇÕES  /  MAIS RECENTES",caption,muted);
-            if(progress.posts.Count==0){
-                RoundedPanel(new Rect(510,125,644,270),FeedCardColor,13);
-                Txt(new Rect(550,188,550,58),"Seu feed começa na loja.",heading,paper);
-                Txt(new Rect(550,255,520,76),"Finalize o primeiro atendimento na DripLab para ver a foto e a avaliação do look aqui.",copy,muted);
+            Fill(new Rect(423,0,1,900),FeedDivider);
+            if(titleLogo==null)titleLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-Red");
+            if(titleLogo!=null)GUI.DrawTexture(new Rect(48,36,43,36),titleLogo,ScaleMode.ScaleToFit);
+            Txt(new Rect(102,48,274,18),"DRIPLAB / FIT CHECK",feedTag,FeedMuted);
+            Txt(new Rect(48,88,328,75),"FitFeed",feedTitle,FeedPaper);
+            Txt(new Rect(48,177,328,78),"Os looks da DripLab pelo bairro.",feedIntro,FeedPaper);
+
+            Fill(new Rect(48,293,328,1),FeedDivider);
+            Txt(new Rect(48,322,156,22),"Publicações",feedSmall,FeedMuted);
+            Txt(new Rect(48,350,156,42),count.ToString("00"),feedMetric,FeedPaper);
+            Txt(new Rect(48,397,156,18),"looks no bairro",feedTag,FeedMuted);
+            Txt(new Rect(220,322,156,22),"Nota média",feedSmall,FeedMuted);
+            string average=count==0?"—":progress.posts.Average(post=>post.score)
+                .ToString("0.#",System.Globalization.CultureInfo.GetCultureInfo("pt-BR"))+"/10";
+            Txt(new Rect(220,350,156,42),average,feedMetric,FeedPaper);
+            Txt(new Rect(220,397,156,18),"média das avaliações",feedTag,FeedMuted);
+            Fill(new Rect(48,438,328,1),FeedDivider);
+
+            Txt(new Rect(48,487,328,18),"DA LOJA PRA RUA",feedTag,FeedMuted);
+            Txt(new Rect(48,512,328,86),"Cada look tem uma história. Reveja os clientes e descubra como foi o atendimento na DripLab.",feedCopy,FeedMuted);
+            if(Tap(new Rect(48,775,328,48),"← Voltar ao quarto")){CloseHomePanel();return;}
+            Txt(new Rect(48,847,328,20),"ESTILO LOCAL. IMPACTO REAL.",feedTag,FeedMuted);
+
+            const float cardX=656,cardWidth=552,firstCardY=52,viewportHeight=848;
+            Txt(new Rect(cardX,24,200,17),"PELO BAIRRO",feedTag,FeedMuted);
+            Txt(new Rect(cardX+252,24,300,17),"MAIS RECENTES PRIMEIRO",feedRightTag,FeedMuted);
+            if(count==0){
+                RoundedPanel(new Rect(cardX,firstCardY,cardWidth,180),FeedCardColor,8);
+                Txt(new Rect(cardX+20,80,512,34),"Seu feed começa na loja.",feedName,FeedPaper);
+                Txt(new Rect(cardX+20,124,512,70),"Finalize o primeiro atendimento na DripLab para ver a foto e a avaliação do look aqui.",feedCopy,FeedMuted);
                 return;
             }
-            const float cardHeight=760,viewportHeight=754;
-            fitFeedScroll=GUI.BeginScrollView(new Rect(505,121,676,viewportHeight),fitFeedScroll,new Rect(0,0,646,progress.posts.Count*cardHeight),false,true);
+
+            const float cardHeight=738;
+            float contentHeight=count*cardHeight-16+24;
+            fitFeedScroll=GUI.BeginScrollView(new Rect(424,firstCardY,1016,viewportHeight),fitFeedScroll,
+                new Rect(0,0,1016,contentHeight),false,false,GUIStyle.none,GUIStyle.none);
             int opened=-1;
-            for(int row=0;row<progress.posts.Count;row++){
+            for(int row=0;row<count;row++){
                 float y=row*cardHeight;
                 if(y+cardHeight<fitFeedScroll.y||y>fitFeedScroll.y+viewportHeight)continue;
-                int index=progress.posts.Count-1-row;
-                var post=progress.posts[index];var client=DayOne.Customers[index];
-                RoundedPanel(new Rect(5,y,634,747),FeedCardColor,13);
-                FeedByline(new Rect(24,y+14,592,68),index);
-                var image=new Rect(52,y+98,540,540);
-                FitFeedImage(image,FeedPhoto(post.photo));
-                if(GUI.Button(image,GUIContent.none,GUIStyle.none)){Sound(0);opened=index;}
-                Txt(new Rect(27,y+644,574,44),client.caption,caption,paper);
-                Txt(new Rect(27,y+698,195,35),"NOTA  "+post.score+" / 10",caption,FeedAccent);
-                if(Tap(new Rect(358,y+692,261,42),"Ver avaliação  →"))opened=index;
+                int index=count-1-row;
+                var post=progress.posts[index];
+                const float left=232;
+                RoundedPanel(new Rect(left,y,cardWidth,722),FeedCardColor,8);
+                FeedByline(new Rect(left+20,y+20,512,68),index);
+                var photoRect=new Rect(left+20,y+100,512,512);
+                FitFeedImage(photoRect,FeedPhoto(post.photo));
+                if(GUI.Button(photoRect,GUIContent.none,GUIStyle.none)){Sound(0);opened=index;}
+                Txt(new Rect(left+20,y+626,512,34),DayOne.Customers[index].caption,feedCopy,FeedPaper);
+                Txt(new Rect(left+20,y+664,186,14),"ATENDIMENTO",feedTag,FeedMuted);
+                Txt(new Rect(left+20,y+678,186,24),"Nota "+post.score+"/10",feedScore,FeedPaper);
+                if(Tap(new Rect(left+380,y+662,152,40),"Ver avaliação →",true))opened=index;
             }
             GUI.EndScrollView();
+
+            const float trackHeight=852;
+            Fill(new Rect(1414,24,2,trackHeight),FeedCardColor);
+            if(contentHeight>viewportHeight){
+                float thumbHeight=trackHeight*viewportHeight/contentHeight;
+                float thumbY=24+(trackHeight-thumbHeight)*Mathf.Clamp01(fitFeedScroll.y/(contentHeight-viewportHeight));
+                Fill(new Rect(1414,thumbY,2,thumbHeight),FeedMuted);
+            }
             if(opened>=0){fromHome=true;customer=opened;record=progress.posts[opened];Continue();}
         }
         void FeedByline(Rect r,int index)
@@ -163,8 +219,9 @@ namespace FitCheck
                 RoundedPanel(avatar,FeedInset,34);
                 Txt(avatar,client.name.Substring(0,1),action,paper);
             }
-            Txt(new Rect(r.x+82,r.y+3,r.width-82,38),client.name,heading,paper);
-            Txt(new Rect(r.x+82,r.y+42,r.width-82,23),client.location+"  •  DIA 0"+(index/3+1),tiny,muted);
+            FeedStyles();
+            Txt(new Rect(r.x+84,r.y+8,r.width-84,30),client.name,feedName,FeedPaper);
+            Txt(new Rect(r.x+84,r.y+42,r.width-84,23),client.location+" · Dia "+(index/3+1).ToString("00"),feedSmall,FeedMuted);
         }
         void FitFeedImage(Rect r,Texture2D image)
         {

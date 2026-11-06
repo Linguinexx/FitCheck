@@ -251,9 +251,10 @@ namespace FitCheck
         void PostUI()
         {
             Fill(new Rect(0,0,1440,900),FeedBackground);
-            Fill(new Rect(60,54,35,4),CreatorRed);
-            Txt(new Rect(58,62,430,48),"FitFeed",heading,paper);
-            Txt(new Rect(59,111,490,31),campaignBeforePreview!=null?"PRÉVIA DO VISUAL":"PUBLICAÇÃO DA DRIPLAB",tiny,muted);
+            if(feedWhiteLogo==null)feedWhiteLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-White");
+            if(feedWhiteLogo!=null)GUI.DrawTexture(new Rect(60,62,76,65),feedWhiteLogo,ScaleMode.ScaleToFit);
+            Txt(new Rect(153,62,335,48),"FitFeed",heading,FeedPaper);
+            Txt(new Rect(154,111,390,31),campaignBeforePreview!=null?"PRÉVIA DO VISUAL":"PUBLICAÇÃO DA DRIPLAB",tiny,muted);
             if(campaignBeforePreview==null){
                 if(Tap(new Rect(774,78,168,44),"← Anterior",false,customer>0)){customer--;record=progress.posts[customer];Continue();}
                 if(Tap(new Rect(953,78,168,44),"Próxima →",false,customer+1<progress.posts.Count)){customer++;record=progress.posts[customer];Continue();}
