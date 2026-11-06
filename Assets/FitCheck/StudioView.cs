@@ -147,8 +147,7 @@ namespace FitCheck
             if(applyingPlayer)skin.color=PlayerAppearance.SkinColors[PlayerLook.skin];
             SetFaceProfile(profile);if(applyingPlayer)ApplyExpression((AvatarExpression)PlayerLook.expression);
             var headwear=playerPieces?[3]??Catalog.Get(outfit[3]);
-            bool headphones=headwear?.id==GarageDjHeadphones;
-            BuildHair(profile,headphones||headwear?.id=="PLAYER_PINK_GLASSES"?null:headwear);
+            BuildHair(profile,headwear);
             int civilianProfile=civilianWardrobe>=0?civilianWardrobe:Mathf.Clamp(customer,0,8);
             bool originalTop=Catalog.IsArrivalPiece(outfit[0]),originalBottom=Catalog.IsArrivalPiece(outfit[1]),originalShoes=Catalog.IsArrivalPiece(outfit[2]);
             var t=playerPieces?[0]??(originalTop?CivilianTop(civilianProfile):Catalog.Get(outfit[0]));bool fubaSuit=t.id==FubaTop;
@@ -194,7 +193,7 @@ ShirtBody(t,cloth);
             for(int side=-1;side<=1;side+=2){
                 if(!blenderBaggy){
                 Rings(b.shorts?"Bermuda":"Calça",new Vector3(side*.23f,b.shorts?1.03f:.83f,0),new Vector3(b.shorts?.46f:.39f,b.shorts?.54f:.95f,.47f),denim,clothes,new[]{0f,.12f,.43f,.66f,.86f,1f},new[]{.95f,1f,1.03f,1.04f,1.06f,1.02f});
-                if(!fubaSuit)Box("Bolso",new Vector3(side*.3f,1.13f,-.232f),new Vector3(.15f,.17f,.018f),Material(b.color*.82f),clothes);
+                if(!fubaSuit&&t.id!=GhostTop)Box("Bolso",new Vector3(side*.3f,1.13f,-.232f),new Vector3(.15f,.17f,.018f),Material(b.color*.82f),clothes);
                 if(b.id=="CG_BOTTOM_01")Box("Faixa lateral",new Vector3(side*.423f,.88f,0),new Vector3(.018f,.82f,.08f),Material(new Color(.8f,.75f,.6f)),clothes);
                 if(b.id=="SB_BOTTOM_02")Box("Painel Remix",new Vector3(side*.23f,1.03f,-.244f),new Vector3(.32f,.3f,.02f),Material(side<0?new Color(.32f,.32f,.34f):new Color(.65f,.65f,.67f)),clothes);
                 }

@@ -78,27 +78,28 @@ namespace FitCheck
             return Mathf.Lerp(edge,hairline,front);
 
         }
-        static float HairStart(int profile,float theta,Garment headwear)
+        static float HairStart(int profile,float theta,Garment headwear,HairFit fit)
         {
-            if(headwear==null)return 0;
+            if(fit!=HairFit.Cap&&fit!=HairFit.Knit)return 0;
             if(headwear.cap){
                 var edge=CapPoint(theta,1,headwear.id=="SB_HEAD_01")-new Vector3(0,2.8f,0);
-                return Mathf.Atan2(new Vector2(edge.x,edge.z).magnitude,edge.y)-.035f;
+                return Mathf.Min(Mathf.Atan2(new Vector2(edge.x,edge.z).magnitude,edge.y)-.055f,HairEdge(profile,theta)-.16f);
             }
             // A small underlap into the rolled cuff hides the upper boundary.
-            return Mathf.Acos((3.19f-2.8f)/.576f);
+            return Mathf.Min(Mathf.Acos((3.19f-2.8f)/.576f)-.06f,HairEdge(profile,theta)-.16f);
         }
-        GameObject HairShell(int profile,Material material,Garment headwear,Material gray)
+        GameObject HairShell(int profile,Material material,Garment headwear,HairFit fit)
         {
-            const int sides=72,rows=24;var v=new List<Vector3>();var t=new List<int>();var uv=new List<Vector2>();var n=new List<Vector3>();var grayTriangles=new List<int>();
+            const int sides=72,rows=24;var v=new List<Vector3>();var t=new List<int>();var uv=new List<Vector2>();var n=new List<Vector3>();
+            bool coveredCrown=fit==HairFit.Cap||fit==HairFit.Knit;
             for(int r=0;r<=rows;r++)for(int i=0;i<=sides;i++){
-                float theta=i*Mathf.PI*2/sides-Mathf.PI,start=HairStart(profile,theta,headwear),edge=Mathf.Max(start,HairEdge(profile,theta));
+                float theta=i*Mathf.PI*2/sides-Mathf.PI,start=HairStart(profile,theta,headwear,fit),edge=HairEdge(profile,theta);
                 float f=r/(float)rows,phi=Mathf.Lerp(start,edge,f);
                 float taper=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(.78f,1,f)),thickness=Mathf.Lerp(.004f,.026f,taper);
-                if(headwear==null){
+                if(!coveredCrown){
                     // Broad connected forms, never raised tubes sitting above a cap.
+                    float baseThickness=thickness;
                     float crown=Mathf.Pow(1-f,1.25f),wave=Mathf.Sin(phi);
-                    float front=Mathf.Pow(Mathf.Max(0,Mathf.Cos(theta+.25f)),3);
                     if(profile==0){
                         float curl=.5f+.5f*Mathf.Cos(theta*11+Mathf.Sin(phi*8)*.65f)*Mathf.Cos(phi*12);
                         thickness+=(.065f*crown+.105f*wave*curl*curl)*taper;
@@ -108,18 +109,20 @@ namespace FitCheck
                         float crest=Mathf.Pow(Mathf.Max(0,Mathf.Cos(sweep)),3)*wave;
                         thickness+=(.030f*crown+.080f*crest+.005f*wave*Mathf.Cos(theta*6+phi*2))*taper;
                     }else thickness+=(.022f*crown+.005f*wave*Mathf.Cos(theta*8-phi*2))*taper;
+                    if(fit==HairFit.Hood)
+                        thickness=Mathf.Lerp(baseThickness,thickness,Mathf.Lerp(.22f,.78f,Mathf.Max(0,Mathf.Cos(theta))));
                 }else thickness=Mathf.Min(thickness,.016f);
                 var direction=new Vector3(Mathf.Sin(theta)*Mathf.Sin(phi),Mathf.Cos(phi),-Mathf.Cos(theta)*Mathf.Sin(phi));
                 var point=direction*(HeadRadius+thickness);
-                if(headwear==null){
-                    float raised=Mathf.Pow(1-f,1.4f);
+                if(!coveredCrown){
+                    float raised=Mathf.Pow(1-f,1.4f)*(fit==HairFit.Hood?.45f:1);
                     if(profile==3)point+=new Vector3(-.035f,.035f,-.025f)*raised;
                     else if(profile==5)point+=new Vector3(.065f,.040f,-.015f)*raised;
                     else if(profile==0)point.y+=.025f*raised;
                 }
                 if(point.sqrMagnitude<.564f*.564f)point=point.normalized*.564f;
-                if(profile==6){
-                    float longF=headwear==null?f:Mathf.Lerp(headwear.cap?.40f:.31f,1,f),u=1-longF;
+                if(profile==6&&fit!=HairFit.Hood){
+                    float longF=coveredCrown?Mathf.Lerp(fit==HairFit.Cap?.40f:.31f,1,f):f,u=1-longF;
                     float y=u*u*u*3.43f+3*u*u*longF*3.40f+3*u*longF*longF*2.50f+longF*longF*longF*2.07f;
                     float rho=3*u*u*longF*.72f+3*u*longF*longF*.60f+longF*longF*longF*.66f;
                     rho+=Mathf.Sin(theta*7-longF*5)*.018f*Mathf.Sin(longF*Mathf.PI);
@@ -128,21 +131,21 @@ namespace FitCheck
                     float sideBlend=Mathf.SmoothStep(0,1,Mathf.InverseLerp(.52f,1.05f,Mathf.Abs(theta)));
                     point=Vector3.Lerp(point,continuous,sideBlend);
                     if(point.sqrMagnitude<.578f*.578f)point=point.normalized*.578f;
-                    if(headwear==null&&r==0)point=new Vector3(0,.63f,0);
+                    if(fit==HairFit.Glasses){
+                        point.x*=1+.045f*sideBlend*Mathf.Sin(Mathf.PI*longF);
+                    }
+                    if(!coveredCrown&&r==0)point=new Vector3(0,.63f,0);
                 }
                 v.Add(point);n.Add(direction);uv.Add(new Vector2(i/(float)sides*2.6f,profile==6?(point.y+2.8f)*.8f/AvatarTileSize:(Mathf.PI-phi)*.58f/AvatarTileSize));
             }
             for(int r=0;r<rows;r++)for(int i=0;i<sides;i++){
-                int a=r*(sides+1)+i,b=a+sides+1;float angle=(i+.5f)*Mathf.PI*2/sides-Mathf.PI;
-                float phi=Mathf.Lerp(HairStart(profile,angle,headwear),Mathf.Max(HairStart(profile,angle,headwear),HairEdge(profile,angle)),(r+.5f)/rows);
-                bool temple=gray!=null&&Mathf.Abs(angle)>.85f&&Mathf.Abs(angle)<2.1f&&phi>1.0f;
-                var target=temple?grayTriangles:t;
-                if(r>0||headwear!=null)target.AddRange(new[]{a,a+1,b});target.AddRange(new[]{b,a+1,b+1});
+                int a=r*(sides+1)+i,b=a+sides+1;
+                if(r>0||coveredCrown)t.AddRange(new[]{a,a+1,b});
+                t.AddRange(new[]{b,a+1,b+1});
             }
             var go=Surface("Cabelo ajustado à cabeça",v,t,uv,n,new Vector3(0,2.80f,0),Vector3.one,material,hair);
             var hairMesh=go.GetComponent<MeshFilter>().sharedMesh;
-            if(gray!=null){hairMesh.subMeshCount=2;hairMesh.SetTriangles(grayTriangles,1);go.GetComponent<MeshRenderer>().sharedMaterials=new[]{material,gray};}
-            if(headwear==null){
+            if(!coveredCrown){
                 hairMesh.RecalculateNormals();var normals=hairMesh.normals;
                 for(int row=0;row<=rows;row++){
                     int a=row*(sides+1),b=a+sides;var average=(normals[a]+normals[b]).normalized;normals[a]=average;normals[b]=average;

@@ -47,12 +47,45 @@ namespace FitCheck
             var violet=SurfaceMaterial(new Color(.36f,.24f,.50f),"Cloth");
             var mint=SurfaceMaterial(new Color(.47f,.84f,.70f),"Cloth");
             Rings("Gola violeta",new Vector3(0,2.217f,0),new Vector3(.43f,.052f,.32f),violet,clothes,new[]{0f,1f},new[]{1f,1f},12);
-            Ellipsoid("Fantasma bordado",new Vector3(0,1.89f,-.277f),new Vector3(.31f,.31f,.055f),violet,clothes,16,10);
-            for(int side=-1;side<=1;side+=2){
-                Ellipsoid("Olho bordado",new Vector3(side*.057f,1.924f,-.303f),new Vector3(.038f,.075f,.023f),mint,clothes,10,8);
-                Tube("Costura ondulada",new[]{new Vector3(side*.11f,1.76f,-.282f),new Vector3(side*.06f,1.72f,-.291f),
-                    new Vector3(0,1.75f,-.295f)},.014f,violet,clothes);
+            BuildGhostPatch(-1,.74f,violet,mint);
+            BuildGhostPatch(1,1.17f,violet,mint);
+        }
+        void BuildGhostPatch(int side,float scale,Material violet,Material mint)
+        {
+            var outline=new[]{
+                new Vector2(-.18f,-.17f),new Vector2(-.15f,-.04f),new Vector2(-.15f,.05f),
+                new Vector2(-.125f,.125f),new Vector2(-.066f,.176f),new Vector2(0,.19f),
+                new Vector2(.066f,.176f),new Vector2(.125f,.125f),new Vector2(.15f,.05f),
+                new Vector2(.15f,-.04f),new Vector2(.18f,-.17f),new Vector2(.115f,-.184f),
+                new Vector2(.06f,-.125f),new Vector2(0,-.178f),new Vector2(-.06f,-.125f),new Vector2(-.115f,-.184f)
+            };
+            var vertices=new List<Vector3>{GhostPatchPoint(Vector2.zero,side,scale,.009f)};
+            var uv=new List<Vector2>{Vector2.one*.5f};
+            var triangles=new List<int>();
+            for(int i=0;i<outline.Length;i++){
+                vertices.Add(GhostPatchPoint(outline[i],side,scale,.009f));
+                uv.Add(outline[i]*2.5f+Vector2.one*.5f);
+                int current=i+1,next=(i+1)%outline.Length+1;
+                triangles.AddRange(side<0?new[]{0,current,next}:new[]{0,next,current});
             }
+            Surface("Bordado — lençol do fantasma",vertices,triangles,uv,null,Vector3.zero,Vector3.one,violet,clothes);
+            var seam=new Vector3[outline.Length];
+            for(int i=0;i<outline.Length;i++)seam[i]=GhostPatchPoint(outline[i],side,scale,.012f);
+            Tube("Contorno do bordado",seam,.005f*scale,mint,clothes,true);
+            foreach(float x in new[]{-.05f,.05f})
+                Ellipsoid("Olho bordado",GhostPatchPoint(new Vector2(x,.064f),side,scale,.019f),new Vector3(.036f,.062f,.017f)*scale,mint,clothes,10,8);
+        }
+        static Vector3 GhostPatchPoint(Vector2 point,int side,float scale,float offset)
+        {
+            float x=point.x*scale,y=1.82f+point.y*scale;
+            int row=1;
+            while(row<5&&ShirtPoint(row+1,0,true).y<y)row++;
+            Vector3 lower=ShirtPoint(row,0,true),upper=ShirtPoint(row+1,0,true);
+            float fraction=Mathf.InverseLerp(lower.y,upper.y,y);
+            float depth=-Mathf.Lerp(lower.z,upper.z,fraction);
+            float width=Mathf.Lerp(ShirtPoint(row,ShirtSides/4,true).x,ShirtPoint(row+1,ShirtSides/4,true).x,fraction);
+            float surfaceDepth=depth*Mathf.Sqrt(1-x*x/(width*width));
+            return new Vector3(x,y,side*(surfaceDepth+offset));
         }
         static Vector3 ShirtPoint(int row,int column,bool loose)
         {

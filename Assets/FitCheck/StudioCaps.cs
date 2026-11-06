@@ -68,36 +68,45 @@ namespace FitCheck
             var trim=SurfaceMaterial(new Color(.39f,.26f,.53f),"Cloth");
             var vertices=new List<Vector3>();var uv=new List<Vector2>();var triangles=new List<int>();
             const int sides=32;
-            float[] depths={-.36f,-.18f,.08f,.35f,.55f,.65f};
-            float[] widths={.93f,1.04f,1.07f,.93f,.62f,.01f};
+            float[] depths={-.36f,-.18f,.08f,.35f,.55f,.66f};
+            float[] widths={.93f,1.04f,1.07f,.97f,.72f,.42f};
             var rim=new Vector3[sides];
             for(int row=0;row<depths.Length;row++)for(int i=0;i<=sides;i++){
                 float a=i*Mathf.PI*2/sides;
-                var point=new Vector3(Mathf.Cos(a)*.62f*widths[row],.035f+Mathf.Sin(a)*.65f*widths[row],depths[row]);
+                float height=Mathf.Sin(a);
+                float sweep=.13f*Mathf.Max(0,height)*(1f-row/(depths.Length-1f));
+                float rear=Mathf.SmoothStep(0,1,Mathf.InverseLerp(.08f,.59f,depths[row]));
+                float bunRoom=currentHairProfile==1?.045f*Mathf.Max(0,height)*rear:0;
+                var point=new Vector3(Mathf.Cos(a)*.66f*widths[row],.035f+height*.68f*widths[row],depths[row]+sweep+bunRoom);
                 vertices.Add(point);uv.Add(new Vector2(i/(float)sides*2,row*.23f));
                 if(row==0&&i<sides)rim[i]=origin+point;
                 if(row==0||i==sides)continue;
                 int b=row*(sides+1)+i,p=b-sides-1;
                 triangles.AddRange(new[]{p,p+1,b,b,p+1,b+1});
             }
+            int pole=vertices.Count,lastRing=pole-sides-1;
+            vertices.Add(new Vector3(0,.035f,.72f));uv.Add(new Vector2(1,1.38f));
+            for(int i=0;i<sides;i++)triangles.AddRange(new[]{lastRing+i,lastRing+i+1,pole});
             Surface("Capuz espectral",vertices,triangles,uv,null,origin,Vector3.one,fabric,clothes);
-            Tube("Costura do capuz espectral",rim,.027f,trim,clothes,true,origin:origin);
+            Tube("Costura do capuz espectral",rim,.021f,trim,clothes,true,origin:origin);
         }
         void BuildGarageDjHeadphones()
         {
             var origin=new Vector3(0,2.8f,0);
             var shell=SurfaceMaterial(new Color(.075f,.066f,.11f),"Leather");
             var lime=SurfaceMaterial(new Color(.68f,.88f,.19f));
+            float sideRoom=currentHairProfile==6?.043f:0;
+            float crownRoom=currentHairProfile==0?.025f:0;
             var band=new Vector3[17];
             for(int i=0;i<band.Length;i++){
                 float angle=Mathf.PI*i/(band.Length-1);
-                band[i]=origin+new Vector3(Mathf.Cos(angle)*.66f,.06f+Mathf.Sin(angle)*.68f,.035f);
+                band[i]=origin+new Vector3(Mathf.Cos(angle)*(.66f+sideRoom),.06f+Mathf.Sin(angle)*(.68f+crownRoom),.035f);
             }
             Tube("Fone — arco",band,.046f,shell,clothes,origin:origin);
             for(int side=-1;side<=1;side+=2){
-                Ellipsoid("Fone — almofada",origin+new Vector3(side*.585f,.045f,.035f),new Vector3(.15f,.33f,.29f),shell,clothes,12,8);
-                Ellipsoid("Fone — concha",origin+new Vector3(side*.671f,.045f,.035f),new Vector3(.11f,.29f,.25f),lime,clothes,12,8);
-                Ellipsoid("Fone — disco externo",origin+new Vector3(side*.718f,.045f,.035f),new Vector3(.044f,.20f,.17f),shell,clothes,12,8);
+                Ellipsoid("Fone — almofada",origin+new Vector3(side*(.585f+sideRoom*.5f),.045f,.035f),new Vector3(.15f+sideRoom,.33f,.29f),shell,clothes,12,8);
+                Ellipsoid("Fone — concha",origin+new Vector3(side*(.671f+sideRoom),.045f,.035f),new Vector3(.11f,.29f,.25f),lime,clothes,12,8);
+                Ellipsoid("Fone — disco externo",origin+new Vector3(side*(.718f+sideRoom),.045f,.035f),new Vector3(.044f,.20f,.17f),shell,clothes,12,8);
             }
         }
         void BuildPlayerGlasses()
