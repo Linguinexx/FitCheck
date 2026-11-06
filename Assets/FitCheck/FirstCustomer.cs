@@ -75,7 +75,10 @@ namespace FitCheck
                 city.Frame(cam,reducedMotion,paused?0:Time.unscaledDeltaTime);
                 if(ShopSequenceActive&&paused){cam.transform.SetPositionAndRotation(p,r);cam.fieldOfView=fov;}
                 else UpdateShopSequence(Time.unscaledDeltaTime);
-                if(stage==Stage.City)city.FramePlayerForCamera(cam,ShopSequenceActive);
+                if(stage==Stage.City){
+                    city.FramePlayerForCamera(cam,ShopSequenceActive);
+                    if(!paused&&city.IsHome)city.RenderHomeMirror(cam);
+                }
                 return;
             }
             studio.SetHome(stage==Stage.Home);studio.Pose(rotation,distance,stage==Stage.Welcome||stage==Stage.Home?-.95f:.9f);

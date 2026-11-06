@@ -74,7 +74,11 @@ namespace FitCheck
         {
             if(traffic!=null){
                 bool stop=Mathf.Abs(Position.y+13.8f)<2&&Position.x>trafficX-2&&Position.x<trafficX+6.4f;
-                if(!stop)trafficX+=delta*3.8f;if(trafficX>49)trafficX=-153;
+                if(!stop)trafficX+=delta*3.8f;
+                if(trafficX>49){
+                    trafficX=-153;
+                    SetTrafficPaint((trafficPaintIndex+1)%TrafficPaints.Length);
+                }
                 traffic.localPosition=new Vector3(trafficX,0,-13.8f);traffic.gameObject.SetActive(trafficX<42);
                 foreach(var wheel in trafficWheels)wheel.localRotation=Quaternion.Euler(90,0,0)*Quaternion.Euler(0,-trafficX*120,0);
             }

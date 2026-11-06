@@ -9,6 +9,12 @@ namespace FitCheck
         public static readonly Rect HomeBounds=new Rect(-5.5f,-4.5f,11,9);
         public static readonly Vector2 HomeSpawn=new Vector2(0,.2f),HomeDoor=new Vector2(0,-3.5f),HomeBed=new Vector2(-1.5f,2.6f),HomeWardrobe=new Vector2(3,2),HomeDesk=new Vector2(-2.1f,-2.2f);
         public static readonly Vector3 HomePhonePosition=new Vector3(-3.3f,1.49f,-2.6f);
+        static readonly Vector3 HomeMirrorCenter=new Vector3(5.39f,1.83f,1.36f);
+        const float HomeMirrorHalfWidth=.59f,HomeMirrorHalfHeight=1.62f;
+        readonly Plane[] mirrorViewPlanes=new Plane[6];
+        Camera homeMirrorCamera;
+        Material homeMirrorMaterial;
+        float nextHomeMirrorFrame;
         public static readonly Vector2 StreetHomeDoor=new Vector2(-124.8f,7.65f),StreetHomeThreshold=new Vector2(-124.8f,9.9f),StreetShopDoor=new Vector2(10.4f,2.1f);
         public void BuildHome()
         {
@@ -60,12 +66,80 @@ namespace FitCheck
             }
             for(int i=0;i<3;i++)Block(new Vector3(-4.5f+i*.7f,2.92f,-4.23f),new Vector3(.45f,.30f,.42f),i%2==0?Kaos:Cream,"Paper");
             DecorateHome(walnut,petrol);
+            BuildHomeMirror();
             BuildCat(new Vector3(-3.4f,1.055f,1.6f),240);
             GeometryBatches=batches.Count;FinishGeometry();motionRigVersion=ResidentArtRevision;
         }
+        void BuildHomeMirror()
+        {
+            var frameColor=new Color(.16f,.13f,.12f);
+            Block(HomeMirrorCenter+Vector3.right*.07f,new Vector3(.13f,3.43f,1.37f),frameColor,"Wood",.038f);
+            Block(HomeMirrorCenter+Vector3.right*.025f,new Vector3(.04f,3.31f,1.24f),new Color(.36f,.35f,.31f),"CityMetal",.012f);
+            float w=HomeMirrorHalfWidth,h=HomeMirrorHalfHeight;
+            var mesh=new Mesh{name="Espelho — face refletiva",
+                vertices=new[]{new Vector3(0,-h,w),new Vector3(0,h,w),new Vector3(0,h,-w),new Vector3(0,-h,-w)},
+                uv=new[]{Vector2.right,Vector2.one,Vector2.up,Vector2.zero},triangles=new[]{0,1,2,0,2,3}};
+            mesh.RecalculateNormals();mesh.RecalculateBounds();assets.Add(mesh);
+            var glass=new GameObject("Espelho do quarto");glass.transform.SetParent(transform,false);glass.transform.localPosition=HomeMirrorCenter;
+            glass.AddComponent<MeshFilter>().sharedMesh=mesh;
+            homeMirrorMaterial=new Material(Resources.Load<Shader>("Artwork")){mainTexture=Texture2D.blackTexture};
+            assets.Add(homeMirrorMaterial);glass.AddComponent<MeshRenderer>().sharedMaterial=homeMirrorMaterial;
+        }
+        public bool RenderHomeMirror(Camera source)
+        {
+            if(!IsHome||homeMirrorMaterial==null||!PlayerBodyReady||Time.unscaledTime<nextHomeMirrorFrame)return false;
+            var center=transform.TransformPoint(HomeMirrorCenter);
+            var eye=source.transform.position;
+            float distance=center.x-eye.x;
+            if(distance<.1f||(center-eye).sqrMagnitude>36)return false;
+            GeometryUtility.CalculateFrustumPlanes(source,mirrorViewPlanes);
+            if(!GeometryUtility.TestPlanesAABB(mirrorViewPlanes,new Bounds(center,new Vector3(.05f,2*HomeMirrorHalfHeight,2*HomeMirrorHalfWidth))))return false;
+            nextHomeMirrorFrame=Time.unscaledTime+1f/15;
+            if(homeMirrorCamera==null){
+                var target=new RenderTexture(128,352,16,RenderTextureFormat.ARGB32){name="Reflexo do quarto",filterMode=FilterMode.Point};
+                assets.Add(target);
+                var cameraObject=new GameObject("Câmera do espelho");cameraObject.transform.SetParent(transform,false);
+                homeMirrorCamera=cameraObject.AddComponent<Camera>();homeMirrorCamera.enabled=false;
+                homeMirrorCamera.clearFlags=CameraClearFlags.SolidColor;homeMirrorCamera.backgroundColor=new Color(.065f,.06f,.07f);
+                homeMirrorCamera.allowHDR=false;homeMirrorCamera.allowMSAA=false;homeMirrorCamera.targetTexture=target;
+                homeMirrorMaterial.mainTexture=target;
+            }
+            var reflectedEye=eye+Vector3.right*(2*distance);
+            homeMirrorCamera.transform.SetPositionAndRotation(reflectedEye,Quaternion.LookRotation(Vector3.left,Vector3.up));
+            // Fit the frustum to the glass and clip the wall behind it.
+            float near=distance+.015f,scale=near/distance;
+            float x=center.z-eye.z,y=center.y-eye.y;
+            homeMirrorCamera.cullingMask=source.cullingMask;
+            homeMirrorCamera.nearClipPlane=near;homeMirrorCamera.farClipPlane=16;
+            homeMirrorCamera.projectionMatrix=Matrix4x4.Frustum((x-HomeMirrorHalfWidth)*scale,(x+HomeMirrorHalfWidth)*scale,
+                (y-HomeMirrorHalfHeight)*scale,(y+HomeMirrorHalfHeight)*scale,near,16);
+            EnsurePlayerPose();
+            try{
+                foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(PlayerFaceVisible(piece));
+                homeMirrorCamera.Render();
+            }finally{FramePlayerForCamera(source,false);}
+            return true;
+        }
         void BuildHomePhone()
         {
-            Block(HomePhonePosition-Vector3.up*.03f,new Vector3(.62f,.06f,.33f),Ink,"Rubber",.04f);
+            var graphite=new Color(.15f,.20f,.22f);
+            var metalEdge=new Color(.30f,.37f,.39f);
+            Block(HomePhonePosition-Vector3.up*.058f,new Vector3(.61f,.064f,.32f),Ink,"Rubber",.038f);
+            Block(HomePhonePosition-Vector3.up*.022f,new Vector3(.62f,.028f,.33f),graphite,"CityMetal",.039f);
+            Block(HomePhonePosition-Vector3.up*.009f,new Vector3(.614f,.010f,.324f),metalEdge,"CityMetal",.037f);
+            Block(HomePhonePosition-Vector3.up*.005f,new Vector3(.599f,.010f,.309f),Ink,"Rubber",.033f);
+
+            // Top and bottom bezels sit outside the wallpaper's existing rectangle.
+            Block(HomePhonePosition+new Vector3(-.274f,.001f,0),new Vector3(.011f,.003f,.075f),new Color(.27f,.30f,.32f),"CityMetal",.003f);
+            var lens=HomePhonePosition+new Vector3(-.274f,0,.065f);
+            Rod(lens,lens+Vector3.up*.004f,.009f,new Color(.16f,.27f,.35f),"CityMetal",8);
+            var button=HomePhonePosition+new Vector3(.273f,0,0);
+            Rod(button,button+Vector3.up*.003f,.018f,metalEdge,"CityMetal",12);
+            Rod(button,button+Vector3.up*.004f,.014f,graphite,"Rubber",12);
+            foreach(float x in new[]{-.119f,-.061f})
+                Block(HomePhonePosition+new Vector3(x,-.023f,.166f),new Vector3(.036f,.012f,.009f),metalEdge,"CityMetal",.003f);
+            Block(HomePhonePosition+new Vector3(.311f,-.025f,0),new Vector3(.005f,.012f,.055f),Ink,"Rubber",.002f);
+
             var center=HomePhonePosition+Vector3.up*.002f;
             const float halfHeight=.245f,halfWidth=.13f;
             var mesh=new Mesh{name="Tela do celular — wallpaper",

@@ -14,11 +14,14 @@ namespace FitCheck
             for(int i=0;i<road.Length;i+=4){var center=(road[i]+road[i+1]+road[i+2]+road[i+3])*.25f;if(Mathf.Abs(center.y+.04f)<.0001f&&center.z>20&&center.z<28)throw new Exception("Faixa de asfalto sobreposta à praça");}
             var leaves=transform.Find("Arquitetura — CityLeaves").GetComponent<MeshFilter>().sharedMesh;foreach(var v in leaves.vertices)if(v.z< -45&&v.y<6.4f)throw new Exception("Folhagem terminal atravessa o muro");
             if(WorldFree(new Vector2(27,-13.8f))||WorldFree(new Vector2(-146,-13.8f)))throw new Exception("Jogador entra no túnel dos carros");
-            float savedX=trafficX;try{
+            float savedX=trafficX;int savedPaint=trafficPaintIndex;try{
                 trafficX=24;TickTraffic(1);if(trafficX<=26||traffic.localPosition.x<=26)throw new Exception("Carro não atravessa o portal");
+                if(trafficPaintIndex!=savedPaint)throw new Exception("Pintura mudou antes de completar o percurso");
                 trafficX=48.9f;TickTraffic(1);if(trafficX!=-153)throw new Exception("Carro não reaparece pelo túnel de entrada");
+                if(trafficPaintIndex!=(savedPaint+1)%TrafficPaints.Length||trafficBodyPaint.GetColor("_DecorTint")!=TrafficPaints[trafficPaintIndex])
+                    throw new Exception("Carro não trocou a pintura no retorno");
                 trafficX=-147;TickTraffic(1);if(trafficX<=-144.5f)throw new Exception("Carro não sai do túnel de entrada");
-            }finally{trafficX=savedX;TickTraffic(0);}
+            }finally{SetTrafficPaint(savedPaint);trafficX=savedX;TickTraffic(0);}
         }
         public void CheckRackFit()
         {

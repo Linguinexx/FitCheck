@@ -6,7 +6,18 @@ namespace FitCheck
     public partial class CityView
     {
         [SerializeField] List<Transform> trafficWheels=new List<Transform>();
-        void CarSurface(string name,Vector3[][] faces,Color color,string texture="Leather")
+        static readonly Color[] TrafficPaints={new Color(227/255f,6/255f,19/255f),new Color(.16f,.43f,.92f),new Color(.10f,.64f,.46f),
+            new Color(.95f,.57f,.13f),new Color(.83f,.80f,.68f),new Color(.59f,.22f,.56f)};
+        Material trafficBodyPaint,trafficRoofPaint;
+        int trafficPaintIndex;
+        void SetTrafficPaint(int index)
+        {
+            trafficPaintIndex=index;
+            var paint=TrafficPaints[index];
+            trafficBodyPaint.SetColor("_DecorTint",paint);
+            trafficRoofPaint.SetColor("_DecorTint",paint);
+        }
+        Material CarSurface(string name,Vector3[][] faces,Color color,string texture="Leather")
         {
             var v=new List<Vector3>();var uv=new List<Vector2>();var triangles=new List<int>();var colors=new List<Color>();
             foreach(var face in faces){
@@ -17,6 +28,7 @@ namespace FitCheck
             var mesh=new Mesh{name=name};mesh.SetVertices(v);mesh.SetUVs(0,uv);mesh.SetColors(colors);mesh.SetTriangles(triangles,0);mesh.RecalculateNormals();mesh.RecalculateBounds();assets.Add(mesh);
             var go=new GameObject(name);go.transform.SetParent(traffic,false);go.AddComponent<MeshFilter>().sharedMesh=mesh;
             var material=CityMaterial(texture);material.SetFloat("_Cull",0);assets.Add(material);go.AddComponent<MeshRenderer>().sharedMaterial=material;
+            return material;
         }
         void BuildStreetCar()
         {
@@ -29,17 +41,23 @@ namespace FitCheck
                 faces.Add(new[]{new Vector3(a.x,.43f,a.y),new Vector3(a.x,.93f,a.y),new Vector3(b.x,.93f,b.y),new Vector3(b.x,.43f,b.y)});
                 faces.Add(new[]{new Vector3(0,.99f,0),new Vector3(a.x,.93f,a.y),new Vector3(b.x,.93f,b.y),new Vector3(0,.99f,0)});
             }
-            CarSurface("Carro — carroceria chanfrada",faces.ToArray(),Kaos);
+            trafficBodyPaint=CarSurface("Carro — carroceria chanfrada",faces.ToArray(),Color.white);
             var cabin=new[]{new Vector3(-1.43f,1.00f,-.72f),new Vector3(-.88f,1.67f,-.57f),new Vector3(.27f,1.67f,-.57f),new Vector3(.98f,1.0f,-.72f)};
             faces.Clear();faces.Add(cabin);var back=new Vector3[4];for(int i=0;i<4;i++)back[i]=new Vector3(cabin[i].x,cabin[i].y,-cabin[i].z);faces.Add(back);
             for(int i=0;i<3;i++)faces.Add(new[]{cabin[i],back[i],back[i+1],cabin[i+1]});
-            CarSurface("Carro — teto e colunas",faces.ToArray(),Kaos*.8f);
-            var glass=new Color(.31f,.28f,.24f);
+            trafficRoofPaint=CarSurface("Carro — teto e colunas",faces.ToArray(),Color.white*.82f);
+            SetTrafficPaint(0);
+            var glass=new Color(.24f,.32f,.38f);
             for(int side=-1;side<=1;side+=2){
                 CarSurface("Carro — vidro lateral",new[]{new[]{new Vector3(-1.25f,1.08f,side*.704f),new Vector3(-.83f,1.58f,side*.60f),new Vector3(.23f,1.58f,side*.60f),new Vector3(.79f,1.08f,side*.704f)}},glass);
                 LiveBox("Carro — coluna do vidro",new Vector3(-.32f,1.33f,side*.666f),new Vector3(.08f,.52f,.035f),Ink,"Leather",traffic);
                 LiveBox("Carro — friso",new Vector3(-.05f,.68f,side*.823f),new Vector3(2.65f,.055f,.035f),Ink,"Rubber",traffic);
                 LiveBox("Carro — maçaneta",new Vector3(.05f,.88f,side*.83f),new Vector3(.22f,.045f,.04f),Cream,"Leather",traffic);
+                LiveBox("Carro — retrovisor",new Vector3(.61f,1.10f,side*.80f),new Vector3(.23f,.13f,.22f),Ink,"CityMetal",traffic);
+                CarSurface("Carro — lente do retrovisor",new[]{new[]{
+                    new Vector3(.492f,1.058f,side*.74f),new Vector3(.492f,1.142f,side*.74f),
+                    new Vector3(.492f,1.142f,side*.887f),new Vector3(.492f,1.058f,side*.887f)
+                }},new Color(.45f,.53f,.55f),"CityMetal");
                 foreach(float x in new[]{-1.15f,1.18f}){
                     var wheel=new GameObject("Carro — pneu e aro de cinco raios");wheel.transform.SetParent(traffic,false);
                     wheel.transform.localPosition=new Vector3(x,.40f,side*.81f);wheel.transform.localRotation=Quaternion.Euler(90,0,0);
@@ -54,7 +72,16 @@ namespace FitCheck
                 LiveBox("Lanterna",new Vector3(-1.876f,.78f,z),new Vector3(.04f,.17f,.24f),Kaos,"CityGlow",traffic);
             }
             foreach(float x in new[]{-1.89f,1.90f})LiveBox("Para-choque",new Vector3(x,.49f,0),new Vector3(.12f,.13f,1.24f),Ink,"Rubber",traffic);
+            LiveBox("Grade frontal",new Vector3(1.879f,.78f,0),new Vector3(.04f,.22f,.62f),Ink,"Rubber",traffic);
+            faces.Clear();
+            for(int i=0;i<3;i++){
+                float y=.712f+i*.065f;
+                faces.Add(new[]{new Vector3(1.902f,y,-.265f),new Vector3(1.902f,y+.016f,-.265f),
+                    new Vector3(1.902f,y+.016f,.265f),new Vector3(1.902f,y,.265f)});
+            }
+            CarSurface("Carro — lâminas da grade",faces.ToArray(),new Color(.46f,.48f,.47f),"CityMetal");
             LiveBox("Placa",new Vector3(1.972f,.59f,0),new Vector3(.025f,.13f,.36f),Cream,"Leather",traffic);
+            LiveBox("Placa traseira",new Vector3(-1.955f,.59f,0),new Vector3(.025f,.13f,.36f),Cream,"Leather",traffic);
         }
     }
 }

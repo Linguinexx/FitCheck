@@ -21,6 +21,10 @@ namespace FitCheck
                 if(stage!=Stage.City||!city.IsHome||!city.RuntimeReady||!city.PlayerBodyReady||city.ResidentCount!=0||cam.orthographic)throw new Exception("Casa não abriu em primeira pessoa");
                 string baseline=JsonUtility.ToJson(progress);
                 city.SetView(310,12);city.Frame(cam,true,0);SaveFirstPersonFrame(Path.Combine(folder,"home-first-person.png"));
+                MoveProof(new Vector2(2.75f,1.36f),90,10);
+                if(!city.RenderHomeMirror(cam)||city.PlayerHeadVisible)throw new Exception("Espelho ausente ou cabeça vazou para a primeira pessoa");
+                SaveFirstPersonFrame(Path.Combine(folder,"home-mirror.png"));
+                MoveProof(CityView.HomeSpawn,310,12);
                 city.Look(new Vector2(25,-18));city.Frame(cam,true,0);if(city.ViewPitch<=0)throw new Exception("Casa sem olhar vertical");
                 WalkWorldProof(CityView.HomeWardrobe);InteractHome();if(stage!=Stage.Home||!showWardrobe)throw new Exception("Guarda-roupa inacessível");
                 FrameHomeWardrobe();
