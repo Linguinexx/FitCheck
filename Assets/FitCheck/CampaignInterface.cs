@@ -9,9 +9,7 @@ namespace FitCheck
     {
         bool showWardrobe, mutedAudio,reducedMotion,retroFilter; AudioSource effects;
         AudioClip clickSound,photoSound,awardSound;Queue<string> notices=new Queue<string>();string notice="";float noticeUntil;
-        static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes"};
         static readonly string[] UniformNames={"Traje padrão","Corta-vento Rubro","Carpa Rosa","Azul Elétrico"};
-        const bool UnlockAllUniformsForTesting=true;
         readonly Dictionary<string,Texture2D> feedPhotos=new Dictionary<string,Texture2D>();
         static readonly Color FeedBackground=new Color32(23,21,25,255),FeedCardColor=new Color32(33,30,35,255),
             FeedPaper=new Color32(247,244,239,255),FeedMuted=new Color32(165,159,168,255),
@@ -108,8 +106,8 @@ namespace FitCheck
                 if(Tap(new Rect(845,806,210,48),"↶ Girar"))homeWardrobeRotation-=45;
                 if(Tap(new Rect(1075,806,210,48),"Girar ↷"))homeWardrobeRotation+=45;
                 for(int i=0;i<4;i++){
-                    bool unlocked=UnlockAllUniformsForTesting||i==0||progress.achievements.Contains(UniformAwards[i]);
-                    if(Tap(new Rect(48,407+i*74,500,61),(progress.uniform==i?"✓ ":"")+UniformNames[i]+(unlocked?"":"  /  bloqueado"),progress.uniform==i,unlocked)){progress.uniform=i;studio.ApplyUniform(i);TrySave();}
+                    bool unlocked=progress.UniformUnlocked(i),selected=progress.EquippedUniform==i;
+                    if(Tap(new Rect(48,407+i*74,500,61),(selected?"✓ ":"")+UniformNames[i]+(unlocked?"":"  /  bloqueado"),selected,unlocked)){progress.uniform=i;studio.ApplyUniform(i);TrySave();}
                 }
                 if(Tap(new Rect(48,725,500,50),"Editar meu personagem"))OpenCreator(Stage.Home);
             }

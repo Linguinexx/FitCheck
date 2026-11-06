@@ -44,7 +44,7 @@ namespace FitCheck
             Home();var oldLook=studio.PlayerLook;int samples=0;
             try{
                 for(int cut=0;cut<6;cut++)for(int face=0;face<6;face++){
-                    studio.PlayerLook=new PlayerAppearance{hair=cut,hairColor=0,skin=3,expression=face};studio.ApplyUniform(progress.uniform);studio.Animate(0,false);
+                    studio.PlayerLook=new PlayerAppearance{hair=cut,hairColor=0,skin=3,expression=face};studio.ApplyUniform(progress.EquippedUniform);studio.Animate(0,false);
                     samples+=studio.ValidateVisibleBrows();
                 }
             }finally{studio.PlayerLook=oldLook;Home();}

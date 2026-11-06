@@ -59,7 +59,7 @@ namespace FitCheck
         void PreviewSave(int slot)
         {
             selectedSave=slot;var info=saveSlots[slot];if(info==null)return;
-            studio.PlayerLook=info.appearance;studio.ApplyUniform(info.progress.uniform);rotation=-12;distance=7.2f;UpdateCamera();
+            studio.PlayerLook=info.appearance;studio.ApplyUniform(info.progress.EquippedUniform);rotation=-12;distance=7.2f;UpdateCamera();
         }
         bool OpenSelectedSave()
         {

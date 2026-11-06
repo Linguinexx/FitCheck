@@ -55,7 +55,7 @@ namespace FitCheck
                 if(titleStarting)city.HideFitFeedResidents();
                 else city.SyncFitFeedResidents(studio,progress);
             }
-            studio.PlayerLook=playerAppearance;studio.ApplyUniform(progress.uniform);city.ResetWalk(mannequin);city.PreparePlayerBody(studio);if(interior&&!home)city.ResetFittingCurtain();shopFittingOpening=false;stage=Stage.City;paused=false;showRequest=false;showDrops=false;
+            studio.PlayerLook=playerAppearance;studio.ApplyUniform(progress.EquippedUniform);city.ResetWalk(mannequin);city.PreparePlayerBody(studio);if(interior&&!home)city.ResetFittingCurtain();shopFittingOpening=false;stage=Stage.City;paused=false;showRequest=false;showDrops=false;
             city.Frame(cam,true,0);mannequin.gameObject.SetActive(false);cityFreeCursor=false;cityLookCaptured=false;cityDragLook=false;SyncCityCursor();
             ArrivalPresentation();
         }
@@ -113,7 +113,7 @@ namespace FitCheck
                 old.PrepareRuntimeDisposal();old.gameObject.SetActive(false);mannequin.gameObject.SetActive(true);
                 city=new GameObject(old.IsHome?"Casa — quarto do jogador":old.IsInterior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(old.IsHome){city.BuildHome();homeRoom=city;}else if(old.IsInterior){city.BuildShop(studio,Mathf.Clamp(progress.posts.Count,0,8));shop=city;}else{city.Build(studio);street=city;}
                 if(!old.IsInterior&&!old.IsHome)city.SyncFitFeedResidents(studio,progress);
-                studio.ApplyUniform(progress.uniform);city.RestoreWalk(position,yaw,pitch,mannequin);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);Destroy(old.gameObject);
+                studio.ApplyUniform(progress.EquippedUniform);city.RestoreWalk(position,yaw,pitch,mannequin);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);Destroy(old.gameObject);
                 shopFittingOpening=false;
             }
             SyncCityCursor(true);

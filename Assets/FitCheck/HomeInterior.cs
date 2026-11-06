@@ -206,7 +206,7 @@ namespace FitCheck
         void CloseHomePanel()
         {
             if(homeRoom!=null&&!homeRoom.gameObject.activeSelf){var position=homeRoom.Position;float yaw=homeRoom.ViewYaw,pitch=homeRoom.ViewPitch;EnterHome();city.RestoreWalk(position,yaw,pitch,mannequin);}
-            stage=Stage.City;city=homeRoom;paused=false;cityFreeCursor=false;mannequin.gameObject.SetActive(true);studio.ApplyUniform(progress.uniform);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);city.Frame(cam,true,0);SyncCityCursor(true);
+            stage=Stage.City;city=homeRoom;paused=false;cityFreeCursor=false;mannequin.gameObject.SetActive(true);studio.ApplyUniform(progress.EquippedUniform);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);city.Frame(cam,true,0);SyncCityCursor(true);
         }
         bool InteractHome()
         {

@@ -1,6 +1,6 @@
 # Tênis cotidiano fornecido pelo usuário — 05/11/2026
 
-Fonte original, preservada: refs roupas/modelos tenis/Base sneaker/Base_sneaker.fbx e pasta Base_sneaker.fbm, fora de Assets. manifest.json registra SHA256, dimensões e contagens. Cópia editável otimizada: BaseSneaker.blend.
+Fonte editável atual: BaseSneaker.blend, com a malha otimizada e textura empacotada. A pasta de entrada foi removida na limpeza dos modelos brutos. O manifest.json conserva o SHA256, as dimensões e as contagens do original.
 
 O modelo foi reduzido de 501.384 para 2.400 triângulos por pé, com basecolor reduzida em uma cópia 512 × 512. Um material e um renderer por pé. Sem importar o normal map de alta resolução. Silhueta cotidiana cinza/preta com sola clara, independente dos três tênis do catálogo DripLab. Os civis usam a malha/material em cache e mantêm o binding existente dos pés.
 

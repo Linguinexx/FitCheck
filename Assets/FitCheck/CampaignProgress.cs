@@ -14,6 +14,9 @@ namespace FitCheck
         public List<int> reached=new List<int>();
         public List<string> rewards=new List<string>();
         public List<string> achievements=new List<string>();
+        static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes"};
+        public bool UniformUnlocked(int index)=>index>=0&&index<UniformAwards.Length&&(index==0||achievements.Contains(UniformAwards[index]));
+        public int EquippedUniform=>UniformUnlocked(uniform)?uniform:0;
         public static readonly int[] Milestones={100,200,300,450,600};
         public static readonly string[][] RewardNames={new[]{"Night Route","Remix"},new[]{"Court Lines","Daily Steps"},new[]{"Closing Time","Independent"},new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"}};
         public bool DayComplete=>posts.Count==day*3;

@@ -1,14 +1,14 @@
 [
   {
     "id": "AH_SHOES_01",
-    "input": "Blue sneaker\\Blue_sneaker.fbx",
-    "sha256": "099b15f75304fd15d2d3c408096ed4db99952d0c6de66bde2f07602ae320185a",
-    "input_triangles": 501558,
-    "runtime_triangles": 2500,
+    "input": "blue sneaker 2.0\\blue_sneaker_2.0.fbx",
+    "sha256": "76e6347b8a947ea8c82d55d67525ea7ac16594e07eac65c40ac2612e4fa654f5",
+    "input_triangles": 501639,
+    "runtime_triangles": 2499,
     "texture": 512,
     "toe_sign": -1,
-    "toe_height_positive": 0.3883209228515625,
-    "toe_height_negative": 0.23512262105941772,
+    "toe_height_positive": 0.3766632080078125,
+    "toe_height_negative": 0.23214338719844818,
     "target_width": 0.41,
     "target_height": 0.345
   },

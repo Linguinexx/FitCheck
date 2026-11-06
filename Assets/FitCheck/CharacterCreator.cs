@@ -12,7 +12,7 @@ namespace FitCheck
         static readonly Color CreatorRed=new Color(227/255f,6/255f,19/255f);
         void LoadAppearance()
         {try{playerAppearance=AppearanceStore.Load(AppearancePath);}catch{playerAppearance=new PlayerAppearance();message="Não foi possível ler a aparência. Você pode criar outra.";}}
-        void ShowPlayer(){studio.PlayerLook=playerAppearance;studio.ApplyUniform(progress.uniform);}
+        void ShowPlayer(){studio.PlayerLook=playerAppearance;studio.ApplyUniform(progress.EquippedUniform);}
         void OpenCreator(Stage destination=Stage.Welcome)
         {
             bool wasHome=stage==Stage.Home||(stage==Stage.City&&city.IsHome);
@@ -20,9 +20,9 @@ namespace FitCheck
             creatorReturn=wasHome?Stage.Home:Stage.Welcome;creatorDestination=destination;
             creatorDraft=playerAppearance.Copy();studio.PlayerLook=creatorDraft;studio.SetHome(false);
             stage=Stage.CharacterCreator;message="";paused=false;dragging=false;rotation=-15;distance=6.8f;
-            studio.ApplyUniform(progress.uniform);UpdateCamera();
+            studio.ApplyUniform(progress.EquippedUniform);UpdateCamera();
         }
-        void RefreshCreator(){studio.PlayerLook=creatorDraft;studio.ApplyUniform(progress.uniform);}
+        void RefreshCreator(){studio.PlayerLook=creatorDraft;studio.ApplyUniform(progress.EquippedUniform);}
         bool SaveCreator()
         {
             var saved=creatorDraft.Copy();saved.name=saved.name.Trim();saved.created=true;
