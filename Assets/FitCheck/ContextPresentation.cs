@@ -21,39 +21,63 @@ namespace FitCheck
             Vector3 origin=city.transform.position;
             if(city.CatInteraction(cam))return Hint("E","Fazer carinho em Fubá",city.Cat.transform.position+Vector3.up*.35f,new Vector3(1.5f,.8f,1));
             if(city.IsHome){switch(city.HomeInteraction){
-                case 1:return Hint("E","Sair de casa",origin+new Vector3(0,2,-4.4f),new Vector3(2.2f,4,.2f));
-                case 2:return Hint("E","Trocar de roupa",origin+CityView.HomeWardrobeCenter,new Vector3(1.8f,3.6f,1.4f));
-                case 3:return Hint("E","Descansar / organizar o dia",origin+new Vector3(-3.4f,.7f,2.3f),new Vector3(2.3f,1.4f,3.5f));
-                case 4:return Hint("E","Abrir FitFeed",origin+CityView.HomePhonePosition,new Vector3(.75f,.2f,.45f));
+                case 1:return Hint("E","Sair de casa",origin+new Vector3(0,1.85f,-4.43f),new Vector3(1.9f,3.7f,.14f));
+                case 2:return Hint("E","Trocar de roupa",origin+CityView.HomeWardrobeCenter,new Vector3(1.65f,3.6f,1.45f));
+                case 3:return Hint("E","Descansar / organizar o dia",origin+new Vector3(-3.4f,.84f,2.375f),new Vector3(2.3f,1.63f,3.51f));
+                case 4:return Hint("E","Abrir FitFeed",origin+CityView.HomePhonePosition-Vector3.up*.044f,new Vector3(.63f,.094f,.35f));
             }}else if(!city.IsInterior){
                 if(city.StreetInteraction==1)return Hint("E","Entrar na DripLab",origin+new Vector3(10.4f,2,3.3f),new Vector3(2.2f,4,.3f));
                 if(city.StreetInteraction==2)return Hint("E","Entrar em casa",origin+new Vector3(CityView.StreetHomeDoor.x,2,8.65f),new Vector3(2.1f,4,.25f));
             }else{
                 if(!shopFittingOpening&&city.LookingAtShopGuide(cam))return Hint("E","Conversar com "+CityView.ShopGuideName,city.ShopGuideTarget-Vector3.up*.8f,new Vector3(1.2f,3.4f,1));
-                if(city.ShopInteraction==1){if(ShopOpen&&!city.CustomerWaitingAtCounter&&!progress.DayComplete)return default;return Hint("E",ShopActionLabel(),origin+new Vector3(4.4f,.85f,6.2f),new Vector3(3.0f,1.7f,1.5f));}
+                if(city.ShopInteraction==1){if(ShopOpen&&!city.CustomerWaitingAtCounter&&!progress.DayComplete)return default;return Hint("E",ShopActionLabel(),origin+new Vector3(4.4f,.82f,6.15f),new Vector3(5.95f,1.64f,1.62f));}
                 if(!ShopOpen&&Vector2.Distance(city.Position,new Vector2(2.1f,7.55f))<2)return Hint("F","Personalizar a loja",origin+new Vector3(2.1f,1.58f,6.35f),new Vector3(1.7f,.15f,1.25f));
-                if(city.ShopInteraction==2)return Hint("E",ShopActionLabel(),origin+new Vector3(-4.9f,1.85f,5.15f),new Vector3(2.2f,3.6f,.3f));
+                if(city.ShopInteraction==2)return Hint("E",ShopActionLabel(),origin+new Vector3(-4.9f,1.85f,5.15f),new Vector3(4.86f,3.5f,.2f));
                 if(city.ShopInteraction==3)return Hint("E","Sair da loja",origin+new Vector3(0,2.1f,-4.8f),new Vector3(2.8f,4.2f,.2f));
             }
             return default;
         }
         bool LogicalPoint(Vector3 world,out Vector2 point)
         {
-            var p=cam.WorldToScreenPoint(world);var q=GUI.matrix.inverse.MultiplyPoint3x4(new Vector3(p.x,Screen.height-p.y,0));point=new Vector2(q.x,q.y);return p.z>.08f;
+            // The retro render target is stretched over the display. Project in normalized
+            // viewport coordinates so the UI stays aligned at either render resolution.
+            var viewport=cam.WorldToViewportPoint(world);
+            var screenPoint=new Vector3(viewport.x*Screen.width,(1-viewport.y)*Screen.height,0);
+            point=GUI.matrix.inverse.MultiplyPoint3x4(screenPoint);
+            return viewport.z>cam.nearClipPlane;
         }
         void DrawAffordance()
         {
             if(!cityFreeCursor){Fill(new Rect(718,448,4,4),new Color(.95f,.92f,.85f,.6f));}
             var hint=CurrentWorldHint();if(!hint.valid)return;
             Vector2 centre;if(!LogicalPoint(hint.bounds.center,out centre))return;
-            Vector2 lo=new Vector2(99999,99999),hi=-lo;var b=hint.bounds;
-            foreach(float x in new[]{b.min.x,b.max.x})foreach(float y in new[]{b.min.y,b.max.y})foreach(float z in new[]{b.min.z,b.max.z}){Vector2 p;if(LogicalPoint(new Vector3(x,y,z),out p)){lo=Vector2.Min(lo,p);hi=Vector2.Max(hi,p);}}
-            float width=Mathf.Clamp(hi.x-lo.x,36,480),height=Mathf.Clamp(hi.y-lo.y,30,440);var r=new Rect(centre.x-width/2,centre.y-height/2,width,height);
-            var accent=CreatorRed;accent.a=reducedMotion?.9f:.72f+.2f*Mathf.Sin(contextClock*3);
-            foreach(float x in new[]{r.xMin,r.xMax-2})foreach(float y in new[]{r.yMin,r.yMax-2}){
-                Fill(new Rect(x==r.xMin?x:x-13,y,15,2),accent);Fill(new Rect(x,y==r.yMin?y:y-13,2,15),accent);
+            var lo=new Vector2(float.PositiveInfinity,float.PositiveInfinity);
+            var hi=new Vector2(float.NegativeInfinity,float.NegativeInfinity);
+            var bounds=hint.bounds;
+            bool allInFront=true;
+            for(int i=0;i<8;i++){
+                var corner=new Vector3((i&1)==0?bounds.min.x:bounds.max.x,
+                    (i&2)==0?bounds.min.y:bounds.max.y,(i&4)==0?bounds.min.z:bounds.max.z);
+                if(!LogicalPoint(corner,out var point)){allInFront=false;continue;}
+                lo=Vector2.Min(lo,point);
+                hi=Vector2.Max(hi,point);
             }
-            float w=Mathf.Clamp(90+hint.label.Length*9,240,530);float left=Mathf.Clamp(centre.x-w/2,24,1416-w),top=Mathf.Clamp(r.yMin-60,112,800);
+            if(hi.x<0||lo.x>1440||hi.y<0||lo.y>900)return;
+            var r=Rect.MinMaxRect(lo.x,lo.y,hi.x,hi.y);
+            var accent=CreatorRed;accent.a=reducedMotion?.9f:.72f+.2f*Mathf.Sin(contextClock*3);
+            if(allInFront){
+                float arm=Mathf.Min(15,r.width*.4f,r.height*.4f);
+                for(int i=0;i<4;i++){
+                    bool right=(i&1)!=0,bottom=(i&2)!=0;
+                    float x=right?r.xMax:r.xMin,y=bottom?r.yMax:r.yMin;
+                    if(x<0||x>1440||y<0||y>900)continue;
+                    Fill(new Rect(right?x-arm:x,bottom?y-2:y,arm,2),accent);
+                    Fill(new Rect(right?x-2:x,bottom?y-arm:y,2,arm),accent);
+                }
+            }
+            float w=Mathf.Clamp(90+hint.label.Length*9,240,530);
+            float left=Mathf.Clamp((allInFront?r.center.x:centre.x)-w/2,24,1416-w);
+            float top=Mathf.Clamp((allInFront?r.yMin:centre.y)-60,24,800);
             RoundedPanel(new Rect(left+2,top+4,w,48),new Color(0,0,0,.35f));RoundedPanel(new Rect(left,top,w,48),new Color(.035f,.03f,.035f,.96f));RoundedPanel(new Rect(left,top,w,48),CreatorRed,7,1.2f);
             KaosButtonFace(new Rect(left+8,top+7,36,35),hint.key,true,true);Txt(new Rect(left+56,top+8,w-66,34),hint.label,action,paper);
         }

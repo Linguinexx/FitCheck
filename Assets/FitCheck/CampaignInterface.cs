@@ -16,7 +16,7 @@ namespace FitCheck
             FeedDivider=new Color32(56,51,58,255),
             FeedInset=new Color(.067f,.058f,.065f),FeedAccent=new Color(1f,.34f,.39f);
         Vector2 fitFeedScroll;
-        Texture2D feedWhiteLogo;
+        Texture2D fitFeedLogo;
         GUIStyle feedTitle, feedName, feedMetric, feedIntro, feedCopy, feedSmall, feedTag, feedRightTag, feedScore;
 
         void FeedStyles()
@@ -38,6 +38,13 @@ namespace FitCheck
         static GUIStyle FeedStyle(GUIStyle basis,int size)
         {
             return new GUIStyle(basis){fontSize=size,padding=new RectOffset()};
+        }
+
+        void DrawFitFeedLogo(Rect bounds)
+        {
+            if(fitFeedLogo==null)fitFeedLogo=Resources.Load<Texture2D>("Brand/FitFeed-Flash-de-Esquina");
+            if(fitFeedLogo!=null)GUI.DrawTexture(bounds,fitFeedLogo,ScaleMode.ScaleToFit,true);
+            else Txt(bounds,"FitFeed",feedTitle,FeedPaper);
         }
         static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","Kaio","SeuJota","Lia","Julia","NinaFaisca"};
         Texture2D[] feedPortraits;
@@ -144,25 +151,21 @@ namespace FitCheck
             int count=progress.posts.Count;
             Fill(new Rect(0,0,1440,900),FeedBackground);
             Fill(new Rect(423,0,1,900),FeedDivider);
-            if(titleLogo==null)titleLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-Red");
-            if(titleLogo!=null)GUI.DrawTexture(new Rect(48,36,43,36),titleLogo,ScaleMode.ScaleToFit);
-            Txt(new Rect(102,48,274,18),"DRIPLAB / FIT CHECK",feedTag,FeedMuted);
-            Txt(new Rect(48,88,328,75),"FitFeed",feedTitle,FeedPaper);
-            Txt(new Rect(48,177,328,78),"Os looks da DripLab pelo bairro.",feedIntro,FeedPaper);
+            DrawFitFeedLogo(new Rect(48,77,300,64));
+            Txt(new Rect(48,160,328,40),"Da loja pra rua",feedIntro,FeedPaper);
 
-            Fill(new Rect(48,293,328,1),FeedDivider);
-            Txt(new Rect(48,322,156,22),"Publicações",feedSmall,FeedMuted);
-            Txt(new Rect(48,350,156,42),count.ToString("00"),feedMetric,FeedPaper);
-            Txt(new Rect(48,397,156,18),"looks no bairro",feedTag,FeedMuted);
-            Txt(new Rect(220,322,156,22),"Nota média",feedSmall,FeedMuted);
+            Fill(new Rect(48,230,328,1),FeedDivider);
+            Txt(new Rect(48,259,156,22),"Publicações",feedSmall,FeedMuted);
+            Txt(new Rect(48,287,156,42),count.ToString("00"),feedMetric,FeedPaper);
+            Txt(new Rect(48,334,156,18),"looks no bairro",feedTag,FeedMuted);
+            Txt(new Rect(220,259,156,22),"Nota média",feedSmall,FeedMuted);
             string average=count==0?"—":progress.posts.Average(post=>post.score)
                 .ToString("0.#",System.Globalization.CultureInfo.GetCultureInfo("pt-BR"))+"/10";
-            Txt(new Rect(220,350,156,42),average,feedMetric,FeedPaper);
-            Txt(new Rect(220,397,156,18),"média das avaliações",feedTag,FeedMuted);
-            Fill(new Rect(48,438,328,1),FeedDivider);
+            Txt(new Rect(220,287,156,42),average,feedMetric,FeedPaper);
+            Txt(new Rect(220,334,156,18),"média das avaliações",feedTag,FeedMuted);
+            Fill(new Rect(48,375,328,1),FeedDivider);
 
-            Txt(new Rect(48,487,328,18),"DA LOJA PRA RUA",feedTag,FeedMuted);
-            Txt(new Rect(48,512,328,86),"Cada look tem uma história. Reveja os clientes e descubra como foi o atendimento na DripLab.",feedCopy,FeedMuted);
+            Txt(new Rect(48,408,328,86),"Cada look tem uma história. Reveja os clientes e descubra como foi o atendimento na DripLab.",feedCopy,FeedMuted);
             if(Tap(new Rect(48,775,328,48),"← Voltar ao quarto")){CloseHomePanel();return;}
             Txt(new Rect(48,847,328,20),"ESTILO LOCAL. IMPACTO REAL.",feedTag,FeedMuted);
 
@@ -232,6 +235,6 @@ namespace FitCheck
             if(!focus&&(stage==Stage.Dressing||stage==Stage.Confirm)){paused=true;dragging=false;}
             if(!focus&&stage==Stage.City){dragging=false;SyncCityCursor();}
         }
-        void OnDestroy(){if(bubbleTail!=null)Destroy(bubbleTail);DisposePresentation();Font.textureRebuilt-=FontRebuilt;if(titlePhoto!=null)Destroy(titlePhoto);if(photo!=null)Destroy(photo);foreach(var t in lockedThumbnails.Values)Destroy(t);foreach(var t in feedPhotos.Values)Destroy(t);if(clickSound!=null)Destroy(clickSound);if(photoSound!=null)Destroy(photoSound);if(awardSound!=null)Destroy(awardSound);}
+        void OnDestroy(){if(bubbleTail!=null)Destroy(bubbleTail);DisposePresentation();Font.textureRebuilt-=FontRebuilt;if(titlePhoto!=null)Destroy(titlePhoto);if(titleScrim!=null)Destroy(titleScrim);if(photo!=null)Destroy(photo);foreach(var t in lockedThumbnails.Values)Destroy(t);foreach(var t in feedPhotos.Values)Destroy(t);if(clickSound!=null)Destroy(clickSound);if(photoSound!=null)Destroy(photoSound);if(awardSound!=null)Destroy(awardSound);}
     }
 }

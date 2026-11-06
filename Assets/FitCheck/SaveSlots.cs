@@ -48,6 +48,9 @@ namespace FitCheck
     {
         int activeSaveSlot=-1,selectedSave;string saveLibraryOverride;
         SaveSlotInfo[] saveSlots=new SaveSlotInfo[SaveSlots.Count];Texture2D titlePhoto,titleLogo;
+        Texture2D titleScrim;
+        GUIStyle titleAction;
+        int titleKeyboardFocus=-1;
         string SaveLibrary=>saveLibraryOverride??Application.persistentDataPath;
         string SessionFolder=>storageOverride??(activeSaveSlot<0?Application.persistentDataPath:SaveSlots.Folder(SaveLibrary,activeSaveSlot));
         void OpenSaveSelection()
@@ -74,7 +77,7 @@ namespace FitCheck
             if(info.exists&&playerAppearance.created)GoHome();else OpenCreator(Stage.Home);
             return true;
         }
-        void ReturnToTitle(){Home();paused=false;StartLiveTitle();}
+        void ReturnToTitle(){Home();paused=false;titleKeyboardFocus=-1;StartLiveTitle();}
         void BuildTitlePhoto()
         {
             EnterCity();city.Frame(cam,true,0);city.PlayerBodyVisible=false;
@@ -90,15 +93,91 @@ namespace FitCheck
         }
         void TitleUI()
         {
-            if(!titleSceneActive&&titlePhoto!=null)GUI.DrawTexture(new Rect(0,0,1440,900),titlePhoto,ScaleMode.ScaleAndCrop);
-            Fill(new Rect(0,0,500,900),new Color(.025f,.028f,.025f,.87f));
-            Txt(new Rect(58,88,400,30),"DRIPLAB  /  DEPOIS DO HORÁRIO",caption,CreatorRed);
+            var canvas=new Rect(0,0,1440,900);
+            if(!titleSceneActive&&titlePhoto!=null)GUI.DrawTexture(canvas,titlePhoto,ScaleMode.ScaleAndCrop);
+            DrawTitleScrim(canvas);
+            const float left=64, width=368;
+            Txt(new Rect(left,86,width,28),"DRIPLAB  /  DEPOIS DO HORÁRIO",caption,paper);
+            Fill(new Rect(left,124,36,3),CreatorRed);
             if(titleLogo==null)titleLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-Red");
-            if(titleLogo!=null)DrawAnimatedTitleLogo(new Rect(52,160,390,260));else Txt(new Rect(50,178,450,200),"FIT\nCHECK",display);
-            Txt(new Rect(60,430,410,140),"Seu estilo.\nAs histórias da cidade.",heading);
-            if(Tap(new Rect(60,651,360,70),"Jogar  →",true))BeginLoading(OpenSaveSelection);
-            if(Tap(new Rect(60,746,360,56),"Configurações"))OpenSettings(false);
-            Txt(new Rect(60,832,420,55),"A game by DripLab",caption,paper);
+            if(titleLogo!=null)DrawAnimatedTitleLogo(new Rect(left,156,272,272));
+            else Txt(new Rect(left,222,width,120),"FIT CHECK",heading);
+            Txt(new Rect(left,470,width,44),"Monte o visual.",heading);
+            Txt(new Rect(left,525,width,72),"Atenda clientes na DripLab e veja\nseus looks ganharem o bairro.",copy,paper);
+
+            int activated=ReadTitleNavigation();
+            bool play=TitleButton(new Rect(left,632,width,64),"Jogar",0,true);
+            bool settings=TitleButton(new Rect(left,712,width,56),"Configurações",1,false);
+            if(play||activated==0)BeginLoading(OpenSaveSelection);
+            else if(settings||activated==1)OpenSettings(false);
+
+            Fill(new Rect(left,816,width,1),new Color(1,1,1,.19f));
+            Txt(new Rect(left,834,width,26),"A game by DripLab",caption,paper);
+        }
+
+        void DrawTitleScrim(Rect canvas)
+        {
+            if(titleScrim==null){
+                const int samples=128;
+                titleScrim=new Texture2D(samples,1,TextureFormat.RGBA32,false){
+                    name="Gradiente do menu inicial",wrapMode=TextureWrapMode.Clamp,filterMode=FilterMode.Bilinear
+                };
+                var pixels=new Color[samples];
+                for(int i=0;i<samples;i++){
+                    float x=i/(float)(samples-1);
+                    float fade=Mathf.SmoothStep(0,1,Mathf.InverseLerp(.28f,.51f,x));
+                    pixels[i]=new Color(.034f,.028f,.034f,.97f*(1-fade));
+                }
+                titleScrim.SetPixels(pixels);
+                titleScrim.Apply(false,true);
+            }
+            GUI.DrawTexture(canvas,titleScrim,ScaleMode.StretchToFill,true);
+        }
+
+        int ReadTitleNavigation()
+        {
+            if(!GUI.enabled)return -1;
+            var input=Event.current;
+            if(input.type==EventType.MouseMove||input.type==EventType.MouseDown)titleKeyboardFocus=-1;
+            if(input.type!=EventType.KeyDown)return -1;
+            switch(input.keyCode){
+                case KeyCode.Tab:
+                case KeyCode.UpArrow:
+                case KeyCode.DownArrow:
+                    bool backwards=input.keyCode==KeyCode.UpArrow||(input.keyCode==KeyCode.Tab&&input.shift);
+                    titleKeyboardFocus=titleKeyboardFocus<0?(backwards?1:0):1-titleKeyboardFocus;
+                    input.Use();
+                    break;
+                case KeyCode.Return:
+                case KeyCode.KeypadEnter:
+                case KeyCode.Space:
+                    input.Use();
+                    Sound(0);
+                    return Mathf.Max(0,titleKeyboardFocus);
+            }
+            return -1;
+        }
+
+        bool TitleButton(Rect bounds,string label,int index,bool primary)
+        {
+            if(titleAction==null)titleAction=new GUIStyle(action){
+                alignment=TextAnchor.MiddleLeft,fontSize=22,padding=new RectOffset()
+            };
+            bool hot=GUI.enabled&&bounds.Contains(Event.current.mousePosition);
+            bool focused=GUI.enabled&&titleKeyboardFocus==index;
+            float pressed=hot&&Input.GetMouseButton(0)&&!reducedMotion?3:0;
+            var face=new Rect(bounds.x,bounds.y+pressed,bounds.width,bounds.height-4);
+            RoundedPanel(new Rect(bounds.x,bounds.y+4,bounds.width,bounds.height-4),new Color(0,0,0,.55f),10);
+            var fill=primary
+                ? (hot?new Color32(204,5,17,255):(Color32)CreatorRed)
+                : (hot?new Color32(60,54,59,255):new Color32(43,38,43,255));
+            RoundedPanel(face,fill,10);
+            if(focused)RoundedPanel(face,Color.white,10,2);
+            Txt(new Rect(face.x+24,face.y,face.width-76,face.height),label,titleAction,Color.white);
+            if(primary)Txt(new Rect(face.xMax-52,face.y,32,face.height),"→",action,Color.white);
+            if(!GUI.Button(bounds,GUIContent.none,GUIStyle.none))return false;
+            Sound(0);
+            return true;
         }
         void SaveSelectionUI()
         {
