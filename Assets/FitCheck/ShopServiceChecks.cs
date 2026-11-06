@@ -10,7 +10,7 @@ namespace FitCheck
         {
             if(!ShopOpen&&!progress.DayComplete){MoveProof(CityView.ShopCounter,180,0);InteractShop();}
             int frames=0;
-            while((ShopSequenceActive||ShopArrivalActive)&&frames++<1400){city.Frame(cam,true,1/30f);UpdateShopSequence(1/30f);city.CheckResidents();city.ValidateShopRoles();}
+            while((ShopSequenceActive||ShopArrivalActive||ShopOpen&&shopArrivalDelay>0)&&frames++<1400){city.Frame(cam,true,1/30f);UpdateShopSequence(1/30f);city.CheckResidents();city.ValidateShopRoles();}
             if(ShopSequenceActive||ShopArrivalActive)throw new Exception("Cliente não terminou de entrar na loja");
             city.Frame(cam,true,0);
         }
@@ -82,6 +82,7 @@ namespace FitCheck
                 }
                 if(stage!=Stage.Dressing||campaignBeforePreview!=null||question!=1||progress.posts.Count!=0||remaining!=120)throw new Exception("Provador perdeu campanha/pergunta ou começou relógio antes da montagem");
                 if(!shopDressingInStore||!city.gameObject.activeSelf||city.CustomerVisible||!city.CustomerShadowVisible||!city.PlayerBodyVisible||!city.PlayerHeadVisible||Vector3.Distance(mannequin.position,city.transform.position+CityView.ShopDressingPosition)>.001f)throw new Exception("Montagem saiu do provador ou perdeu a presença do cliente/jogador");
+                for(int slot=0;slot<3;slot++)if(outfit[slot]!=Catalog.ArrivalPiece(slot).id)throw new Exception("Peça de chegada trocada ao abrir o provador");
                 for(int frame=0;frame<30;frame++){
                     var beforeCamera=cam.transform.position;shopDressingTime+=1/30f;FrameShopDressing();
                     maxCameraStep=Mathf.Max(maxCameraStep,Vector3.Distance(beforeCamera,cam.transform.position));
@@ -106,6 +107,17 @@ namespace FitCheck
                 if(stage!=Stage.Post||progress.posts.Count!=1||!File.Exists(DayPath))throw new Exception("Saída não chegou ao FitFeed com um atendimento salvo");
                 if(shopDressingInStore||mannequin.position!=Vector3.zero)throw new Exception("Provador físico não foi encerrado ao finalizar");
                 EnterShop();if(Vector2.Distance(new Vector2(employeePosition.x,employeePosition.z),new Vector2(city.PlayerBodyPosition.x,city.PlayerBodyPosition.z))>.001f)throw new Exception("Próximo cliente teleportou jogador para a porta");
+                UpdateShopSequence(BetweenCustomersDelay-.25f);
+                if(city.CustomerVisible||ShopArrivalActive)throw new Exception("Próximo cliente chegou antes do intervalo");
+                UpdateShopSequence(.25f);
+                if(!ShopArrivalActive)throw new Exception("Próximo cliente não chegou após o intervalo");
+                EnterCity();
+                var postedCustomer=city.transform.Find("FitFeed — "+DayOne.Customers[0].name);
+                if(!ShopOpen||!city.RuntimeReady||city.ResidentCount!=CityView.StreetResidentCount+1||postedCustomer==null||!postedCustomer.gameObject.activeInHierarchy)
+                    throw new Exception("Cliente atendido ausente do bairro com a loja aberta");
+                EnterShop();EnterCity();
+                if(city.ResidentCount!=CityView.StreetResidentCount+1||city.transform.Find(postedCustomer.name)!=postedCustomer)
+                    throw new Exception("Cliente do FitFeed duplicado ao retornar ao bairro");
                 Home();GoHome();if(shopService)throw new Exception("Atendimento vazou para a casa/repetição");Home();EnterShop();SettleShopArrival();
                 if(city.ShopCustomerIndex!=1)throw new Exception("Próximo cliente não corresponde ao próximo pedido");city.CheckCustomerClothing(true);
                 MoveProof(CityView.ShopCounter,0,0);InteractShop();ProceedToFitting();
@@ -115,7 +127,10 @@ namespace FitCheck
                 shopService=true;EnterShopDressing();Home();
                 if(shop!=null||shopDressingInStore||mannequin.position!=Vector3.zero||progress.posts.Count!=1)throw new Exception("Cancelar montagem deixou provador ativo");
                 progress=new DayProgress();shopOpenedCampaign=progress;shopOpenedDay=1;
-                for(int i=0;i<3;i++)progress.Add(new Attempt{outfit=(string[])Catalog.Default.Clone(),question=1});progress.Close();progress.Advance();
+                for(int i=0;i<3;i++)progress.Add(new Attempt{outfit=(string[])Catalog.Default.Clone(),question=1});progress.Close();
+                EnterCity();if(city.ResidentCount!=CityView.StreetResidentCount+3)throw new Exception("Fechar a loja removeu os clientes do dia");
+                Home();progress.Advance();EnterCity();
+                if(city.ResidentCount!=CityView.StreetResidentCount)throw new Exception("Clientes do dia anterior ficaram no bairro");
                 EnterShop();if(ShopOpen||city.CustomerVisible||ShopArrivalActive)throw new Exception("Novo dia abriu automaticamente");
                 MoveProof(CityView.ShopCounter,180,0);InteractShop();if(!ShopOpen||!ShopArrivalActive)throw new Exception("Não foi possível abrir o novo dia");
                 Debug.Log("FITCHECK_SHOP_SERVICE_PASSED: manual daily opening; free first-person arrival and waiting client; full player retained at counter during fitting camera; in-store dressing, continuous camera max step="+maxCameraStep+" / turn="+maxCameraTurn+"; pause, departure, saved FitFeed, next client, cancellation and next-day opening.");

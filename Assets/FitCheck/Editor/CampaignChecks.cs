@@ -47,6 +47,11 @@ namespace FitCheck.Editor
             }
             var path=Path.Combine(Application.temporaryCachePath,"FitCheck-save-test-"+Guid.NewGuid()+".json");
             try{
+                var mixed=new DayProgress();var mixedOutfit=Catalog.ArrivalOutfit;
+                mixedOutfit[0]="AH_TOP_01";mixed.Add(new Attempt{outfit=mixedOutfit});
+                ProgressStore.Save(path,mixed);
+                if(!ProgressStore.Load(path).posts[0].outfit.SequenceEqual(mixedOutfit))throw new Exception("Peças originais perdidas ao salvar");
+                File.Delete(path);
                 ProgressStore.Save(path,campaign);ProgressStore.Save(path,campaign);
                 File.WriteAllText(path,"save corrompido");var recovered=ProgressStore.Load(path+".bak");if(!recovered.Complete)throw new Exception("Backup inválido");
                 ProgressStore.Save(path,recovered);if(ProgressStore.Load(path).reputation!=900)throw new Exception("Regravação inválida");

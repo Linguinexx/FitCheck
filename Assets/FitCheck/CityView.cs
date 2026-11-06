@@ -7,6 +7,62 @@ namespace FitCheck
     {
         public int ResidentCount=>residents.Count;
         public int GeometryBatches {get;private set;}
+        // Street counterparts of the FitFeed locations, in campaign order.
+        static readonly Vector3[] FitFeedSpots={
+            new Vector3(-8,-.055f,-3.5f), new Vector3(-99,-.055f,33.9f), new Vector3(-79,-.055f,42),
+            new Vector3(-48,-.055f,-18.1f), new Vector3(-31.5f,-.055f,-40.5f), new Vector3(-54,-.055f,-18.7f),
+            new Vector3(-94,-.055f,33.9f), new Vector3(11.8f,-.055f,-2.5f), new Vector3(-34,.245f,-38.65f)
+        };
+        static readonly float[] FitFeedFacing={155,180,120,0,180,0,180,0,180};
+        readonly List<(int index,string[] outfit,Resident actor,List<Object> owned)> fitFeedResidents=
+            new List<(int,string[],Resident,List<Object>)>();
+        DayProgress fitFeedCampaign;
+        int fitFeedDay;
+
+        public void HideFitFeedResidents()
+        {
+            foreach(var entry in fitFeedResidents)entry.actor.root.gameObject.SetActive(false);
+        }
+
+        public void SyncFitFeedResidents(StudioView studio,DayProgress campaign)
+        {
+            int first=(campaign.day-1)*3;
+            for(int i=fitFeedResidents.Count-1;i>=0;i--){
+                var entry=fitFeedResidents[i];
+                if(ReferenceEquals(fitFeedCampaign,campaign)&&fitFeedDay==campaign.day&&entry.index<campaign.posts.Count
+                    &&ReferenceEquals(entry.outfit,campaign.posts[entry.index].outfit)){
+                    entry.actor.root.gameObject.SetActive(true);
+                    continue;
+                }
+                residents.Remove(entry.actor);
+                entry.actor.root.gameObject.SetActive(false);Destroy(entry.actor.root.gameObject);
+                foreach(var asset in entry.owned){assets.Remove(asset);Destroy(asset);}
+                fitFeedResidents.RemoveAt(i);
+            }
+            fitFeedCampaign=campaign;fitFeedDay=campaign.day;
+            var rotation=studio.Avatar.rotation;
+            bool avatarActive=studio.Avatar.gameObject.activeSelf;
+            try{
+                studio.Avatar.gameObject.SetActive(true);
+                studio.Avatar.rotation=Quaternion.identity;
+                for(int index=first;index<campaign.posts.Count;index++){
+                    if(fitFeedResidents.Exists(entry=>entry.index==index))continue;
+                    var outfit=campaign.posts[index].outfit;
+                    studio.Apply(outfit,index);
+                    int assetStart=assets.Count;
+                    var actor=CopyAvatar(studio,"FitFeed — "+DayOne.Customers[index].name,FitFeedSpots[index],FitFeedFacing[index],false);
+                    actor.idleStyle=3+index%3;
+                    actor.homeFacing=actor.facing;
+                    residents.Add(actor);
+                    PoseResident(actor,residents.Count-1,0);
+                    fitFeedResidents.Add((index,outfit,actor,assets.GetRange(assetStart,assets.Count-assetStart)));
+                }
+            }finally{
+                studio.Avatar.rotation=rotation;
+                studio.Avatar.gameObject.SetActive(avatarActive);
+            }
+        }
+
         public void Build(StudioView studio)
         {
             transform.position=Origin;

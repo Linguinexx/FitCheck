@@ -193,8 +193,17 @@ namespace FitCheck
                 if(Tap(new Rect(1032+i*94,219,87,46),tabs[i],category==i)){category=i;scroll=Vector2.zero;}
             }
             var items=Catalog.All.Where(x=>x.slot==category).ToArray();
+            bool showOriginal=category<3&&(shopDressingInStore||replayIndex>=0);
+            float gridTop=287;
+            if(showOriginal){
+                var original=Catalog.ArrivalPiece(category);
+                if(Tap(new Rect(1032,278,370,38),original.name,outfit[category]==original.id)){
+                    outfit[category]=original.id;message="";Apply();
+                }
+                gridTop=327;
+            }
             int count=items.Length+(category==3?1:0);int rows=(count+1)/2;
-            scroll=GUI.BeginScrollView(new Rect(1026,287,392,425),scroll,new Rect(0,0,366,rows*164));
+            scroll=GUI.BeginScrollView(new Rect(1026,gridTop,392,712-gridTop),scroll,new Rect(0,0,366,rows*164));
             for(int i=0;i<count;i++){
                 var r=new Rect(6+(i%2)*184,(i/2)*164,174,153);
                 if(i==items.Length){if(Tap(r,"Sem acessório",outfit[3]=="")){outfit[3]="";Apply();}continue;}

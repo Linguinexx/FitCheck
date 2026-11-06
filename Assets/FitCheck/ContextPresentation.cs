@@ -84,7 +84,7 @@ namespace FitCheck
         {
             if(!StreetBubblesAllowed||CurrentWorldHint().valid)return;
             int nearest=-1;float distance=8;
-            for(int i=0;i<city.ResidentCount;i++){
+            for(int i=0;i<CityView.StreetResidentCount;i++){
                 var p=city.ResidentPosition(i);float d=Vector2.Distance(city.Position,new Vector2(p.x,p.z));var view=cam.WorldToViewportPoint(city.transform.position+p+Vector3.up*3.2f);
                 if(d<distance&&view.z>0&&view.x>.1f&&view.x<.85f&&view.y>.1f&&view.y<.85f){nearest=i;distance=d;}
             }

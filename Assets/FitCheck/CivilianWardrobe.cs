@@ -4,13 +4,13 @@ namespace FitCheck
     public partial class StudioView
     {
         int civilianWardrobe=-1;
-        public void ApplyCivilian(int id,bool customerProfile=false){int previous=civilianWardrobe;try{civilianWardrobe=Mathf.Abs(id);Apply(Catalog.Default,customerProfile?Mathf.Clamp(id,0,8):-1);CompactCivilianWardrobe();}finally{civilianWardrobe=previous;}}
+        public void ApplyCivilian(int id,bool customerProfile=false){int previous=civilianWardrobe;try{civilianWardrobe=Mathf.Abs(id);Apply(Catalog.ArrivalOutfit,customerProfile?Mathf.Clamp(id,0,8):-1);}finally{civilianWardrobe=previous;}}
         static readonly Color[] CivilianColors={new Color(.82f,.78f,.66f),new Color(.09f,.39f,.27f),new Color(.13f,.29f,.53f),new Color(.67f,.22f,.13f),new Color(.75f,.46f,.10f),new Color(.13f,.46f,.45f),new Color(.54f,.19f,.40f),new Color(.26f,.28f,.33f),new Color(.75f,.70f,.56f)};
-        Garment CivilianTop(int id)
+        internal static Garment CivilianTop(int id)
         {
-            int style=id%5;return new Garment(style==2||style==3?"CIV_TOP_03":"CIV_TOP_01","Roupa cotidiana","CIVIL",0,CivilianColors[id%9],true,style==0||style==2){discreet=true};
+            int style=id%5;return new Garment(style==2||style==3?"CIV_TOP_03":"CIV_TOP_01","Roupa cotidiana","CIVIL",0,CivilianColors[id%9],id%9==0||id%9==7||id%9==8,style==0||style==2){light=id%9==0||id%9==8,vibrant=id%9==3||id%9==4||id%9==5||id%9==6};
         }
-        Garment CivilianBottom(int id)
+        internal static Garment CivilianBottom(int id)
         {
             var colors=new[]{new Color(.12f,.22f,.32f),new Color(.46f,.34f,.20f),new Color(.19f,.22f,.24f),new Color(.31f,.36f,.25f)};
             return new Garment("CIV_BOTTOM","Calça cotidiana","CIVIL",1,colors[id%4],true){shorts=id==6||id==8};
@@ -19,9 +19,9 @@ namespace FitCheck
         {
             material.name="Civilian — "+fabric;material.shader=Resources.Load<Shader>("GarmentFabric");material.mainTexture=Resources.Load<Texture2D>("Garments/Finishes/"+fabric);material.SetFloat("_Motion",0);material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);material.SetFloat("_FabricWeight",0);
         }
-        bool BuildCivilianTop(Garment top,Material fabric)
+        bool BuildCivilianTop(Garment top,Material fabric,int id)
         {
-            int style=civilianWardrobe%5;FinishCivilianMaterial(fabric,style==4?"Stripes":"Cotton");ShirtBody(top,fabric);
+            int style=id%5;FinishCivilianMaterial(fabric,style==4?"Stripes":"Cotton");ShirtBody(top,fabric);
             var trim=Material(top.color*.75f);FinishCivilianMaterial(trim);
             Rings("Gola",new Vector3(0,2.217f,0),new Vector3(.34f,.045f,.32f),trim,clothes,new[]{0f,1f},new[]{1f,1f},12);
             if(style==1||style==3){

@@ -21,7 +21,7 @@ namespace FitCheck
         }
         [System.Serializable] sealed class Resident
         {
-            public Transform root,shadow;public Vector3 home;public Quaternion facing;
+            public Transform root,shadow;public Vector3 home;public Quaternion facing,homeFacing;
             public List<ResidentPart> parts=new List<ResidentPart>();
             public Vector2[] path;public int target;public float cycle,blinkClock,wait,phase,speed,blend,poseDelay;public bool walking;
             public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;public int idleStyle;public Transform prop;public AvatarExpression expression;
@@ -33,7 +33,7 @@ namespace FitCheck
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
             if(IsInterior&&(cat==null||!cat.Ready))return false;
-            if(motionRigVersion!=ResidentArtRevision||residents.Count!=(IsHome?0:IsInterior?2:StreetResidentCount))return false;
+            if(motionRigVersion!=ResidentArtRevision||residents.Count!=(IsHome?0:IsInterior?2:StreetResidentCount+fitFeedResidents.Count))return false;
             if(IsInterior&&!IsHome&&(fittingCurtains==null||fittingCurtains.Length!=2||fittingCurtains[0]==null||fittingCurtains[1]==null))return false;
             foreach(var actor in residents)if(actor.root==null||actor.parts.Count==0)return false;
             return true;
@@ -58,6 +58,13 @@ namespace FitCheck
             for(int index=0;index<residents.Count;index++){
                 var actor=residents[index];if(!actor.root.gameObject.activeSelf)continue;actor.cycle+=delta;actor.blinkClock+=delta;actor.walking=false;
                 var pos=actor.root.localPosition;float travelled=0;
+                if(actor.idleStyle>=3){
+                    var toPlayer=Position-new Vector2(pos.x,pos.z);
+                    var facing=toPlayer.sqrMagnitude>1.4f&&toPlayer.sqrMagnitude<81
+                        ?Quaternion.LookRotation(new Vector3(-toPlayer.x,0,-toPlayer.y))
+                        :actor.homeFacing;
+                    actor.facing=Quaternion.RotateTowards(actor.facing,facing,delta*150);
+                }
                 // Unity can restore a null route as an empty array after a script reload.
                 if(actor.path!=null&&actor.path.Length==0)actor.path=null;
                 if(actor.path!=null){
@@ -141,6 +148,14 @@ namespace FitCheck
                 torsoShift=new Vector3(wave*.027f,Mathf.Sin(actor.cycle*1.3f)*.004f*idle,-.022f*b)
             };
             if(actor.idleStyle==2&&b<.1f){body.torso=Quaternion.Euler(-4,0,-2);body.head=Quaternion.Euler(-23,-12+Mathf.Sin(actor.cycle*.5f)*2,-3);}
+            if(actor.idleStyle>=3){
+                float side=actor.idleStyle==4?-1:1;
+                body.pelvis=Quaternion.Euler(0,-6*side,-3*side);
+                body.torso=Quaternion.Euler(actor.idleStyle==5?-4:5,8*side,6*side);
+                body.head=Quaternion.Euler(1,-5*side,3*side);
+                body.pelvisShift+=new Vector3(.045f*side,-.035f,0);
+                body.torsoShift+=new Vector3(.035f*side,0,.025f);
+            }
             if(actor.wallLean){
                 var lean=ShopLeanBody(actor);float f=Mathf.SmoothStep(0,1,actor.leanBlend);
                 body.pelvis=Quaternion.Slerp(body.pelvis,lean.pelvis,f);body.torso=Quaternion.Slerp(body.torso,lean.torso,f);body.head=Quaternion.Slerp(body.head,lean.head,f);
@@ -155,6 +170,7 @@ namespace FitCheck
             var leg=new LegPose{hipRest=new Vector3(side*.225f,1.175f,0),kneeRest=new Vector3(side*.225f,.675f,side<0?-.025f:.012f),ankleRest=new Vector3(side*.225f,.265f,side<0?-.040f:.020f)};
             leg.hip=body.PelvisPoint(leg.hipRest);
             leg.ankle=leg.ankleRest+new Vector3(0,(phase<.5f?0:Mathf.Sin(swing*Mathf.PI)*.13f)*actor.blend+dip,z*actor.blend);
+            if(actor.idleStyle>=3&&side==(actor.idleStyle==4?-1:1))leg.ankle+=new Vector3(side*.05f,0,-.15f);
             if(actor.wallLean)leg.ankle=Vector3.Lerp(leg.ankle,side>0?actor.leanAnkle:leg.ankleRest,Mathf.SmoothStep(0,1,actor.leanBlend));
             float upper=Vector3.Distance(leg.hipRest,leg.kneeRest),lower=Vector3.Distance(leg.kneeRest,leg.ankleRest);
             var line=leg.ankle-leg.hip;float distance=Mathf.Clamp(line.magnitude,.05f,upper+lower-.0001f);var direction=line.normalized;

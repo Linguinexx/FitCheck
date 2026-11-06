@@ -23,8 +23,8 @@ namespace FitCheck
             new Garment("CG_BOTTOM_01", "Open Court", "COMMON GROUND", 1, new Color(.15f,.3f,.65f), false),
             new Garment("CG_BOTTOM_02", "Home Turf", "COMMON GROUND", 1, new Color(.85f,.28f,.12f), false, true),
             new Garment("SB_BOTTOM_01", "Backstage", "SIDE B", 1, Color.black, true),
-            new Garment("AH_SHOES_01", "Sidewalk", "AFTER HOURS", 2, new Color(.88f,.86f,.79f), true),
             new Garment("SB_SHOES_01", "Garage Session", "SIDE B", 2, new Color(.12f,.12f,.14f), true),
+            new Garment("AH_SHOES_01", "Sidewalk", "AFTER HOURS", 2, new Color(.88f,.86f,.79f), true),
             new Garment("AH_HEAD_01", "After Dark", "AFTER HOURS", 3, new Color(.08f,.12f,.3f), false),
             new Garment("CG_HEAD_01", "Neighborhood", "COMMON GROUND", 3, new Color(.9f,.83f,.65f), false)
         };
@@ -40,7 +40,15 @@ namespace FitCheck
             new Garment("CG_TOP_03","Meeting Point","COMMON GROUND",0,new Color(.15f,.3f,.65f),false,false,false){unlockAt=600},
             new Garment("SB_TOP_03","Unreleased","SIDE B",0,Color.black,true,false,false){unlockAt=600}
         }).ToArray();
-        public static Garment Get(string id) => All.FirstOrDefault(x=>x.id==id);
+        static readonly Garment[] ArrivalPieces={
+            new Garment("CIV_ARRIVAL_TOP","Parte de cima original","CIVIL",0,Color.gray,true),
+            new Garment("CIV_ARRIVAL_BOTTOM","Parte de baixo original","CIVIL",1,Color.gray,true),
+            new Garment("CIV_ARRIVAL_SHOES","Tênis original","CIVIL",2,Color.gray,true)
+        };
+        public static Garment ArrivalPiece(int slot)=>ArrivalPieces[slot];
+        public static bool IsArrivalPiece(string id)=>id==ArrivalPieces[0].id||id==ArrivalPieces[1].id||id==ArrivalPieces[2].id;
+        public static string[] ArrivalOutfit=>new[]{ArrivalPieces[0].id,ArrivalPieces[1].id,ArrivalPieces[2].id,""};
+        public static Garment Get(string id) => All.FirstOrDefault(x=>x.id==id)??Array.Find(ArrivalPieces,x=>x.id==id);
         static Catalog()
         {
             foreach(var g in All.Where(g=>g.id.EndsWith("TOP_03")))g.loose=true;
@@ -68,9 +76,10 @@ namespace FitCheck
             if(ids==null || ids.Length!=4) throw new ArgumentException("Conjunto inválido");
             for(int i=0;i<3;i++) if(Catalog.Get(ids[i])?.slot!=i) throw new ArgumentException("Categoria obrigatória inválida");
             if(!string.IsNullOrEmpty(ids[3]) && Catalog.Get(ids[3])?.slot!=3) throw new ArgumentException("Acessório inválido");
-            return new[]{Catalog.Get(ids[0]).loose, ids.Take(3).Count(id=>Catalog.Get(id).neutral)>=2,
-                ids.Where(id=>!string.IsNullOrEmpty(id)).All(id=>Catalog.Get(id).discreet)};
+            return EvaluatePieces(ids.Select(Catalog.Get).ToArray());
         }
+        internal static bool[] EvaluatePieces(Garment[] pieces)=>new[]{pieces[0].loose,
+            pieces.Take(3).Count(piece=>piece.neutral)>=2,pieces.All(piece=>piece==null||piece.discreet)};
         public static int Score(string[] ids) { var c=Evaluate(ids); return (c[0]?4:0)+(c[1]?3:0)+(c[2]?3:0); }
         public static int TutorialReputation(int score) => score==10?100:score==7?60:score==6?30:0;
     }

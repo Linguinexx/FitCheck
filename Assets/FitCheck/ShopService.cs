@@ -61,12 +61,14 @@ namespace FitCheck
         enum ShopSequence { None, Arriving, SettlingArrival, ReturningToPlayer, LeavingRest, WalkingToFitting, EnteringFitting, PresentingFit, ShowingFinishedFit, Exiting }
         ShopSequence shopSequence;bool shopService,shopDressingInStore,shopCustomerEntering;
         DayProgress shopOpenedCampaign;int shopOpenedDay;
+        const float BetweenCustomersDelay=6f;
+        float shopArrivalDelay;
         Vector2 shopWorkPosition;float shopWorkYaw,shopWorkPitch;
         bool ShopOpen=>ReferenceEquals(shopOpenedCampaign,progress)&&shopOpenedDay==progress.day&&!progress.DayComplete;
         Vector3 shopCameraStart;Quaternion shopCameraRotation;float shopCameraTime,shopCameraStartFov,shopDressingTime,shopDepartureTime;
         bool ShopArrivalActive=>shopSequence==ShopSequence.Arriving||shopSequence==ShopSequence.SettlingArrival||shopSequence==ShopSequence.ReturningToPlayer;
         bool ShopSequenceActive=>shopSequence!=ShopSequence.None&&!ShopArrivalActive;
-        void OpenShopForDay(){shopOpenedCampaign=progress;shopOpenedDay=progress.day;StartShopArrival();}
+        void OpenShopForDay(){shopOpenedCampaign=progress;shopOpenedDay=progress.day;shopArrivalDelay=0;StartShopArrival();}
         void CaptureShopCamera()
         {shopCameraStart=cam.transform.position;shopCameraRotation=cam.transform.rotation;shopCameraStartFov=cam.fieldOfView;shopCameraTime=0;}
         void StartShopSequence(ShopSequence phase){shopSequence=phase;CaptureShopCamera();}
@@ -80,7 +82,7 @@ namespace FitCheck
         }
         void StartShopArrival()
         {
-            if(!ShopOpen||city.CustomerHasEntered||progress.DayComplete)return;
+            if(!ShopOpen||shopArrivalDelay>0||city.CustomerHasEntered)return;
             city.ArriveCustomer();
             StartShopSequence(ShopSequence.Arriving);
         }
@@ -90,7 +92,7 @@ namespace FitCheck
             var p=cam.transform.position;var r=cam.transform.rotation;float fov=cam.fieldOfView;
             stage=Stage.Welcome;Begin();shopService=stage==Stage.Dialogue;
             if(!shopService)return;
-            outfit=Catalog.Default;Apply();
+            outfit=Catalog.ArrivalOutfit;Apply();
             cam.transform.SetPositionAndRotation(p,r);cam.fieldOfView=fov;CaptureShopCamera();FrameShopDialogue();
         }
         void ProceedToFitting()
@@ -143,7 +145,12 @@ namespace FitCheck
         }
         void UpdateShopSequence(float delta)
         {
-            if((!ShopSequenceActive&&!ShopArrivalActive)||paused)return;
+            if(paused)return;
+            if(stage==Stage.City&&city.IsInterior&&!city.IsHome&&ShopOpen&&shopSequence==ShopSequence.None&&!city.CustomerHasEntered){
+                shopArrivalDelay=Mathf.Max(0,shopArrivalDelay-delta);
+                StartShopArrival();
+            }
+            if(!ShopSequenceActive&&!ShopArrivalActive)return;
             shopCameraTime+=delta;
             var origin=city.transform.position;var customerFocus=origin+city.ResidentPosition(0)+Vector3.up*1.9f;
             if(shopSequence==ShopSequence.Arriving||shopSequence==ShopSequence.SettlingArrival){
@@ -177,6 +184,7 @@ namespace FitCheck
                 if(city.CustomerAtDestination){
                     city.SetCustomerVisible(false);shopDepartureTime+=delta;
                     if(shopDepartureTime>=.35f){
+                        shopArrivalDelay=BetweenCustomersDelay;
                         ExitCity();if(shop!=null){shop.gameObject.SetActive(false);Destroy(shop.gameObject);shop=null;}stage=Stage.Post;UpdateCamera();
                     }
                 }

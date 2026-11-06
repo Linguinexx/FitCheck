@@ -23,7 +23,7 @@ namespace FitCheck
         public static void CheckOutfit(string[] outfit,string[] inventory)
         {
             Rules.Evaluate(outfit);
-            if(inventory==null||outfit.Where(id=>!string.IsNullOrEmpty(id)).Any(id=>!inventory.Contains(id)))throw new ArgumentException("Peça indisponível neste atendimento");
+            if(inventory==null||outfit.Any(id=>!string.IsNullOrEmpty(id)&&!Catalog.IsArrivalPiece(id)&&!inventory.Contains(id)))throw new ArgumentException("Peça indisponível neste atendimento");
         }
         public void Add(Attempt attempt)
         {

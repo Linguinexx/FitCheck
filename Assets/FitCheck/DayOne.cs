@@ -35,14 +35,17 @@ namespace FitCheck
         }.Concat(CampaignContent.More).ToArray();
         public static bool[] Evaluate(int customer, string[] outfit)
         {
-            var tutorial=Rules.Evaluate(outfit); // Also validates required slots.
-            var garments=outfit.Where(id=>!string.IsNullOrEmpty(id)).Select(Catalog.Get).ToArray();
-            if(customer==0)return tutorial;
-            if(customer==1)return new[]{Catalog.Get(outfit[0]).light!=Catalog.Get(outfit[1]).light,
+            Rules.Evaluate(outfit); // Also validates required slots.
+            var pieces=outfit.Select(Catalog.Get).ToArray();
+            if(Catalog.IsArrivalPiece(outfit[0]))pieces[0]=StudioView.CivilianTop(customer);
+            if(Catalog.IsArrivalPiece(outfit[1]))pieces[1]=StudioView.CivilianBottom(customer);
+            var garments=pieces.Where(piece=>piece!=null).ToArray();
+            if(customer==0)return Rules.EvaluatePieces(pieces);
+            if(customer==1)return new[]{pieces[0].light!=pieces[1].light,
                 garments.Any(g=>g.drop=="SIDE B"), Catalog.Get(outfit[3])?.cap==true};
-            if(customer==2)return new[]{Catalog.Get(outfit[1]).shorts,
+            if(customer==2)return new[]{pieces[1].shorts,
                 garments.Any(g=>g.drop=="COMMON GROUND"), garments.Count(g=>g.vibrant)==1};
-            var top=Catalog.Get(outfit[0]);var bottom=Catalog.Get(outfit[1]);
+            var top=pieces[0];var bottom=pieces[1];
             if(customer==3)return new[]{top.light!=bottom.light,top.loose,string.IsNullOrEmpty(outfit[3])};
             if(customer==4)return new[]{bottom.loose,garments.Any(g=>g.drop=="SIDE B"),top.discreet};
             if(customer==5)return new[]{bottom.shorts&&bottom.vibrant,top.light,Catalog.Get(outfit[3])?.cap==true};
