@@ -24,8 +24,7 @@ namespace FitCheck
                 Block(new Vector3(x,.68f,-5.43f),new Vector3(4.55f,.16f,.42f),Cream,"Plaster");
             }
             ResidenceDoor(0,-5.35f);
-            Block(new Vector3(0,4.45f,-5.3f),new Vector3(16.4f,.83f,.25f),accent,"CityMetal");
-            Words(records?"SIDE B":"OFICINA",new Vector3(0,4.45f,-5.46f),.11f,Cream);
+            FacadeSign(records?"SIDE B":"OFICINA",new Vector3(0,4.49f,-5.34f),16.4f,.93f,.11f,accent,Cream);
             Awning(0,-5.1f,3.73f,16.4f,records?new Color(.72f,.44f,.06f):accent);
             if(records){
                 foreach(float x in new[]{-6.3f,-4.9f,-3.5f,3.8f,5.5f}){

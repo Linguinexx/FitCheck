@@ -3,6 +3,63 @@ namespace FitCheck
 {
     public partial class FirstCustomer
     {
+        Texture2D titleIntroAtlas;
+        const float TitleIntroDuration=1.6f;
+        const float TitleIntroHold=.35f,TitleIntroFade=.3f;
+        const float TitleIntroTotal=TitleIntroDuration+TitleIntroHold+TitleIntroFade;
+
+        void DrawTitleIdentity(Rect area,float progress=1,bool idleMotion=true)
+        {
+            if(titleIntroAtlas==null)titleIntroAtlas=Resources.Load<Texture2D>("Brand/FitCheck-Intro-Layers");
+            if(titleIntroAtlas==null){DrawAnimatedTitleLogo(area);return;}
+            var frame=new Rect(area.x,area.center.y-area.width*405/1024f,area.width,area.width*405/512f);
+            float time=Mathf.Clamp01(progress);
+            if(idleMotion&&!reducedMotion){
+                float idle=titleSceneTime;
+                float pulse=1+.018f*Mathf.Sin(idle*1.8f);
+                frame=new Rect(frame.center.x-frame.width*pulse/2,frame.center.y-frame.height*pulse/2+
+                    Mathf.Sin(idle*1.2f)*3,frame.width*pulse,frame.height*pulse);
+            }
+            DrawIntroPart(frame,0,new Vector2(.5f,.5f),time,0,.4f,.67f,.72f,1.012f,-7,1,0,0);
+            DrawIntroPart(frame,1,new Vector2(.497f,.346f),time,.18f,.49f,.72f,.84f,1.02f,-5,0,28,-5);
+            DrawIntroPart(frame,2,new Vector2(.760f,.406f),time,.46f,.72f,1,.38f,1.16f,-38,9,0,0);
+            DrawIntroPart(frame,3,new Vector2(.5f,.701f),time,.27f,.60f,.80f,.82f,1.021f,0,0,42,-7);
+        }
+
+        void DrawTitleIntro(Rect canvas)
+        {
+            if(Event.current.type!=EventType.Repaint)return;
+            titleIntroPresented=true;
+            float opacity=1-Mathf.InverseLerp(TitleIntroDuration+TitleIntroHold,TitleIntroTotal,titleIntroClock);
+            Fill(canvas,new Color(.045f,.036f,.044f,opacity));
+            var color=GUI.color;
+            GUI.color=new Color(color.r,color.g,color.b,color.a*opacity);
+            DrawTitleIdentity(new Rect(480,245,480,410),titleIntroClock/TitleIntroDuration,false);
+            GUI.color=color;
+        }
+
+        void DrawIntroPart(Rect frame,int tile,Vector2 anchor,float time,float start,float peak,float end,
+            float startScale,float peakScale,float startAngle,float peakAngle,float startY,float peakY)
+        {
+            if(time<=start)return;
+            bool entering=time<peak;
+            float t=Mathf.InverseLerp(entering?start:peak,entering?peak:end,time);
+            float eased=1-Mathf.Pow(1-t,entering?3:2);
+            float scale=entering?Mathf.Lerp(startScale,peakScale,eased):Mathf.Lerp(peakScale,1,eased);
+            float angle=entering?Mathf.Lerp(startAngle,peakAngle,eased):Mathf.Lerp(peakAngle,0,eased);
+            float offset=frame.height/1085f*(entering?Mathf.Lerp(startY,peakY,eased):Mathf.Lerp(peakY,0,eased));
+            var pivot=frame.position+Vector2.Scale(frame.size,anchor)+Vector2.up*offset;
+            var rect=new Rect(pivot-Vector2.Scale(frame.size*scale,anchor),frame.size*scale);
+            var uv=new Rect((tile%2)*.5f,1-(tile/2)*.5f-405/1024f,.5f,405/1024f);
+            var matrix=GUI.matrix;
+            var color=GUI.color;
+            GUI.color=new Color(color.r,color.g,color.b,color.a*(entering?eased:1));
+            if(angle!=0)GUIUtility.RotateAroundPivot(angle,pivot);
+            GUI.DrawTextureWithTexCoords(rect,titleIntroAtlas,uv,true);
+            GUI.matrix=matrix;
+            GUI.color=color;
+        }
+
         void DrawAnimatedTitleLogo(Rect rect,float? clock=null)
         {
             float t=reducedMotion?0:(clock??titleSceneTime);float pulse=reducedMotion?1:1+.018f*Mathf.Sin(t*1.8f);

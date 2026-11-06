@@ -44,8 +44,8 @@ namespace FitCheck
         }
         void CreatorUI()
         {
-            Fill(new Rect(0,88,375,812),new Color(.045f,.045f,.05f,.98f));
-            Fill(new Rect(1050,88,390,812),new Color(.045f,.045f,.05f,.98f));
+            Fill(new Rect(0,88,375,812),KaosPanel);
+            Fill(new Rect(1050,88,390,812),KaosPanel);
             Txt(new Rect(28,118,320,28),"SEU PERSONAGEM",tiny,CreatorRed);
             Txt(new Rect(28,160,320,52),"Seu jeito.",heading);
             Txt(new Rect(28,224,320,28),"Como você se chama?",caption);

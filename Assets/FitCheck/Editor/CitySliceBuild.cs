@@ -14,6 +14,10 @@ namespace FitCheck.Editor
         {BuildTo("Windows-Test01");}
         public static void BuildTeaserCapture()
         {BuildTo("Windows-TeaserCurrent");}
+        public static void BuildTest04()
+        {BuildTo("Windows-Test04");}
+        public static void BuildTest05()
+        {BuildTo("Windows-Test05");}
         static void BuildTo(string folder)
         {
             AmbientSurfaceImporter.PrepareAll();

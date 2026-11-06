@@ -51,6 +51,7 @@ namespace FitCheck
         Texture2D titleScrim;
         GUIStyle titleAction;
         int titleKeyboardFocus=-1;
+        const int TitleActionCount=3;
         string SaveLibrary=>saveLibraryOverride??Application.persistentDataPath;
         string SessionFolder=>storageOverride??(activeSaveSlot<0?Application.persistentDataPath:SaveSlots.Folder(SaveLibrary,activeSaveSlot));
         void OpenSaveSelection()
@@ -96,23 +97,30 @@ namespace FitCheck
             var canvas=new Rect(0,0,1440,900);
             if(!titleSceneActive&&titlePhoto!=null)GUI.DrawTexture(canvas,titlePhoto,ScaleMode.ScaleAndCrop);
             DrawTitleScrim(canvas);
+            bool intro=titleIntroPlaying&&!reducedMotion;
+            bool enabled=GUI.enabled;
+            GUI.enabled=enabled&&!intro;
             const float left=64, width=368;
             Txt(new Rect(left,86,width,28),"DRIPLAB  /  DEPOIS DO HORÁRIO",caption,paper);
             Fill(new Rect(left,124,36,3),CreatorRed);
             if(titleLogo==null)titleLogo=Resources.Load<Texture2D>("Brand/FitCheck-Selo-Kaos-Red");
-            if(titleLogo!=null)DrawAnimatedTitleLogo(new Rect(left,156,272,272));
+            if(titleLogo!=null)DrawTitleIdentity(new Rect(left,156,296,272));
             else Txt(new Rect(left,222,width,120),"FIT CHECK",heading);
             Txt(new Rect(left,470,width,44),"Monte o visual.",heading);
             Txt(new Rect(left,525,width,72),"Atenda clientes na DripLab e veja\nseus looks ganharem o bairro.",copy,paper);
 
             int activated=ReadTitleNavigation();
-            bool play=TitleButton(new Rect(left,632,width,64),"Jogar",0,true);
-            bool settings=TitleButton(new Rect(left,712,width,56),"Configurações",1,false);
+            bool play=TitleButton(new Rect(left,610,width,60),"Jogar",0,true);
+            bool settings=TitleButton(new Rect(left,684,width,50),"Configurações",1,false);
+            bool quit=TitleButton(new Rect(left,746,width,50),"Sair",2,false);
             if(play||activated==0)BeginLoading(OpenSaveSelection);
             else if(settings||activated==1)OpenSettings(false);
+            else if(quit||activated==2)Application.Quit();
 
             Fill(new Rect(left,816,width,1),new Color(1,1,1,.19f));
             Txt(new Rect(left,834,width,26),"A game by DripLab",caption,paper);
+            GUI.enabled=enabled;
+            if(intro)DrawTitleIntro(canvas);
         }
 
         void DrawTitleScrim(Rect canvas)
@@ -145,7 +153,8 @@ namespace FitCheck
                 case KeyCode.UpArrow:
                 case KeyCode.DownArrow:
                     bool backwards=input.keyCode==KeyCode.UpArrow||(input.keyCode==KeyCode.Tab&&input.shift);
-                    titleKeyboardFocus=titleKeyboardFocus<0?(backwards?1:0):1-titleKeyboardFocus;
+                    titleKeyboardFocus=titleKeyboardFocus<0?(backwards?TitleActionCount-1:0):
+                        (titleKeyboardFocus+(backwards?-1:1)+TitleActionCount)%TitleActionCount;
                     input.Use();
                     break;
                 case KeyCode.Return:
@@ -168,10 +177,7 @@ namespace FitCheck
             float pressed=hot&&Input.GetMouseButton(0)&&!reducedMotion?3:0;
             var face=new Rect(bounds.x,bounds.y+pressed,bounds.width,bounds.height-4);
             RoundedPanel(new Rect(bounds.x,bounds.y+4,bounds.width,bounds.height-4),new Color(0,0,0,.55f),10);
-            var fill=primary
-                ? (hot?new Color32(204,5,17,255):(Color32)CreatorRed)
-                : (hot?new Color32(60,54,59,255):new Color32(43,38,43,255));
-            RoundedPanel(face,fill,10);
+            RoundedPanel(face,KaosControlColor(primary,hot,true),10);
             if(focused)RoundedPanel(face,Color.white,10,2);
             Txt(new Rect(face.x+24,face.y,face.width-76,face.height),label,titleAction,Color.white);
             if(primary)Txt(new Rect(face.xMax-52,face.y,32,face.height),"→",action,Color.white);
@@ -181,7 +187,7 @@ namespace FitCheck
         }
         void SaveSelectionUI()
         {
-            Fill(new Rect(0,88,545,812),new Color(.055f,.06f,.055f,.97f));
+            Fill(new Rect(0,88,545,812),KaosPanel);
             Txt(new Rect(40,122,470,30),"ESCOLHA SEU SAVE",caption,CreatorRed);
             Txt(new Rect(40,168,470,65),"Sua história.",heading);
             for(int i=0;i<SaveSlots.Count;i++){

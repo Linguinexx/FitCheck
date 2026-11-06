@@ -43,8 +43,8 @@ namespace FitCheck
         }
         void NightDetails()
         {
-            Words("DRIPLAB",new Vector3(7.5f,4.98f,3.60f),.175f,Cream,"CityGlow");
-            Words("RADIO",new Vector3(22.1f,4.35f,5.00f),.10f,Kaos,"CityGlow");
+            FacadeSign("DRIPLAB",new Vector3(7.5f,4.98f,3.61f),8.4f,1.44f,.175f,Ink,Cream,true);
+            FacadeSign("RADIO",new Vector3(22.1f,4.35f,5.08f),4.25f,.94f,.10f,Ink,Kaos,true);
             Words("ABERTO",new Vector3(-16.8f,2.05f,4.70f),.065f,new Color(1,.72f,.40f),"CityGlow");
             Block(new Vector3(7.5f,4.1f,3.16f),new Vector3(16,.065f,.07f),new Color(1,.64f,.30f),"CityGlow");
             Block(new Vector3(7.5f,5.73f,3.61f),new Vector3(17.1f,.055f,.07f),Kaos,"CityGlow");

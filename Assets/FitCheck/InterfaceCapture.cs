@@ -36,8 +36,20 @@ namespace FitCheck
         void CaptureKaosInterfaceReview(string folder)
         {
             var original=progress;string storage=storageOverride;float sensitivity=mouseSensitivity;
+            bool originalMotion=reducedMotion;
             try{
-                Home();StartLiveTitle();FrameLiveTitle(.4f);CaptureInterface(Path.Combine(folder,"ui-title-live.png"));
+                // Capture both entry states regardless of the host's saved preferences.
+                reducedMotion=false;
+                Home();StartLiveTitle();
+                if(titleIntroPlaying){
+                    CaptureInterface(Path.Combine(folder,"ui-title-intro-start.png"));
+                    FrameLiveTitle(.8f);CaptureInterface(Path.Combine(folder,"ui-title-intro.png"));
+                    FrameLiveTitle(TitleIntroTotal);
+                }
+                CaptureInterface(Path.Combine(folder,"ui-title-live.png"));
+                reducedMotion=true;
+                CaptureInterface(Path.Combine(folder,"ui-title-reduced-motion.png"));
+                reducedMotion=originalMotion;
                 OpenSettings(false);CaptureInterface(Path.Combine(folder,"ui-settings.png"));settingsOpen=false;
                 Home();progress=new DayProgress();storageOverride=Path.Combine(folder,"ui-session-"+Guid.NewGuid().ToString("N"));
                 EnterHome();MoveProof(new Vector2(0,-2.3f),180,18);TickContext(10);CaptureInterface(Path.Combine(folder,"ui-home-interaction.png"));
@@ -45,7 +57,7 @@ namespace FitCheck
                 SettleShopArrival();MoveProof(CityView.ShopCounter,180,0);InteractShop();question=1;shopCameraTime=.5f;FrameShopDialogue();
                 TickContext(.5f);TickContext(.5f);CaptureInterface(Path.Combine(folder,"ui-comic-dialogue.png"));
                 Debug.Log("FITCHECK_KAOS_INTERFACE_PASSED: live title, settings, proximity hint, vivid decor and comic dialogue native UI captures.");
-            }finally{settingsOpen=false;Home();progress=original;storageOverride=storage;savedDecor=null;SetMouseSensitivity(sensitivity);}
+            }finally{reducedMotion=originalMotion;settingsOpen=false;Home();progress=original;storageOverride=storage;savedDecor=null;SetMouseSensitivity(sensitivity);}
         }
     }
 }

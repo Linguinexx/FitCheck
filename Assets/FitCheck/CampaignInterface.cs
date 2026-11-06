@@ -97,7 +97,7 @@ namespace FitCheck
         }
         void HomeUI()
         {
-            Fill(new Rect(0,88,600,812),new Color(.055f,.06f,.055f,.97f));
+            Fill(new Rect(0,88,600,812),KaosPanel);
             Txt(new Rect(48,125,500,35),progress.Complete?"SEMANA CONCLUÍDA":"DIA 0"+progress.day+"  /  EM CASA",caption,violet);
             Txt(new Rect(48,178,510,85),progress.Complete?"Seu toque ficou.":"Seu canto.",heading);
             string intro=progress.Complete?"Os nove encontros viraram histórias no FitFeed. Você pode revisitar seus visuais e melhorar seus resultados.":progress.closed?"Expediente encerrado. Confira suas conquistas, reveja os posts e descanse para amanhã.":"Antes de sair, escolha seu uniforme. O bairro tem novas histórias esperando por você.";
@@ -129,7 +129,7 @@ namespace FitCheck
             Txt(new Rect(96,278,1100,50),"Dia "+progress.day+"  /  Três ocasiões. Três histórias. Seu toque.",copy,muted);
             for(int j=0;j<3;j++){
                 int i=(progress.day-1)*3+j;
-                Fill(new Rect(95+j*423,376,395,145),new Color(.14f,.11f,.19f));
+                RoundedPanel(new Rect(95+j*423,376,395,145),KaosControl,12);
                 Txt(new Rect(119+j*423,398,348,48),DayOne.Customers[i].name,heading);
                 Txt(new Rect(119+j*423,463,348,43),progress.posts[i].score+" / 10",copy,violet);
             }

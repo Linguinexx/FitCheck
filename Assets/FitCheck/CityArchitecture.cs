@@ -9,11 +9,12 @@ namespace FitCheck
         {PrintedWords(text.ToUpperInvariant(),center,pixel,color,texture=="CityGlow");}
         void Window(float x,float y,float z,float width,float height,Color frame,bool shutters=false)
         {
-            Block(new Vector3(x,y,z),new Vector3(width+.22f,height+.22f,.22f),frame,"Wood");
-            Block(new Vector3(x,y,z-.14f),new Vector3(width,height,.06f),new Color(.75f,.49f,.27f),"CityWindow",.015f);
-            Block(new Vector3(x,y,z-.20f),new Vector3(.055f,height,.05f),frame,"Wood",.005f);
-            Block(new Vector3(x,y,z-.20f),new Vector3(width,.055f,.05f),frame,"Wood",.005f);
-            Block(new Vector3(x,y-height*.5f-.17f,z-.22f),new Vector3(width+.45f,.18f,.45f),Cream);
+            Block(new Vector3(x,y,z),new Vector3(width+.30f,height+.29f,.25f),frame*.73f,"Wood",.045f);
+            Block(new Vector3(x,y,z-.15f),new Vector3(width+.16f,height+.16f,.10f),frame,"Wood",.024f);
+            Block(new Vector3(x,y,z-.205f),new Vector3(width,height,.045f),new Color(.75f,.49f,.27f),"CityWindow",.010f);
+            Block(new Vector3(x,y,z-.23f),new Vector3(.055f,height,.055f),frame,"Wood",.005f);
+            Block(new Vector3(x,y,z-.231f),new Vector3(width,.055f,.055f),frame,"Wood",.005f);
+            Block(new Vector3(x,y-height*.5f-.17f,z-.22f),new Vector3(width+.45f,.18f,.45f),Cream,"Plaster",.038f);
             if(shutters)for(int side=-1;side<=1;side+=2){
                 Block(new Vector3(x+side*(width*.5f+.36f),y,z-.10f),new Vector3(.55f,height,.16f),Teal,"Wood");
                 for(int i=0;i<7;i++)Block(new Vector3(x+side*(width*.5f+.36f),y-height*.38f+i*height*.125f,z-.20f),new Vector3(.46f,.035f,.06f),Teal*.72f,"Wood",.005f);
@@ -73,6 +74,8 @@ namespace FitCheck
                 for(int side=-1;side<=1;side+=2)Block(new Vector3(x+side*1.66f,2.55f,3.36f),new Vector3(.14f,3.4f,.28f),Teal,"Wood");
                 Block(new Vector3(x,.98f,3.30f),new Vector3(3.5f,.16f,.45f),Teal);
                 Block(new Vector3(x,4.13f,3.36f),new Vector3(3.5f,.16f,.28f),Teal);
+                Block(new Vector3(x,2.55f,3.39f),new Vector3(.075f,3.0f,.12f),Teal*.82f,"Wood",.014f);
+                Block(new Vector3(x,1.12f,3.22f),new Vector3(3.46f,.045f,.12f),Cream,"CityMetal",.009f);
             }
             ShoeDisplay(new Vector3(3.1f,1.6f,3.09f));
             Block(new Vector3(7,2.35f,3.18f),new Vector3(1.15f,1.35f,.15f),new Color(.77f,.73f,.61f),"Cloth");
@@ -105,8 +108,7 @@ namespace FitCheck
             for(int i=0;i<3;i++)Window(-21.2f+i*4.4f,6.8f,5.42f,1.95f,2.15f,Cream,true);
             Block(new Vector3(-16.8f,2.05f,5.4f),new Vector3(8.4f,3.9f,.2f),Ink,"Leather");
             Awning(-16.8f,5.2f,4.0f,11.2f,new Color(.70f,.37f,.25f));
-            Block(new Vector3(-16.8f,3.76f,3.56f),new Vector3(10.6f,.55f,.15f),Cream);
-            Words("CAFE DO LADO",new Vector3(-16.8f,3.72f,3.46f),.070f,Teal);
+            FacadeSign("CAFE DO LADO",new Vector3(-16.8f,3.76f,3.56f),10.6f,.65f,.070f,Cream,Teal);
             obstacles.Add(new Rect(-23.8f,5,14,8.5f));
             Block(new Vector3(22.1f,4.45f,9.5f),new Vector3(7.6f,8.9f,8.0f),new Color(.40f,.36f,.32f),"Plaster",.12f);
             Block(new Vector3(22.1f,9.05f,9.5f),new Vector3(8.1f,.25f,8.5f),Cream);

@@ -27,6 +27,11 @@ namespace FitCheck
             foreach(var range in new[]{new Vector2(-44.5f,-17.4f),new Vector2(-10.2f,58.5f)})Block(new Vector3(x,3.2f,(range.x+range.y)*.5f),new Vector3(.7f,6.4f,range.y-range.x),Teal,"CityBrick");
             Block(new Vector3(x,5.8f,-13.8f),new Vector3(.75f,1.2f,7.2f),Teal,"CityBrick");
             float side=x>0?1:-1,entry=x-side*.42f,far=entry+side*19;
+            // Bridge the offset between the arch face and the perimeter wall.
+            foreach(float edge in new[]{-1f,1f}){
+                Block(new Vector3(entry+side*.35f,3.2f,-13.8f+edge*3.72f),
+                    new Vector3(.92f,6.4f,.84f),Teal,"CityBrick",0);
+            }
             const int segments=14;
             for(int i=0;i<segments;i++){
                 float a=i*Mathf.PI/segments,b=(i+1)*Mathf.PI/segments;

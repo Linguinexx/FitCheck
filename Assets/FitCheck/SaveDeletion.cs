@@ -48,7 +48,8 @@ namespace FitCheck
         }
         void SaveDeletionUI()
         {
-            Fill(new Rect(0,0,1440,900),new Color(.02f,.015f,.025f,.93f));Fill(new Rect(360,245,720,405),surface);
+            Fill(new Rect(0,0,1440,900),new Color(.02f,.015f,.025f,.93f));DrawKaosPanel(new Rect(360,245,720,405));
+            Fill(new Rect(396,267,36,3),CreatorRed);
             Txt(new Rect(396,281,645,56),"Excluir este save?",heading);
             Txt(new Rect(396,350,645,45),"0"+(pendingDeleteSlot+1)+"  /  "+deleteSaveName,copy,CreatorRed);
             Txt(new Rect(396,410,645,85),"O personagem e o progresso deste espaço serão apagados. Essa ação não pode ser desfeita.",copy,paper);

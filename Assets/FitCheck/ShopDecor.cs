@@ -87,7 +87,7 @@ namespace FitCheck
         }
         void ShopDecorUI()
         {
-            Fill(new Rect(30,108,570,766),new Color(.055f,.06f,.055f,.98f));
+            DrawKaosPanel(new Rect(30,108,570,766));
             Txt(new Rect(55,130,510,48),"Sua loja. Seu jeito.",heading);
             Txt(new Rect(55,191,510,50),"Escolha os acabamentos antes de abrir.\nA prévia aparece na própria loja.",caption,muted);
             string[] lights={"Roxo","Kaos","Rosa","Azul","Turquesa","Verde","Âmbar","Branco"};

@@ -7,7 +7,7 @@ namespace FitCheck
     public partial class FirstCustomer
     {
         readonly Color paper=new Color(.94f,.92f,.86f), muted=new Color(.65f,.63f,.57f),
-            surface=new Color(.075f,.065f,.07f), violet=new Color(227/255f,6/255f,19/255f), line=new Color(.34f,.14f,.16f);
+            surface=KaosPanel, violet=new Color(227/255f,6/255f,19/255f), line=KaosTrack;
         GUIStyle display, heading, copy, caption, action, tiny,nameEntry;
         Font uiFont,uiStrong,titleFont;bool fontDirty=true;
         void FontRebuilt(Font font){if(font==uiFont||font==uiStrong||font==titleFont)fontDirty=true;}
@@ -97,6 +97,10 @@ namespace FitCheck
             var offset=new Vector3((Screen.width-1440*scale)/2,(Screen.height-900*scale)/2,0);
             GUI.matrix=Matrix4x4.TRS(offset,Quaternion.identity,Vector3.one*scale);
             var e=Event.current;
+            if(renderedStage==Stage.Title&&titleIntroPlaying&&e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){
+                titleIntroPlaying=false;
+                e.Use();
+            }
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&settingsOpen){CloseSettings();e.Use();}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&showShopDecor){CloseShopDecor(false);e.Use();}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&shopGuideOpen){CloseShopGuide();e.Use();}
@@ -124,7 +128,7 @@ namespace FitCheck
             if(pendingDeleteSlot>=0)SaveDeletionUI();
             if(renderedStage==Stage.Confirm&&!paused){
                 Fill(new Rect(0,0,1440,900),new Color(.025f,.03f,.025f,.88f));
-                Fill(new Rect(440,280,560,320),surface);Fill(new Rect(440,280,560,4),violet);
+                DrawKaosPanel(new Rect(440,280,560,320));Fill(new Rect(478,301,36,3),CreatorRed);
                 Txt(new Rect(478,316,490,55),"Esse é o visual?",heading);
                 Txt(new Rect(478,381,475,65),"Depois do envio, o cliente sai com as peças que você escolheu.",copy,muted);
                 if(Tap(new Rect(478,485,222,60),"Voltar ao provador"))stage=Stage.Dressing;
@@ -173,7 +177,7 @@ namespace FitCheck
             if(Tap(new Rect(38,222,190,46),showRequest?"Fechar pedido":"Reler pedido")){showRequest=!showRequest;showDrops=false;}
             if(Tap(new Rect(38,281,190,46),showDrops?"Fechar drops":"Ver drops")){showDrops=!showDrops;showRequest=false;}
             if(showRequest||showDrops){
-                Fill(new Rect(38,343,315,375),new Color(.065f,.05f,.09f,.97f));
+                Fill(new Rect(38,343,315,375),KaosPanel);
                 detailsScroll=GUI.BeginScrollView(new Rect(54,361,282,335),detailsScroll,new Rect(0,0,255,680));
                 Txt(new Rect(0,0,247,435),showRequest?"“"+Request+"”":"AFTER HOURS\nA cidade continua depois do trabalho. Luzes, encontros e caminhos.\n\nCOMMON GROUND\nPraça, quadra e pertencimento.\n\nSIDE B\nMúsica independente, colagem e criação autoral.",caption);
                 if(showRequest&&question>=0)Txt(new Rect(0,450,247,220),answers[question],caption,violet);
@@ -184,7 +188,7 @@ namespace FitCheck
                 if(Tap(new Rect(38,711,250,48),"Expressão: "+studio.ExpressionName+"  ↔"))studio.CycleExpression();
                 if(Tap(new Rect(38,772,250,48),"Cabelo: "+studio.HairName+"  ↔")){studio.CycleHair();Apply();}
             }
-            Fill(new Rect(325,827,565,57),new Color(.045f,.05f,.045f,.9f));
+            Fill(new Rect(325,827,565,57),KaosPanel);
             Txt(new Rect(340,840,535,30),"ARRASTE PARA GIRAR   /   ROLE PARA APROXIMAR",tiny,paper);
             Fill(new Rect(1000,88,440,812),surface);
             Txt(new Rect(1032,118,370,42),"Seu toque.",heading);

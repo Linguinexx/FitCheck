@@ -203,7 +203,7 @@ namespace FitCheck
         void ShopGuideUI()
         {
             var panel=new Rect(916,162,482,510);
-            RoundedPanel(panel,new Color(.045f,.037f,.042f,.96f),12);
+            DrawKaosPanel(panel);
             Txt(new Rect(944,184,425,52),"Bora trocar ideia?",heading,paper);
             for(int i=0;i<ShopGuideTopics.Length;i++){
                 if(Tap(new Rect(944,250+i*57,424,48),ShopGuideTopics[i],shopGuideTopic==i)){
