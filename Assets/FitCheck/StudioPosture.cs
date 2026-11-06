@@ -50,7 +50,7 @@ namespace FitCheck
             var v=new List<Vector3>();var n=new List<Vector3>();var uv=new List<Vector2>();var triangles=new List<int>();var liningTriangles=new List<int>();
             var shoulder=sleeve?SleeveShoulder(side,top.loose):null;float sleevePhase=0;
             if(sleeve){var center=Vector3.zero;foreach(var p in shoulder)center+=p;center/=shoulder.Count;var d=shoulder[0]-center;sleevePhase=Mathf.Atan2(Vector3.Dot(d,Vector3.back),Vector3.Dot(d,Vector3.down*side));}
-            bool longSleeve=top.id.EndsWith("TOP_03");float length=0;
+            bool longSleeve=top.id.EndsWith("TOP_03"),patternedSleeve=sleeve&&PlayerSleeveTexture(top.id)!=null;float length=0;
             for(int r=0;r<samples.Count;r++){
                 float t=samples[r];var center=ArmPoint(side,t,top.loose);Vector3 tangent,across,forward;ArmFrame(side,t,top.loose,out tangent,out across,out forward);
                 if(r>0)length+=Vector3.Distance(center,ArmPoint(side,samples[r-1],top.loose));
@@ -60,7 +60,7 @@ namespace FitCheck
                 for(int i=0;i<=ArmSides;i++){
                     float angle=i*Mathf.PI*2/ArmSides+sleevePhase;var radial=across*Mathf.Cos(angle)*rx+forward*Mathf.Sin(angle)*rz;
                     v.Add(center+radial-TorsoPivot);n.Add((across*Mathf.Cos(angle)/rx+forward*Mathf.Sin(angle)/rz).normalized);
-                    uv.Add(sleeve&&top.id=="PLAYER_RED_TOP_03"?new Vector2(i/(float)ArmSides,r/(float)(samples.Count-1)):
+                    uv.Add(patternedSleeve?new Vector2(i/(float)ArmSides,r/(float)(samples.Count-1)):
                         new Vector2(i/(float)ArmSides*Mathf.PI*(rx+rz)/AvatarTileSize,length/AvatarTileSize));
                 }
             }

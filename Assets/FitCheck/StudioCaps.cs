@@ -18,12 +18,15 @@ namespace FitCheck
         void BuildHeadwear(Garment item)
         {
             if(item==null)return;
+            if(item.id=="PLAYER_PINK_GLASSES"){BuildPlayerGlasses();return;}
             if(!item.cap){
                 var knit=SurfaceMaterial(item.color,"Knit");
                 BuildSoftBeanie(item,knit);return;
             }
             bool structured=item.id=="SB_HEAD_01";
-            var fabric=SurfaceMaterial(item.color,"Cloth");var edge=SurfaceMaterial(item.color*.78f,"Cloth");
+            bool denim=item.id=="PLAYER_BLUE_CAP";
+            string surface=denim?"Denim":"Cloth";
+            var fabric=SurfaceMaterial(item.color,surface);var edge=SurfaceMaterial(item.color*.78f,surface);
             const int sides=64,rows=12;var v=new List<Vector3>();var t=new List<int>();var uv=new List<Vector2>();
             for(int r=0;r<=rows;r++)for(int i=0;i<=sides;i++){
                 float theta=i*Mathf.PI*2/sides-Mathf.PI;v.Add(CapPoint(theta,r/(float)rows,structured)-new Vector3(0,2.8f,0));uv.Add(new Vector2(i/(float)sides*2.4f,r/(float)rows*.6f));
@@ -39,8 +42,28 @@ namespace FitCheck
                 for(int i=0;i<path.Length;i++)path[i]=CapPoint(theta,.08f+i/(float)(path.Length-1)*.91f,structured)+new Vector3(Mathf.Sin(theta)*.003f,.003f,-Mathf.Cos(theta)*.003f);
                 Tube("Boné — costura de painel",path,.0035f,edge,clothes,origin:new Vector3(0,2.8f,0));
             }
-            BuildBill(structured,SurfaceMaterial(structured?item.color:new Color(.15f,.32f,.22f),"Cloth"));
+            BuildBill(structured,denim?fabric:SurfaceMaterial(structured?item.color:new Color(.15f,.32f,.22f),"Cloth"));
             Box("Boné — ajuste traseiro",new Vector3(0,3.005f,.555f),new Vector3(.24f,.047f,.025f),edge,clothes);
+        }
+        void BuildPlayerGlasses()
+        {
+            var ink=SurfaceMaterial(new Color(.067f,.061f,.079f),"Leather");
+            var hinge=SurfaceMaterial(new Color(.56f,.45f,.28f),"Leather");
+            var origin=new Vector3(0,2.8f,0);
+            for(int side=-1;side<=1;side+=2){
+                var frame=new[]{
+                    new Vector3(side*.08f,2.99f,-.632f),new Vector3(side*.12f,3.025f,-.638f),
+                    new Vector3(side*.43f,3.025f,-.631f),new Vector3(side*.47f,2.99f,-.627f),
+                    new Vector3(side*.44f,2.79f,-.626f),new Vector3(side*.39f,2.755f,-.632f),
+                    new Vector3(side*.14f,2.755f,-.638f),new Vector3(side*.10f,2.79f,-.638f)
+                };
+                Tube("Óculos — armação",frame,.019f,ink,clothes,true,origin:origin);
+                var temple=new[]{frame[3],new Vector3(side*.54f,2.985f,-.49f),new Vector3(side*.56f,2.92f,.02f)};
+                Tube("Óculos — haste",temple,.015f,ink,clothes,origin:origin);
+                Tube("Óculos — dobradiça",new[]{frame[3],Vector3.Lerp(frame[3],temple[1],.29f)},.017f,hinge,clothes,origin:origin);
+            }
+            Tube("Óculos — ponte",new[]{new Vector3(-.095f,2.955f,-.633f),new Vector3(0,2.983f,-.654f),new Vector3(.095f,2.955f,-.633f)},
+                .016f,ink,clothes,origin:origin);
         }
         void BuildSoftBeanie(Garment item,Material knit)
         {

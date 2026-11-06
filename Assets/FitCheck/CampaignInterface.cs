@@ -10,7 +10,7 @@ namespace FitCheck
         bool showWardrobe, mutedAudio,reducedMotion,retroFilter; AudioSource effects;
         AudioClip clickSound,photoSound,awardSound;Queue<string> notices=new Queue<string>();string notice="";float noticeUntil;
         static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes"};
-        static readonly string[] UniformNames={"Equipe DripLab","Corta-vento Rubro","Visual Perfeito","Sintonia"};
+        static readonly string[] UniformNames={"Traje padrão","Corta-vento Rubro","Carpa Rosa","Azul Elétrico"};
         const bool UnlockAllUniformsForTesting=true;
         readonly Dictionary<string,Texture2D> feedPhotos=new Dictionary<string,Texture2D>();
         static readonly Color FeedBackground=new Color32(23,21,25,255),FeedCardColor=new Color32(33,30,35,255),

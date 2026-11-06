@@ -129,13 +129,7 @@ namespace FitCheck
         {if(house!=null)house.gameObject.SetActive(home);if(home==inHome)return;inHome=home;Avatar.position=home?new Vector3(100,0,0):Vector3.zero;framingNow=home?-.95f:.9f;}
         public void ApplyUniform(int uniform)
         {
-            if(uniform==1){Apply(Catalog.Default,-1,RedPlayerPieces);return;}
-            Apply(Catalog.Default,-1,uniform==0?InitialPlayerPieces:null);buildingGarments=true;
-            var color=new[]{new Color(.89f,.024f,.075f),new Color(.18f,.12f,.24f),new Color(.85f,.81f,.7f),new Color(.12f,.34f,.24f)}[Mathf.Clamp(uniform,0,3)];
-            var fabric=Material(color);
-            foreach(var r in clothes.GetComponentsInChildren<Renderer>())if(r.name=="Camiseta com caimento"||r.name=="Manga")r.sharedMaterial=fabric;
-            Box("Identificação do funcionário",new Vector3(.144f,1.95f,-.28f)-TorsoPivot,new Vector3(.144f,.12f,.018f),Material(new Color(.9f,.87f,.78f)),garmentTorso);
-            buildingGarments=false;
+            Apply(Catalog.Default,-1,PlayerUniforms[Mathf.Clamp(uniform,0,PlayerUniforms.Length-1)]);
         }
         public PlayerAppearance PlayerLook;
         bool applyingPlayer;
@@ -153,7 +147,7 @@ namespace FitCheck
             if(applyingPlayer)skin.color=PlayerAppearance.SkinColors[PlayerLook.skin];
             SetFaceProfile(profile);if(applyingPlayer)ApplyExpression((AvatarExpression)PlayerLook.expression);
             var headwear=playerPieces?[3]??Catalog.Get(outfit[3]);
-            BuildHair(profile,headwear);
+            BuildHair(profile,headwear?.id=="PLAYER_PINK_GLASSES"?null:headwear);
             int civilianProfile=civilianWardrobe>=0?civilianWardrobe:Mathf.Clamp(customer,0,8);
             bool originalTop=Catalog.IsArrivalPiece(outfit[0]),originalBottom=Catalog.IsArrivalPiece(outfit[1]),originalShoes=Catalog.IsArrivalPiece(outfit[2]);
             var t=playerPieces?[0]??(originalTop?CivilianTop(civilianProfile):Catalog.Get(outfit[0]));var cloth=Material(t.color);

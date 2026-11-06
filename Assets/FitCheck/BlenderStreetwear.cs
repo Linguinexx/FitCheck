@@ -6,6 +6,16 @@ namespace FitCheck
     {
         static readonly Dictionary<string,BlenderGarmentAsset> streetwearModels=new Dictionary<string,BlenderGarmentAsset>();
         static string StreetwearResource(string id)=>(id.StartsWith("PLAYER_")?"Garments/Player/":"Garments/Streetwear/")+id;
+        static string PlayerSleeveTexture(string id)
+        {
+            switch(id){
+                case "PLAYER_RED_TOP_03":return "Garments/Player/RedSleeve";
+                case "PLAYER_STANDARD_TOP_03":return "Garments/Player/StandardSleeve";
+                case "PLAYER_PINK_TOP_01":return "Garments/Player/PinkSleeve";
+                case "PLAYER_BLUE_TOP_03":return "Garments/Player/BlueSleeve";
+                default:return null;
+            }
+        }
         static BlenderGarmentAsset StreetwearModel(string id)
         {
             if(streetwearModels.TryGetValue(id,out var model))return model;
@@ -20,9 +30,10 @@ namespace FitCheck
         {
             var model=StreetwearModel(top.id);if(model==null)return false;
             FinishCollectionSleeve(sleeveMaterial,model);
-            if(top.id=="PLAYER_RED_TOP_03"){
+            string sleeveTexture=PlayerSleeveTexture(top.id);
+            if(sleeveTexture!=null){
                 sleeveMaterial.color=Color.white;
-                sleeveMaterial.mainTexture=Resources.Load<Texture2D>("Garments/Player/RedSleeve");
+                sleeveMaterial.mainTexture=Resources.Load<Texture2D>(sleeveTexture);
             }
             StreetwearParts(model,Vector3.zero);return true;
         }
