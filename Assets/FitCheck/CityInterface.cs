@@ -8,6 +8,20 @@ namespace FitCheck
         DayProgress shopBuiltCampaign;int shopBuiltDay;
         float beforeCityFov,beforeCityNearClip;bool cityFreeCursor,cityLookCaptured,cityDragLook;int cityLookReadyFrame;
         bool shopFittingOpening;
+        bool shopGuideOpen,shopGuidePreviousCursor;
+        int shopGuideTopic;
+        float shopGuideAnswerAt;
+        static readonly string[] ShopGuideTopics={
+            "Como começo o expediente?", "O que faço quando o cliente chega?",
+            "Como monto um bom visual?", "Onde vejo as fotos e recompensas?", "Como avanço para o próximo dia?"
+        };
+        static readonly string[] ShopGuideAnswers={
+            "Vai até o balcão e aperta E pra abrir a loja. O primeiro cliente vem sozinho. Enquanto a loja estiver fechada, dá pra usar F na área de personalização.",
+            "Espera a pessoa chegar ao balcão e aperta E pra atender. Escuta o pedido e usa uma das perguntas pra esclarecer o que ela quer. Quando continuar, ela vai pro provador.",
+            "O cliente entra com o próprio look. Troca só o que quiser em Cima, Baixo, Tênis e Cabeça. Usa as pistas do pedido pra combinar as peças. Se mudar de ideia, volta à peça original pela opção no topo.",
+            "O FitFeed mostra a foto e a nota do atendimento. Em casa, dá pra abrir o feed pela mesa. A reputação libera novas peças, entregues no fechamento do expediente.",
+            "Atende os três clientes do dia e volta ao balcão pra ver o fechamento. Depois, volta pra casa e interage com a cama pra dormir e começar o próximo dia."
+        };
         static readonly bool CityProofMode=System.Array.IndexOf(System.Environment.GetCommandLineArgs(),"-city-proof")>=0;
         bool ProofMode=>CityProofMode;
         void EnterCity()
@@ -47,6 +61,7 @@ namespace FitCheck
         }
         void ExitCity()
         {
+            if(shopGuideOpen)CloseShopGuide();
             if(showShopDecor)CloseShopDecor(false);
             studio.SetExploration(false);
             if(city==null)return;bool discardShop=city.IsInterior&&(shopDressingInStore||ShopSequenceActive||ShopArrivalActive);
@@ -103,7 +118,7 @@ namespace FitCheck
             }
             SyncCityCursor(true);
             Vector2 input=Vector2.zero;
-            if(!paused&&!showShopDecor&&!shopFittingOpening&&!ShopSequenceActive&&homeDoorExitRemaining<=0&&(!cityFreeCursor||cityDragLook)&&!ProofMode&&CityInputFocused){
+            if(!paused&&!showShopDecor&&!shopGuideOpen&&!shopFittingOpening&&!ShopSequenceActive&&homeDoorExitRemaining<=0&&(!cityFreeCursor||cityDragLook)&&!ProofMode&&CityInputFocused){
                 if(cityLookCaptured&&Time.frameCount>=cityLookReadyFrame&&Cursor.lockState==CursorLockMode.Locked)city.Look(new Vector2(Input.GetAxisRaw("Mouse X"),Input.GetAxisRaw("Mouse Y")));
                 float x=(Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.RightArrow)?1:0)-(Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.LeftArrow)?1:0);
                 float y=(Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow)?1:0)-(Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow)?1:0);
@@ -120,6 +135,7 @@ namespace FitCheck
         }
         void CityUI()
         {
+            if(shopGuideOpen){ShopGuideUI();return;}
             if(showShopDecor){ShopDecorUI();return;}
             if(ShopSequenceActive){ComicBubble(new Rect(455,740,530,125),ShopSequenceLabel,"DRIPLAB",1,false);return;}
             if(cityFreeCursor&&Tap(new Rect(38,111,350,48),"Clique para olhar  /  Tab")){cityFreeCursor=false;SyncCityCursor();}
@@ -163,8 +179,13 @@ namespace FitCheck
         }
         bool InteractShop()
         {
-            if(loadingActive||paused||stage!=Stage.City||!city.IsInterior||city.IsHome||ShopSequenceActive)return false;
+            if(loadingActive||paused||stage!=Stage.City||!city.IsInterior||city.IsHome||ShopSequenceActive||shopGuideOpen)return false;
             if(shopFittingOpening)return true;
+            if(city.LookingAtShopGuide(cam)){
+                shopGuidePreviousCursor=cityFreeCursor;shopGuideOpen=true;shopGuideTopic=-1;shopGuideAnswerAt=contextClock;
+                city.StopWalk();cityDragLook=false;cityFreeCursor=true;SyncCityCursor(true);
+                return true;
+            }
             int action=city.ShopInteraction;if(action==0)return false;
             if(action==3){EnterStreetAt(CityView.StreetShopDoor,180);return true;}
             if(pendingPhotoBytes!=null&&!TrySave())return false;
@@ -174,6 +195,24 @@ namespace FitCheck
             if(!city.CustomerWaitingAtCounter)return false;
             StartShopConversation();
             SyncCityCursor();return true;
+        }
+        void CloseShopGuide()
+        {
+            shopGuideOpen=false;cityFreeCursor=shopGuidePreviousCursor;SyncCityCursor(true);
+        }
+        void ShopGuideUI()
+        {
+            var panel=new Rect(916,162,482,510);
+            RoundedPanel(panel,new Color(.045f,.037f,.042f,.96f),12);
+            Txt(new Rect(944,184,425,52),"Bora trocar ideia?",heading,paper);
+            for(int i=0;i<ShopGuideTopics.Length;i++){
+                if(Tap(new Rect(944,250+i*57,424,48),ShopGuideTopics[i],shopGuideTopic==i)){
+                    shopGuideTopic=i;shopGuideAnswerAt=contextClock;
+                }
+            }
+            if(Tap(new Rect(944,570,424,48),"Valeu, até mais  /  Esc")){CloseShopGuide();return;}
+            ComicBubble(new Rect(96,613,750,216),shopGuideTopic<0?"Eu sou o Nando, mas pode chamar de Chave. Manda a dúvida que eu te ajudo.":ShopGuideAnswers[shopGuideTopic],
+                CityView.ShopGuideName,contextClock-shopGuideAnswerAt,false);
         }
         void FinishShopFittingEntryIfReady()
         {

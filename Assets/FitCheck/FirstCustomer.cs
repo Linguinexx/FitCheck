@@ -176,8 +176,8 @@ namespace FitCheck
         {
             outfit=(string[])record.outfit.Clone(); question=record.question; Apply();
             if(photo!=null)Destroy(photo); photo=null;
-            try {if(File.Exists(record.photo)){photo=new Texture2D(2,2); photo.LoadImage(File.ReadAllBytes(record.photo));}}
-            catch(Exception e){message="Foto indisponível: "+e.Message;}
+            try {if(File.Exists(record.photo)){photo=new Texture2D(2,2);if(!photo.LoadImage(File.ReadAllBytes(record.photo),true)){Destroy(photo);photo=null;}}}
+            catch(Exception e){if(photo!=null)Destroy(photo);photo=null;message="Foto indisponível: "+e.Message;}
             stage=Stage.Post;
         }
         public void SmokeCheck()

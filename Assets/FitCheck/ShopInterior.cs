@@ -20,7 +20,7 @@ namespace FitCheck
             residents[0].root.name="Cliente — "+DayOne.Customers[customer].name;
             SetCustomerVisible(false);
             BakeResident(studio,0,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-.8f,-.055f,7.96f),0,true);
-            residents[1].root.name="Frequentador fixo — encostado na parede";
+            residents[1].root.name="Frequentador fixo — "+ShopGuideName;
             Ground(-4.6f,-2.6f,1.5f,1.15f,-.048f,Kaos*.45f,"Rug");
             BuildCat(new Vector3(-4.6f,-.045f,-2.6f),270);obstacles.Add(new Rect(-5.30f,-3.12f,1.4f,1.04f));
             motionRigVersion=ResidentArtRevision;GeometryBatches=batches.Count;FinishGeometry();ResetFittingCurtain();
@@ -143,6 +143,14 @@ namespace FitCheck
         {
             var display=studio.CreateShopDisplay(shoes?outfit[2]:outfit[0],transform,position,yaw);
             if(!shoes)display.localScale=new Vector3(.60f,1,1);
+        }
+        public const string ShopGuideName="Nando ‘Chave’";
+        public Vector3 ShopGuideTarget=>residents[1].root.position+Vector3.up*2.5f;
+        public bool LookingAtShopGuide(Camera camera)
+        {
+            if(!IsInterior||IsHome||residents.Count<2)return false;
+            var offset=ShopGuideTarget-camera.transform.position;
+            return offset.sqrMagnitude<9&&Vector3.Dot(camera.transform.forward,offset.normalized)>.91f;
         }
         public int ShopInteraction
         {

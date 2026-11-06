@@ -8,6 +8,7 @@ namespace FitCheck
             var metal=new Color(.24f,.25f,.23f);var night=new Color(.035f,.045f,.07f);
             Block(new Vector3(.7f,2.75f,4.40f),new Vector3(3.0f,2.25f,.17f),metal,"CityMetal",.04f);
             Block(new Vector3(.7f,2.75f,4.29f),new Vector3(2.72f,1.98f,.04f),night,"CityWindow",.005f);
+            Rod(new Vector3(1.47f,3.42f,4.258f),new Vector3(1.47f,3.42f,4.247f),.15f,new Color(.62f,.77f,.96f),"CityGlow",12);
             // Layered silhouette beyond the pane, instead of bright blocks glued to the wall.
             for(int i=0;i<7;i++){
                 float x=-.47f+i*.38f,h=.45f+(i%3)*.19f;

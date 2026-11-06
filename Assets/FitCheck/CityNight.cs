@@ -25,6 +25,7 @@ namespace FitCheck
             m.SetFloat("_SurfaceTile",tile);m.SetFloat("_TexScale",tile==1?.33f:tile==2?.30f:tile==4?.5f:1);
             m.SetFloat("_TextureWeight",tile>0?.94f:key=="CityStone"?.88f:.68f);
             m.SetFloat("_Motion",0);m.SetFloat("_Interior",IsInterior?1:0);m.SetFloat("_Emission",key=="CityGlow"?1:key=="CityWindow"?.72f:0);
+            if(IsHome){var origin=transform.position;m.SetVector("_HomeOrigin",new Vector4(origin.x,origin.y,origin.z,1));}
             m.SetFloat("_Wind",key=="CityBanners"?1:0);m.SetFloat("_LeafWind",key=="CityLeaves"?1:0);
             m.SetFloat("_Cull",key=="CityBanners"||key=="CityLeaves"?0:2);
             if(key=="CityBanners")bannerMaterial=m;

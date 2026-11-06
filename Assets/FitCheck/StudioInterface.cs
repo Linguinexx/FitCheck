@@ -99,6 +99,7 @@ namespace FitCheck
             var e=Event.current;
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&settingsOpen){CloseSettings();e.Use();}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&showShopDecor){CloseShopDecor(false);e.Use();}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&shopGuideOpen){CloseShopGuide();e.Use();}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){if(pendingDeleteSlot>=0)CancelSaveDeletion();else if(renderedStage==Stage.CharacterCreator&&!paused)CancelCreator();else if(renderedStage==Stage.Confirm&&!paused)stage=Stage.Dressing;else paused=!paused;dragging=false;e.Use();}
             bool modal=paused || settingsOpen || renderedStage==Stage.Confirm||pendingDeleteSlot>=0;
             GUI.enabled=!modal;
@@ -154,7 +155,7 @@ namespace FitCheck
             Txt(new Rect(1032,123,370,38),"Qual é a ocasião?",heading);
             ComicBubble(new Rect(1016,181,408,313),Request,Customer.name,speechAge);
             Rule(1032,505,366);
-            if(Timed)Txt(new Rect(50,715,850,70),"Malu está com pressa: você terá 120 segundos no provador. Pausa interrompe o relógio.",copy,violet);
+            if(Timed)Txt(new Rect(50,715,850,70),Customer.name+" está com pressa: você terá 120 segundos no provador. Pausa interrompe o relógio.",copy,violet);
             if(question<0){
                 Txt(new Rect(1032,526,365,45),"Se quiser, pergunte um pouco mais.",caption,muted);
                 for(int i=0;i<2;i++)if(Tap(new Rect(1032,581+i*89,366,76),questions[i]))question=i;
@@ -249,32 +250,46 @@ namespace FitCheck
         }
         void PostUI()
         {
-            Fill(new Rect(0,88,1440,812),new Color(.055f,.06f,.055f));
-            Txt(new Rect(52,119,700,52),"FitFeed",heading);Txt(new Rect(52,170,700,30),"O VISUAL GANHOU A CIDADE.",tiny,violet);
+            Fill(new Rect(0,0,1440,900),FeedBackground);
+            Fill(new Rect(60,54,35,4),CreatorRed);
+            Txt(new Rect(58,62,430,48),"FitFeed",heading,paper);
+            Txt(new Rect(59,111,490,31),campaignBeforePreview!=null?"PRÉVIA DO VISUAL":"PUBLICAÇÃO DA DRIPLAB",tiny,muted);
             if(campaignBeforePreview==null){
-                if(Tap(new Rect(262,119,180,44),"← Anterior",false,customer>0)){customer--;record=progress.posts[customer];Continue();}
-                if(Tap(new Rect(460,119,180,44),"Próxima →",false,customer+1<progress.posts.Count)){customer++;record=progress.posts[customer];Continue();}
+                if(Tap(new Rect(774,78,168,44),"← Anterior",false,customer>0)){customer--;record=progress.posts[customer];Continue();}
+                if(Tap(new Rect(953,78,168,44),"Próxima →",false,customer+1<progress.posts.Count)){customer++;record=progress.posts[customer];Continue();}
+                if(fromHome&&Tap(new Rect(1132,78,245,44),"← Voltar ao feed")){stage=Stage.Retrospective;return;}
             }
-            if(photo!=null)GUI.DrawTexture(new Rect(52,219,596,596),photo,ScaleMode.ScaleToFit);
-            Txt(new Rect(704,225,650,55),Customer.name,heading);Txt(new Rect(704,282,650,30),Customer.location,caption,muted);
-            Txt(new Rect(704,337,650,92),Customer.caption,copy);
-            Rule(704,454,650);Txt(new Rect(704,480,500,85),record.score+" / 10",display);
-            var c=DayOne.Evaluate(customer,record.outfit);
+            RoundedPanel(new Rect(60,158,614,679),FeedCardColor,13);
+            FeedByline(new Rect(82,169,568,54),customer);
+            FitFeedImage(new Rect(91,230,552,552),photo);
+            Txt(new Rect(84,790,566,39),Customer.caption,caption,paper);
+
+            RoundedPanel(new Rect(705,158,672,598),FeedCardColor,13);
+            Txt(new Rect(735,180,594,36),"AVALIAÇÃO DO LOOK",caption,muted);
+            Txt(new Rect(730,217,510,112),record.score+" / 10",display,paper);
+            Fill(new Rect(738,335,602,5),FeedInset);
+            if(record.score>0)Fill(new Rect(738,335,602*record.score/10f,5),CreatorRed);
+            Txt(new Rect(736,366,550,36),"O pedido do cliente",heading,paper);
+            var criteria=DayOne.Evaluate(customer,record.outfit);
             for(int i=0;i<3;i++){
-                Fill(new Rect(708,597+i*44,8,8),c[i]?violet:muted);
-                Txt(new Rect(731,586+i*44,615,37),Customer.criteria[i]+"  /  "+(c[i]?(i==0?4:3):0)+" pontos",caption,c[i]?paper:muted);
+                float y=421+i*66;
+                RoundedPanel(new Rect(735,y,610,56),FeedInset,8);
+                Txt(new Rect(752,y+11,37,34),criteria[i]?"✓":"–",action,criteria[i]?FeedAccent:muted);
+                Txt(new Rect(799,y+10,424,39),Customer.criteria[i],caption,paper);
+                Txt(new Rect(1230,y+10,104,36),criteria[i]?(i==0?"+4 pontos":"+3 pontos"):"0 pontos",action,criteria[i]?FeedAccent:muted);
             }
-            Txt(new Rect(708,734,630,34),campaignBeforePreview!=null?"PRÉVIA  /  SEM ALTERAR A REPUTAÇÃO":"Contribuição "+(record.reputation>=0?"+":"")+record.reputation+"   /   Reputação total "+progress.reputation,copy,violet);
-            Txt(new Rect(52,827,596,54),message, tiny,muted);
+            Rule(735,634,610);
+            Txt(new Rect(736,652,602,38),campaignBeforePreview!=null?"PRÉVIA  /  SEM ALTERAR A REPUTAÇÃO":"REPUTAÇÃO  "+(record.reputation>=0?"+":"")+record.reputation+"  •  TOTAL "+progress.reputation,copy,FeedAccent);
+            Txt(new Rect(736,701,602,42),message,tiny,muted);
             if(campaignBeforePreview!=null){
-                if(Tap(new Rect(704,805,390,60),"Continuar experimentando",true))stage=Stage.Dressing;
-                if(Tap(new Rect(1114,805,240,60),"Menu"))ReturnToTitle();
+                if(Tap(new Rect(705,777,420,60),"Continuar experimentando",true))stage=Stage.Dressing;
+                if(Tap(new Rect(1145,777,232,60),"Menu"))ReturnToTitle();
             }else if(fromHome){
-                if(Tap(new Rect(704,805,390,60),"Refazer nas condições originais",true))Replay();
-                if(Tap(new Rect(1114,805,240,60),"Voltar ao quarto"))CloseHomePanel();
+                if(Tap(new Rect(705,777,420,60),"Refazer nas condições originais",true))Replay();
+                if(Tap(new Rect(1145,777,232,60),"Voltar ao quarto"))CloseHomePanel();
             }else{
-                if(Tap(new Rect(704,805,390,60),progress.DayComplete?"Fechar expediente  →":"Próximo cliente  →",true)){if(progress.DayComplete)stage=Stage.Summary;else if(shopService){shopService=false;EnterShop();}else Begin();}
-                if(Tap(new Rect(1114,805,240,60),"Menu"))ReturnToTitle();
+                if(Tap(new Rect(705,777,420,60),progress.DayComplete?"Fechar expediente  →":"Próximo cliente  →",true)){if(progress.DayComplete)stage=Stage.Summary;else if(shopService){shopService=false;EnterShop();}else Begin();}
+                if(Tap(new Rect(1145,777,232,60),"Menu"))ReturnToTitle();
             }
         }
     }

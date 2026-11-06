@@ -17,7 +17,7 @@ namespace FitCheck
         {return new WorldHint{key=key,label=label,bounds=new Bounds(p,size),valid=true};}
         WorldHint CurrentWorldHint()
         {
-            if(city==null||stage!=Stage.City||paused||ShopSequenceActive||showShopDecor||homeDoorExitRemaining>0)return default;
+            if(city==null||stage!=Stage.City||paused||ShopSequenceActive||showShopDecor||shopGuideOpen||homeDoorExitRemaining>0)return default;
             Vector3 origin=city.transform.position;
             if(city.CatInteraction(cam))return Hint("E","Fazer carinho em Fubá",city.Cat.transform.position+Vector3.up*.35f,new Vector3(1.5f,.8f,1));
             if(city.IsHome){switch(city.HomeInteraction){
@@ -29,6 +29,7 @@ namespace FitCheck
                 if(city.StreetInteraction==1)return Hint("E","Entrar na DripLab",origin+new Vector3(10.4f,2,3.3f),new Vector3(2.2f,4,.3f));
                 if(city.StreetInteraction==2)return Hint("E","Entrar em casa",origin+new Vector3(CityView.StreetHomeDoor.x,2,8.65f),new Vector3(2.1f,4,.25f));
             }else{
+                if(!shopFittingOpening&&city.LookingAtShopGuide(cam))return Hint("E","Conversar com "+CityView.ShopGuideName,city.ShopGuideTarget-Vector3.up*.8f,new Vector3(1.2f,3.4f,1));
                 if(city.ShopInteraction==1){if(ShopOpen&&!city.CustomerWaitingAtCounter&&!progress.DayComplete)return default;return Hint("E",ShopActionLabel(),origin+new Vector3(4.4f,.85f,6.2f),new Vector3(3.0f,1.7f,1.5f));}
                 if(!ShopOpen&&Vector2.Distance(city.Position,new Vector2(2.1f,7.55f))<2)return Hint("F","Personalizar a loja",origin+new Vector3(2.1f,1.58f,6.35f),new Vector3(1.7f,.15f,1.25f));
                 if(city.ShopInteraction==2)return Hint("E",ShopActionLabel(),origin+new Vector3(-4.9f,1.85f,5.15f),new Vector3(2.2f,3.6f,.3f));

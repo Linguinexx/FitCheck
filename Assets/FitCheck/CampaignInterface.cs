@@ -12,12 +12,22 @@ namespace FitCheck
         static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes"};
         static readonly string[] UniformNames={"Equipe DripLab","Primeiro Expediente","Visual Perfeito","Sintonia"};
         readonly Dictionary<string,Texture2D> feedPhotos=new Dictionary<string,Texture2D>();
+        static readonly Color FeedBackground=new Color(.045f,.04f,.045f),FeedCardColor=new Color(.095f,.083f,.091f),
+            FeedInset=new Color(.067f,.058f,.065f),FeedAccent=new Color(1f,.34f,.39f);
+        Vector2 fitFeedScroll;
         void InvalidateFeedPhoto(string path){if(feedPhotos.TryGetValue(path,out var tex)){Destroy(tex);feedPhotos.Remove(path);}}
         Texture2D FeedPhoto(string path)
         {
             if(string.IsNullOrEmpty(path))return null;
             if(feedPhotos.TryGetValue(path,out var cached))return cached;
-            try{if(!System.IO.File.Exists(path))return null;var tex=new Texture2D(2,2);tex.LoadImage(System.IO.File.ReadAllBytes(path));feedPhotos[path]=tex;return tex;}catch{return null;}
+            Texture2D tex=null;
+            try{
+                if(!System.IO.File.Exists(path))return null;
+                tex=new Texture2D(2,2);
+                if(tex.LoadImage(System.IO.File.ReadAllBytes(path),true)){feedPhotos[path]=tex;return tex;}
+            }catch(Exception ex) when(ex is System.IO.IOException||ex is UnauthorizedAccessException){}
+            if(tex!=null)Destroy(tex);
+            return null;
         }
         void BuildAudio()
         {
@@ -104,18 +114,56 @@ namespace FitCheck
         }
         void RetrospectiveUI()
         {
-            Fill(new Rect(0,88,1440,812),surface);
-            Txt(new Rect(48,117,900,55),progress.Complete?"A semana no seu olhar.":"FitFeed  /  Suas histórias",heading);
-            Txt(new Rect(48,174,1110,35),progress.posts.Count+" publicações   /   Reputação "+progress.reputation+"   /   Abra uma foto para rever ou refazer em casa.",caption,muted);
-            if(Tap(new Rect(1190,120,200,48),"Voltar ao quarto"))CloseHomePanel();
-            for(int i=0;i<progress.posts.Count;i++){
-                var rect=new Rect(48+(i%3)*453,232+(i/3)*211,430,193);Fill(rect,new Color(.14f,.115f,.18f));
-                var tex=FeedPhoto(progress.posts[i].photo);if(tex!=null)GUI.DrawTexture(new Rect(rect.x+10,rect.y+10,173,173),tex,ScaleMode.ScaleToFit);
-                Txt(new Rect(rect.x+201,rect.y+16,213,53),DayOne.Customers[i].name,copy);
-                Txt(new Rect(rect.x+201,rect.y+82,213,35),"Nota "+progress.posts[i].score+" / 10",copy,violet);
-                Txt(new Rect(rect.x+201,rect.y+129,210,55),"DIA "+(i/3+1)+"  /  "+DayOne.Customers[i].location,tiny,muted);
-                if(GUI.Button(rect,GUIContent.none,GUIStyle.none)){Sound(0);customer=i;record=progress.posts[i];Continue();}
+            Fill(new Rect(0,0,1440,900),FeedBackground);
+            Fill(new Rect(96,126,38,4),CreatorRed);
+            Txt(new Rect(92,145,386,108),"FitFeed",display,paper);
+            Txt(new Rect(96,250,337,72),progress.Complete?"A semana no seu olhar.":"Os looks da DripLab pelo bairro.",copy,muted);
+            RoundedPanel(new Rect(96,346,326,108),FeedCardColor,12);
+            Txt(new Rect(114,366,137,44),progress.posts.Count.ToString("00"),heading,paper);
+            Txt(new Rect(265,366,137,44),progress.reputation.ToString(),heading,paper);
+            Txt(new Rect(116,412,137,26),"PUBLICAÇÕES",tiny,muted);
+            Txt(new Rect(267,412,137,26),"REPUTAÇÃO",tiny,muted);
+            if(Tap(new Rect(96,778,326,52),"← Voltar ao quarto")){CloseHomePanel();return;}
+            Txt(new Rect(510,75,590,35),"PUBLICAÇÕES  /  MAIS RECENTES",caption,muted);
+            if(progress.posts.Count==0){
+                RoundedPanel(new Rect(510,125,644,270),FeedCardColor,13);
+                Txt(new Rect(550,188,550,58),"Seu feed começa na loja.",heading,paper);
+                Txt(new Rect(550,255,520,76),"Finalize o primeiro atendimento na DripLab para ver a foto e a avaliação do look aqui.",copy,muted);
+                return;
             }
+            const float cardHeight=760,viewportHeight=754;
+            fitFeedScroll=GUI.BeginScrollView(new Rect(505,121,676,viewportHeight),fitFeedScroll,new Rect(0,0,646,progress.posts.Count*cardHeight),false,true);
+            int opened=-1;
+            for(int row=0;row<progress.posts.Count;row++){
+                float y=row*cardHeight;
+                if(y+cardHeight<fitFeedScroll.y||y>fitFeedScroll.y+viewportHeight)continue;
+                int index=progress.posts.Count-1-row;
+                var post=progress.posts[index];var client=DayOne.Customers[index];
+                RoundedPanel(new Rect(5,y,634,747),FeedCardColor,13);
+                FeedByline(new Rect(24,y+14,592,52),index);
+                var image=new Rect(42,y+76,560,560);
+                FitFeedImage(image,FeedPhoto(post.photo));
+                if(GUI.Button(image,GUIContent.none,GUIStyle.none)){Sound(0);opened=index;}
+                Txt(new Rect(27,y+644,574,44),client.caption,caption,paper);
+                Txt(new Rect(27,y+698,195,35),"NOTA  "+post.score+" / 10",caption,FeedAccent);
+                if(Tap(new Rect(358,y+692,261,42),"Ver avaliação  →"))opened=index;
+            }
+            GUI.EndScrollView();
+            if(opened>=0){fromHome=true;customer=opened;record=progress.posts[opened];Continue();}
+        }
+        void FeedByline(Rect r,int index)
+        {
+            var client=DayOne.Customers[index];
+            RoundedPanel(new Rect(r.x,r.y+4,44,44),CreatorRed,22);
+            Txt(new Rect(r.x+2,r.y+5,40,42),client.name.Substring(0,1),action,paper);
+            Txt(new Rect(r.x+55,r.y,r.width-62,28),client.name,copy,paper);
+            Txt(new Rect(r.x+55,r.y+29,r.width-62,24),client.location+"  •  DIA 0"+(index/3+1),tiny,muted);
+        }
+        void FitFeedImage(Rect r,Texture2D image)
+        {
+            Fill(r,FeedInset);
+            if(image!=null)GUI.DrawTexture(r,image,ScaleMode.ScaleToFit);
+            else Txt(new Rect(r.x+20,r.center.y-20,r.width-40,40),"Foto indisponível",action,muted);
         }
         void OnApplicationFocus(bool focus){
             if(!focus&&(stage==Stage.Dressing||stage==Stage.Confirm)){paused=true;dragging=false;}

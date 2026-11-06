@@ -46,7 +46,10 @@ namespace FitCheck
                 }
                 if(ids.Count!=9)throw new Exception("Araras sem os nove tops dos três drops");
                 MoveProof(new Vector2(0,6.3f),0,0);
-                if(city.ShopInteraction==1||InteractShop())throw new Exception("Frequentador fixo abriu atendimento de cliente");
+                cam.transform.LookAt(city.ShopGuideTarget);
+                if(!InteractShop()||!shopGuideOpen||shopService||stage!=Stage.City||progress.posts.Count!=0)
+                    throw new Exception("Guia não abriu ajuda independente do atendimento");
+                CloseShopGuide();
                 MoveProof(CityView.ShopCounter,180,0);InteractShop();question=1;
                 if(!shopService||stage!=Stage.Dialogue)throw new Exception("Conversa não inicia atendimento da loja");
                 shopCameraTime=.5f;FrameShopDialogue();SaveFirstPersonFrame(Path.Combine(folder,"service-conversation.png"));
