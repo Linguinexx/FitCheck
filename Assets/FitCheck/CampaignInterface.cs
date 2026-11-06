@@ -10,7 +10,7 @@ namespace FitCheck
         bool showWardrobe, mutedAudio,reducedMotion,retroFilter; AudioSource effects;
         AudioClip clickSound,photoSound,awardSound;Queue<string> notices=new Queue<string>();string notice="";float noticeUntil;
         const string FubaUniformName="Modo Fubá";
-        static readonly string[] UniformNames={"Traje padrão","Corta-vento Rubro","Carpa Rosa","Azul Elétrico",FubaUniformName,DayProgress.NeighbourhoodAward};
+        static readonly string[] UniformNames={"Traje padrão","Corta-vento Rubro","Carpa Rosa","Azul Elétrico",FubaUniformName,DayProgress.NeighbourhoodAward,DayProgress.GarageDjAward,DayProgress.FittingGhostAward};
         readonly Dictionary<string,Texture2D> feedPhotos=new Dictionary<string,Texture2D>();
         static readonly Color FeedBackground=new Color32(23,21,25,255),FeedCardColor=new Color32(33,30,35,255),
             FeedPaper=new Color32(247,244,239,255),FeedMuted=new Color32(165,159,168,255),
@@ -109,7 +109,9 @@ namespace FitCheck
                 if(progress.closed&&!progress.Complete&&Tap(new Rect(48,413,500,60),"Dormir e começar o próximo dia  →",true)){progress.Advance();TrySave();GoHome();}
                 if(progress.Complete&&Tap(new Rect(48,413,500,60),"Receber recompensas pendentes",true)){progress.Deliver();TrySave();}
                 Txt(new Rect(48,700,500,40),"Reputação "+progress.reputation+"   /   "+progress.Available.Length+" peças disponíveis",copy,violet);
-                int visibleAwards=3+(progress.UniformUnlocked(DayProgress.FubaUniform)?1:0)+(progress.UniformUnlocked(DayProgress.NeighbourhoodUniform)?1:0);
+                int visibleAwards=3;
+                for(int i=DayProgress.FubaUniform;i<UniformNames.Length;i++)
+                    if(progress.UniformUnlocked(i))visibleAwards++;
                 Txt(new Rect(48,755,500,44),progress.achievements.Count+" de "+visibleAwards+" conquistas   /   "+progress.posts.Count+" de 9 publicações",caption,muted);
             }else{
                 if(Tap(new Rect(845,806,210,48),"↶ Girar"))homeWardrobeRotation-=45;
@@ -117,7 +119,7 @@ namespace FitCheck
                 for(int i=0,row=0;i<UniformNames.Length;i++){
                     bool unlocked=progress.UniformUnlocked(i),selected=progress.EquippedUniform==i;
                     if(i>=DayProgress.FubaUniform&&!unlocked)continue;
-                    if(Tap(new Rect(48,407+row++*52,500,46),(selected?"✓ ":"")+UniformNames[i]+(unlocked?"":"  /  bloqueado"),selected,unlocked)){progress.uniform=i;studio.ApplyUniform(i);TrySave();}
+                    if(Tap(new Rect(48,396+row++*40,500,36),(selected?"✓ ":"")+UniformNames[i]+(unlocked?"":"  /  bloqueado"),selected,unlocked)){progress.uniform=i;studio.ApplyUniform(i);TrySave();}
                 }
                 if(Tap(new Rect(48,725,500,50),"Editar meu personagem"))OpenCreator(Stage.Home);
             }

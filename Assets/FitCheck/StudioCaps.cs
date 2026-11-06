@@ -19,6 +19,8 @@ namespace FitCheck
         {
             if(item==null)return;
             if(item.id=="PLAYER_PINK_GLASSES"){BuildPlayerGlasses();return;}
+            if(item.id==GarageDjHeadphones){BuildGarageDjHeadphones();return;}
+            if(item.id==GhostHood){BuildFittingGhostHood(item.color);return;}
             if(!item.cap){
                 var knit=SurfaceMaterial(item.color,"Knit");
                 BuildSoftBeanie(item,knit);return;
@@ -58,6 +60,45 @@ namespace FitCheck
                 }
             }
             Box("Boné — ajuste traseiro",new Vector3(0,3.005f,.555f),new Vector3(.24f,.047f,.025f),edge,clothes);
+        }
+        void BuildFittingGhostHood(Color color)
+        {
+            var origin=new Vector3(0,2.8f,0);
+            var fabric=SurfaceMaterial(color,"Knit");
+            var trim=SurfaceMaterial(new Color(.39f,.26f,.53f),"Cloth");
+            var vertices=new List<Vector3>();var uv=new List<Vector2>();var triangles=new List<int>();
+            const int sides=32;
+            float[] depths={-.36f,-.18f,.08f,.35f,.55f,.65f};
+            float[] widths={.93f,1.04f,1.07f,.93f,.62f,.01f};
+            var rim=new Vector3[sides];
+            for(int row=0;row<depths.Length;row++)for(int i=0;i<=sides;i++){
+                float a=i*Mathf.PI*2/sides;
+                var point=new Vector3(Mathf.Cos(a)*.62f*widths[row],.035f+Mathf.Sin(a)*.65f*widths[row],depths[row]);
+                vertices.Add(point);uv.Add(new Vector2(i/(float)sides*2,row*.23f));
+                if(row==0&&i<sides)rim[i]=origin+point;
+                if(row==0||i==sides)continue;
+                int b=row*(sides+1)+i,p=b-sides-1;
+                triangles.AddRange(new[]{p,p+1,b,b,p+1,b+1});
+            }
+            Surface("Capuz espectral",vertices,triangles,uv,null,origin,Vector3.one,fabric,clothes);
+            Tube("Costura do capuz espectral",rim,.027f,trim,clothes,true,origin:origin);
+        }
+        void BuildGarageDjHeadphones()
+        {
+            var origin=new Vector3(0,2.8f,0);
+            var shell=SurfaceMaterial(new Color(.075f,.066f,.11f),"Leather");
+            var lime=SurfaceMaterial(new Color(.68f,.88f,.19f));
+            var band=new Vector3[17];
+            for(int i=0;i<band.Length;i++){
+                float angle=Mathf.PI*i/(band.Length-1);
+                band[i]=origin+new Vector3(Mathf.Cos(angle)*.66f,.06f+Mathf.Sin(angle)*.68f,.035f);
+            }
+            Tube("Fone — arco",band,.046f,shell,clothes,origin:origin);
+            for(int side=-1;side<=1;side+=2){
+                Ellipsoid("Fone — almofada",origin+new Vector3(side*.585f,.045f,.035f),new Vector3(.15f,.33f,.29f),shell,clothes,12,8);
+                Ellipsoid("Fone — concha",origin+new Vector3(side*.671f,.045f,.035f),new Vector3(.11f,.29f,.25f),lime,clothes,12,8);
+                Ellipsoid("Fone — disco externo",origin+new Vector3(side*.718f,.045f,.035f),new Vector3(.044f,.20f,.17f),shell,clothes,12,8);
+            }
         }
         void BuildPlayerGlasses()
         {

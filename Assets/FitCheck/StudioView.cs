@@ -147,7 +147,8 @@ namespace FitCheck
             if(applyingPlayer)skin.color=PlayerAppearance.SkinColors[PlayerLook.skin];
             SetFaceProfile(profile);if(applyingPlayer)ApplyExpression((AvatarExpression)PlayerLook.expression);
             var headwear=playerPieces?[3]??Catalog.Get(outfit[3]);
-            BuildHair(profile,headwear?.id=="PLAYER_PINK_GLASSES"?null:headwear);
+            bool headphones=headwear?.id==GarageDjHeadphones;
+            BuildHair(profile,headphones||headwear?.id=="PLAYER_PINK_GLASSES"?null:headwear);
             int civilianProfile=civilianWardrobe>=0?civilianWardrobe:Mathf.Clamp(customer,0,8);
             bool originalTop=Catalog.IsArrivalPiece(outfit[0]),originalBottom=Catalog.IsArrivalPiece(outfit[1]),originalShoes=Catalog.IsArrivalPiece(outfit[2]);
             var t=playerPieces?[0]??(originalTop?CivilianTop(civilianProfile):Catalog.Get(outfit[0]));bool fubaSuit=t.id==FubaTop;
@@ -160,6 +161,12 @@ namespace FitCheck
             }else if(t.id==NeighbourhoodTop){
                 ShirtBody(t,cloth);
                 BuildPosterJacket();
+            }else if(t.id==GarageDjTop){
+                ShirtBody(t,cloth);
+                BuildGarageDjJacket();
+            }else if(t.id==GhostTop){
+                ShirtBody(t,cloth);
+                BuildFittingGhostShirt();
             }else if(!blenderTop){
 ShirtBody(t,cloth);
             Rings("Gola",new Vector3(0,2.217f,0),new Vector3(.34f,.045f,.32f),Material(t.id=="CG_TOP_01"?new Color(.12f,.3f,.19f):t.color*.68f),clothes,new[]{0f,1f},new[]{1f,1f},12);

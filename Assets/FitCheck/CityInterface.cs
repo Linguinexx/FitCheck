@@ -62,6 +62,7 @@ namespace FitCheck
         void ExitCity()
         {
             greetedIndex=-1;
+            garageRecordUntil=0;
             if(shopGuideOpen)CloseShopGuide();
             if(showShopDecor)CloseShopDecor(false);
             studio.SetExploration(false);
@@ -149,7 +150,7 @@ namespace FitCheck
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.F&&!showShopDecor){OpenShopDecor();if(showShopDecor)e.Use();return;}
             if(paused||stage!=Stage.City||ShopSequenceActive)return;
             if(ProcessCityDragLook(e))return;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()||TryGreetPostedCustomer()))e.Use();return;}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()||TryGreetPostedCustomer()||TryUseGarageDeck()))e.Use();return;}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Tab){cityFreeCursor=!cityFreeCursor;SyncCityCursor();e.Use();return;}
             if(!CityHitArea(e.mousePosition))return;
             if(e.type==EventType.MouseDown&&CaptureCityPointer(e.mousePosition,e.button))e.Use();
@@ -219,6 +220,10 @@ namespace FitCheck
         {
             if(!shopFittingOpening||paused||stage!=Stage.City||city.FittingMoving)return;
             shopFittingOpening=false;
+            if(city.FittingOpen&&!city.CustomerVisible&&progress.DiscoverFittingGhost()){
+                notices.Enqueue(DayProgress.FittingGhostAward);
+                TrySave();
+            }
         }
     }
 }

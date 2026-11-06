@@ -3,6 +3,22 @@ namespace FitCheck
 {
     public partial class CityView
     {
+        static readonly Vector3[] GarageDeckTargets={
+            new Vector3(-32.55f,1.08f,-37.55f),new Vector3(-100.5f,1.08f,29f),new Vector3(15,1.08f,44)
+        };
+        public bool LookingAtGarageDeck(Camera view,DayProgress progress,out int index,out Vector3 target)
+        {
+            index=-1;target=default;
+            if(IsInterior||progress.UniformUnlocked(DayProgress.GarageDjUniform))return false;
+            for(int i=0;i<GarageDeckTargets.Length;i++){
+                Vector3 deck=GarageDeckTargets[i];
+                if(progress.HasGarageRecord(i)||Vector2.Distance(Position,new Vector2(deck.x,deck.z))>3.2f)continue;
+                Vector3 toDeck=transform.TransformPoint(deck)-view.transform.position;
+                if(Vector3.Dot(view.transform.forward,toDeck.normalized)<=.91f)continue;
+                index=i;target=deck;return true;
+            }
+            return false;
+        }
         public int MusicInfillTriangles {get;private set;}
         public int MusicInfillBatches {get;private set;}
         void FillMusicGap()
@@ -70,6 +86,21 @@ namespace FitCheck
             Words("SO MAIS UM DROP",new Vector3(-3.1f,.64f,-6.50f),.025f,Cream);
             obstacles.Add(new Rect(-4.25f,-6.55f,2.3f,.9f));
         }
+        void BuildGarageDeck(int index)
+        {
+            Vector3 deck=GarageDeckTargets[index];
+            var finish=index==0?new Color(.44f,.21f,.66f):index==1?new Color(.13f,.51f,.43f):new Color(.62f,.24f,.15f);
+            var lime=new Color(.66f,.86f,.20f);
+            if(index!=0)Block(deck-Vector3.up*.91f,new Vector3(1.04f,.34f,.58f),Ink,"CityBrick");
+            Block(deck-Vector3.up*.42f,new Vector3(1.13f,.74f,.64f),Ink,"CityMetal");
+            Block(deck-Vector3.up*.035f,new Vector3(1.10f,.12f,.60f),finish,"CityMetal");
+            Vector3 vinyl=deck+new Vector3(-.16f,.038f,0);
+            Rod(vinyl,vinyl+Vector3.up*.028f,.244f,Ink,"Rubber",20);
+            Rod(vinyl+Vector3.up*.029f,vinyl+Vector3.up*.034f,.070f,lime,"Paper",10);
+            Vector3 tonearm=deck+new Vector3(.30f,.085f,-.17f);
+            Rod(tonearm,tonearm+new Vector3(-.21f,0,.21f),.019f,Cream,"CityMetal");
+            Block(deck+new Vector3(.34f,.034f,.18f),new Vector3(.09f,.03f,.08f),lime,"CityGlow");
+        }
         void MusicCourtyard()
         {
             PlaceCityModule(()=>Bench(0,0),new Vector3(-28.8f,0,-41.6f),true);
@@ -78,6 +109,7 @@ namespace FitCheck
             Bicycle(new Vector3(-22.5f,0,-39.5f));
             Block(new Vector3(-34,.15f,-38.5f),new Vector3(4.8f,.30f,2.5f),new Color(.28f,.18f,.13f),"Wood");
             obstacles.Add(new Rect(-36.5f,-39.85f,5,2.7f));
+            BuildGarageDeck(0);
             foreach(float x in new[]{-35.9f,-32.1f}){
                 Block(new Vector3(x,.95f,-39.3f),new Vector3(.65f,1.6f,.55f),Ink,"Rubber");
                 Rod(new Vector3(x,.85f,-38.99f),new Vector3(x,.85f,-38.96f),.22f,Teal,"CityMetal",12);

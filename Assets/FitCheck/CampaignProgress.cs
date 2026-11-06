@@ -20,7 +20,28 @@ namespace FitCheck
         public const int NeighbourhoodUniform=5;
         public const string NeighbourhoodAward="Figurinha do Bairro";
         public int greetedCustomerProfiles;
-        static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes",FubaAward,NeighbourhoodAward};
+        public const int GarageDjUniform=6, GarageDjRecordGoal=3;
+        public const string GarageDjAward="DJ de Garagem";
+        public int garageDjDecks;
+        public bool HasGarageRecord(int deck)=>(garageDjDecks&(1<<deck))!=0;
+        public int GarageRecordsFound=>
+            (HasGarageRecord(0)?1:0)+(HasGarageRecord(1)?1:0)+(HasGarageRecord(2)?1:0);
+        public const int FittingGhostUniform=7;
+        public const string FittingGhostAward="Fantasma do Provador";
+        static readonly string[] UniformAwards={"","Primeiro Expediente","Visual Perfeito","Sintonia com os Clientes",FubaAward,NeighbourhoodAward,GarageDjAward,FittingGhostAward};
+        public bool DiscoverFittingGhost()
+        {
+            if(!closed||UniformUnlocked(FittingGhostUniform))return false;
+            Unlock(FittingGhostAward);
+            return true;
+        }
+        public bool RegisterGarageRecord(int deck)
+        {
+            if(deck<0||deck>=GarageDjRecordGoal||HasGarageRecord(deck)||UniformUnlocked(GarageDjUniform))return false;
+            garageDjDecks|=1<<deck;
+            if(GarageRecordsFound==GarageDjRecordGoal)Unlock(GarageDjAward);
+            return true;
+        }
         public bool UniformUnlocked(int index)=>index>=0&&index<UniformAwards.Length&&(index==0||achievements.Contains(UniformAwards[index]));
         public int EquippedUniform=>UniformUnlocked(uniform)?uniform:0;
         public bool GreetedCustomer(int index)=>(greetedCustomerProfiles&(1<<DayOne.CustomerProfile(index)))!=0;

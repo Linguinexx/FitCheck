@@ -27,6 +27,33 @@ namespace FitCheck
                 }
             }
         }
+        void BuildGarageDjJacket()
+        {
+            var ink=SurfaceMaterial(new Color(.075f,.066f,.11f),"Knit");
+            var lime=SurfaceMaterial(new Color(.68f,.88f,.19f),"Cloth");
+            Rings("Gola canelada",new Vector3(0,2.217f,0),new Vector3(.40f,.055f,.33f),ink,clothes,new[]{0f,1f},new[]{1f,1f},12);
+            Tube("Zíper lima",new[]{
+                new Vector3(0,1.42f,-.302f),new Vector3(0,1.75f,-.285f),
+                new Vector3(0,2.0f,-.272f),new Vector3(0,2.22f,-.120f)
+            },.014f,lime,clothes);
+            float[] levels={.08f,.15f,.25f,.19f,.10f};
+            for(int i=0;i<levels.Length;i++){
+                float x=(i-2)*.084f,z=.285f-.024f*Mathf.Abs(i-2)/2;
+                Box("Equalizador",new Vector3(x,1.85f,z),new Vector3(.047f,levels[i],.027f),lime,clothes);
+            }
+        }
+        void BuildFittingGhostShirt()
+        {
+            var violet=SurfaceMaterial(new Color(.36f,.24f,.50f),"Cloth");
+            var mint=SurfaceMaterial(new Color(.47f,.84f,.70f),"Cloth");
+            Rings("Gola violeta",new Vector3(0,2.217f,0),new Vector3(.43f,.052f,.32f),violet,clothes,new[]{0f,1f},new[]{1f,1f},12);
+            Ellipsoid("Fantasma bordado",new Vector3(0,1.89f,-.277f),new Vector3(.31f,.31f,.055f),violet,clothes,16,10);
+            for(int side=-1;side<=1;side+=2){
+                Ellipsoid("Olho bordado",new Vector3(side*.057f,1.924f,-.303f),new Vector3(.038f,.075f,.023f),mint,clothes,10,8);
+                Tube("Costura ondulada",new[]{new Vector3(side*.11f,1.76f,-.282f),new Vector3(side*.06f,1.72f,-.291f),
+                    new Vector3(0,1.75f,-.295f)},.014f,violet,clothes);
+            }
+        }
         static Vector3 ShirtPoint(int row,int column,bool loose)
         {
             float[] heights={1.37f,1.44f,1.75f,loose?1.84f:1.89f,2.0f,loose?2.12f:2.14f,2.23f};

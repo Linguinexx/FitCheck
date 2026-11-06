@@ -45,7 +45,22 @@ namespace FitCheck
             PlayerWashedDenim,InitialPlayerPieces[2],
             new Garment(NeighbourhoodCap,"Boné de adesivos","CIVIL",3,new Color(.13f,.15f,.16f),true){cap=true}
         };
-        static readonly Garment[][] PlayerUniforms={InitialPlayerPieces,RedPlayerPieces,PinkPlayerPieces,BluePlayerPieces,FubaPlayerPieces,NeighbourhoodPieces};
+        const string GarageDjTop="PLAYER_GARAGE_DJ_TOP",GarageDjHeadphones="PLAYER_GARAGE_DJ_HEADPHONES";
+        static readonly Garment[] GarageDjPieces={
+            new Garment(GarageDjTop,"Jaqueta Garage","CIVIL",0,new Color(.29f,.14f,.49f),true,true),
+            PlayerBlueDenim,
+            new Garment("PLAYER_GARAGE_DJ_SHOES","Runner lima","CIVIL",2,new Color(.43f,.63f,.12f),true),
+            new Garment(GarageDjHeadphones,"Fone de estúdio","CIVIL",3,new Color(.08f,.075f,.11f),true)
+        };
+        const string GhostTop="PLAYER_GHOST_TOP",GhostHood="PLAYER_GHOST_HOOD";
+        static readonly Color GhostFabric=new Color(.84f,.80f,.89f);
+        static readonly Garment[] GhostPieces={
+            new Garment(GhostTop,"Moletom assombrado","CIVIL",0,GhostFabric,true,true),
+            new Garment("PLAYER_GHOST_BOTTOM","Calça névoa","CIVIL",1,new Color(.35f,.29f,.47f),true,true),
+            new Garment("PLAYER_GHOST_SHOES","Tênis espectral","CIVIL",2,new Color(.66f,.74f,.85f),true),
+            new Garment(GhostHood,"Capuz espectral","CIVIL",3,GhostFabric,true)
+        };
+        static readonly Garment[][] PlayerUniforms={InitialPlayerPieces,RedPlayerPieces,PinkPlayerPieces,BluePlayerPieces,FubaPlayerPieces,NeighbourhoodPieces,GarageDjPieces,GhostPieces};
         bool BuildBlenderBaggy(Garment item)
         {
             if(item==PlayerWashedDenim||item==PlayerBlueDenim){

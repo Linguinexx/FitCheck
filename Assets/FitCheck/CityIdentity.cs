@@ -83,20 +83,36 @@ namespace FitCheck
         }
         void Monument()
         {
-            // Original distant landmark: a woven ribbon spirals into a tilted open halo.
             MonumentHill();
-            Block(new Vector3(-37,11,67),new Vector3(9,3,8),Ink,"Plaster",.4f);
-            for(int i=0;i<26;i++){
-                float a=i/26f,b=(i+1)/26f;
-                var p=new Vector3(-37+Mathf.Sin(a*5)*2.8f,12+a*21,67);
-                var q=new Vector3(-37+Mathf.Sin(b*5)*2.8f,12+b*21,67);
-                Quad(p-Vector3.right*1.4f,q-Vector3.right*1.4f,q+Vector3.right*1.4f,p+Vector3.right*1.4f,Cream,"Plaster");
-                Quad(p+Vector3.right*1.4f,q+Vector3.right*1.4f,q-Vector3.right*1.4f,p-Vector3.right*1.4f,Kaos,"Leather");
+            var copper=new Color(.62f,.28f,.16f);
+            var amber=new Color(1,.56f,.20f);
+            var cyan=new Color(.19f,.91f,.79f);
+            var center=new Vector3(-37,30,65);
+            Block(new Vector3(-37,11.6f,66),new Vector3(9,2.4f,7),Ink,"CityBrick",.30f);
+            for(int side=-1;side<=1;side+=2){
+                Vector3 foot=new Vector3(-37+side*2.3f,12.8f,66);
+                Vector3 shoulder=center+new Vector3(side*6,-5.8f,0);
+                Rod(foot,shoulder,.62f,copper,"CityMetal",8);
+                Rod(foot+Vector3.back*.62f,shoulder+Vector3.back*.62f,.095f,amber,"CityGlow",6);
             }
-            for(int i=0;i<32;i++){
-                float a=i*Mathf.PI*2/32,b=(i+1)*Mathf.PI*2/32;
-                Rod(new Vector3(-39.5f+Mathf.Cos(a)*6,33+Mathf.Sin(a)*6,67+Mathf.Cos(a)*1.4f),new Vector3(-39.5f+Mathf.Cos(b)*6,33+Mathf.Sin(b)*6,67+Mathf.Cos(b)*1.4f),.65f,Kaos,"Plaster",6);
+            const int sides=40;
+            for(int i=0;i<sides;i++){
+                Vector3 a=MonumentRingPoint(center,i,sides),b=MonumentRingPoint(center,i+1,sides);
+                Rod(a,b,.51f,copper,"CityMetal",8);
+                Rod(a+Vector3.back*.47f,b+Vector3.back*.47f,.15f,amber,"CityGlow",6);
             }
+            float[] wave={0,0,1.7f,-2.8f,4.7f,-3.8f,2.4f,-.9f,0,0};
+            for(int i=1;i<wave.Length;i++){
+                var a=center+new Vector3(-8.3f+(i-1)*1.84f,wave[i-1],-.48f);
+                var b=center+new Vector3(-8.3f+i*1.84f,wave[i],-.48f);
+                Rod(a,b,.39f,Ink,"CityMetal",8);
+                Rod(a+Vector3.back*.35f,b+Vector3.back*.35f,.18f,cyan,"CityGlow",6);
+            }
+        }
+        static Vector3 MonumentRingPoint(Vector3 center,int step,int sides)
+        {
+            float angle=step*Mathf.PI*2/sides;
+            return center+new Vector3(Mathf.Cos(angle)*8.5f,Mathf.Sin(angle)*8.5f,Mathf.Cos(angle)*1.35f);
         }
     }
 }

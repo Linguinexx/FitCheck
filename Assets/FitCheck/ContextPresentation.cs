@@ -5,7 +5,19 @@ namespace FitCheck
     {
         struct WorldHint {public string key,label;public Bounds bounds;public bool valid;}
         float contextClock,regionUntil,speechAge,answerAge;string contextRegion="",speechRequestKey="",speechAnswerKey="";Texture2D bubbleTail;
-        float greetedAt;
+        float greetedAt,garageRecordUntil;
+        int lastGarageDeck;
+        static readonly string[] GarageRecordTitles={"Batida da Laje","Frequência Noturna","Fita de Garagem"};
+        bool TryUseGarageDeck()
+        {
+            if(!StreetBubblesAllowed||!city.LookingAtGarageDeck(cam,progress,out int deck,out _))return false;
+            if(!progress.RegisterGarageRecord(deck))return false;
+            lastGarageDeck=deck;
+            garageRecordUntil=contextClock+1.8f;
+            if(progress.UniformUnlocked(DayProgress.GarageDjUniform))notices.Enqueue(DayProgress.GarageDjAward);
+            TrySave();
+            return true;
+        }
         int greetedIndex=-1;
         bool TryGreetPostedCustomer()
         {
@@ -42,6 +54,8 @@ namespace FitCheck
                 if(city.StreetInteraction==2)return Hint("E","Entrar em casa",origin+new Vector3(CityView.StreetHomeDoor.x,2,8.65f),new Vector3(2.1f,4,.25f));
                 if(city.TryLookAtPostedCustomer(cam,progress,out int index,out Vector3 point))
                     return Hint("E","Cumprimentar "+DayOne.Customers[index].name,point-Vector3.up*.65f,new Vector3(1.3f,3.25f,1.2f));
+                if(city.LookingAtGarageDeck(cam,progress,out _,out Vector3 deck))
+                    return Hint("E","Conferir o disco",origin+deck,new Vector3(1.1f,.65f,.68f));
             }else{
                 if(!shopFittingOpening&&city.LookingAtShopGuide(cam))return Hint("E","Conversar com "+CityView.ShopGuideName,city.ShopGuideTarget-Vector3.up*.8f,new Vector3(1.2f,3.4f,1));
                 if(city.ShopInteraction==1){if(ShopOpen&&!city.CustomerWaitingAtCounter&&!progress.DayComplete)return default;return Hint("E",ShopActionLabel(),origin+new Vector3(4.4f,.82f,6.15f),new Vector3(5.95f,1.64f,1.62f));}
@@ -122,6 +136,11 @@ namespace FitCheck
         void DrawAmbientBubble()
         {
             if(!StreetBubblesAllowed)return;
+            if(contextClock<garageRecordUntil){
+                int record=progress.GarageRecordsFound;
+                ComicBubble(new Rect(487,697,466,122),GarageRecordTitles[lastGarageDeck],"VITROLAS  /  "+record+" DE "+DayProgress.GarageDjRecordGoal,contextClock-(garageRecordUntil-1.8f),false);
+                return;
+            }
             if(greetedIndex>=0&&contextClock-greetedAt<2.8f){
                 ComicBubble(new Rect(487,697,466,122),"Valeu pelo look! Bom te ver por aqui.",DayOne.Customers[greetedIndex].name,contextClock-greetedAt,false);
                 return;

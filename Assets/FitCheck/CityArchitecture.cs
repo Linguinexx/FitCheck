@@ -126,9 +126,6 @@ namespace FitCheck
             var warm=new Color(.74f,.66f,.52f);
             // Ground floor is built around a genuine doorway, rather than painting a door on a solid block.
             foreach(float x in new[]{-7.1f,-2.5f})Block(new Vector3(x,2,8.95f),new Vector3(2.55f,4,.34f),warm,"CityBrick");
-            foreach(float x in new[]{-8.35f,-1.25f})Block(new Vector3(x,2,11.2f),new Vector3(.22f,4,4.8f),warm,"Plaster");
-            Block(new Vector3(-4.8f,2,10.85f),new Vector3(2.2f,4,.20f),Ink,"Plaster");
-            Ground(-4.8f,11.15f,7.1f,4.65f,-.025f,Cream,"EntryTile");
             ResidentialFinish();
             Ground(-4.8f,8.2f,2.25f,1.2f,-.015f,Ink,"Rubber");
             Block(new Vector3(-4.8f,6.3f,11.2f),new Vector3(7.3f,4.6f,4.8f),warm,"Plaster",.09f);
@@ -138,13 +135,12 @@ namespace FitCheck
             Block(new Vector3(-4.8f,4.03f,8.66f),new Vector3(2.55f,.22f,.55f),Ink,"Wood");
             Block(new Vector3(-4.8f,4.40f,8.72f),new Vector3(1.75f,.52f,.08f),Cream,"Paper");
             Words("AP 03",new Vector3(-4.8f,4.39f,8.65f),.052f,Ink);
-            Block(new Vector3(-4.8f,3.82f,9.7f),new Vector3(.65f,.05f,.45f),new Color(1,.8f,.48f),"CityGlow");
-            // Open leaf and small lobby details remain visible when leaving the apartment.
+            // The open leaf remains attached to the left jamb.
             var hinge=new Vector3(-5.74f,.04f,8.80f);var leaf=hinge+new Vector3(.22f,0,1.55f);
             Quad(hinge,hinge+Vector3.up*3.65f,leaf+Vector3.up*3.65f,leaf,new Color(.44f,.26f,.14f),"Wood");
             Quad(leaf,leaf+Vector3.up*3.65f,hinge+Vector3.up*3.65f,hinge,new Color(.44f,.26f,.14f),"Wood");
             Rod(leaf+new Vector3(.04f,1.6f,-.10f),leaf+new Vector3(.04f,2.0f,-.10f),.035f,Cream,"CityMetal");
-            for(int i=0;i<3;i++)Block(new Vector3(-4.8f+(i-1)*.53f,1.6f,10.70f),new Vector3(.45f,.55f,.10f),Cream,"CityMetal");
+
             obstacles.Add(new Rect(-8.5f,8.7f,2.65f,5.4f));obstacles.Add(new Rect(-3.75f,8.7f,2.65f,5.4f));obstacles.Add(new Rect(-5.85f,10.6f,2.1f,3.5f));
         }
     }

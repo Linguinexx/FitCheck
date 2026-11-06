@@ -50,6 +50,19 @@ namespace FitCheck.Editor
             if(greetings.RegisterCustomerGreeting(0)||greetings.RegisterCustomerGreeting(4)||!greetings.RegisterCustomerGreeting(3)||
                 greetings.UniformUnlocked(DayProgress.NeighbourhoodUniform)||!greetings.RegisterCustomerGreeting(5)||
                 !greetings.UniformUnlocked(DayProgress.NeighbourhoodUniform))throw new Exception("Figurinha do Bairro não contou três clientes distintos");
+            var dj=new DayProgress();
+            if(!dj.RegisterGarageRecord(2)||dj.UniformUnlocked(DayProgress.GarageDjUniform))throw new Exception("DJ liberado na primeira vitrola");
+            dj=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(dj));
+            if(dj.RegisterGarageRecord(2)||!dj.RegisterGarageRecord(0)||dj.UniformUnlocked(DayProgress.GarageDjUniform)||
+                !dj.RegisterGarageRecord(1)||!dj.UniformUnlocked(DayProgress.GarageDjUniform)||dj.RegisterGarageRecord(1))
+                throw new Exception("Progressão da vitrola inválida após recarregar");
+            var ghost=new DayProgress();
+            if(ghost.DiscoverFittingGhost())throw new Exception("Fantasma liberado antes de fechar");
+            for(int i=0;i<3;i++)ghost.Add(new Attempt{outfit=Catalog.Default});
+            ghost.Close();
+            if(!ghost.DiscoverFittingGhost()||ghost.DiscoverFittingGhost())throw new Exception("Descoberta do Fantasma inválida");
+            ghost=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(ghost));
+            if(!ghost.UniformUnlocked(DayProgress.FittingGhostUniform))throw new Exception("Traje Fantasma perdido no save");
             var legacy=new DayProgress();legacy.Add(new Attempt{outfit=Solutions[0]});legacy.version=1;legacy.posts[0].available=null;
             var migrated=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(legacy));migrated.Validate();if(migrated.version!=2||migrated.posts[0].available.Length!=11)throw new Exception("Migração inválida");
             foreach(var top in Catalog.Items.Where(g=>g.slot==0))foreach(var bottom in Catalog.Items.Where(g=>g.slot==1))foreach(var shoes in Catalog.Items.Where(g=>g.slot==2))foreach(var head in new[]{"","AH_HEAD_01","CG_HEAD_01"})for(int i=0;i<9;i++){

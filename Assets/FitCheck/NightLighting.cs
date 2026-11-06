@@ -22,7 +22,7 @@ namespace FitCheck
             AddNightSource(new Vector3(-49,4,-20.7f),new Color(.68f,.16f,1),12,.66f,.55f);
             AddNightSource(new Vector3(-97,3.5f,31),new Color(.12f,.73f,1),12,.48f,.50f);
             AddNightSource(new Vector3(-76,5,41),new Color(1,.72f,.40f),13,.50f,.5f);
-            AddNightSource(new Vector3(-124.8f,3.8f,8.9f),new Color(1,.65f,.30f),7,.48f,.35f);
+            AddNightSource(new Vector3(-124.8f,3.67f,9.76f),new Color(1,.72f,.39f),7,.59f,.24f);
             // Visible LED housings are static members of existing geometry batches.
             foreach(var item in new[]{new Vector4(-9,4.04f,-22.55f,0),new Vector4(12,4.04f,-22.55f,1)})
                 Block(new Vector3(item.x,item.y,item.z),new Vector3(15.6f,.06f,.08f),item.w==0?new Color(.65f,.15f,1):new Color(.08f,1,.63f),"CityGlow",.005f);
