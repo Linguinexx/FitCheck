@@ -83,12 +83,12 @@ namespace FitCheck
             for(int i=0;i<count;i++){float t=i/22050f;float env=Mathf.Min(1,t/.008f)*Mathf.Pow(1-t/duration,2);data[i]=Mathf.Sin(t*frequency*Mathf.PI*2)*env*.45f;}
             var clip=AudioClip.Create(name,count,1,22050,false);clip.SetData(data,0);return clip;
         }
-        void Sound(int kind){if(kind==1)photoFlash=.16f;if(effects!=null&&!mutedAudio)effects.PlayOneShot(kind==0?clickSound:kind==1?photoSound:awardSound);}
+        void Sound(int kind){if(kind==1)photoFlash=.16f;if(effects!=null&&!mutedAudio)PlayClip(kind==0?Clip("ui_click_01")??clickSound:kind==1?Clip("photo_capture")??photoSound:Clip("ui_confirm")??awardSound);}
         bool TrySave(){try{if(pendingPhotoBytes!=null)System.IO.File.WriteAllBytes(pendingPhotoPath,pendingPhotoBytes);SaveDay();pendingPhotoBytes=null;pendingPhotoPath=null;message="Progresso salvo.";return true;}catch(Exception ex){message="Não foi possível salvar. Tente novamente: "+ex.Message;return false;}}
         void NotifyAchievements(string[] before){foreach(string id in progress.achievements)if(!before.Contains(id))notices.Enqueue(id);}
         void DrawAchievement()
         {
-            if(notice.Length==0&&notices.Count>0){notice=notices.Dequeue();noticeUntil=Time.unscaledTime+4;Sound(2);}
+            if(notice.Length==0&&notices.Count>0){notice=notices.Dequeue();noticeUntil=Time.unscaledTime+4;PlayClip(Clip("achievement")??awardSound);}
             if(notice.Length==0)return;
             float left=noticeUntil-Time.unscaledTime;if(left<=0){notice="";return;}
             float shift=Mathf.Clamp01((left-3.65f)/.35f)*420;
