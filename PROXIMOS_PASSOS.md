@@ -1,5 +1,15 @@
 # Pendências para a próxima sessão — 05/11/2026
 
+## Feedback após concluir o jogo — 07/11/2026
+
+Registro solicitado para uma próxima etapa.
+
+- Corrigir os cumprimentos dos clientes que retornam em outros dias. Ao encontrá-los novamente no bairro após o atendimento, deve ser possível cumprimentá-los. Separar a interação social da contagem de pessoas distintas para o traje Figurinha do Bairro, mantendo a recompensa sem duplicação.
+- Aumentar a campanha para sete dias. Rever pedidos, progressão, recompensas, encerramento e compatibilidade com saves da campanha atual.
+- Depois da expansão para sete dias, avaliar aumentar o número de clientes por dia. Quantidade ainda a definir.
+- Criar novas roupas e novos clientes para sustentar a campanha ampliada, preservando variedade, estilo gráfico e desempenho.
+- Considerar novos cortes e cores de cabelo. Black Power foi sugerido pelo usuário e deve entrar na exploração visual, com encaixe nos acessórios dos trajes.
+
 Anotações solicitadas pelo usuário ao encerrar a sessão. Registrar agora; retomar no próximo pedido, sem implementar nesta sessão.
 
 - Concluído em 05/11/2026: clientes chegam com roupas cotidianas variadas e tênis padrão, mantendo seus próprios rostos/cabelos/expressões. Peças DripLab aparecem na montagem do fit e permanecem na saída. Frequentador fixo continua separado.
