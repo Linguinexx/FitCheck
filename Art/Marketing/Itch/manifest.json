@@ -1,0 +1,72 @@
+[
+  {
+    "file": "01-banner-v1.png",
+    "width": 2172,
+    "height": 724,
+    "bytes": 2061743,
+    "sha256": "27bb3248614041bade6e5f870b49f97f122306b1b37be9eaf5626a3909a0a5ab"
+  },
+  {
+    "file": "02-monte-seu-fit-v1.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2348469,
+    "sha256": "42f3348908f49e3cdaa98d88ddeb4563729ba6b9510d653310ee10c73cbf439c"
+  },
+  {
+    "file": "03-criacao-v1.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2062171,
+    "sha256": "6e8edd2e17d949c78de89505782e1b621c469e8643fe1c7ddbd34ca9fd2cf23b"
+  },
+  {
+    "file": "04-drop-after-hours-v1.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 1921890,
+    "sha256": "52ebb2865f6d4ae8e0fc26b980103450a672febc5da067f89df9c372de4489b9"
+  },
+  {
+    "file": "05-drop-common-ground-v1.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 2149974,
+    "sha256": "30705d188401d916800fd25ffc926d0abd88ceb6ac6428575dd292ca282df10b"
+  },
+  {
+    "file": "06-drop-side-b-v1.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 1963714,
+    "sha256": "44243656b6ae409b4b938d9c8e2876a85ae76d32340915268a49d01765212ac4"
+  },
+  {
+    "file": "07-bairro-v1.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2413373,
+    "sha256": "6a31ab35088841b5d185e11965b72baa9d4e242617f2c9f25b7b51c0c0f018ae"
+  },
+  {
+    "file": "08-fuba-v1.png",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 2035421,
+    "sha256": "a6f56e2ac59f3396d9364037acf3fb24c9eed48ac6e78725dd7fbbcc469fca93"
+  },
+  {
+    "file": "09-controles-v1.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2350442,
+    "sha256": "4ee0fe3e8461e787b95a124bf8d680acf868e1739dce88e5f2755ee288218c6e"
+  },
+  {
+    "file": "fitcheck-cover-v1.png",
+    "width": 1408,
+    "height": 1117,
+    "bytes": 2072163,
+    "sha256": "571aef647beac8660ed57cb5a4e19ea97264e02559be2903ded849717e5b9097"
+  }
+]
