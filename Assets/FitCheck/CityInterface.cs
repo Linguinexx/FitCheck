@@ -77,7 +77,13 @@ namespace FitCheck
             cityLookCaptured=false;cityDragLook=false;shopFittingOpening=false;shopSequence=ShopSequence.None;shopDressingInStore=false;
             homeDoorExitRemaining=0;
             if(discardShop&&shop==city){var previousShop=shop;shop=null;Destroy(previousShop.gameObject);}
-            if(!ProofMode){Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
+            if(!ProofMode){
+#if UNITY_WEBGL && !UNITY_EDITOR
+                if(!loadingActive)BrowserPointer.Capture(false);
+#else
+                Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
+#endif
+            }
         }
         void SyncCityCursor(bool apply=false)
         {
@@ -86,20 +92,22 @@ namespace FitCheck
             // Locking inside OnGUI can be cancelled by the editor's button control.
             bool focused=CityInputFocused;
             bool capture=stage==Stage.City&&!paused&&!ShopSequenceActive&&!cityFreeCursor&&focused;
-            if(capture){
 #if UNITY_WEBGL && !UNITY_EDITOR
-                // Browser pointer lock must follow a fresh click in the active canvas,
-                // never a passive loading completion or a focus-restoration frame.
-                if(Cursor.lockState!=CursorLockMode.Locked&&!Input.GetMouseButtonDown(0)){
-                    cityLookCaptured=false;Cursor.visible=true;return;
-                }
-#endif
+            BrowserPointer.Capture(capture);
+            bool locked=capture&&BrowserPointer.Locked;
+            if(locked&&!cityLookCaptured)cityLookReadyFrame=Time.frameCount+2;
+            cityLookCaptured=locked;
+            if(!capture&&(!focused||paused))cityDragLook=false;
+            return;
+#else
+            if(capture){
                 if(!cityLookCaptured||Cursor.lockState!=CursorLockMode.Locked){
                     if(Cursor.lockState!=CursorLockMode.Locked)Cursor.lockState=CursorLockMode.Locked;
                     cityLookCaptured=true;cityLookReadyFrame=Time.frameCount+2;
                 }
             }else{cityLookCaptured=false;if(paused||!focused)cityDragLook=false;if(Cursor.lockState!=CursorLockMode.None)Cursor.lockState=CursorLockMode.None;}
             Cursor.visible=stage!=Stage.City||paused||cityFreeCursor||!focused;
+#endif
         }
         bool CityInputFocused {
             get {
@@ -114,6 +122,9 @@ namespace FitCheck
         }
         void LateUpdate()
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            if(BrowserPointer.TakeEscape())HandleEscapeAction();
+#endif
             // Reconcile after frame/UI work. A temporary editor/OS release must
             // never become the player's explicit Tab choice to free the pointer.
             if(stage==Stage.City&&!loadingActive)SyncCityCursor(true);
@@ -132,7 +143,7 @@ namespace FitCheck
             SyncCityCursor(true);
             Vector2 input=Vector2.zero;
             if(!paused&&!showShopDecor&&!shopGuideOpen&&!shopFittingOpening&&!ShopSequenceActive&&homeDoorExitRemaining<=0&&(!cityFreeCursor||cityDragLook)&&!ProofMode&&CityInputFocused){
-                if(cityLookCaptured&&Time.frameCount>=cityLookReadyFrame&&Cursor.lockState==CursorLockMode.Locked)city.Look(new Vector2(Input.GetAxisRaw("Mouse X"),Input.GetAxisRaw("Mouse Y")));
+                if(cityLookCaptured&&Time.frameCount>=cityLookReadyFrame&&BrowserPointer.Locked)city.Look(new Vector2(Input.GetAxisRaw("Mouse X"),Input.GetAxisRaw("Mouse Y")));
                 float x=(Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.RightArrow)?1:0)-(Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.LeftArrow)?1:0);
                 float y=(Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow)?1:0)-(Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow)?1:0);
                 var basis=Quaternion.Euler(0,city.ViewYaw,0);var direction=(basis*Vector3.right)*x+(basis*Vector3.forward)*y;input=new Vector2(direction.x,direction.z);

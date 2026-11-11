@@ -7,7 +7,7 @@ import zlib
 from zipfile import ZipFile, ZIP_DEFLATED
 
 folder=Path(__file__).resolve().parent
-images=sorted(folder.glob('*.png'))
+images=sorted(p for p in folder.glob('*.png') if p.name=='fitcheck-cover-v1.png' or p.name[:2].isdigit())
 assert len(images)==10, 'Expected approved cover and nine new illustrations'
 manifest=[]
 for path in images:

@@ -66,7 +66,9 @@ namespace FitCheck
         void BuildAudio()
         {
             SetGarmentFinishes(ProofMode||PlayerPrefs.GetInt("FitCheck.GarmentFinishes",1)==1);
-            SetMouseSensitivity(ProofMode?1:PlayerPrefs.GetFloat("FitCheck.MouseSensitivity",1));
+            LoadMouseSensitivity();
+            masterVolume=ProofMode?1:Mathf.Clamp01(PlayerPrefs.GetFloat(MasterVolumePreference,1));
+            musicVolume=ProofMode?1:Mathf.Clamp01(PlayerPrefs.GetFloat(MusicVolumePreference,1));
             mutedAudio=PlayerPrefs.GetInt("FitCheck.Mute",0)==1;
             reducedMotion=PlayerPrefs.GetInt("FitCheck.ReducedMotion",0)==1;
             if(!ProofMode&&PlayerPrefs.GetInt("FitCheck.VisualDefaultsVersion",0)<2){

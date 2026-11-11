@@ -29,7 +29,10 @@ namespace FitCheck
             try{
                 Home();EnterCity();SetMouseSensitivity(.5f);city.SetView(0,0);city.Look(new Vector2(10,0));float slow=city.ViewYaw;
                 SetMouseSensitivity(1.5f);city.SetView(0,0);city.Look(new Vector2(10,0));if(Mathf.Abs(city.ViewYaw-slow*3)>.01f)throw new Exception("Sensibilidade não altera o olhar");
-                SetMouseSensitivity(9);if(mouseSensitivity!=2.5f)throw new Exception("Sensibilidade fora do limite");SetMouseSensitivity(1);
+                SetMouseSensitivity(9);if(mouseSensitivity!=SensitivityMax)throw new Exception("Sensibilidade fora do limite");
+                SetMouseSensitivity(-1);if(mouseSensitivity!=0)throw new Exception("Sensibilidade não chega a zero");
+                city.SetView(0,0);city.Look(new Vector2(10,5));if(city.ViewYaw!=0||city.ViewPitch!=0)throw new Exception("Sensibilidade zero ainda move o olhar");
+                SetMouseSensitivity(1);
                 city.CheckNaturalActors(cam);
                 var cafe=city.transform.position+city.ResidentPosition(0);cam.transform.position=cafe+new Vector3(1.5f,2.1f,-2);cam.transform.LookAt(cafe+Vector3.up*1.8f);cam.fieldOfView=50;SaveFirstPersonFrame(Path.Combine(folder,"citizen-phone-attached.png"));
                 MoveProof(new Vector2(-76,39),55,-10);SaveFirstPersonFrame(Path.Combine(folder,"monument-green-hill.png"));

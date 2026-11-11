@@ -103,7 +103,7 @@ namespace FitCheck
         public void RestoreWalk(Vector2 position,float yaw,float pitch,Transform avatar)
         {ResetWalk(avatar);if(Free(position))Position=position;SetView(yaw,pitch);}
         public void Look(Vector2 delta)
-        {float gain=LookSensitivity*Mathf.Clamp(MouseLookScale,.25f,2.5f);ViewYaw=Mathf.Repeat(ViewYaw+delta.x*gain,360);ViewPitch=Mathf.Clamp(ViewPitch-delta.y*gain,-75,88);}
+        {float gain=LookSensitivity*Mathf.Clamp(MouseLookScale,0,1.5f);ViewYaw=Mathf.Repeat(ViewYaw+delta.x*gain,360);ViewPitch=Mathf.Clamp(ViewPitch-delta.y*gain,-75,88);}
         public void SetView(float yaw,float pitch)
         {ViewYaw=Mathf.Repeat(yaw,360);ViewPitch=Mathf.Clamp(pitch,-75,88);}
         public Vector2 GroundPoint(Camera camera,Vector2 viewport)

@@ -38,6 +38,8 @@ namespace FitCheck
                 PlayerPrefs.SetInt(CatalogTesting.PreferenceKey,1);PlayerPrefs.SetInt(CatalogTesting.CountPreferenceKey,Catalog.All.Length);PlayerPrefs.Save();
             }
             CatalogTesting.Enabled=!ProofMode&&PlayerPrefs.GetInt(CatalogTesting.PreferenceKey,1)==1;
+            if(!ProofMode&&!Application.isEditor&&Application.platform!=RuntimePlatform.WebGLPlayer)
+                SetFullscreen(PlayerPrefs.GetInt(FullscreenPreference,1)!=0);
             if(ProofMode){storageOverride=Path.Combine(FirstPersonProofOutput(),"session");Directory.CreateDirectory(storageOverride);}
             if(ProofMode)try {
                 if(File.Exists(DayPath)) {

@@ -115,7 +115,13 @@ namespace FitCheck
             bool quit=TitleButton(new Rect(left,746,width,50),"Sair",2,false);
             if(play||activated==0)BeginLoading(OpenSaveSelection);
             else if(settings||activated==1)OpenSettings(false);
-            else if(quit||activated==2)Application.Quit();
+            else if(quit||activated==2){
+#if UNITY_WEBGL && !UNITY_EDITOR
+                BrowserPointer.Minimize();
+#else
+                Application.Quit();
+#endif
+            }
 
             Fill(new Rect(left,816,width,1),new Color(1,1,1,.19f));
             Txt(new Rect(left,834,width,26),"A game by DripLab",caption,paper);
@@ -178,9 +184,10 @@ namespace FitCheck
             var face=new Rect(bounds.x,bounds.y+pressed,bounds.width,bounds.height-4);
             RoundedPanel(new Rect(bounds.x,bounds.y+4,bounds.width,bounds.height-4),new Color(0,0,0,.55f),10);
             RoundedPanel(face,KaosControlColor(primary,hot,true),10);
+            if(hot)Fill(new Rect(face.x+14,face.y+3,face.width-28,2),new Color(1,1,1,.22f));
             if(focused)RoundedPanel(face,Color.white,10,2);
             Txt(new Rect(face.x+24,face.y,face.width-76,face.height),label,titleAction,Color.white);
-            if(primary)Txt(new Rect(face.xMax-52,face.y,32,face.height),"→",action,Color.white);
+            if(primary)Txt(new Rect(face.xMax-52+(hot&&!reducedMotion?5:0),face.y,32,face.height),"→",action,Color.white);
             if(!GUI.Button(bounds,GUIContent.none,GUIStyle.none))return false;
             Sound(0);
             return true;

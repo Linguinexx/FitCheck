@@ -31,14 +31,14 @@ namespace FitCheck.Editor
             PlayerSettings.WebGL.memoryGrowthMode=WebGLMemoryGrowthMode.Geometric;
             PlayerSettings.WebGL.exceptionSupport=WebGLExceptionSupport.FullWithoutStacktrace;
             PlayerSettings.defaultWebScreenWidth=1440;PlayerSettings.defaultWebScreenHeight=900;
-            const string folder="Builds/Web-Test01";
+            const string folder="Builds/Web-Test04";
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{
                 scenes=new[]{"Assets/Scenes/FirstCustomer.unity"},locationPathName=folder,
                 target=BuildTarget.WebGL,targetGroup=BuildTargetGroup.WebGL,options=BuildOptions.None
             });
             var summary=report.summary;
             string result="FITCHECK_WEB_BUILD: "+summary.result+"; bytes="+summary.totalSize+"; errors="+summary.totalErrors+"; warnings="+summary.totalWarnings;
-            Directory.CreateDirectory("Builds");File.WriteAllText("Builds/Web-Test01-build-report.txt",result);Debug.Log(result);
+            Directory.CreateDirectory("Builds");File.WriteAllText("Builds/Web-Test04-build-report.txt",result);Debug.Log(result);
             if(summary.result!=BuildResult.Succeeded)throw new Exception(result);
         }
     }

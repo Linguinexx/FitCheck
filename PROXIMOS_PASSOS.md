@@ -99,3 +99,23 @@ Retomada em 11/11/2026 para artes, calça rosa e óculos. Sons, tutorial e build
 - Compilação IL2CPP, primitivas preservadas no stripping, gravação compatível com IndexedDB e sincronização persistente automática. Captura do mouse por clique; recusa de permissão não derruba o player. Interface e fluxo mantidos.
 - Verificados menu, criador, continuidade do save após reabrir o navegador, casa, movimento, pausa, interação com Fubá e porta para o bairro. Não foi repetida a campanha completa na web. Detalhes em Art/Releases/Web01/VALIDACAO.md.
 - Hospedagem pública ainda não realizada. Os saves web são separados dos saves Windows. Tutorial de novos saves continua pendente.
+
+## Correções da versão web — Teste 02
+
+- Mouse mantém captura durante loadings entre ambientes e retorna com um clique em Retomar, usando a ativação direta do navegador. Câmera consulta o pointer lock real. Menus e Tab liberam o cursor; uma recusa de permissão permanece recuperável.
+- Sair removido somente do menu inicial web para evitar que Application.Quit pare o player dentro do itch.io. Navegação por teclado acompanha os dois botões restantes. Windows preservado.
+- Nova entrega em Builds/FitCheck-Web-Test02.zip, com relato de bugs e instruções. Testes em iframe local passaram para criação/continuidade, quarto, bairro, três ciclos de pause/Retomar, Tab e porta sem perda de captura. Detalhes em Art/Releases/Web02/VALIDACAO.md. A substituição no itch.io deve ser feita pelo usuário; não houve publicação automática.
+- Comparação de fontes para os títulos da página em Art/Marketing/Itch/titulos-comparacao-v1.png: Bungee, Bowlby One SC e Passion One Black. Tema publicado e fontes do jogo preservados.
+
+## Tela de controles — Web Teste 03
+
+- Configurações → Controles no título e na pausa, com teclado e mouse ilustrados por código. Exploração destaca WASD, Shift, E, F, Tab e Esc; Provador explica clique, arraste e roda. As setas alternam páginas; Esc e Voltar retornam à tela anterior, preservando a pausa.
+- Verificação visual em 1440×900 e 1280×720, acesso pelos dois menus, criação de personagem e recaptura por um clique em Retomar passaram em iframe local. Prévias e validação em Art/Releases/Web03. Sem novas texturas, remapeamento, mudanças de inventário ou fontes globais.
+- Build em Builds/FitCheck-Web-Test03.zip. Substituição no itch.io pelo usuário. Tutorial automático de novos saves continua pendente; esta entrega é uma ajuda acessível pelas Configurações.
+
+## Revisão web — Teste 04
+
+- Pausa no primeiro desbloqueio do ponteiro/Esc, com deduplicação; Sair restaurado para sair da Fullscreen API sem encerrar o player. Expansão CSS do itch.io depende da página.
+- Hover do Jogar reforçado; sensibilidade 0–100, padrão 35; sliders compartilhados e mouse ilustrado curvo nas duas páginas.
+- Seletor janela/tela cheia só na web. Windows Teste 08 preservado; próxima compilação deve validar Art/Releases/Web04/PENDENCIAS-WINDOWS.md.
+- Entrega Builds/FitCheck-Web-Test04.zip; validação local em iframe em Art/Releases/Web04/VALIDACAO.md. Substituição no itch.io pelo usuário.

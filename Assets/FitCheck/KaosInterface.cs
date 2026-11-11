@@ -3,8 +3,12 @@ namespace FitCheck
 {
     public partial class FirstCustomer
     {
-        bool settingsOpen,settingsFromPause;float mouseSensitivity=1;
-        const float SensitivityMin=.25f,SensitivityMax=2.5f;
+        bool settingsOpen,settingsFromPause,audioSettingsOpen;
+        const string MasterVolumePreference="FitCheck.MasterVolume", MusicVolumePreference="FitCheck.MusicVolume";
+        float masterVolume=1,musicVolume=1;float mouseSensitivity=SensitivityDefault;
+        const float SensitivityMin=0,SensitivityMax=1.5f,SensitivityDefault=.525f;
+        const string SensitivityPreference="FitCheck.MouseSensitivityV2";
+        const string FullscreenPreference="FitCheck.Fullscreen";
         static readonly Color KaosControl=new Color32(43,38,43,255);
         static readonly Color KaosHover=new Color32(60,54,59,255);
         static readonly Color KaosPanel=new Color32(23,21,25,250);
@@ -14,7 +18,7 @@ namespace FitCheck
         Color KaosControlColor(bool primary,bool hot,bool enabled)
         {
             if(!enabled)return new Color32(34,31,34,255);
-            if(primary)return hot?new Color32(204,5,17,255):CreatorRed;
+            if(primary)return hot?new Color32(175,0,14,255):CreatorRed;
             return hot?KaosHover:KaosControl;
         }
         void RoundedPanel(Rect r,Color color,float radius=7,float border=0)
@@ -33,11 +37,28 @@ namespace FitCheck
             RoundedPanel(new Rect(area.x,area.y+7,area.width,area.height),new Color(0,0,0,.45f),16);
             RoundedPanel(area,KaosPanel,16);
         }
-        void OpenSettings(bool fromPause){settingsFromPause=fromPause;settingsOpen=true;cityFreeCursor=true;SyncCityCursor(true);}
-        void CloseSettings(){settingsOpen=false;if(!ProofMode){PlayerPrefs.SetFloat("FitCheck.MouseSensitivity",mouseSensitivity);PlayerPrefs.Save();}if(settingsFromPause)paused=true;else paused=false;}
-        void SetMouseSensitivity(float value,bool save=false){mouseSensitivity=Mathf.Clamp(value,SensitivityMin,SensitivityMax);if(city!=null)city.MouseLookScale=mouseSensitivity;if(save&&!ProofMode){PlayerPrefs.SetFloat("FitCheck.MouseSensitivity",mouseSensitivity);PlayerPrefs.Save();}}
-        void SensitivitySlider(Rect bounds)
+        void OpenSettings(bool fromPause){settingsFromPause=fromPause;audioSettingsOpen=false;controlsOpen=false;settingsOpen=true;cityFreeCursor=true;SyncCityCursor(true);}
+        void SetFullscreen(bool fullscreen)
         {
+            if(ProofMode||Application.isEditor)return;
+#if UNITY_WEBGL
+            if(fullscreen)Screen.fullScreen=true;else BrowserPointer.Minimize();
+#else
+            Resolution desktop=Screen.currentResolution;
+            if(fullscreen)Screen.SetResolution(desktop.width,desktop.height,FullScreenMode.FullScreenWindow);
+            else{
+                float scale=Mathf.Min(1f,desktop.width*.9f/1440f,desktop.height*.9f/900f);
+                Screen.SetResolution(Mathf.RoundToInt(1440*scale),Mathf.RoundToInt(900*scale),FullScreenMode.Windowed);
+            }
+#endif
+        }
+        void CloseSettings(){settingsOpen=false;controlsOpen=false;if(!ProofMode){PlayerPrefs.SetFloat(SensitivityPreference,mouseSensitivity);SaveAudioSettings();}if(settingsFromPause)paused=true;else paused=false;}
+        void SetMouseSensitivity(float value,bool save=false){mouseSensitivity=Mathf.Clamp(value,SensitivityMin,SensitivityMax);if(city!=null)city.MouseLookScale=mouseSensitivity;if(save&&!ProofMode){PlayerPrefs.SetFloat(SensitivityPreference,mouseSensitivity);SaveAudioSettings();}}
+        void SensitivitySlider(Rect bounds)
+        {SetMouseSensitivity(Mathf.Lerp(SensitivityMin,SensitivityMax,SettingsSlider(bounds,Mathf.InverseLerp(SensitivityMin,SensitivityMax,mouseSensitivity))));}
+        float SettingsSlider(Rect bounds,float value)
+        {
+            value=Mathf.Clamp01(value);
             const float knobSize=22;
             float left=bounds.x+knobSize/2,right=bounds.xMax-knobSize/2;
             int id=GUIUtility.GetControlID(FocusType.Keyboard,bounds);
@@ -47,12 +68,12 @@ namespace FitCheck
                     if(!GUI.enabled||input.button!=0||!bounds.Contains(input.mousePosition))break;
                     GUIUtility.hotControl=id;
                     GUIUtility.keyboardControl=id;
-                    SetMouseSensitivity(Mathf.Lerp(SensitivityMin,SensitivityMax,Mathf.InverseLerp(left,right,input.mousePosition.x)));
+                    value=Mathf.InverseLerp(left,right,input.mousePosition.x);
                     input.Use();
                     break;
                 case EventType.MouseDrag:
                     if(GUIUtility.hotControl!=id)break;
-                    SetMouseSensitivity(Mathf.Lerp(SensitivityMin,SensitivityMax,Mathf.InverseLerp(left,right,input.mousePosition.x)));
+                    value=Mathf.InverseLerp(left,right,input.mousePosition.x);
                     input.Use();
                     break;
                 case EventType.MouseUp:
@@ -63,15 +84,15 @@ namespace FitCheck
                 case EventType.KeyDown:
                     if(GUIUtility.keyboardControl!=id)break;
                     float step=input.shift?.10f:.01f;
-                    if(input.keyCode==KeyCode.LeftArrow)SetMouseSensitivity(mouseSensitivity-step);
-                    else if(input.keyCode==KeyCode.RightArrow)SetMouseSensitivity(mouseSensitivity+step);
-                    else if(input.keyCode==KeyCode.Home)SetMouseSensitivity(SensitivityMin);
-                    else if(input.keyCode==KeyCode.End)SetMouseSensitivity(SensitivityMax);
+                    if(input.keyCode==KeyCode.LeftArrow)value=Mathf.Clamp01(value-step);
+                    else if(input.keyCode==KeyCode.RightArrow)value=Mathf.Clamp01(value+step);
+                    else if(input.keyCode==KeyCode.Home)value=0;
+                    else if(input.keyCode==KeyCode.End)value=1;
                     else break;
                     input.Use();
                     break;
             }
-            float x=Mathf.Lerp(left,right,Mathf.InverseLerp(SensitivityMin,SensitivityMax,mouseSensitivity));
+            float x=Mathf.Lerp(left,right,value);
             var track=new Rect(left,bounds.center.y-4,right-left,8);
             RoundedPanel(track,KaosTrack,4);
             if(x-left>=1)RoundedPanel(new Rect(left,track.y,x-left,8),CreatorRed,4);
@@ -81,29 +102,48 @@ namespace FitCheck
                 RoundedPanel(halo,GUIUtility.keyboardControl==id?CreatorRed:KaosHover,15);
             }
             RoundedPanel(knob,paper,knobSize/2);
+            return value;
         }
         void SettingsUI()
         {
             Fill(new Rect(0,0,1440,900),new Color(.02f,.018f,.022f,.88f));
+            if(controlsOpen){ControlsUI();return;}
+            if(audioSettingsOpen){AudioSettingsUI();return;}
             DrawKaosPanel(new Rect(390,116,660,670));
             Txt(new Rect(430,154,570,52),"Configurações",heading);
+#if UNITY_WEBGL && !UNITY_EDITOR
+            bool fullscreen=Screen.fullScreen;
+            if(Tap(new Rect(795,154,205,48),fullscreen?"Tela cheia":"Modo janela",false,!Application.isEditor)){
+                SetFullscreen(!fullscreen);
+                if(!ProofMode){PlayerPrefs.SetInt(FullscreenPreference,fullscreen?0:1);PlayerPrefs.Save();}
+            }
+#endif
             Fill(new Rect(430,217,36,3),CreatorRed);
             RoundedPanel(new Rect(422,246,588,156),KaosControl,12);
             Txt(new Rect(444,262,400,32),"Sensibilidade do mouse",copy);
             if(sensitivityValue==null)sensitivityValue=new GUIStyle(action){alignment=TextAnchor.MiddleCenter};
             RoundedPanel(new Rect(892,261,94,34),KaosPanel,8);
-            Txt(new Rect(892,261,94,34),Mathf.RoundToInt(mouseSensitivity*100)+"%",sensitivityValue,paper);
+            Txt(new Rect(892,261,94,34),Mathf.RoundToInt(Mathf.InverseLerp(SensitivityMin,SensitivityMax,mouseSensitivity)*100).ToString(),sensitivityValue,paper);
             SensitivitySlider(new Rect(442,298,544,44));
-            Txt(new Rect(450,343,60,24),"25%",tiny,muted);
-            Txt(new Rect(934,343,52,24),"250%",tiny,muted);
+            Txt(new Rect(450,343,60,24),"0",tiny,muted);
+            Txt(new Rect(934,343,52,24),"100",tiny,muted);
             Txt(new Rect(444,373,540,23),"Velocidade do olhar em primeira pessoa.",caption,muted);
-            if(Tap(new Rect(430,423,570,48),mutedAudio?"Sons: desligados":"Sons: ligados")){mutedAudio=!mutedAudio;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.Mute",mutedAudio?1:0);}
+            if(Tap(new Rect(430,423,278,48),"Áudio  →"))audioSettingsOpen=true;
+            if(Tap(new Rect(722,423,278,48),"Controles  →"))OpenControls();
             if(Tap(new Rect(430,487,570,48),reducedMotion?"Movimento reduzido: sim":"Movimento reduzido: não")){reducedMotion=!reducedMotion;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.ReducedMotion",reducedMotion?1:0);}
             if(Tap(new Rect(430,551,570,48),retroFilter?"Pixelização: leve":"Pixelização: desligada")){retroFilter=!retroFilter;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.Retro",retroFilter?1:0);}
             if(Tap(new Rect(430,611,570,48),garmentFinishes?"Brilho das roupas: ligado":"Brilho das roupas: desligado"))SetGarmentFinishes(!garmentFinishes,true);
             if(Tap(new Rect(430,665,570,40),CatalogTesting.Enabled?"Catálogo de teste: liberado":"Catálogo de teste: desligado"))
                 SetCatalogTesting(!CatalogTesting.Enabled);
             if(Tap(new Rect(430,714,570,52),"Voltar",true))CloseSettings();
+        }
+        void SaveAudioSettings()
+        {
+            if(ProofMode)return;
+            PlayerPrefs.SetFloat(MasterVolumePreference,masterVolume);
+            PlayerPrefs.SetFloat(MusicVolumePreference,musicVolume);
+            PlayerPrefs.SetInt("FitCheck.Mute",mutedAudio?1:0);
+            PlayerPrefs.Save();
         }
         void SetCatalogTesting(bool enabled)
         {
@@ -120,6 +160,25 @@ namespace FitCheck
                 if(changed)Apply();
             }
             if(!ProofMode){PlayerPrefs.SetInt(CatalogTesting.PreferenceKey,enabled?1:0);PlayerPrefs.Save();}
+        }
+        float AudioSlider(string label,float y,float value)
+        {
+            Txt(new Rect(444,y,420,32),label,copy,paper);
+            Txt(new Rect(911,y,75,32),$"{Mathf.RoundToInt(value*100)}%",copy,paper);
+            return SettingsSlider(new Rect(442,y+31,544,44),value);
+        }
+        void AudioSettingsUI()
+        {
+            DrawKaosPanel(new Rect(390,202,660,488));
+            Txt(new Rect(430,235,570,52),"Áudio",heading);
+            Fill(new Rect(430,296,36,3),CreatorRed);
+            masterVolume=AudioSlider("Volume geral",321,masterVolume);
+            musicVolume=AudioSlider("Volume da música",407,musicVolume);
+            if(Tap(new Rect(430,501,570,48),mutedAudio?"Som desligado":"Som ligado"))mutedAudio=!mutedAudio;
+            if(Tap(new Rect(430,601,570,52),"Voltar",true)){
+                SaveAudioSettings();
+                audioSettingsOpen=false;
+            }
         }
         void PauseMenuUI()
         {

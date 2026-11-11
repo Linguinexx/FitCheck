@@ -103,14 +103,15 @@ namespace FitCheck
             var offset=new Vector3((Screen.width-1440*scale)/2,(Screen.height-900*scale)/2,0);
             GUI.matrix=Matrix4x4.TRS(offset,Quaternion.identity,Vector3.one*scale);
             var e=Event.current;
-            if(renderedStage==Stage.Title&&titleIntroPlaying&&e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){
-                titleIntroPlaying=false;
+            ControlsKeyInput(e);
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){
+#if !UNITY_WEBGL || UNITY_EDITOR
+                HandleEscapeAction();
+#endif
+                // Web Escape is dispatched once by the browser bridge, including
+                // the first press consumed by pointer-lock/fullscreen handling.
                 e.Use();
             }
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&settingsOpen){CloseSettings();e.Use();}
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&showShopDecor){CloseShopDecor(false);e.Use();}
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape&&shopGuideOpen){CloseShopGuide();e.Use();}
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Escape){if(pendingDeleteSlot>=0)CancelSaveDeletion();else if(renderedStage==Stage.CharacterCreator&&!paused)CancelCreator();else if(renderedStage==Stage.Confirm&&!paused)stage=Stage.Dressing;else paused=!paused;dragging=false;e.Use();}
             bool modal=paused || settingsOpen || renderedStage==Stage.Confirm||pendingDeleteSlot>=0;
             GUI.enabled=!modal;
             if(renderedStage==Stage.Title)TitleUI();else{

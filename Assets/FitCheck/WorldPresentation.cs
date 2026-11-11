@@ -96,6 +96,8 @@ namespace FitCheck
             bool menu=stage==Stage.Title||stage==Stage.Welcome||stage==Stage.CharacterCreator;
             bool activeWorld=city!=null&&city.gameObject.activeInHierarchy;
             int zone=menu?0:activeWorld?(city.IsHome?2:city.IsInterior?3:1):3;
+            music.volume=.26f*musicVolume;
+            AudioListener.volume=masterVolume;
             TickLoop(music,tracks[zone],paused||mutedAudio);
             TickLoop(ambience,activeWorld&&!menu?backgrounds[zone]:null,paused||mutedAudio);
             effects.mute=mutedAudio||paused;
@@ -108,6 +110,6 @@ namespace FitCheck
             if(!paused&&arrivalFade>.001f)Fill(new Rect(0,0,1440,900),new Color(.025f,.03f,.025f,Mathf.SmoothStep(0,1,arrivalFade)));
             if(!paused&&photoFlash>.001f&&!reducedMotion)Fill(new Rect(0,0,1440,900),new Color(.94f,.91f,.82f,photoFlash));
         }
-        void DisposePresentation(){foreach(var clip in new[]{doorFx,stepStone,stepWood,clothFx,windFx})if(clip!=null)Destroy(clip);if(moteMaterial!=null)Destroy(moteMaterial);if(moteTexture!=null)Destroy(moteTexture);}
+        void DisposePresentation(){AudioListener.volume=1;foreach(var clip in new[]{doorFx,stepStone,stepWood,clothFx,windFx})if(clip!=null)Destroy(clip);if(moteMaterial!=null)Destroy(moteMaterial);if(moteTexture!=null)Destroy(moteTexture);}
     }
 }

@@ -22,7 +22,9 @@ namespace FitCheck
             if(ProofMode&&!loadingTestEnabled){destination();return;}
             loadingActive=true;loadingClock=0;loadingOpacity=1;paused=false;dragging=false;
             cityDragLook=false;cityLookCaptured=false;
+#if !UNITY_WEBGL || UNITY_EDITOR
             if(!ProofMode){Cursor.lockState=CursorLockMode.None;Cursor.visible=false;}
+#endif
             StartCoroutine(LoadDestination(destination));
         }
         IEnumerator LoadDestination(Action destination)
@@ -35,14 +37,22 @@ namespace FitCheck
                 catch(Exception error){message="Não foi possível abrir o destino. Tente novamente.";Debug.LogException(error);}
                 finally{loadingExecuting=false;}
                 arrivalFade=0;
+#if !UNITY_WEBGL || UNITY_EDITOR
                 if(!ProofMode){Cursor.lockState=CursorLockMode.None;Cursor.visible=false;}
+#endif
                 // Brief readable transition, never a simulated progress percentage.
                 while(loadingClock<LoadingMinimumSeconds)yield return null;
                 float fade=0;
                 while(fade<LoadingRevealSeconds){fade+=Time.unscaledDeltaTime;loadingOpacity=1-Mathf.Clamp01(fade/LoadingRevealSeconds);yield return null;}
             }finally{
                 loadingExecuting=false;loadingActive=false;loadingOpacity=1;
-                if(!ProofMode){if(stage==Stage.City)SyncCityCursor(true);else{Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}}
+                if(!ProofMode){if(stage==Stage.City)SyncCityCursor(true);else{
+#if UNITY_WEBGL && !UNITY_EDITOR
+                    BrowserPointer.Capture(false);
+#else
+                    Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
+#endif
+                }}
             }
         }
         int LoadingDotCount(float clock)

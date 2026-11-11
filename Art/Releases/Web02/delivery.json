@@ -1,0 +1,59 @@
+{
+  "platform": "WebGL",
+  "unity": "6000.6.7f1",
+  "folder_bytes": 50853779,
+  "zip_bytes": 50746831,
+  "zip_sha256": "aec6a200f388e24d44533063cf088da5d881f89ce4298793ef127e83ea650267",
+  "files": [
+    {
+      "path": "ABRIR-WEB.bat",
+      "bytes": 417,
+      "sha256": "6f17898d53edda37af7470203dc4a4a191a5b5c78364483ed96297ae39533fbd"
+    },
+    {
+      "path": "Build/43102d74aee9d5ee9f03fe924a6ffb0d.framework.js.unityweb",
+      "bytes": 75049,
+      "sha256": "fbb2b5159c6b513d1727590033b5690dacc7a11b3a9a9de772606afca4e316ec"
+    },
+    {
+      "path": "Build/57fb887d22806e7791efac541d72e9af.loader.js",
+      "bytes": 48779,
+      "sha256": "833273b4f7bdefde1b15a1d2ccbf2c0512648e44644c406308609c34c668d192"
+    },
+    {
+      "path": "Build/5c95e40a202ff8fae8d6ca3f624f800d.wasm.unityweb",
+      "bytes": 6353348,
+      "sha256": "d692f565c9e4ce1b5922be1b77b7fab2a7a18fa0ed9d5eaf9f3e6f116aff1616"
+    },
+    {
+      "path": "Build/dc17eb2c6a859cc0cdf26778d79101d2.data.unityweb",
+      "bytes": 44338471,
+      "sha256": "98650aa64f110413564009da5b94b9df026bb5952fd833b41149f1e63b0ed667"
+    },
+    {
+      "path": "index.html",
+      "bytes": 4296,
+      "sha256": "1241ce4be370b4f045309113f96b9b1e814ed1df4a657ae235b79b39b4c59e8e"
+    },
+    {
+      "path": "LEIA-ME.txt",
+      "bytes": 1563,
+      "sha256": "3f4b20f817b4cc0d833eb209514d1de1bdd7056bc009c135ef464f14fc200c68"
+    },
+    {
+      "path": "RELATO-DE-BUG.txt",
+      "bytes": 646,
+      "sha256": "920e7682a68f2fda8254eb5c0a6290a7e44454b5ad6c9275aff785b3fdc15ea1"
+    },
+    {
+      "path": "serve.py",
+      "bytes": 1407,
+      "sha256": "4d8ef39481ff6921aeb37a0b1cbf9e75ad1f55686aec90e5fde708565827da07"
+    },
+    {
+      "path": "TemplateData/logo.png",
+      "bytes": 29803,
+      "sha256": "1dfb6f9a85f264298ff0327a52b31022520ee4680f6c6bfd952595fcdc3052b3"
+    }
+  ]
+}
