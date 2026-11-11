@@ -100,7 +100,32 @@ namespace FitCheck
         internal const string SlideFootMeshName="Pé do slide";
         const string CloudSlideId="AH_SHOES_02";
         const string BrasaClogId="AH_SHOES_03";
-        void BuildSlideFoot(int side,bool clog)
+        void BuildCloudFoot(int side)
+        {
+            var shape=new SneakerShape{
+                z=new[]{.27f,.20f,.10f,-.05f,-.20f,-.34f,-.38f},
+                w=new[]{.06f,.10f,.115f,.12f,.13f,.122f,.10f},
+                y=new[]{.232f,.28f,.28f,.235f,.22f,.21f,.20f},
+                h=new[]{.045f,.125f,.125f,.08f,.045f,.035f,.022f},
+                soleY=new[]{.184f,.184f,.184f,.184f,.184f,.184f,.184f},
+                soleH=new[]{.014f,.014f,.014f,.014f,.014f,.014f,.014f}
+            };
+            var foot=ShoeVolume(SlideFootMeshName,side*.24f,skin,shape,false);
+            var pieces=new List<CombineInstance>{new CombineInstance{mesh=foot.GetComponent<MeshFilter>().sharedMesh,transform=Matrix4x4.identity}};
+            var toes=new[]{
+                new Vector3(-.085f,.209f,-.375f),new Vector3(-.035f,.207f,-.378f),
+                new Vector3(.012f,.205f,-.367f),new Vector3(.055f,.202f,-.350f),new Vector3(.091f,.198f,-.331f)
+            };
+            var sizes=new[]{new Vector3(.062f,.068f,.146f),new Vector3(.054f,.062f,.137f),new Vector3(.049f,.058f,.128f),new Vector3(.045f,.053f,.113f),new Vector3(.039f,.047f,.096f)};
+            for(int i=0;i<toes.Length;i++){
+                var p=toes[i];p.x=side*(.24f+p.x);
+                var toe=Ellipsoid("Dedo do pé",p,sizes[i],skin,clothes,12,6);
+                pieces.Add(new CombineInstance{mesh=toe.GetComponent<MeshFilter>().sharedMesh,transform=foot.transform.worldToLocalMatrix*toe.transform.localToWorldMatrix});
+                toe.SetActive(false);if(Application.isPlaying)Destroy(toe);else DestroyImmediate(toe);
+            }
+            var mesh=new Mesh{name=SlideFootMeshName};mesh.CombineMeshes(pieces.ToArray(),true,true);Own(mesh);foot.GetComponent<MeshFilter>().sharedMesh=mesh;
+        }
+        void BuildClogFoot(int side)
         {
             var foot=new SneakerShape{
                 z=new[]{.28f,.22f,.12f,-.02f,-.14f,-.29f,-.41f,-.44f},
@@ -110,7 +135,7 @@ namespace FitCheck
                 soleY=new[]{.184f,.184f,.184f,.184f,.184f,.184f,.184f,.184f},
                 soleH=new[]{.014f,.014f,.014f,.014f,.014f,.014f,.014f,.014f}
             };
-            if(clog)for(int i=0;i<foot.z.Length;i++){
+            for(int i=0;i<foot.z.Length;i++){
                 float forefoot=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(.05f,.22f,foot.z[i]));
                 foot.y[i]-=.065f*forefoot;
                 foot.h[i]*=1-.40f*forefoot;
@@ -121,7 +146,8 @@ namespace FitCheck
         void BuildShoes(Garment item,int side)
         {
             if(BuildStreetwearShoes(item,side)){
-                if(item.id==CloudSlideId||item.id==BrasaClogId)BuildSlideFoot(side,item.id==BrasaClogId);
+                if(item.id==CloudSlideId)BuildCloudFoot(side);
+                else if(item.id==BrasaClogId)BuildClogFoot(side);
                 return;
             }
             var shape=Sneaker(item);float x=side*.24f;var cream=new Color(.86f,.84f,.76f);

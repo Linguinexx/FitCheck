@@ -39,7 +39,7 @@ namespace FitCheck.Editor
             try{
             if(DayOne.Customers.Length!=DayProgress.TotalCustomers||Solutions.Length!=DayProgress.TotalCustomers||
                 DayOne.Customers.Select(request=>request.id).Distinct().Count()!=DayProgress.TotalCustomers||
-                Catalog.All.Length!=31||Catalog.All.Select(g=>g.id).Distinct().Count()!=Catalog.All.Length)
+                Catalog.All.Length!=32||Catalog.All.Select(g=>g.id).Distinct().Count()!=Catalog.All.Length)
                 throw new Exception("Conteúdo incompleto ou IDs duplicados");
             var campaign=new DayProgress();
             for(int i=0;i<DayProgress.TotalCustomers;i++){
@@ -63,7 +63,7 @@ namespace FitCheck.Editor
                 }
                 campaign.Validate();
             }
-            if(!campaign.Complete||campaign.reputation!=2100||campaign.Available.Length!=31||campaign.achievements.Count!=3)throw new Exception("Conclusão/progressão inválida");
+            if(!campaign.Complete||campaign.reputation!=2100||campaign.Available.Length!=32||campaign.achievements.Count!=3)throw new Exception("Conclusão/progressão inválida");
             var before=campaign.reputation;var question=campaign.posts[0].question;
             var fittingTest=new DayProgress();
             fittingTest.Add(new Attempt{outfit=Catalog.Default});

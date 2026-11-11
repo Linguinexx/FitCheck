@@ -34,6 +34,9 @@ namespace FitCheck
             Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
             Application.targetFrameRate=60;
             Application.runInBackground=true;
+            if(!ProofMode&&PlayerPrefs.GetInt(CatalogTesting.CountPreferenceKey,0)<Catalog.All.Length){
+                PlayerPrefs.SetInt(CatalogTesting.PreferenceKey,1);PlayerPrefs.SetInt(CatalogTesting.CountPreferenceKey,Catalog.All.Length);PlayerPrefs.Save();
+            }
             CatalogTesting.Enabled=!ProofMode&&PlayerPrefs.GetInt(CatalogTesting.PreferenceKey,1)==1;
             if(ProofMode){storageOverride=Path.Combine(FirstPersonProofOutput(),"session");Directory.CreateDirectory(storageOverride);}
             if(ProofMode)try {

@@ -20,6 +20,7 @@ namespace FitCheck
             tracks=new[]{Clip("mus_menu"),Clip("mus_bairro_noite"),Clip("mus_quarto"),Clip("mus_loja")};
             backgrounds=new[]{null,Clip("amb_bairro_noite")??windFx,Clip("amb_quarto_noite"),Clip("amb_loja_interior")};
             steps=new[]{Steps("calcada"),Steps("madeira"),Steps("loja")};
+            BuildAdditionalSounds();
             var go=new GameObject("Poeira na luz");go.transform.SetParent(cam.transform,false);go.transform.localPosition=new Vector3(0,0,5);motes=go.AddComponent<ParticleSystem>();
             var main=motes.main;main.playOnAwake=false;main.maxParticles=28;main.startLifetime=7;main.startSize=new ParticleSystem.MinMaxCurve(.012f,.028f);main.startSpeed=.018f;main.simulationSpace=ParticleSystemSimulationSpace.World;main.startColor=new Color(.85f,.77f,.53f,.22f);
             var emission=motes.emission;emission.rateOverTime=3;
@@ -66,10 +67,11 @@ namespace FitCheck
         }
         void TickPresentation(float delta)
         {
+            TickAdditionalSounds(delta);
             if(!paused){arrivalFade=Mathf.MoveTowards(arrivalFade,0,delta*2.5f);photoFlash=Mathf.MoveTowards(photoFlash,0,delta*2);}
             if(presentationStage!=stage){
                 if(stage==Stage.CharacterCreator||stage==Stage.Welcome||stage==Stage.Title)arrivalFade=reducedMotion?.1f:.65f;
-                if(stage==Stage.Post&&record!=null)PlayClip(Clip(record.score==10?"result_10":record.score>=6?"result_7":record.score>0?"result_3":"result_0"));
+                if(stage==Stage.Post&&record!=null){PlayClip(Clip("feed_publish"),.30f);PlayClip(Clip(record.score==10?"result_10":record.score>=6?"result_7":record.score>0?"result_3":"result_0"));}
                 presentationStage=stage;
             }
             bool world=stage==Stage.City&&city!=null;

@@ -26,12 +26,15 @@ namespace FitCheck
             DrawIntroPart(frame,3,new Vector2(.5f,.701f),time,.27f,.60f,.80f,.82f,1.021f,0,0,42,-7);
         }
 
-        void DrawTitleIntro(Rect canvas)
+        void DrawTitleIntro()
         {
             if(Event.current.type!=EventType.Repaint)return;
             titleIntroPresented=true;
             float opacity=1-Mathf.InverseLerp(TitleIntroDuration+TitleIntroHold,TitleIntroTotal,titleIntroClock);
-            Fill(canvas,new Color(.045f,.036f,.044f,opacity));
+            var matrix=GUI.matrix;
+            GUI.matrix=Matrix4x4.identity;
+            Fill(new Rect(0,0,Screen.width,Screen.height),new Color(0,0,0,opacity));
+            GUI.matrix=matrix;
             var color=GUI.color;
             GUI.color=new Color(color.r,color.g,color.b,color.a*opacity);
             DrawTitleIdentity(new Rect(480,245,480,410),titleIntroClock/TitleIntroDuration,false);

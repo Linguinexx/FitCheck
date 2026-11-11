@@ -120,7 +120,7 @@ namespace FitCheck
             Fill(new Rect(left,816,width,1),new Color(1,1,1,.19f));
             Txt(new Rect(left,834,width,26),"A game by DripLab",caption,paper);
             GUI.enabled=enabled;
-            if(intro)DrawTitleIntro(canvas);
+            if(intro)DrawTitleIntro();
         }
 
         void DrawTitleScrim(Rect canvas)

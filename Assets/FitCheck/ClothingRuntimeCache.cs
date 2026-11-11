@@ -57,7 +57,8 @@ namespace FitCheck
                         bool textured=part.textured||part.denim;var color=textured?Color.white:part.color;
                         string signature=(textured?"T":"C")+color.r.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+"/"+color.g.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+"/"+color.b.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+"/"+color.a.ToString("R",System.Globalization.CultureInfo.InvariantCulture);
                         if(!palette.TryGetValue(signature,out int index)){
-                            index=materials.Count;palette.Add(signature,index);var material=new Material(shader){name="Cached clothing — "+key,color=color,mainTexture=textured?image:Texture2D.whiteTexture};material.SetFloat("_Motion",0);material.SetFloat("_FabricWeight",0);material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);if(textured)FinishCollectionMaterial(material,key);ConfigureGarmentFinish(material,key,group.Key=="Camiseta com caimento");materials.Add(material);owned.Add(material);
+                            var textureMap=textured?image:slot<2?Resources.Load<Texture2D>("Garments/Finishes/"+ClothingFabric(key)):Texture2D.whiteTexture;
+                            index=materials.Count;palette.Add(signature,index);var material=new Material(shader){name="Cached clothing — "+key,color=color,mainTexture=textureMap};material.SetFloat("_Motion",0);material.SetFloat("_FabricWeight",0);material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);if(textured||slot<2)FinishCollectionMaterial(material,key);ConfigureGarmentFinish(material,key,group.Key=="Camiseta com caimento");materials.Add(material);owned.Add(material);
                         }
                         foreach(int i in part.triangles)builder.Add(part.vertices[i],part.normals[i],part.uv[i],index);
                     }

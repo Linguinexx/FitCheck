@@ -156,6 +156,7 @@ namespace FitCheck
             bool originalTop=Catalog.IsArrivalPiece(outfit[0]),originalBottom=Catalog.IsArrivalPiece(outfit[1]),originalShoes=Catalog.IsArrivalPiece(outfit[2]);
             var t=playerPieces?[0]??(originalTop?CivilianTop(civilianProfile):Catalog.Get(outfit[0]));bool fubaSuit=t.id==FubaTop;
             var cloth=fubaSuit?SurfaceMaterial(t.color,"Knit"):Material(t.color);
+            FinishCivilianMaterial(cloth,ClothingFabric(t.id));
             cloth.SetFloat("_Outline",0);
             bool blenderTop=originalTop?BuildCivilianTop(t,cloth,civilianProfile):BuildStreetwearTop(t,cloth);
             if(fubaSuit){
@@ -189,7 +190,7 @@ ShirtBody(t,cloth);
             }
             var b=playerPieces?[1]??(originalBottom?CivilianBottom(civilianProfile):Catalog.Get(outfit[1]));
             var shoes=playerPieces?[2]??Catalog.Get(outfit[2]);
-            var denim=fubaSuit?cloth:Material(b.color);if(originalBottom)FinishCivilianMaterial(denim,"Denim");
+            var denim=fubaSuit?cloth:Material(b.color);FinishCivilianMaterial(denim,originalBottom?"Denim":ClothingFabric(b.id));
             foreach(Transform part in Avatar){
                 if(part.name=="Canela")part.gameObject.SetActive(b.shorts);
             }
@@ -206,6 +207,7 @@ ShirtBody(t,cloth);
                 if(fubaSuit)BuildFubaPaw(side,cloth);
                 else if(originalShoes)BuildCivilianShoes(civilianProfile,side);else BuildShoes(shoes,side);
             }
+            FinishProceduralClothing(t,b);
             BuildHeadwear(headwear);
             foreach(var eye in eyes)eye.gameObject.SetActive(headwear?.id!=PrismaGlassesId);
             var headScale=HeadProportion(profile);

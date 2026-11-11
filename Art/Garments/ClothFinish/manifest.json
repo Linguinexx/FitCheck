@@ -1,0 +1,306 @@
+[
+  {
+    "texture": "BaggyDenim01.png",
+    "fabric": "Denim",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "b0d53ec045f1bc870a5f2194082b21f286c6ef410db98307afc0119e95140acd"
+  },
+  {
+    "texture": "Finishes/Canvas.png",
+    "fabric": "Canvas",
+    "width": 128,
+    "height": 128,
+    "geometry_mapped": false,
+    "sha256": "b663976c8050e27f967610e24540acb4a548135a3bb8049906823ec403f656fb"
+  },
+  {
+    "texture": "Finishes/Cotton.png",
+    "fabric": "Cotton",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "abd4fd447bae684484f98f33116289d309c0f59bf5ec661484602f6035b83402"
+  },
+  {
+    "texture": "Finishes/Denim.png",
+    "fabric": "Denim",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "2916352ce00051b78b4a89d47b2c743262a990dfd12bb049b33c1ddfacaa22ff"
+  },
+  {
+    "texture": "Finishes/Fleece.png",
+    "fabric": "Fleece",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "9072df20972f464910deb90e0a597e9132656f631940c4396429ce1e49947781"
+  },
+  {
+    "texture": "Finishes/Jersey.png",
+    "fabric": "Jersey",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "592e0f48e192710f3d0d54b7743bf71a4345e0119b54a01eea957935da0a66fa"
+  },
+  {
+    "texture": "Finishes/Knit.png",
+    "fabric": "Knit",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "81252f7968042e3589ca404ea618d9ea4c1f37f23f71aa05d9891083c9102114"
+  },
+  {
+    "texture": "Finishes/Leather.png",
+    "fabric": "Leather",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "75797d1fc99d8b2e64fa47ff9f7ad5b798e0e3e97892a7f0a8b9f354e4d5bcfc"
+  },
+  {
+    "texture": "Finishes/Nylon.png",
+    "fabric": "Nylon",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "ca86949a04b2f63891686ab1a60f531d723e704d1f7ec34e27ff2c0d096402b4"
+  },
+  {
+    "texture": "Finishes/Stripes.png",
+    "fabric": "Stripes",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "c3722f246bc1cb3d96b2a3033369b76d50b758135ee20661c9e49c839e91a8cd"
+  },
+  {
+    "texture": "Player/BlueSleeve.png",
+    "fabric": "Cotton",
+    "width": 128,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "6e0c946c1697468c09069297f548cd3261bb6a15c689928fa44baf5337859950"
+  },
+  {
+    "texture": "Player/PLAYER_BLUE_BOTTOM.png",
+    "fabric": "Denim",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "de10e9eadce62e5c88e5e397f424466979c6af4c97c43674857f511f04aaf3c8"
+  },
+  {
+    "texture": "Player/PLAYER_BLUE_TOP_03.png",
+    "fabric": "Cotton",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": true,
+    "sha256": "dae35df83f9fe62e2424c04f56b79f9c25823f56d33c0d2501c30fbfb5e724c9"
+  },
+  {
+    "texture": "Player/PLAYER_PINK_BOTTOM.png",
+    "fabric": "Nylon",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "20b98eb6287f8eed1d939579b8bcd101d2c4ec529b3dd9c8f1cd28179a392465"
+  },
+  {
+    "texture": "Player/PLAYER_PINK_TOP_01.png",
+    "fabric": "Jersey",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": true,
+    "sha256": "f2c5cf8bc1390ad231b6cdee198f35ab2d0082016e7f5e2e0398cac59554fc6c"
+  },
+  {
+    "texture": "Player/PLAYER_RED_TOP_03.png",
+    "fabric": "Nylon",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": true,
+    "sha256": "0b8d345b08c58e965cb9be15c198b5911bfbc83d6c9d1b9d6493a3ab2b73ffda"
+  },
+  {
+    "texture": "Player/PLAYER_STANDARD_TOP_03.png",
+    "fabric": "Nylon",
+    "width": 256,
+    "height": 256,
+    "geometry_mapped": true,
+    "sha256": "35f62f0f4b80185ffbe2f1a8d766b363a049d8df431b7ef6a440f53b7b5bc8b5"
+  },
+  {
+    "texture": "Player/PinkSleeve.png",
+    "fabric": "Jersey",
+    "width": 128,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "f36a4176d0899461c5394d24e9ec617795a53411f019f74c6b8850bc0d4976bf"
+  },
+  {
+    "texture": "Player/RedSleeve.png",
+    "fabric": "Nylon",
+    "width": 128,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "5cc32135b084852406fc0d34deb7c717c52af3c1c3c8ef196478999d574593e6"
+  },
+  {
+    "texture": "Player/StandardSleeve.png",
+    "fabric": "Nylon",
+    "width": 128,
+    "height": 256,
+    "geometry_mapped": false,
+    "sha256": "835a8497224300fd75bc2a6055f9f457cb2a5c68e98d3fd31008f8dcb69b6339"
+  },
+  {
+    "texture": "PlayerBlueDenim.png",
+    "fabric": "Denim",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "b870f043c42f4d7e0d92b8e20686a03ad91054c48bc5a6cc71d27716ef09fab2"
+  },
+  {
+    "texture": "PlayerWashedDenim.png",
+    "fabric": "Denim",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "11ceec972a49b509af73929d939ddb2c659fe98027051f5df01acc7c4f81d1c5"
+  },
+  {
+    "texture": "Streetwear/AH_BOTTOM_01.png",
+    "fabric": "Canvas",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "aac43ff65f58a6ed69e6dc51be87d34ce82cd8177e0f358dcbd1960637376580"
+  },
+  {
+    "texture": "Streetwear/AH_BOTTOM_02.png",
+    "fabric": "Nylon",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "fa225e512a3ff413b3ec03b718acf59cc39db8db208c1340f88b4cc049f8444d"
+  },
+  {
+    "texture": "Streetwear/AH_TOP_01.png",
+    "fabric": "Cotton",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "334c398b4b5bf37e5a10daf020d34500a8c07faf04ccb13e488b6371ae5dfee3"
+  },
+  {
+    "texture": "Streetwear/AH_TOP_02.png",
+    "fabric": "Cotton",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "ba94bc77db8ae4aa55d088f5a956dbe4c033682b41fcef533bc88d408030a6b7"
+  },
+  {
+    "texture": "Streetwear/AH_TOP_03.png",
+    "fabric": "Leather",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "95e4fff1fad2068c917ef600f6684b3fc6ee800283475a9912b4743c86e6125d"
+  },
+  {
+    "texture": "Streetwear/CG_BOTTOM_02.png",
+    "fabric": "Jersey",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "61b59550f59ab516eaa87b6d62f055f4141817b2ddbf644acbb27ace57fcb9d3"
+  },
+  {
+    "texture": "Streetwear/CG_BOTTOM_04.png",
+    "fabric": "Denim",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "799584aa032805a824234c4c9859b2d52c84e8af2416da829f7ed710b3352f39"
+  },
+  {
+    "texture": "Streetwear/CG_BOTTOM_05.png",
+    "fabric": "Canvas",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "1a527e333fa0978346a4f501694f6eaf5e4da4e017ff127709630e13337d3531"
+  },
+  {
+    "texture": "Streetwear/CG_TOP_01.png",
+    "fabric": "Jersey",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "1ef35d8ad325c4b061cd4d0f777d84d53f688096491605e7515a2c7f00a08a89"
+  },
+  {
+    "texture": "Streetwear/CG_TOP_02.png",
+    "fabric": "Nylon",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "ba9f9efc7aa3e7c1f5681713c0397600c9858b971e90406ebe3901a815708576"
+  },
+  {
+    "texture": "Streetwear/CG_TOP_03.png",
+    "fabric": "Nylon",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "05fe9d3a6f46cb3d68bff04f871703e1846d24ad283bffc5a3ee5c8e4871f5c5"
+  },
+  {
+    "texture": "Streetwear/SB_BOTTOM_01.png",
+    "fabric": "Canvas",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "f75bc21a34defd032447657c92da58737d6fb9a8c9c6dd36df994ac38cb6040b"
+  },
+  {
+    "texture": "Streetwear/SB_BOTTOM_02.png",
+    "fabric": "Canvas",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "d11ece34015c39637a5b4e50c0d114b3665da7f93a4a5518c423523d19456fce"
+  },
+  {
+    "texture": "Streetwear/SB_TOP_01.png",
+    "fabric": "Cotton",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "ca16eaf0f7e111489e2f36260502ef8fc7fec52d838302ccf468255856b0c49e"
+  },
+  {
+    "texture": "Streetwear/SB_TOP_02.png",
+    "fabric": "Canvas",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "e217c7126d7a800c5945b4d8e3250faff0a11a5867259a010ade59512a15fe7e"
+  },
+  {
+    "texture": "Streetwear/SB_TOP_03.png",
+    "fabric": "Fleece",
+    "width": 512,
+    "height": 512,
+    "geometry_mapped": true,
+    "sha256": "6b36dfadbb850d2ed202e5821ef46e0129fef65ccd294eaf74c0035cdad66bdd"
+  }
+]

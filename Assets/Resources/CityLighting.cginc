@@ -10,9 +10,4 @@ float3 CityLightAt(float3 world)
     return tex2D(_CityLightField,saturate(uv)).rgb*inside*_CityLightActive*lerp(1,.20,saturate(world.y/20));
 }
 float3 CityMoonDirection(){return normalize(float3(-.7,.55,.65));}
-float3 CityHaze(float3 color,float distance,float exterior)
-{
-    float mist=smoothstep(16,106,distance)*.58*saturate(exterior);
-    return lerp(color,float3(.095,.102,.096),mist);
-}
 #endif

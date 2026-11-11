@@ -83,7 +83,7 @@ namespace FitCheck
             for(int i=0;i<count;i++){float t=i/22050f;float env=Mathf.Min(1,t/.008f)*Mathf.Pow(1-t/duration,2);data[i]=Mathf.Sin(t*frequency*Mathf.PI*2)*env*.45f;}
             var clip=AudioClip.Create(name,count,1,22050,false);clip.SetData(data,0);return clip;
         }
-        void Sound(int kind){if(kind==1)photoFlash=.16f;if(effects!=null&&!mutedAudio)PlayClip(kind==0?Clip("ui_click_01")??clickSound:kind==1?Clip("photo_capture")??photoSound:Clip("ui_confirm")??awardSound);}
+        void Sound(int kind){if(kind==1)photoFlash=.16f;if(effects!=null&&!mutedAudio)PlayClip(kind==0?NextClickSound()??clickSound:kind==1?Clip("photo_capture")??photoSound:Clip("ui_confirm")??awardSound);}
         bool TrySave(){try{if(pendingPhotoBytes!=null)System.IO.File.WriteAllBytes(pendingPhotoPath,pendingPhotoBytes);SaveDay();pendingPhotoBytes=null;pendingPhotoPath=null;message="Progresso salvo.";return true;}catch(Exception ex){message="Não foi possível salvar. Tente novamente: "+ex.Message;return false;}}
         void NotifyAchievements(string[] before){foreach(string id in progress.achievements)if(!before.Contains(id))notices.Enqueue(id);}
         void DrawAchievement()
@@ -107,7 +107,7 @@ namespace FitCheck
                 if(!progress.DayComplete&&Tap(new Rect(48,413,500,60),"Voltar ao quarto  →",true))CloseHomePanel();
                 if(progress.DayComplete&&!progress.closed)Txt(new Rect(48,413,500,80),"Feche o expediente no balcão da DripLab antes de descansar.",copy,muted);
                 if(progress.closed&&!progress.Complete&&Tap(new Rect(48,413,500,60),"Dormir e começar o próximo dia  →",true)){progress.Advance();TrySave();GoHome();}
-                if(progress.Complete&&Tap(new Rect(48,413,500,60),"Receber recompensas pendentes",true)){progress.Deliver();TrySave();}
+                if(progress.Complete&&Tap(new Rect(48,413,500,60),"Receber recompensas pendentes",true)){int rewards=progress.rewards.Count;progress.Deliver();TrySave();if(progress.rewards.Count>rewards)PlayClip(Clip("unlock_drop"),.65f);}
                 Txt(new Rect(48,700,500,40),"Reputação "+progress.reputation+"   /   "+progress.Available.Length+" peças disponíveis",copy,violet);
                 int visibleAwards=3;
                 for(int i=DayProgress.FubaUniform;i<UniformNames.Length;i++)
@@ -142,7 +142,7 @@ namespace FitCheck
             if(!progress.closed){
                 Txt(new Rect(96,645,1100,75),"As peças dos marcos alcançados chegam no fechamento.",copy,muted);
                 if(Tap(new Rect(96,769,510,67),"Receber recompensas e fechar o dia",true)){
-                    var before=progress.achievements.ToArray();progress.Close();NotifyAchievements(before);TrySave();Sound(2);
+                    int rewards=progress.rewards.Count;var before=progress.achievements.ToArray();progress.Close();NotifyAchievements(before);TrySave();if(progress.rewards.Count>rewards)PlayClip(Clip("unlock_drop"),.65f);else Sound(2);
                 }
             }else{
                 Txt(new Rect(96,640,1200,90),progress.rewards.Count>0?"Peças conquistadas: "+string.Join("  /  ",progress.rewards):"Novos visuais podem melhorar sua Reputação. A campanha continua mesmo com notas baixas.",copy,violet);

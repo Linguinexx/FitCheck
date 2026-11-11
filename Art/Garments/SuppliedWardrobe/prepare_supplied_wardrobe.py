@@ -34,7 +34,7 @@ def glasses_frame(points):
 def fit_glasses(point, frame):
     # A rigid rotation and uniform scale preserve the original lenses and arms.
     c, s, front_depth, front_height = frame
-    depth = (point.y * c - point.z * s - front_depth) * 1.12 - .64
+    depth = (point.y * c - point.z * s - front_depth) * 1.12 - .555
     height = (point.y * s + point.z * c - front_height) * 1.12 + .10
     return Vector((-point.x * 1.12, -depth, height))
 

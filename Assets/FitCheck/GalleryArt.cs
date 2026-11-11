@@ -19,7 +19,7 @@ namespace FitCheck
             LiveBox("Passe-partout",new Vector3(0,0,-.009f),Vector3.one,Cream,"Paper",root);
             var mesh=new Mesh{name="Impressão — UV inteira",vertices=new[]{new Vector3(-.5f,-.5f,0),new Vector3(-.5f,.5f,0),new Vector3(.5f,.5f,0),new Vector3(.5f,-.5f,0)},uv=new[]{Vector2.zero,Vector2.up,Vector2.one,Vector2.right},triangles=new[]{0,1,2,0,2,3}};mesh.RecalculateNormals();mesh.RecalculateBounds();assets.Add(mesh);
             var image=new GameObject("Arte fornecida").transform;image.SetParent(root,false);image.localPosition=new Vector3(0,0,-.041f);image.gameObject.AddComponent<MeshFilter>().sharedMesh=mesh;
-            var material=new Material(Resources.Load<Shader>("Artwork"));material.SetFloat("_CityExterior",IsInterior?0:1);assets.Add(material);image.gameObject.AddComponent<MeshRenderer>().sharedMaterial=material;
+            var material=new Material(Resources.Load<Shader>("Artwork"));assets.Add(material);image.gameObject.AddComponent<MeshRenderer>().sharedMaterial=material;
             SetFramedPrint(root,index,maximum);return root;
         }
         void SetFramedPrint(Transform root,int index,Vector2 maximum)

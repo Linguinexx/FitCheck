@@ -73,7 +73,7 @@ Shader "FitCheck/Selective Garment Finishes"
                     float broad=pow(saturate(dot(normal,normalize(view+float3(-.65,.5,-.6)))),14);
                     result+=(broad*.24+rim*rim*.08)*float3(.65,.78,1)*lerp(1,localLight,_NightCity);
                 }
-                return fixed4(CityHaze(saturate(result),distance(i.world,_WorldSpaceCameraPos),_NightCity),1);
+                return fixed4(saturate(result),1);
             }
             ENDCG
         }

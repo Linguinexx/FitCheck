@@ -47,13 +47,36 @@ namespace FitCheck
             for(int i=0;i<3;i++){float z=.025f-i*.075f;Tube("Cadarço",new[]{new Vector3(x-.07f,ShoeTop(shape,-.07f,z)+.008f,z),new Vector3(x,ShoeTop(shape,0,z)+.008f,z+.012f),new Vector3(x+.07f,ShoeTop(shape,.07f,z)+.008f,z)},.006f,lace,clothes);}
         }
         static BlenderGarmentAsset civilianShoeModel;
+        static string ClothingFabric(string id)
+        {
+            switch(id){
+                case "AH_TOP_03":return "Leather";
+                case "CG_TOP_01":case "CG_TOP_04":case "CG_BOTTOM_02":case "CG_BOTTOM_03":case "PLAYER_PINK_TOP_01":return "Jersey";
+                case "AH_TOP_04":case "AH_BOTTOM_02":case "CG_TOP_02":case "CG_TOP_03":case "PLAYER_RED_TOP_03":case "PLAYER_STANDARD_TOP_03":case "PLAYER_PINK_BOTTOM":case GarageDjTop:return "Nylon";
+                case "SB_TOP_03":case GhostTop:case "PLAYER_GHOST_BOTTOM":return "Fleece";
+                case "CG_BOTTOM_01":case "CG_BOTTOM_04":case "PLAYER_BLUE_BOTTOM":case "PlayerBlueDenim":case "PlayerWashedDenim":case "CIV_BOTTOM":return "Denim";
+                case "SB_TOP_02":case "SB_TOP_04":case "SB_BOTTOM_01":case "SB_BOTTOM_02":case "AH_BOTTOM_01":case "AH_BOTTOM_03":case "CG_BOTTOM_05":case NeighbourhoodTop:return "Canvas";
+                case FubaTop:case "PLAYER_FUBA_BOTTOM":return "Knit";
+                default:return "Cotton";
+            }
+        }
+        void FinishProceduralClothing(Garment top,Garment bottom)
+        {
+            foreach(var renderer in clothes.GetComponentsInChildren<MeshRenderer>()){
+                float height=Avatar.InverseTransformPoint(renderer.bounds.max).y;
+                if(height<.62f||renderer.name==SlideFootMeshName)continue;
+                string fabric=ClothingFabric(height>1.5f?top.id:bottom.id);
+                foreach(var material in renderer.sharedMaterials)
+                    if(material!=skin&&material!=ink&&material.shader.name=="FitCheck/Retro Painted")FinishCivilianMaterial(material,fabric);
+            }
+        }
         static void FinishCollectionMaterial(Material material,string id)
         {
-            var weave=Resources.Load<Texture2D>("Surfaces/Fabric030");material.SetTexture("_FabricTex",weave);material.SetFloat("_FabricWeight",id.Contains("_SHOES_")?.025f:id=="CG_TOP_03"?.20f:id=="AH_TOP_03"?.055f:id=="AH_TOP_01"?.18f:.11f);material.SetFloat("_Motion",0);
+            var weave=Resources.Load<Texture2D>("Surfaces/Fabric030");material.SetTexture("_FabricTex",weave);material.SetFloat("_FabricWeight",id.Contains("_SHOES_")?.025f:id.Contains("_HEAD_")?.11f:ClothingFabric(id)=="Nylon"?.035f:.055f);material.SetFloat("_Motion",0);
         }
         void FinishCollectionSleeve(Material material,BlenderGarmentAsset model)
         {
-            material.shader=Resources.Load<Shader>("GarmentFabric");material.mainTexture=Resources.Load<Texture2D>("Garments/Finishes/Cotton");material.color=model.sleeveColor;material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);FinishCollectionMaterial(material,model.id);ConfigureGarmentFinish(material,model.id,false);
+            material.shader=Resources.Load<Shader>("GarmentFabric");material.mainTexture=Resources.Load<Texture2D>("Garments/Finishes/"+ClothingFabric(model.id));material.color=model.sleeveColor;material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);FinishCollectionMaterial(material,model.id);ConfigureGarmentFinish(material,model.id,false);
         }
     }
 }

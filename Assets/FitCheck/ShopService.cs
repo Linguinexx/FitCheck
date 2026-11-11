@@ -84,6 +84,7 @@ namespace FitCheck
         {
             if(!ShopOpen||shopArrivalDelay>0||city.CustomerHasEntered)return;
             city.ArriveCustomer();
+            PlayClip(Clip("door_loja_bell"),.45f);
             StartShopSequence(ShopSequence.Arriving);
         }
         void StartShopConversation()

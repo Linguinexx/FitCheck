@@ -72,11 +72,7 @@ namespace FitCheck
             return true;
         }
         public static readonly int[] Milestones={100,200,300,450,600,750,1050,1400};
-        public static readonly string[][] RewardNames={
-            new[]{"Night Route","Remix"},new[]{"Court Lines","Daily Steps"},new[]{"Closing Time","Independent"},
-            new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"},new[]{"Pista Aberta","Cargo das Lajes","Slide Nuvem","Jeans Rosa"},
-            new[]{"Fita Local","Bermuda de Pista","Clog Brasa","Óculos Prisma"},new[]{"Luz de Poste","Aba de Tijolo"}
-        };
+        public static readonly string[][] RewardNames=Milestones.Select(DropCatalog.RewardsAt).ToArray();
         public bool DayComplete=>posts.Count==FirstCustomerOfDay+CustomersPerDay;
         public bool Complete=>day==TotalDays&&DayComplete&&closed;
         public string[] Available=>Catalog.All.Where(g=>CatalogTesting.Enabled||g.unlockAt==0||rewards.Contains(g.name)).Select(g=>g.id).ToArray();

@@ -15,7 +15,7 @@ namespace FitCheck
         {
             const string glyphs="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789áàâãéêíóôõúüçÁÀÂÃÉÊÍÓÔÕÚÜÇ .,:;!?+-−/\\%()[]‘’“”•…←→↺✓–—";
             foreach(int size in new[]{13,17,21})uiFont.RequestCharactersInTexture(glyphs,size,FontStyle.Normal);
-            foreach(int size in new[]{17,18,21,30})uiStrong.RequestCharactersInTexture(glyphs,size,FontStyle.Normal);
+            foreach(int size in new[]{14,15,17,18,21,30})uiStrong.RequestCharactersInTexture(glyphs,size,FontStyle.Normal);
             foreach(int size in new[]{30,86})titleFont.RequestCharactersInTexture(glyphs,size,FontStyle.Normal);
             uiFont.RequestCharactersInTexture("0123456789 /FITCHECKOUAFim de expedienteUma pausaO visual foi pra ruaA semana virou história.",86,FontStyle.Bold);
             fontDirty=false;
@@ -23,12 +23,18 @@ namespace FitCheck
         bool dragging, moved; Vector2 dragStart;
         readonly System.Collections.Generic.Dictionary<string,Texture2D> thumbnails=new System.Collections.Generic.Dictionary<string,Texture2D>();
         readonly System.Collections.Generic.Dictionary<string,Texture2D> lockedThumbnails=new System.Collections.Generic.Dictionary<string,Texture2D>();
+        readonly System.Collections.Generic.Dictionary<string,Rect> thumbnailBounds=new System.Collections.Generic.Dictionary<string,Rect>();
         void BuildThumbnails()
         {
             foreach(var item in Catalog.All){
                 var image=studio.Thumbnail(item);thumbnails[item.id]=image;
                 var gray=new Texture2D(image.width,image.height,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};var pixels=image.GetPixels();
-                for(int i=0;i<pixels.Length;i++){float value=pixels[i].grayscale*.55f;pixels[i]=new Color(value,value,value,pixels[i].a);}
+                int minX=image.width,minY=image.height,maxX=-1,maxY=-1;
+                for(int i=0;i<pixels.Length;i++){
+                    if(pixels[i].a>.05f){int x=i%image.width,y=i/image.width;minX=Mathf.Min(minX,x);maxX=Mathf.Max(maxX,x);minY=Mathf.Min(minY,y);maxY=Mathf.Max(maxY,y);}
+                    float value=pixels[i].grayscale*.55f;pixels[i]=new Color(value,value,value,pixels[i].a);
+                }
+                if(maxX>=minX){minX=Mathf.Max(0,minX-3);minY=Mathf.Max(0,minY-3);maxX=Mathf.Min(image.width-1,maxX+3);maxY=Mathf.Min(image.height-1,maxY+3);thumbnailBounds[item.id]=new Rect(minX/(float)image.width,minY/(float)image.height,(maxX-minX+1)/(float)image.width,(maxY-minY+1)/(float)image.height);}
                 gray.SetPixels(pixels);gray.Apply();lockedThumbnails[item.id]=gray;
             }
             Apply();UpdateCamera();
@@ -178,8 +184,10 @@ namespace FitCheck
             if(Tap(new Rect(38,281,190,46),showDrops?"Fechar drops":"Ver drops")){showDrops=!showDrops;showRequest=false;}
             if(showRequest||showDrops){
                 Fill(new Rect(38,343,315,375),KaosPanel);
-                detailsScroll=GUI.BeginScrollView(new Rect(54,361,282,335),detailsScroll,new Rect(0,0,255,680));
-                Txt(new Rect(0,0,247,435),showRequest?"“"+Request+"”":"AFTER HOURS\nA cidade continua depois do trabalho. Luzes, encontros e caminhos.\n\nCOMMON GROUND\nPraça, quadra e pertencimento.\n\nSIDE B\nMúsica independente, colagem e criação autoral.",caption);
+                string guide=showRequest?"“"+Request+"”":DropCatalog.Guide;
+                float guideHeight=caption.CalcHeight(new GUIContent(guide),247);
+                detailsScroll=GUI.BeginScrollView(new Rect(54,361,282,335),detailsScroll,new Rect(0,0,255,Mathf.Max(680,guideHeight+24)));
+                Txt(new Rect(0,0,247,guideHeight),guide,caption);
                 if(showRequest&&question>=0)Txt(new Rect(0,450,247,220),answers[question],caption,violet);
                 GUI.EndScrollView();
             }
@@ -190,49 +198,20 @@ namespace FitCheck
             }
             Fill(new Rect(325,827,565,57),KaosPanel);
             Txt(new Rect(340,840,535,30),"ARRASTE PARA GIRAR   /   ROLE PARA APROXIMAR",tiny,paper);
-            Fill(new Rect(1000,88,440,812),surface);
-            Txt(new Rect(1032,118,370,42),"Seu toque.",heading);
-            Txt(new Rect(1032,164,370,30),"Experimente. As peças contam a história.",caption,muted);
-            string[] tabs={"Cima","Baixo","Tênis","Cabeça"};
-            for(int i=0;i<4;i++){
-                if(Tap(new Rect(1032+i*94,219,87,46),tabs[i],category==i)){category=i;scroll=Vector2.zero;}
-            }
-            var items=Catalog.All.Where(x=>x.slot==category).ToArray();
-            bool showOriginal=category<3&&(shopDressingInStore||replayIndex>=0);
-            float gridTop=287;
-            if(showOriginal){
-                var original=Catalog.ArrivalPiece(category);
-                if(Tap(new Rect(1032,278,370,38),original.name,outfit[category]==original.id)){
-                    outfit[category]=original.id;message="";Apply();
-                }
-                gridTop=327;
-            }
-            int count=items.Length+(category==3?1:0);int rows=(count+1)/2;
-            scroll=GUI.BeginScrollView(new Rect(1026,gridTop,392,712-gridTop),scroll,new Rect(0,0,366,rows*164));
-            for(int i=0;i<count;i++){
-                var r=new Rect(6+(i%2)*184,(i/2)*164,174,153);
-                if(i==items.Length){if(Tap(r,"Sem acessório",outfit[3]=="")){outfit[3]="";Apply();}continue;}
-                var item=items[i];bool locked=!IsAvailable(item);bool selected=outfit[category]==item.id;
-                Fill(r,selected?new Color(.22f,.16f,.3f):new Color(.12f,.10f,.16f));
-                if(selected)Fill(new Rect(r.x,r.y,3,r.height),violet);
-                ClothingIcon(new Rect(r.x+39,r.y+10,95,75),item,locked);
-                Txt(new Rect(r.x+12,r.y+88,152,25),item.name,caption,locked?muted:paper);
-                Txt(new Rect(r.x+12,r.y+119,154,25),locked?"BLOQUEADA  /  "+item.unlockAt:item.drop,tiny,locked?muted:violet);
-                if(GUI.Button(r,GUIContent.none,GUIStyle.none)&&stage==Stage.Dressing){Sound(0);
-                    if(locked)message=item.name+": alcance "+item.unlockAt+" de Reputação. Entrega no fechamento.";
-                    else{outfit[category]=item.id;message="";Apply();}
-                }
-            }
-            GUI.EndScrollView();
-            Rule(1032,730,366);
-            Txt(new Rect(1032,742,365,40),message.Length>0?message:"Você pode mudar de ideia até enviar o visual.",tiny,muted);
-            if(Tap(new Rect(1032,796,366,64),"Finalizar visual  →",true))stage=Stage.Confirm;
+            DrawWardrobeShelf();
             if(Tap(new Rect(910,836,66,38),"↺")){rotation=-12;distance=7.2f;UpdateCamera();}
             HandlePreview();
         }
         void ClothingIcon(Rect r,Garment g,bool locked)
         {
-            if(thumbnails.ContainsKey(g.id)){GUI.DrawTexture(r,locked?lockedThumbnails[g.id]:thumbnails[g.id],ScaleMode.ScaleToFit,true);return;}
+            if(thumbnails.ContainsKey(g.id)){
+                var image=locked?lockedThumbnails[g.id]:thumbnails[g.id];
+                if(thumbnailBounds.TryGetValue(g.id,out var uv)){
+                    float aspect=image.width*uv.width/(image.height*uv.height),width=Mathf.Min(r.width,r.height*aspect),height=width/aspect;
+                    GUI.DrawTextureWithTexCoords(new Rect(r.center.x-width/2,r.center.y-height/2,width,height),image,uv,true);
+                }else GUI.DrawTexture(r,image,ScaleMode.ScaleToFit,true);
+                return;
+            }
             Color c=locked?new Color(.3f,.28f,.34f):g.color;
             if(g.slot==0){Fill(new Rect(r.x+24,r.y+13,47,55),c);Fill(new Rect(r.x+9,r.y+13,20,24),c);Fill(new Rect(r.x+67,r.y+13,20,24),c);Fill(new Rect(r.x+39,r.y+10,19,8),surface);Fill(new Rect(r.x+53,r.y+29,8,5),locked?muted:violet);}
             if(g.slot==1){Fill(new Rect(r.x+24,r.y+6,47,19),c);Fill(new Rect(r.x+24,r.y+25,21,g.shorts?23:48),c);Fill(new Rect(r.x+50,r.y+25,21,g.shorts?23:48),c);}

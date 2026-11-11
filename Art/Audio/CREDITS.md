@@ -21,3 +21,13 @@ As trilhas e o toque de conquista vieram do Pixabay. [Resumo da licença Pixabay
 - Conquista — RibhavAgrawal, [achievement (Video game Type 1)](https://pixabay.com/sound-effects/film-special-effects-achievement-video-game-type-1-230515/).
 
 Os demais clipes em `Audio/Game` vieram do ZIP AUDIOS fornecido para o projeto. O manifesto entregue descreve o material como gerado para o Fit Check com ferramentas do Manus.
+
+## Efeitos adicionais — 11/11/2026
+
+Foram integrados 18 efeitos do mesmo ZIP entregue pelo grupo. Origem e hashes em ADDITIONAL_SOUNDS.json. Cópias mono PCM de 16 bits e 22.050 Hz, com aproximadamente 1,2 MB no total. O pacote original foi preservado.
+
+- Três variações de tecido na troca de roupa, segundo clique da interface e aviso de peça bloqueada.
+- Campainha na entrada dos clientes, publicação no FitFeed e entrega de novos drops.
+- Três passagens de carro, duas batidas de bola, rangido de tênis na quadra, duas ferramentas da oficina e duas variações de máquina de barbear.
+
+Os sons da cidade são posicionados no trânsito, quadra, oficina e barbearia, com distância máxima, intervalos e interrupção em pausa, mute ou saída do bairro. O manifesto do pacote fornecido declara esses efeitos como gerados para o projeto.

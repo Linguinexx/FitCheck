@@ -57,3 +57,28 @@ Retomada em 11/11/2026 para artes, calça rosa e óculos. Sons, tutorial e build
 - Miniatura dos Óculos Prisma enquadrada pelos limites da armação, em uma imagem horizontal de 128 × 64. A versão bloqueada acompanha as mesmas dimensões. Armação ocupa 111 × 29 px na conferência de captura.
 - Teste solicitado: ao equipar os Óculos Prisma, ocultar olhos, pupilas, cílios e pálpebras atrás das lentes. Remover a peça restaura os olhos e suas piscadas. Sobrancelhas e boca permanecem expressivas. As cópias de NPCs seguem essa visibilidade, incluindo a exclusão de pálpebras soltas. Verificados nove cabelos e duas bases de aparência. Aguardar avaliação visual do usuário.
 - Neblina leve por distância no bairro, aumentando suavemente entre 16 e 106 unidades, em cinza discreto. Aplicada a superfícies, letreiros, artes e personagens externos pelos shaders existentes. Conferência de compilação e exclusão dos interiores aprovada. Prévias em Captures/GlassesFogReview.
+
+## Revisão posterior — bermuda militar, óculos e sons
+
+- Neblina de teste retirada a pedido do usuário, restaurando os shaders anteriores.
+- Óculos Prisma aproximados 0,085 unidade do rosto, mantendo o teste com olhos ocultos. A armação e as lentes continuam nas proporções do modelo original.
+- Nova Bermuda Comando CG_BOTTOM_05, COMMON GROUND, com 6.844 triângulos, camuflagem de sarja 512, corte largo abaixo do joelho, cós com relevo e estampa 07 assentada na malha. Fonte em Art/Garments/MilitaryShorts/MilitaryShorts.blend. Desbloqueio normal em 1050 RP. Ao detectar expansão do catálogo, o modo de teste libera todas as 32 peças uma vez e continua podendo ser desligado nas Configurações.
+- Dezoito efeitos adicionais integrados do ZIP em audio recebidos, com cópias mono de 22.050 Hz. Roupas, interface, campainha, FitFeed, drops, trânsito, quadra, oficina e barbearia. Originais preservados e mapeamento em Art/Audio/ADDITIONAL_SOUNDS.json.
+- Conferência visual e de caminhada em Captures/MilitaryAudioReview. Tutorial de novos saves e nova build de até 200 MB seguem pendentes.
+- Limpeza concluída da cópia temporária tools/.city-build-project após as verificações, removendo aproximadamente 459 MB. Os hashes das entregas Teste 07 e do ZIP anterior Teste 06 foram preservados. Fontes, referências, arquivos recebidos e dados do jogador mantidos. Relatório em tools/cleanup-validation-20261111.json. A cópia técnica pode ser recriada a partir de Assets, Packages e ProjectSettings do projeto para novas verificações.
+
+## Acabamento das roupas, pé e intro — 11/11/2026
+
+- Pé do slide de nuvem remodelado com contorno arredondado e cinco dedos unidos à base, em uma malha por pé. Verificados quatro momentos da caminhada e o vínculo rígido dos dedos ao pé.
+- Revisadas as texturas das 22 peças de blusas/casacos e shorts/calças do catálogo, incluindo as partes procedurais, trajes do jogador e roupas civis. Tecidos diferenciados, trama fotográfica e dobras suaves; estampas e paleta preservadas. Texturas continuam em até 512 px, sem novo passe de renderização. Fontes e mapas anteriores preservados em Art/Garments/ClothFinish.
+- Fundo preto da intro desenhado nas dimensões reais da tela antes de restaurar a escala da interface. Posição, proporção e animação da logo mantidas.
+- Prévias e verificações em Captures/ClothingPolish. A nova build distribuível e o tutorial permanecem pendentes.
+- Removidas as cópias e o executável temporários da verificação, recuperando cerca de 656 MiB. As entregas Teste 07 e Teste 06 foram preservadas. Captura automática da intro limitada pela ausência de Repaint na janela oculta; conferir a apresentação visual no Play normal.
+
+## Provador organizado por drop — 11/11/2026
+
+- Seleção alterna entre **Por peça** e **Por drop**, sem trocar o fit. Por drop reúne todas as categorias; seleção equipa somente a categoria da peça. As peças originais e a opção Sem acessório continuam disponíveis.
+- Três drops formalizados em DropCatalog: After Hours (11 peças, noite/camadas/couro), Common Ground (11, quadra/jeans/utilitários) e Side B (10, música/estampas autorais). Mantidos os nomes e vínculos de todas as peças, IDs, critérios e marcos para preservar avaliações e inventários históricos. Distribuição completa em Art/Garments/DROPS.md.
+- Cartões em carvão/papel com seleção Vermelho Kaos, relevo, etiqueta do drop e estado de desbloqueio. Prateleiras com identidades próprias: luzes noturnas, marcações de quadra e sulcos de vinil. Miniaturas reenquadradas pelos limites de transparência, mantendo as texturas e proporções existentes.
+- Etiquetas distinguem bloqueio por RP, entrega no fechamento e peça indisponível no replay. As recompensas dos oito marcos são derivadas diretamente do catálogo para não divergir das etiquetas. Modo de teste reversível e saves mantidos.
+- Conferências em Captures/DropShelfReview e Tools/Fit Check/Check clothing drops. Nova build distribuível e tutorial seguem pendentes.

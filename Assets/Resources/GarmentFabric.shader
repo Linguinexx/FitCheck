@@ -55,7 +55,7 @@ Shader "FitCheck/Blender Garment Fabric"
                 float3 colorA=floor(saturate(_Color.rgb*paintA*shade+_Color.rgb*_Glow*.55)*31+.5)/31;
                 float3 colorB=floor(saturate(_Color.rgb*paintB*shade+_Color.rgb*_Glow*.55)*31+.5)/31;
                 float3 localLight=float3(.52,.55,.60)+CityLightAt(i.world)*.66;
-                return fixed4(CityHaze(lerp(colorA,colorB,blend)*lerp(1,localLight,_NightCity),distance(i.world,_WorldSpaceCameraPos),_NightCity),1);
+                return fixed4(lerp(colorA,colorB,blend)*lerp(1,localLight,_NightCity),1);
             }
             ENDCG
         }

@@ -48,7 +48,8 @@ namespace FitCheck
             new Garment("SB_HEAD_02","Aba de Tijolo","SIDE B",3,new Color(.64f,.21f,.12f),false){unlockAt=1400,cap=true},
             new Garment("AH_SHOES_03","Clog Brasa","AFTER HOURS",2,new Color(.83f,.17f,.12f),false){unlockAt=1050,vibrant=true},
             new Garment("CG_BOTTOM_04","Jeans Rosa","COMMON GROUND",1,new Color(.74f,.39f,.49f),false,true){unlockAt=750,light=true},
-            new Garment("SB_HEAD_03","Óculos Prisma","SIDE B",3,new Color(.64f,.12f,.15f),false){unlockAt=1050}
+            new Garment("SB_HEAD_03","Óculos Prisma","SIDE B",3,new Color(.64f,.12f,.15f),false){unlockAt=1050},
+            new Garment("CG_BOTTOM_05","Bermuda Comando","COMMON GROUND",1,new Color(.29f,.32f,.18f),true,true){unlockAt=1050,shorts=true,light=true}
         }).ToArray();
         static readonly Garment[] ArrivalPieces={
             new Garment("CIV_ARRIVAL_TOP","Parte de cima original","CIVIL",0,Color.gray,true),
@@ -73,6 +74,7 @@ namespace FitCheck
     public static class CatalogTesting
     {
         public const string PreferenceKey="FitCheck.CatalogTesting";
+        public const string CountPreferenceKey="FitCheck.CatalogTesting.Count";
         public static bool Enabled=true;
     }
     [Serializable] public class Attempt

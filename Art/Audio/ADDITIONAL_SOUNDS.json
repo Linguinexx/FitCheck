@@ -1,0 +1,164 @@
+[
+  {
+    "id": "equip_tecido_01",
+    "source": "AUDIOS/GUARDA-ROUPAS/equip_tecido_01.wav",
+    "source_sha256": "6ca4c325807cbc551f95f92fc0c5fe7f95dd10d22909fcaafa1e2306660c6b02",
+    "duration": 0.5,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 22094
+  },
+  {
+    "id": "equip_tecido_02",
+    "source": "AUDIOS/GUARDA-ROUPAS/equip_tecido_02.wav",
+    "source_sha256": "8bf9014741a6c3ebc0aad23ad4ce2730d4716480a72765e4cac13e49301075aa",
+    "duration": 0.5,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 22094
+  },
+  {
+    "id": "equip_tecido_03",
+    "source": "AUDIOS/GUARDA-ROUPAS/equip_tecido_03.wav",
+    "source_sha256": "dcb2234233c5b06096ac9e7d6d3290a801a5b89132524be8ec684d378af0c4c8",
+    "duration": 0.5,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 22094
+  },
+  {
+    "id": "door_loja_bell",
+    "source": "AUDIOS/GUARDA-ROUPAS/door_loja_bell.wav",
+    "source_sha256": "604ab630e0c56ef840192e58a37f4056806f388879d885e1f0a5a04eb79d940f",
+    "duration": 0.8,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 35324
+  },
+  {
+    "id": "feed_publish",
+    "source": "AUDIOS/RESULTADOS/feed_publish.wav",
+    "source_sha256": "be9d839318e434d1fa55005316883eb0155cbc2eb507866f55adce552d57781f",
+    "duration": 0.68,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 30044
+  },
+  {
+    "id": "unlock_drop",
+    "source": "AUDIOS/RESULTADOS/unlock_drop.wav",
+    "source_sha256": "6a4dfc5dc827bb1e7bf71371469cd890c308b72904ecdf5eddfd1adebf5886bf",
+    "duration": 1.2,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 52964
+  },
+  {
+    "id": "ui_unavailable",
+    "source": "AUDIOS/INTERFACE/ui_unavailable.wav",
+    "source_sha256": "6adc5bdd8685fc65645b92dd1251ce30c9a6a8a167d0f0aad27b527c0e3dec92",
+    "duration": 0.48,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 21212
+  },
+  {
+    "id": "ui_click_02",
+    "source": "AUDIOS/INTERFACE/ui_click_02.wav",
+    "source_sha256": "772fe51d35c429ed411583fe843caf1578c51ee36aee895ed55be3cf0539ebbe",
+    "duration": 0.48,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 21212
+  },
+  {
+    "id": "car_pass_01",
+    "source": "AUDIOS/CIDADE/car_pass_01.wav",
+    "source_sha256": "adb615e55d8252e8531a648884b6c96068db22c893bce1f417085397a10b4566",
+    "duration": 4.0,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 176444
+  },
+  {
+    "id": "car_pass_02",
+    "source": "AUDIOS/CIDADE/car_pass_02.wav",
+    "source_sha256": "e823b6fd7c6263a14dcbe58ae41200eb5174e7b902c2e13fe705a4d765c61fa7",
+    "duration": 4.0,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 176444
+  },
+  {
+    "id": "car_pass_03",
+    "source": "AUDIOS/CIDADE/car_pass_03.wav",
+    "source_sha256": "4bb2c3817ab3b89d3d29d4cc461a5ab79f3cc1872065c025c9ab567a69573948",
+    "duration": 4.0,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 176444
+  },
+  {
+    "id": "court_ball_01",
+    "source": "AUDIOS/CIDADE/court_ball_01.wav",
+    "source_sha256": "9b8b3734320c4aa33045f4ebb3ba1879310b62bcbf792d37f1b4e108f2f199ef",
+    "duration": 0.6,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 26504
+  },
+  {
+    "id": "court_ball_02",
+    "source": "AUDIOS/CIDADE/court_ball_02.wav",
+    "source_sha256": "423b2e0b5cf509a6c49cc182931f9d9c4598d1af5dc4bfcdd141728a4138d5e9",
+    "duration": 0.64,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 28290
+  },
+  {
+    "id": "court_squeak_01",
+    "source": "AUDIOS/CIDADE/court_squeak_01.wav",
+    "source_sha256": "1d9b466ea8c160b4775f8fb7626e9e31faba6101ee4024e299f52d93aa5b595d",
+    "duration": 0.48,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 21212
+  },
+  {
+    "id": "workshop_tool_01",
+    "source": "AUDIOS/CIDADE/workshop_tool_01.wav",
+    "source_sha256": "48a5f85ea7979b99e6816e304a9157faf76d188539be4852a43251f7455aeb93",
+    "duration": 1.0,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 44144
+  },
+  {
+    "id": "workshop_tool_02",
+    "source": "AUDIOS/CIDADE/workshop_tool_02.wav",
+    "source_sha256": "5478bed6068af0c4f43c99e7708a64574d23fce6b5c3c9ace32e934ba2aef2df",
+    "duration": 1.093,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 48230
+  },
+  {
+    "id": "barber_clipper_01",
+    "source": "AUDIOS/CIDADE/barber_clipper_01.wav",
+    "source_sha256": "95974a4320286003dbf819241627515ff927d6db1c08a70912861d3dd0502009",
+    "duration": 3.0,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 132344
+  },
+  {
+    "id": "barber_clipper_02",
+    "source": "AUDIOS/CIDADE/barber_clipper_02.wav",
+    "source_sha256": "47505efd3cbf1872794598eaf4f7a205a36684c13005448b7d0c67a331f6651d",
+    "duration": 2.789,
+    "rate": 22050,
+    "channels": 1,
+    "runtime_bytes": 123056
+  }
+]
