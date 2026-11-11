@@ -72,8 +72,12 @@ namespace FitCheck
         }
         void CreatorSwatches(Rect area,Color[] colors,bool skin)
         {
+            int columns=skin?3:4;
+            float strideX=skin?110:83,strideY=skin?58:41;
+            float width=skin?100:76,height=skin?48:36;
             for(int i=0;i<colors.Length;i++){
-                var r=new Rect(area.x+i%3*110,area.y+i/3*58,100,48);bool selected=(skin?creatorDraft.skin:creatorDraft.hairColor)==i;
+                var r=new Rect(area.x+i%columns*strideX,area.y+i/columns*strideY,width,height);
+                bool selected=(skin?creatorDraft.skin:creatorDraft.hairColor)==i;
                 Fill(r,selected?CreatorRed:line);Fill(new Rect(r.x+4,r.y+4,r.width-8,r.height-8),colors[i]);
                 if(GUI.Button(r,GUIContent.none,GUIStyle.none)){if(skin)creatorDraft.skin=i;else creatorDraft.hairColor=i;RefreshCreator();Sound(0);}
             }

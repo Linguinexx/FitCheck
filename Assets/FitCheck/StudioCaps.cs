@@ -44,7 +44,8 @@ namespace FitCheck
                 for(int i=0;i<path.Length;i++)path[i]=CapPoint(theta,.08f+i/(float)(path.Length-1)*.91f,structured)+new Vector3(Mathf.Sin(theta)*.003f,.003f,-Mathf.Cos(theta)*.003f);
                 Tube("Boné — costura de painel",path,.0035f,edge,clothes,origin:new Vector3(0,2.8f,0));
             }
-            BuildBill(structured,denim?fabric:SurfaceMaterial(structured?item.color:new Color(.15f,.32f,.22f),"Cloth"));
+            var bill=denim?fabric:SurfaceMaterial(structured||item.id=="SB_HEAD_02"?item.color*.8f:new Color(.15f,.32f,.22f),"Cloth");
+            BuildBill(structured,bill);
             if(item.id==NeighbourhoodCap){
                 var origin=new Vector3(0,2.8f,0);
                 for(int i=0;i<3;i++){

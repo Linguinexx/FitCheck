@@ -24,7 +24,7 @@ namespace FitCheck
             index=-1;target=Vector3.zero;
             float best=.91f;
             foreach(var entry in fitFeedResidents){
-                if(!entry.actor.root.gameObject.activeInHierarchy||campaign.GreetedCustomer(entry.index))continue;
+                if(!entry.actor.root.gameObject.activeInHierarchy||!campaign.CanGreetCustomer(entry.index))continue;
                 var point=entry.actor.root.position+Vector3.up*2.35f;
                 var offset=point-camera.transform.position;
                 float alignment=Vector3.Dot(camera.transform.forward,offset.normalized);
@@ -41,7 +41,7 @@ namespace FitCheck
 
         public void SyncFitFeedResidents(StudioView studio,DayProgress campaign)
         {
-            int first=(campaign.day-1)*3;
+            int first=campaign.FirstCustomerOfDay;
             for(int i=fitFeedResidents.Count-1;i>=0;i--){
                 var entry=fitFeedResidents[i];
                 if(ReferenceEquals(fitFeedCampaign,campaign)&&fitFeedDay==campaign.day&&entry.index<campaign.posts.Count
@@ -65,7 +65,8 @@ namespace FitCheck
                     var outfit=campaign.posts[index].outfit;
                     studio.Apply(outfit,index);
                     int assetStart=assets.Count;
-                    var actor=CopyAvatar(studio,"FitFeed — "+DayOne.Customers[index].name,FitFeedSpots[index],FitFeedFacing[index],false);
+                    int scenery=DayOne.CustomerScenery(index);
+                    var actor=CopyAvatar(studio,"FitFeed — "+DayOne.Customers[index].name,FitFeedSpots[scenery],FitFeedFacing[scenery],false);
                     actor.idleStyle=3+index%3;
                     actor.homeFacing=actor.facing;
                     residents.Add(actor);

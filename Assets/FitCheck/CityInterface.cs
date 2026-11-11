@@ -43,7 +43,7 @@ namespace FitCheck
             beforeCityClearFlags=cam.clearFlags;var sky=cam.GetComponent<Skybox>();beforeCitySky=sky!=null?sky.material:null;beforeCitySkyEnabled=sky!=null&&sky.enabled;
             studio.SetHome(false);beforeCityBackground=cam.backgroundColor;beforeCityFov=cam.fieldOfView;beforeCityNearClip=cam.nearClipPlane;
             studio.SetExploration(true);
-            int nextCustomer=Mathf.Clamp(progress.posts.Count,0,8);
+            int nextCustomer=Mathf.Clamp(progress.posts.Count,0,DayOne.Customers.Length-1);
             if(interior&&!home&&shop!=null&&(shop.ShopCustomerIndex!=nextCustomer||!ReferenceEquals(shopBuiltCampaign,progress)||shopBuiltDay!=progress.day)){shop.gameObject.SetActive(false);Destroy(shop.gameObject);shop=null;}
             city=home?homeRoom:interior?shop:street;
             if(city==null){city=new GameObject(home?"Casa — quarto do jogador":interior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(home)city.BuildHome();else if(interior)city.BuildShop(studio,nextCustomer);else city.Build(studio);if(home)homeRoom=city;else if(interior)shop=city;else street=city;}
@@ -113,7 +113,7 @@ namespace FitCheck
             if(!city.RuntimeReady||!city.PlayerBodyReady){
                 var old=city;var position=old.Position;float yaw=old.ViewYaw,pitch=old.ViewPitch;
                 old.PrepareRuntimeDisposal();old.gameObject.SetActive(false);mannequin.gameObject.SetActive(true);
-                city=new GameObject(old.IsHome?"Casa — quarto do jogador":old.IsInterior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(old.IsHome){city.BuildHome();homeRoom=city;}else if(old.IsInterior){city.BuildShop(studio,Mathf.Clamp(progress.posts.Count,0,8));shop=city;}else{city.Build(studio);street=city;}
+                city=new GameObject(old.IsHome?"Casa — quarto do jogador":old.IsInterior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(old.IsHome){city.BuildHome();homeRoom=city;}else if(old.IsInterior){city.BuildShop(studio,Mathf.Clamp(progress.posts.Count,0,DayOne.Customers.Length-1));shop=city;}else{city.Build(studio);street=city;}
                 if(!old.IsInterior&&!old.IsHome)city.SyncFitFeedResidents(studio,progress);
                 studio.ApplyUniform(progress.EquippedUniform);city.RestoreWalk(position,yaw,pitch,mannequin);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);Destroy(old.gameObject);
                 shopFittingOpening=false;

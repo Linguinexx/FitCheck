@@ -13,8 +13,9 @@ namespace FitCheck
         }
         public static GameObject Build(int index)
         {var go=new GameObject("Cidade — "+DayOne.Customers[index].location);go.transform.position=new Vector3(30,0,0);
-            if(index==1||index==2||index==3||index==5||index==6)go.AddComponent<CityView>().BuildPhotoLocation(index);
-            else go.AddComponent<PhotoScenery>().Compose(index);return go;}
+            int scenery=DayOne.CustomerScenery(index);
+            if(scenery==1||scenery==2||scenery==3||scenery==5||scenery==6)go.AddComponent<CityView>().BuildPhotoLocation(scenery);
+            else go.AddComponent<PhotoScenery>().Compose(scenery);return go;}
         void Compose(int index)
         {
             var sand=new Color(.66f,.6f,.48f);var stone=new Color(.38f,.4f,.38f);var green=new Color(.15f,.34f,.22f);var cream=new Color(.87f,.79f,.6f);

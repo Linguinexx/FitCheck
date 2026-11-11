@@ -24,9 +24,12 @@ namespace FitCheck
                 AppearanceStore.Save(Path.Combine(library,"player-appearance.json"),new PlayerAppearance{created=true,name="Lia",hair=1,skin=2,hairColor=5});
                 string originalLegacy=File.ReadAllText(Path.Combine(library,"day-one.json"));
                 OpenSaveSelection();
-                if(!saveSlots[0].progress.Complete||saveSlots[0].appearance.name!="Lia"||saveSlots[1].exists||saveSlots[2].exists)throw new Exception("Migração não preservou a semana ou ocupou outro espaço");
+                if(saveSlots[0].progress.Complete||!saveSlots[0].progress.closed||saveSlots[0].progress.day!=3||
+                    saveSlots[0].appearance.name!="Lia"||saveSlots[1].exists||saveSlots[2].exists)
+                    throw new Exception("Migração não preservou o terceiro dia ou ocupou outro espaço");
                 PreviewSave(0);OpenSelectedSave();
-                if(stage!=Stage.City||!city.IsHome||!progress.Complete)throw new Exception("Continuar save não retomou a semana concluída em casa");
+                if(stage!=Stage.City||!city.IsHome||progress.Complete||!progress.closed||progress.day!=3)
+                    throw new Exception("Continuar save não retomou o terceiro dia encerrado em casa");
                 string first=File.ReadAllText(DayPath);
                 OpenSaveSelection();PreviewSave(1);OpenSelectedSave();
                 if(stage!=Stage.CharacterCreator||progress.posts.Count!=0)throw new Exception("Novo save não abriu criação independente");

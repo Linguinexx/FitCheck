@@ -143,13 +143,15 @@ namespace FitCheck
             clothes=new GameObject("Vestuário 3D").transform;clothes.SetParent(Avatar,false);clothes.localPosition=Vector3.zero;
             foreach(Transform c in hair){c.gameObject.SetActive(false);Destroy(c.gameObject);}
             int profile=customer<0?6:DayOne.CustomerProfile(Mathf.Clamp(customer,0,DayOne.Customers.Length-1));
-            feminineAppearance=applyingPlayer?PlayerLook.appearanceBase==1:profile==1||profile==3||profile==5;
-            skin.color=new[]{new Color(.67f,.40f,.23f),new Color(.94f,.72f,.58f),new Color(.25f,.135f,.085f),new Color(.76f,.60f,.40f),new Color(.53f,.33f,.23f),new Color(.38f,.205f,.13f),new Color(.62f,.4f,.27f)}[profile];
-            if(applyingPlayer)skin.color=PlayerAppearance.SkinColors[PlayerLook.skin];
-            SetFaceProfile(profile);if(applyingPlayer)ApplyExpression((AvatarExpression)PlayerLook.expression);
+            var appearance=applyingPlayer?PlayerLook:WeekExpansion.Appearance(profile);
+            feminineAppearance=appearance!=null?appearance.appearanceBase==1:profile==1||profile==3||profile==5;
+            skin.color=appearance!=null?PlayerAppearance.SkinColors[appearance.skin]:
+                new[]{new Color(.67f,.40f,.23f),new Color(.94f,.72f,.58f),new Color(.25f,.135f,.085f),new Color(.76f,.60f,.40f),new Color(.53f,.33f,.23f),new Color(.38f,.205f,.13f),new Color(.62f,.4f,.27f)}[profile];
+            SetFaceProfile(profile);
+            if(appearance!=null&&(applyingPlayer||ExpressionOverride<0))ApplyExpression((AvatarExpression)appearance.expression);
             var headwear=playerPieces?[3]??Catalog.Get(outfit[3]);
-            BuildHair(profile,headwear);
-            int civilianProfile=civilianWardrobe>=0?civilianWardrobe:Mathf.Clamp(customer,0,8);
+            BuildHair(profile,headwear,appearance);
+            int civilianProfile=civilianWardrobe>=0?civilianWardrobe:Mathf.Max(0,customer);
             bool originalTop=Catalog.IsArrivalPiece(outfit[0]),originalBottom=Catalog.IsArrivalPiece(outfit[1]),originalShoes=Catalog.IsArrivalPiece(outfit[2]);
             var t=playerPieces?[0]??(originalTop?CivilianTop(civilianProfile):Catalog.Get(outfit[0]));bool fubaSuit=t.id==FubaTop;
             var cloth=fubaSuit?SurfaceMaterial(t.color,"Knit"):Material(t.color);
@@ -167,7 +169,7 @@ namespace FitCheck
             }else if(t.id==GhostTop){
                 ShirtBody(t,cloth);
                 BuildFittingGhostShirt();
-            }else if(!blenderTop){
+            }else if(!blenderTop&&!BuildWeekTop(t,cloth)){
 ShirtBody(t,cloth);
             Rings("Gola",new Vector3(0,2.217f,0),new Vector3(.34f,.045f,.32f),Material(t.id=="CG_TOP_01"?new Color(.12f,.3f,.19f):t.color*.68f),clothes,new[]{0f,1f},new[]{1f,1f},12);
             var print=Material(t.id=="SB_TOP_01"?new Color(.7f,.06f,.07f):new Color(.16f,.26f,.22f));
@@ -197,6 +199,7 @@ ShirtBody(t,cloth);
                 if(!fubaSuit&&t.id!=GhostTop)Box("Bolso",new Vector3(side*.3f,1.13f,-.232f),new Vector3(.15f,.17f,.018f),Material(b.color*.82f),clothes);
                 if(b.id=="CG_BOTTOM_01")Box("Faixa lateral",new Vector3(side*.423f,.88f,0),new Vector3(.018f,.82f,.08f),Material(new Color(.8f,.75f,.6f)),clothes);
                 if(b.id=="SB_BOTTOM_02")Box("Painel Remix",new Vector3(side*.23f,1.03f,-.244f),new Vector3(.32f,.3f,.02f),Material(side<0?new Color(.32f,.32f,.34f):new Color(.65f,.65f,.67f)),clothes);
+                if(b.id=="AH_BOTTOM_03"||b.id=="CG_BOTTOM_03")BuildWeekBottomTrim(b,side);
                 }
                 if(fubaSuit)BuildFubaPaw(side,cloth);
                 else if(originalShoes)BuildCivilianShoes(civilianProfile,side);else BuildShoes(playerPieces?[2]??Catalog.Get(outfit[2]),side);

@@ -8,7 +8,10 @@ namespace FitCheck
 {
     [Serializable] public class DayProgress
     {
+        public const int TotalDays=7, CustomersPerDay=3;
+        public const int TotalCustomers=TotalDays*CustomersPerDay;
         public int version=2, day=1, reputation, uniform;
+        public int FirstCustomerOfDay=>(day-1)*CustomersPerDay;
         public bool closed;
         public List<Attempt> posts=new List<Attempt>();
         public List<int> reached=new List<int>();
@@ -20,6 +23,7 @@ namespace FitCheck
         public const int NeighbourhoodUniform=5;
         public const string NeighbourhoodAward="Figurinha do Bairro";
         public int greetedCustomerProfiles;
+        public List<int> greetedCustomerEncounters=new List<int>();
         public const int GarageDjUniform=6, GarageDjRecordGoal=3;
         public const string GarageDjAward="DJ de Garagem";
         public int garageDjDecks;
@@ -44,11 +48,18 @@ namespace FitCheck
         }
         public bool UniformUnlocked(int index)=>index>=0&&index<UniformAwards.Length&&(index==0||achievements.Contains(UniformAwards[index]));
         public int EquippedUniform=>UniformUnlocked(uniform)?uniform:0;
-        public bool GreetedCustomer(int index)=>(greetedCustomerProfiles&(1<<DayOne.CustomerProfile(index)))!=0;
+        public bool CanGreetCustomer(int index)
+        {
+            return index>=0&&index>=FirstCustomerOfDay&&index<posts.Count&&greetedCustomerEncounters?.Contains(index)!=true;
+        }
         public bool RegisterCustomerGreeting(int index)
         {
-            if(index<(day-1)*3||index>=posts.Count||GreetedCustomer(index))return false;
-            greetedCustomerProfiles|=1<<DayOne.CustomerProfile(index);
+            if(!CanGreetCustomer(index))return false;
+            greetedCustomerEncounters??=new List<int>();
+            greetedCustomerEncounters.Add(index);
+            int profileFlag=1<<DayOne.CustomerProfile(index);
+            if((greetedCustomerProfiles&profileFlag)!=0)return true;
+            greetedCustomerProfiles|=profileFlag;
             int count=0;
             for(int flags=greetedCustomerProfiles;flags!=0;flags&=flags-1)count++;
             if(count>=3)Unlock(NeighbourhoodAward);
@@ -60,10 +71,14 @@ namespace FitCheck
             if(++fubaPets==FubaPetGoal)Unlock(FubaAward);
             return true;
         }
-        public static readonly int[] Milestones={100,200,300,450,600};
-        public static readonly string[][] RewardNames={new[]{"Night Route","Remix"},new[]{"Court Lines","Daily Steps"},new[]{"Closing Time","Independent"},new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"}};
-        public bool DayComplete=>posts.Count==day*3;
-        public bool Complete=>posts.Count==9&&closed;
+        public static readonly int[] Milestones={100,200,300,450,600,750,1050,1400};
+        public static readonly string[][] RewardNames={
+            new[]{"Night Route","Remix"},new[]{"Court Lines","Daily Steps"},new[]{"Closing Time","Independent"},
+            new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"},new[]{"Pista Aberta","Cargo das Lajes"},
+            new[]{"Fita Local","Bermuda de Pista"},new[]{"Luz de Poste","Aba de Tijolo"}
+        };
+        public bool DayComplete=>posts.Count==FirstCustomerOfDay+CustomersPerDay;
+        public bool Complete=>day==TotalDays&&DayComplete&&closed;
         public string[] Available=>Catalog.All.Where(g=>g.unlockAt==0||rewards.Contains(g.name)).Select(g=>g.id).ToArray();
         public static int Credit(int score,int index)=>index==0?Rules.TutorialReputation(score):score==10?100:score==7?60:score==6?30:-30;
         public static void CheckOutfit(string[] outfit,string[] inventory)
@@ -73,7 +88,7 @@ namespace FitCheck
         }
         public void Add(Attempt attempt)
         {
-            if(closed||DayComplete||posts.Count>=9)throw new InvalidOperationException("Feche o expediente antes de avançar");
+            if(closed||DayComplete||posts.Count>=TotalCustomers)throw new InvalidOperationException("Feche o expediente antes de avançar");
             CheckOutfit(attempt.outfit,Available);
             attempt.available=Available;
             attempt.score=DayOne.Score(posts.Count,attempt.outfit);
@@ -96,7 +111,8 @@ namespace FitCheck
         {
             if(posts.Any(p=>p.score==10))Unlock("Visual Perfeito");
             if(closed&&day>=1)Unlock("Primeiro Expediente");
-            for(int d=0;d<posts.Count/3;d++)if(posts.Skip(d*3).Take(3).All(p=>p.score>=7))Unlock("Sintonia com os Clientes");
+            for(int start=0;start+CustomersPerDay<=posts.Count;start+=CustomersPerDay)
+                if(posts.Skip(start).Take(CustomersPerDay).All(p=>p.score>=7))Unlock("Sintonia com os Clientes");
         }
         public void Deliver()
         {
@@ -109,13 +125,16 @@ namespace FitCheck
         }
         public void Advance()
         {
-            if(!closed||day>=3)throw new InvalidOperationException("Não há outro dia disponível");
+            if(!closed||day>=TotalDays)throw new InvalidOperationException("Não há outro dia disponível");
+            // Entrega os novos marcos já alcançados por saves da campanha antiga.
+            UpdateMilestones();
+            Deliver();
             day++;closed=false;
         }
         public void Validate()
         {
             if(version==1){version=2;day=1;achievements=new List<string>();foreach(var post in posts)post.available=Catalog.Items.Select(g=>g.id).ToArray();UpdateAchievements();}
-            if(version!=2||day<1||day>3||posts==null||posts.Count<(day-1)*3||posts.Count>day*3||reached==null||rewards==null||achievements==null||closed&&!DayComplete)
+            if(version!=2||day<1||day>TotalDays||posts==null||posts.Count<FirstCustomerOfDay||posts.Count>FirstCustomerOfDay+CustomersPerDay||reached==null||rewards==null||achievements==null||closed&&!DayComplete)
                 throw new ArgumentException("Progresso inválido");
             for(int i=0;i<posts.Count;i++){
                 var post=posts[i];if(post==null||!post.completed||post.question< -1||post.question>1)throw new ArgumentException("Publicação inválida");

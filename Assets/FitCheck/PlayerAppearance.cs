@@ -9,10 +9,19 @@ namespace FitCheck
         public int version=1,skin,hair,hairColor,expression,appearanceBase;public bool created;public string name="Você";
         public const int BlackPowerHair=7,ShortCoilsHair=8;
         public static readonly string[] HairNames={"Cachos","Coque","Raspado","Franja","Penteado","Assimétrico","Ondulado longo","Black Power","Crespo curto"};
-        public static readonly string[] ColorNames={"Castanho","Preto","Ruivo","Loiro","Grisalho","Ameixa"};
+        internal const int CopperHairColor=7, HotPinkHairColor=9;
+        public static readonly string[] ColorNames={
+            "Castanho","Preto","Ruivo","Loiro","Grisalho","Ameixa",
+            "Chocolate","Cobre","Platinado","Rosa choque","Azul elétrico","Turquesa"
+        };
         public static readonly string[] FaceNames={"Neutra","Curiosa","Desconfiada","Sonolenta","Animada","Surpresa"};
         public static readonly Color[] SkinColors={new Color(.67f,.40f,.23f),new Color(.94f,.72f,.58f),new Color(.25f,.135f,.085f),new Color(.76f,.60f,.40f),new Color(.53f,.33f,.23f),new Color(.38f,.205f,.13f)};
-        public static readonly Color[] HairColors={new Color(.16f,.075f,.035f),new Color(.045f,.033f,.028f),new Color(.49f,.17f,.065f),new Color(.78f,.59f,.27f),new Color(.52f,.51f,.49f),new Color(.23f,.075f,.19f)};
+        public static readonly Color[] HairColors={
+            new Color(.16f,.075f,.035f),new Color(.045f,.033f,.028f),new Color(.49f,.17f,.065f),
+            new Color(.78f,.59f,.27f),new Color(.52f,.51f,.49f),new Color(.23f,.075f,.19f),
+            new Color(.32f,.15f,.088f),new Color(.74f,.31f,.125f),new Color(.84f,.84f,.82f),
+            new Color(.88f,.21f,.49f),new Color(.16f,.38f,.89f),new Color(.10f,.66f,.56f)
+        };
         public PlayerAppearance Copy(){return new PlayerAppearance{version=version,name=name,created=created,skin=skin,hair=hair,hairColor=hairColor,expression=expression,appearanceBase=appearanceBase};}
         public void Validate()
         {

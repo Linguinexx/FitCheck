@@ -6,6 +6,50 @@ namespace FitCheck
     public partial class StudioView
     {
         const int ShirtSides=32;
+        bool BuildWeekTop(Garment top,Material fabric)
+        {
+            if(top.id!="CG_TOP_04"&&top.id!="SB_TOP_04"&&top.id!="AH_TOP_04")return false;
+            ShirtBody(top,fabric);
+            var seam=SurfaceMaterial(top.color*.66f,"Knit");
+            Rings("Gola canelada",new Vector3(0,2.217f,0),new Vector3(.42f,.06f,.34f),
+                seam,clothes,new[]{0f,1f},new[]{1f,1f},12);
+            if(top.id=="SB_TOP_04"){
+                var tape=SurfaceMaterial(new Color(.22f,.16f,.11f),"Cloth");
+                var label=SurfaceMaterial(new Color(.99f,.91f,.73f),"Cloth");
+                Box("Fita cassete",GhostPatchPoint(new Vector2(0,.065f),-1,1,.009f),new Vector3(.24f,.12f,.027f),tape,clothes);
+                Box("Etiqueta da fita",GhostPatchPoint(new Vector2(0,.085f),-1,1,.026f),new Vector3(.195f,.041f,.009f),label,clothes);
+                foreach(float x in new[]{-.057f,.057f})
+                    Ellipsoid("Carretel da fita",GhostPatchPoint(new Vector2(x,.083f),-1,1,.033f),new Vector3(.030f,.030f,.014f),tape,clothes,12,8);
+            }else{
+                bool track=top.id=="CG_TOP_04";
+                var stripe=SurfaceMaterial(track?new Color(.93f,.75f,.33f):new Color(.72f,.91f,.82f),"Cloth");
+                if(!track)stripe.SetFloat("_Glow",.16f);
+                foreach(int side in new[]{-1,1}){
+                    for(int row=0;row<(track?3:2);row++){
+                        float y=-.085f+row*.075f;
+                        var a=GhostPatchPoint(new Vector2(-.29f,y+.06f),side,1,.014f);
+                        var b=GhostPatchPoint(new Vector2(0,y-.025f),side,1,.014f);
+                        var c=GhostPatchPoint(new Vector2(.29f,y+.06f),side,1,.014f);
+                        Tube(track?"Linhas da pista":"Faixa refletiva",new[]{a,b,c},track?.014f:.018f,stripe,clothes);
+                    }
+                }
+            }
+            return true;
+        }
+        void BuildWeekBottomTrim(Garment bottom,int side)
+        {
+            bool cargo=bottom.id=="AH_BOTTOM_03";
+            var trim=SurfaceMaterial(cargo?bottom.color*.68f:new Color(.79f,.91f,.96f),"Cloth");
+            float outer=side*(cargo?.41f:.445f);
+            if(cargo){
+                Box("Bolso cargo lateral",new Vector3(outer,.91f,.015f),new Vector3(.052f,.28f,.19f),trim,clothes);
+                Box("Aba do bolso cargo",new Vector3(outer+side*.028f,1.02f,.014f),new Vector3(.022f,.058f,.213f),
+                    SurfaceMaterial(bottom.color*1.22f,"Cloth"),clothes);
+            }else{
+                var stripe=new[]{new Vector3(outer,1.25f,-.045f),new Vector3(outer+side*.008f,1.02f,-.045f),new Vector3(outer,.79f,-.045f)};
+                Tube("Friso da bermuda",stripe,.017f,trim,clothes);
+            }
+        }
         void BuildPosterJacket()
         {
             var paper=SurfaceMaterial(new Color(.94f,.84f,.59f),"Cloth");

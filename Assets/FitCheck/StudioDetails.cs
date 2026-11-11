@@ -18,13 +18,15 @@ namespace FitCheck
             if(headwear.id==GarageDjHeadphones)return HairFit.Headphones;
             return headwear.cap?HairFit.Cap:HairFit.Knit;
         }
-        void BuildHair(int profile,Garment headwear)
+        void BuildHair(int profile,Garment headwear,PlayerAppearance appearance)
         {
-            int cut=applyingPlayer?PlayerLook.hair:HairOverride>=0?HairOverride:profile==5?PlayerAppearance.BlackPowerHair:profile==3?6:profile==6?0:profile;currentHairProfile=cut;
+            int naturalCut=appearance?.hair??(profile==5?PlayerAppearance.BlackPowerHair:profile==3?6:profile==6?0:profile);
+            int cut=!applyingPlayer&&HairOverride>=0?HairOverride:naturalCut;
+            currentHairProfile=cut;
             foreach(Transform part in face)if(part.name=="Orelha")part.gameObject.SetActive(cut!=6&&cut!=PlayerAppearance.BlackPowerHair);
             var color=cut>=PlayerAppearance.BlackPowerHair?new Color(.065f,.043f,.034f):
                 new[]{new Color(.065f,.038f,.025f),new Color(.49f,.17f,.065f),new Color(.08f,.045f,.03f),new Color(.12f,.065f,.115f),new Color(.36f,.37f,.39f),new Color(.78f,.59f,.27f),new Color(.21f,.09f,.055f)}[cut];
-            if(applyingPlayer)color=PlayerAppearance.HairColors[PlayerLook.hairColor];
+            if(appearance!=null)color=PlayerAppearance.HairColors[appearance.hairColor];
             bool coils=cut>=PlayerAppearance.BlackPowerHair;
             if(coils&&color.maxColorComponent<.10f)color=new Color(.115f,.093f,.077f);
             var strands=SurfaceMaterial(color,"Hair");strands.SetFloat("_HairFlow",coils?0:1);strands.SetFloat("_Outline",0);

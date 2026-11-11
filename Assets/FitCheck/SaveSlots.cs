@@ -195,7 +195,7 @@ namespace FitCheck
                 if(Tap(new Rect(40,y,462,118),"",selectedSave==i))PreviewSave(i);
                 var color=paper;
                 Txt(new Rect(58,y+12,420,30),"0"+(i+1)+"  /  "+(info.exists?info.appearance.name:"Novo save"),action,color);
-                string subtitle=info.error!=null?"Save indisponível — arquivos preservados":!info.exists?"Crie um personagem e comece sua semana":info.progress.Complete?"Semana concluída  /  9 publicações":"Dia 0"+info.progress.day+"  /  "+info.progress.posts.Count+" publicações";
+                string subtitle=info.error!=null?"Save indisponível — arquivos preservados":!info.exists?"Crie um personagem e comece sua semana":info.progress.Complete?"Semana concluída  /  "+info.progress.posts.Count+" publicações":"Dia 0"+info.progress.day+"  /  "+info.progress.posts.Count+" publicações";
                 Txt(new Rect(58,y+59,420,48),subtitle,caption,color);
             }
             var chosen=saveSlots[selectedSave]??new SaveSlotInfo();

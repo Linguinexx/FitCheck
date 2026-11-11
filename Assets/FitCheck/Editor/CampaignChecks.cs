@@ -17,20 +17,50 @@ namespace FitCheck.Editor
             new[]{"CG_TOP_01","CG_BOTTOM_02","AH_SHOES_01","CG_HEAD_01"},
             new[]{"SB_TOP_01","SB_BOTTOM_01","AH_SHOES_01",""},
             new[]{"AH_TOP_01","AH_BOTTOM_01","SB_SHOES_01",""},
-            new[]{"CG_TOP_01","SB_BOTTOM_01","AH_SHOES_01",""}
+            new[]{"CG_TOP_01","SB_BOTTOM_01","AH_SHOES_01",""},
+            new[]{"AH_TOP_01","CG_BOTTOM_02","AH_SHOES_01",""},
+            new[]{"AH_TOP_01","AH_BOTTOM_01","AH_SHOES_01","CG_HEAD_01"},
+            new[]{"SB_TOP_01","AH_BOTTOM_01","AH_SHOES_01",""},
+            new[]{"AH_TOP_01","AH_BOTTOM_01","AH_SHOES_01",""},
+            new[]{"AH_TOP_01","CG_BOTTOM_02","AH_SHOES_01","CG_HEAD_01"},
+            new[]{"AH_TOP_01","CG_BOTTOM_01","AH_SHOES_01",""},
+            new[]{"AH_TOP_01","AH_BOTTOM_01","AH_SHOES_01",""},
+            new[]{"AH_TOP_01","CG_BOTTOM_02","AH_SHOES_01",""},
+            new[]{"SB_TOP_01","AH_BOTTOM_01","AH_SHOES_01","CG_HEAD_01"},
+            new[]{"AH_TOP_01","CG_BOTTOM_02","AH_SHOES_01",""},
+            new[]{"AH_TOP_01","AH_BOTTOM_01","AH_SHOES_01",""},
+            new[]{"AH_TOP_01","CG_BOTTOM_01","AH_SHOES_01",""}
         };
         [MenuItem("Tools/Fit Check/Validate full campaign")]
         public static void Validate()
         {
-            if(DayOne.Customers.Length!=9||Catalog.All.Length!=21||Catalog.All.Select(g=>g.id).Distinct().Count()!=21)throw new Exception("Conteúdo incompleto ou IDs duplicados");
+            if(DayOne.Customers.Length!=DayProgress.TotalCustomers||Solutions.Length!=DayProgress.TotalCustomers||
+                DayOne.Customers.Select(request=>request.id).Distinct().Count()!=DayProgress.TotalCustomers||
+                Catalog.All.Length!=27||Catalog.All.Select(g=>g.id).Distinct().Count()!=Catalog.All.Length)
+                throw new Exception("Conteúdo incompleto ou IDs duplicados");
             var campaign=new DayProgress();
-            for(int i=0;i<9;i++){
+            for(int i=0;i<DayProgress.TotalCustomers;i++){
                 if(DayOne.Score(i,Solutions[i])!=10)throw new Exception("Solução inicial falhou: "+i);
                 campaign.Add(new Attempt{outfit=(string[])Solutions[i].Clone(),question=i%2});
-                if((i+1)%3==0){campaign.Close();campaign.Close();if(i<8)campaign.Advance();}
+                if(campaign.DayComplete){
+                    campaign.Close();campaign.Close();
+                    if(i==8){
+                        var oldWeek=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(campaign));
+                        oldWeek.reached.RemoveAll(mark=>mark>600);
+                        oldWeek.rewards.RemoveAll(name=>Catalog.All.Any(g=>g.name==name&&g.unlockAt>600));
+                        oldWeek.Validate();
+                        if(oldWeek.Complete||!oldWeek.closed||oldWeek.posts.Count!=9||oldWeek.reputation!=900)
+                            throw new Exception("Save antigo encerrou a campanha de sete dias");
+                        oldWeek.Advance();
+                        oldWeek.Validate();
+                        if(oldWeek.day!=4||oldWeek.closed||!oldWeek.Available.Contains("CG_TOP_04"))
+                            throw new Exception("Save antigo perdeu o próximo dia ou a recompensa já merecida");
+                    }
+                    if(!campaign.Complete)campaign.Advance();
+                }
                 campaign.Validate();
             }
-            if(!campaign.Complete||campaign.reputation!=900||campaign.Available.Length!=21||campaign.achievements.Count!=3)throw new Exception("Conclusão/progressão inválida");
+            if(!campaign.Complete||campaign.reputation!=2100||campaign.Available.Length!=27||campaign.achievements.Count!=3)throw new Exception("Conclusão/progressão inválida");
             var before=campaign.reputation;var question=campaign.posts[0].question;
             if(campaign.Improve(0,Solutions[0])||campaign.reputation!=before||campaign.posts[0].question!=question)throw new Exception("Replay duplicou crédito ou mudou pergunta");
             bool denied=false;try{campaign.Improve(0,new[]{"AH_TOP_02","AH_BOTTOM_01","AH_SHOES_01",""});}catch(ArgumentException){denied=true;}
@@ -45,9 +75,13 @@ namespace FitCheck.Editor
             for(int i=0;i<3;i++)greetings.Add(new Attempt{outfit=Catalog.Default});
             if(!greetings.RegisterCustomerGreeting(0)||greetings.RegisterCustomerGreeting(0))throw new Exception("Cumprimento duplicado");
             greetings.Close();greetings.Advance();
+            greetings.greetedCustomerEncounters=null;
             greetings=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(greetings));
             for(int i=3;i<6;i++)greetings.Add(new Attempt{outfit=Catalog.Default});
-            if(greetings.RegisterCustomerGreeting(0)||greetings.RegisterCustomerGreeting(4)||!greetings.RegisterCustomerGreeting(3)||
+            if(greetings.RegisterCustomerGreeting(0)||!greetings.CanGreetCustomer(4)||!greetings.RegisterCustomerGreeting(4))
+                throw new Exception("Cliente recorrente não aceitou cumprimento");
+            greetings=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(greetings));
+            if(greetings.RegisterCustomerGreeting(4)||!greetings.RegisterCustomerGreeting(3)||
                 greetings.UniformUnlocked(DayProgress.NeighbourhoodUniform)||!greetings.RegisterCustomerGreeting(5)||
                 !greetings.UniformUnlocked(DayProgress.NeighbourhoodUniform))throw new Exception("Figurinha do Bairro não contou três clientes distintos");
             var dj=new DayProgress();
@@ -65,7 +99,7 @@ namespace FitCheck.Editor
             if(!ghost.UniformUnlocked(DayProgress.FittingGhostUniform))throw new Exception("Traje Fantasma perdido no save");
             var legacy=new DayProgress();legacy.Add(new Attempt{outfit=Solutions[0]});legacy.version=1;legacy.posts[0].available=null;
             var migrated=JsonUtility.FromJson<DayProgress>(JsonUtility.ToJson(legacy));migrated.Validate();if(migrated.version!=2||migrated.posts[0].available.Length!=11)throw new Exception("Migração inválida");
-            foreach(var top in Catalog.Items.Where(g=>g.slot==0))foreach(var bottom in Catalog.Items.Where(g=>g.slot==1))foreach(var shoes in Catalog.Items.Where(g=>g.slot==2))foreach(var head in new[]{"","AH_HEAD_01","CG_HEAD_01"})for(int i=0;i<9;i++){
+            foreach(var top in Catalog.Items.Where(g=>g.slot==0))foreach(var bottom in Catalog.Items.Where(g=>g.slot==1))foreach(var shoes in Catalog.Items.Where(g=>g.slot==2))foreach(var head in new[]{"","AH_HEAD_01","CG_HEAD_01"})for(int i=0;i<DayProgress.TotalCustomers;i++){
                 int score=DayOne.Score(i,new[]{top.id,bottom.id,shoes.id,head});if(!new[]{0,3,4,6,7,10}.Contains(score))throw new Exception("Nota fora do modelo 4/3/3");
             }
             var path=Path.Combine(Application.temporaryCachePath,"FitCheck-save-test-"+Guid.NewGuid()+".json");
@@ -77,9 +111,9 @@ namespace FitCheck.Editor
                 File.Delete(path);
                 ProgressStore.Save(path,campaign);ProgressStore.Save(path,campaign);
                 File.WriteAllText(path,"save corrompido");var recovered=ProgressStore.Load(path+".bak");if(!recovered.Complete)throw new Exception("Backup inválido");
-                ProgressStore.Save(path,recovered);if(ProgressStore.Load(path).reputation!=900)throw new Exception("Regravação inválida");
+                ProgressStore.Save(path,recovered);if(ProgressStore.Load(path).reputation!=2100)throw new Exception("Regravação inválida");
             }finally{foreach(var suffix in new[]{"",".tmp",".bak"})if(File.Exists(path+suffix))File.Delete(path+suffix);}
-            Debug.Log("FITCHECK_CAMPAIGN_PASSED: 9 pedidos, 900 RP, 21 peças, 3 conquistas, replays sem inflação, inventário congelado, migração e backup.");
+            Debug.Log("FITCHECK_CAMPAIGN_PASSED: 21 pedidos, sete dias, 2100 RP, 27 peças, replays, migração do dia 3 e backup.");
         }
         [MenuItem("Tools/Fit Check/Run full campaign runtime check")]
         public static void Runtime()

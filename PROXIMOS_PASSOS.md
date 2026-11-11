@@ -4,11 +4,11 @@
 
 Registro solicitado para uma próxima etapa.
 
-- Corrigir os cumprimentos dos clientes que retornam em outros dias. Ao encontrá-los novamente no bairro após o atendimento, deve ser possível cumprimentá-los. Separar a interação social da contagem de pessoas distintas para o traje Figurinha do Bairro, mantendo a recompensa sem duplicação.
-- Aumentar a campanha para sete dias. Rever pedidos, progressão, recompensas, encerramento e compatibilidade com saves da campanha atual.
+- Corrigido em 10/11/2026: clientes recorrentes podem ser cumprimentados no bairro depois de cada novo atendimento. Cada encontro só aceita um cumprimento e o traje Figurinha do Bairro continua contando pessoas distintas.
+- Campanha ampliada em 10/11/2026 para sete dias e 21 atendimentos. Saves encerrados no dia 3 continuam pelo mesmo espaço, a partir da cama em casa.
 - Depois da expansão para sete dias, avaliar aumentar o número de clientes por dia. Quantidade ainda a definir.
-- Criar novas roupas e novos clientes para sustentar a campanha ampliada, preservando variedade, estilo gráfico e desempenho.
-- Considerar novos cortes e cores de cabelo. Black Power foi sugerido pelo usuário e deve entrar na exploração visual, com encaixe nos acessórios dos trajes.
+- Os dias 4 a 7 trazem Dandara, Ravi, Joana e Téo, pedidos inéditos de clientes recorrentes e seis novas peças nos marcos de 750, 1050 e 1400 de Reputação. Os retratos dos novos clientes podem ser adicionados depois. Até lá, o FitFeed usa iniciais para eles.
+- Paleta do criador ampliada para 12 cores. Chocolate, cobre, platinado, rosa choque, azul elétrico e turquesa entraram depois das seis cores originais, preservando os IDs dos saves. Joana usa rosa choque e Téo usa cobre.
 - Primeira etapa de cabelos implementada em 07/11/2026: Black Power atribuído à Nina e disponível no criador do jogador; Crespo curto incluído como segunda opção. IDs anteriores preservados. Encaixe específico com bonés, gorros, óculos, fones e capuz espectral. Continuação visual depende do feedback.
 - Bases de aparência masculina/feminina disponíveis no criador em 07/11/2026, com seleção persistente por save, todos os cabelos e trajes acessíveis e cabeça esférica. Primeira versão feminina com sobrancelhas arqueadas, boca mais delicada, cintura discreta e postura ajustada. Lia, Julia e Nina usam essa base; moradores alternam entre as duas. Revisar com o usuário após as prévias.
 

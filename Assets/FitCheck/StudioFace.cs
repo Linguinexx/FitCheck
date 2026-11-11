@@ -170,7 +170,8 @@ namespace FitCheck
             faceProfile=profile;bodyScale=BodyProportion(profile);Avatar.localScale=bodyScale;
             face.localScale=HeadProportion(profile);face.localPosition=new Vector3(0,2.8f+HeadLift(profile),0);
             var neck=Avatar.Find("Pescoço");neck.localPosition=new Vector3(0,2.31f+HeadLift(profile)*.5f,.025f);neck.localScale=new Vector3(.30f,.32f+HeadLift(profile),.29f);
-            ApplyExpression(ExpressionOverride>=0?(AvatarExpression)ExpressionOverride:new[]{AvatarExpression.Curious,AvatarExpression.Happy,AvatarExpression.Skeptical,AvatarExpression.Sleepy,AvatarExpression.Neutral,AvatarExpression.Surprised,AvatarExpression.Neutral}[profile]);
+            var defaults=new[]{AvatarExpression.Curious,AvatarExpression.Happy,AvatarExpression.Skeptical,AvatarExpression.Sleepy,AvatarExpression.Neutral,AvatarExpression.Surprised,AvatarExpression.Neutral};
+            ApplyExpression(ExpressionOverride>=0?(AvatarExpression)ExpressionOverride:defaults[Mathf.Min(profile,defaults.Length-1)]);
         }
         void AnimateFace()
         {

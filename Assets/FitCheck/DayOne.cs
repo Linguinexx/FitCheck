@@ -14,7 +14,8 @@ namespace FitCheck
     public static class DayOne
     {
         static readonly int[] CustomerProfiles={0,1,2,3,0,4,1,3,5};
-        internal static int CustomerProfile(int index)=>CustomerProfiles[index];
+        internal static int CustomerProfile(int index)=>index<CustomerProfiles.Length?CustomerProfiles[index]:WeekExpansion.Encounters[index-CustomerProfiles.Length].Profile;
+        internal static int CustomerScenery(int index)=>index<CustomerProfiles.Length?index:WeekExpansion.Encounters[index-CustomerProfiles.Length].Scenery;
         internal const string KaioName="Kaio", GalleryArtistName="Lia", ShowRegularName="Júlia";
         public static readonly CustomerRequest[] Customers = new CustomerRequest[] {
             new CustomerRequest("DAY01_K7_TUTORIAL", KaioName,
@@ -35,7 +36,7 @@ namespace FitCheck
                 new[]{"Praça, pista, quadra… lugares que ficam com a cara de quem aparece por lá.", "Ela aparece primeiro quando você olha. Se outra peça tentar fazer a mesma coisa, já vira discussão."},
                 new[]{"Usar bermuda", "Pelo menos uma peça COMMON GROUND", "Apenas uma peça vibrante"},
                 "A quadra é de geral. O estilo hoje teve assistência da DripLab.", "Quadra")
-        }.Concat(CampaignContent.More).ToArray();
+        }.Concat(CampaignContent.More).Concat(WeekExpansion.Encounters.Select(encounter=>encounter.Request)).ToArray();
         public static bool[] Evaluate(int customer, string[] outfit)
         {
             Rules.Evaluate(outfit); // Also validates required slots.
@@ -55,6 +56,8 @@ namespace FitCheck
             if(customer==6)return new[]{garments.Any(g=>g.drop=="SIDE B"),top.discreet,!bottom.shorts};
             if(customer==7)return new[]{garments.Any(g=>g.drop=="AFTER HOURS"),top.loose,!bottom.light};
             if(customer==8)return new[]{top.light&&!bottom.light,garments.Any(g=>g.drop=="COMMON GROUND"),string.IsNullOrEmpty(outfit[3])};
+            if(customer>=CustomerProfiles.Length&&customer<Customers.Length)
+                return WeekExpansion.Encounters[customer-CustomerProfiles.Length].Evaluate(pieces);
             throw new ArgumentOutOfRangeException(nameof(customer));
         }
         public static int Score(int customer,string[] outfit)

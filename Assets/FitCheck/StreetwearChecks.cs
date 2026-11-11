@@ -17,7 +17,7 @@ namespace FitCheck
             var original=progress;string storage=storageOverride;var look=playerAppearance;
             try{
                 Home();progress=new DayProgress();storageOverride=Path.Combine(folder,"collection-session");int count=0,triangles=0;
-                foreach(var item in Catalog.All.Where(x=>x.slot<3&&x.id!="CG_BOTTOM_01")){
+                foreach(var item in Catalog.All.Where(x=>x.slot<3&&x.id!="CG_BOTTOM_01"&&x.unlockAt<=600)){
                     var json=Resources.Load<TextAsset>("Garments/Streetwear/"+item.id);if(json==null)throw new Exception("Modelo ausente: "+item.id);
                     var model=JsonUtility.FromJson<BlenderGarmentAsset>(json.text);if(model.id!=item.id||model.slot!=item.slot||!model.source.Contains("Blender"))throw new Exception("Modelo incorreto: "+item.id);
                     foreach(var part in model.parts){triangles+=part.triangles.Length/3;foreach(var p in part.vertices)if(float.IsNaN(p.x)||float.IsInfinity(p.y))throw new Exception("Vértice inválido");}

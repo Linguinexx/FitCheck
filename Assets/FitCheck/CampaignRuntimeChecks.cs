@@ -25,7 +25,7 @@ namespace FitCheck
                 if(distance!=8.2f||distance==oldDistance)throw new Exception("Zoom sem limite");
                 paused=true;angle=rotation;ProcessPreview(new Event{type=EventType.MouseDrag,delta=new Vector2(40,0)});
                 if(rotation!=angle)throw new Exception("Pausa permitiu arrasto");paused=false;
-                for(int i=0;i<9;i++){
+                for(int i=0;i<DayProgress.TotalCustomers;i++){
                     Begin();question=i%2;outfit=(string[])solutions[i].Clone();Apply();EnterDressing();
                     if(i==3){
                         paused=true;AdvanceClock(10);if(remaining!=120)throw new Exception("Pausa não congelou timer");paused=false;
@@ -34,18 +34,18 @@ namespace FitCheck
                     }else Submit();
                     var saved=ProgressStore.Load(DayPath);if(saved.posts.Count!=i+1||!File.Exists(saved.posts[i].photo))throw new Exception("Atendimento não persistido");
                     customer=i;record=saved.posts[i];Continue();if(photo==null||photo.width!=480)throw new Exception("Foto não recuperada");
-                    if((i+1)%3==0){progress.Close();SaveDay();if(i<8)progress.Advance();}
+                    if(progress.DayComplete){progress.Close();SaveDay();if(!progress.Complete)progress.Advance();}
                 }
-                if(!progress.Complete||progress.reputation!=900||progress.Available.Length!=21)throw new Exception("Campanha incompleta");
+                if(!progress.Complete||progress.reputation!=2100||progress.Available.Length!=Catalog.All.Length)throw new Exception("Campanha incompleta");
                 customer=0;fromHome=true;record=progress.posts[0];Replay();Submit();
-                if(progress.reputation!=900||progress.posts.Count!=9)throw new Exception("Replay alterou campanha");
+                if(progress.reputation!=2100||progress.posts.Count!=DayProgress.TotalCustomers)throw new Exception("Replay alterou campanha");
                 foreach(var garment in Catalog.All){outfit=Catalog.Default;outfit[garment.slot]=garment.id;Apply();}
-                if(thumbnails.Count!=21||lockedThumbnails.Count!=21)throw new Exception("Miniaturas incompletas");
+                if(thumbnails.Count!=Catalog.All.Length||lockedThumbnails.Count!=Catalog.All.Length)throw new Exception("Miniaturas incompletas");
                 progress=new DayProgress();Begin();EnterDressing();Submit();string oldPhoto=progress.posts[0].photo;
                 customer=0;record=progress.posts[0];fromHome=true;Replay();outfit=(string[])solutions[0].Clone();Apply();Submit();
                 var backup=ProgressStore.Load(DayPath+".bak");
                 if(progress.posts[0].photo==oldPhoto||backup.posts[0].photo!=oldPhoto||!File.Exists(oldPhoto)||!File.Exists(progress.posts[0].photo))throw new Exception("Replay quebrou associação de foto/backup");
-                Debug.Log("FITCHECK_CAMPAIGN_RUNTIME_PASSED: arrasto/clique/zoom, 9 fotos/saves, timer/pausa/expiração, 3 dias, 21 peças renderizadas e replay sem crédito duplicado.");
+                Debug.Log("FITCHECK_CAMPAIGN_RUNTIME_PASSED: sete dias, 21 fotos e 27 peças, timer e replay sem crédito duplicado.");
             }finally{
                 var testFolder=storageOverride;
                 foreach(var file in Directory.GetFiles(testFolder))File.Delete(file);Directory.Delete(testFolder);

@@ -4,7 +4,7 @@ namespace FitCheck
     public partial class StudioView
     {
         int civilianWardrobe=-1;
-        public void ApplyCivilian(int id,bool customerProfile=false){int previous=civilianWardrobe;try{civilianWardrobe=Mathf.Abs(id);Apply(Catalog.ArrivalOutfit,customerProfile?Mathf.Clamp(id,0,8):-1);}finally{civilianWardrobe=previous;}}
+        public void ApplyCivilian(int id,bool customerProfile=false){int previous=civilianWardrobe;try{civilianWardrobe=Mathf.Abs(id);Apply(Catalog.ArrivalOutfit,customerProfile?Mathf.Clamp(id,0,DayOne.Customers.Length-1):-1);}finally{civilianWardrobe=previous;}}
         static readonly Color[] CivilianColors={new Color(.82f,.78f,.66f),new Color(.09f,.39f,.27f),new Color(.13f,.29f,.53f),new Color(.67f,.22f,.13f),new Color(.75f,.46f,.10f),new Color(.13f,.46f,.45f),new Color(.54f,.19f,.40f),new Color(.26f,.28f,.33f),new Color(.75f,.70f,.56f)};
         internal static Garment CivilianTop(int id)
         {

@@ -47,7 +47,7 @@ namespace FitCheck
             if(fitFeedLogo!=null)GUI.DrawTexture(bounds,fitFeedLogo,ScaleMode.ScaleToFit,true);
             else Txt(bounds,"FitFeed",feedTitle,FeedPaper);
         }
-        static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","Kaio","SeuJota","Lia","Julia","NinaFaisca"};
+        static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","SeuJota","NinaFaisca"};
         Texture2D[] feedPortraits;
         void InvalidateFeedPhoto(string path){if(feedPhotos.TryGetValue(path,out var tex)){Destroy(tex);feedPhotos.Remove(path);}}
         Texture2D FeedPhoto(string path)
@@ -101,7 +101,7 @@ namespace FitCheck
             Fill(new Rect(0,88,600,812),KaosPanel);
             Txt(new Rect(48,125,500,35),progress.Complete?"SEMANA CONCLUÍDA":"DIA 0"+progress.day+"  /  EM CASA",caption,violet);
             Txt(new Rect(48,178,510,85),progress.Complete?"Seu toque ficou.":"Seu canto.",heading);
-            string intro=progress.Complete?"Os nove encontros viraram histórias no FitFeed. Você pode revisitar seus visuais e melhorar seus resultados.":progress.closed?"Expediente encerrado. Confira suas conquistas, reveja os posts e descanse para amanhã.":"Antes de sair, escolha seu uniforme. O bairro tem novas histórias esperando por você.";
+            string intro=progress.Complete?"Os encontros da semana viraram histórias no FitFeed. Você pode revisitar seus visuais e melhorar seus resultados.":progress.closed?"Expediente encerrado. Confira suas conquistas, reveja os posts e descanse para amanhã.":"Antes de sair, escolha seu uniforme. O bairro tem novas histórias esperando por você.";
             Txt(new Rect(48,260,500,125),intro,copy,muted);
             if(!showWardrobe){
                 if(!progress.DayComplete&&Tap(new Rect(48,413,500,60),"Voltar ao quarto  →",true))CloseHomePanel();
@@ -112,7 +112,7 @@ namespace FitCheck
                 int visibleAwards=3;
                 for(int i=DayProgress.FubaUniform;i<UniformNames.Length;i++)
                     if(progress.UniformUnlocked(i))visibleAwards++;
-                Txt(new Rect(48,755,500,44),progress.achievements.Count+" de "+visibleAwards+" conquistas   /   "+progress.posts.Count+" de 9 publicações",caption,muted);
+                Txt(new Rect(48,755,500,44),progress.achievements.Count+" de "+visibleAwards+" conquistas   /   "+progress.posts.Count+" de "+DayProgress.TotalCustomers+" publicações",caption,muted);
             }else{
                 if(Tap(new Rect(845,806,210,48),"↶ Girar"))homeWardrobeRotation-=45;
                 if(Tap(new Rect(1075,806,210,48),"Girar ↷"))homeWardrobeRotation+=45;
@@ -130,10 +130,10 @@ namespace FitCheck
         void SummaryUI()
         {
             Fill(new Rect(0,88,1440,812),surface);
-            Txt(new Rect(90,145,1250,110),progress.day==3?"A semana virou história.":"Fim de expediente.",display);
+            Txt(new Rect(90,145,1250,110),progress.day==DayProgress.TotalDays?"A semana virou história.":"Fim de expediente.",display);
             Txt(new Rect(96,278,1100,50),"Dia "+progress.day+"  /  Três ocasiões. Três histórias. Seu toque.",copy,muted);
-            for(int j=0;j<3;j++){
-                int i=(progress.day-1)*3+j;
+            for(int j=0;j<DayProgress.CustomersPerDay;j++){
+                int i=progress.FirstCustomerOfDay+j;
                 RoundedPanel(new Rect(95+j*423,376,395,145),KaosControl,12);
                 Txt(new Rect(119+j*423,398,348,48),DayOne.Customers[i].name,heading);
                 Txt(new Rect(119+j*423,463,348,43),progress.posts[i].score+" / 10",copy,violet);
@@ -221,14 +221,16 @@ namespace FitCheck
             if(feedPortraits==null)feedPortraits=FeedPortraitNames.Select(name=>Resources.Load<Texture2D>("Artwork/PhoneAndProfiles/"+name)).ToArray();
             var client=DayOne.Customers[index];
             var avatar=new Rect(r.x,r.y,68,68);
-            if(feedPortraits[index]!=null)GUI.DrawTexture(avatar,feedPortraits[index],ScaleMode.ScaleToFit,true);
+            int profile=DayOne.CustomerProfile(index);
+            var portrait=profile<feedPortraits.Length?feedPortraits[profile]:null;
+            if(portrait!=null)GUI.DrawTexture(avatar,portrait,ScaleMode.ScaleToFit,true);
             else{
                 RoundedPanel(avatar,FeedInset,34);
                 Txt(avatar,client.name.Substring(0,1),action,paper);
             }
             FeedStyles();
             Txt(new Rect(r.x+84,r.y+8,r.width-84,30),client.name,feedName,FeedPaper);
-            Txt(new Rect(r.x+84,r.y+42,r.width-84,23),client.location+" · Dia "+(index/3+1).ToString("00"),feedSmall,FeedMuted);
+            Txt(new Rect(r.x+84,r.y+42,r.width-84,23),client.location+" · Dia "+(index/DayProgress.CustomersPerDay+1).ToString("00"),feedSmall,FeedMuted);
         }
         void FitFeedImage(Rect r,Texture2D image)
         {
