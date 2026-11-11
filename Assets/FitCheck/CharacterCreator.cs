@@ -52,7 +52,9 @@ namespace FitCheck
             creatorDraft.name=GUI.TextField(new Rect(28,264,320,40),creatorDraft.name,24,nameEntry);
             Txt(new Rect(28,330,320,32),"Corte de cabelo",caption);
             for(int i=0;i<PlayerAppearance.HairNames.Length;i++)if(CreatorButton(new Rect(28+i%2*165,376+i/2*60,155,48),PlayerAppearance.HairNames[i],creatorDraft.hair==i)){creatorDraft.hair=i;RefreshCreator();}
-            Txt(new Rect(28,640,320,58),"Gire para ver o volume\ne o encaixe por todos os lados.",caption,muted);
+            Txt(new Rect(28,700,320,32),"Base de aparência",caption);
+            if(CreatorButton(new Rect(28,744,155,48),"Masculina",creatorDraft.appearanceBase==0)){creatorDraft.appearanceBase=0;RefreshCreator();}
+            if(CreatorButton(new Rect(193,744,155,48),"Feminina",creatorDraft.appearanceBase==1)){creatorDraft.appearanceBase=1;RefreshCreator();}
             Txt(new Rect(1074,126,330,32),"Tom de pele",caption);
             CreatorSwatches(new Rect(1074,178,330,120),PlayerAppearance.SkinColors,true);
             Txt(new Rect(1074,324,330,32),"Cor do cabelo",caption);

@@ -95,8 +95,8 @@ namespace FitCheck
             var origin=new Vector3(0,2.8f,0);
             var shell=SurfaceMaterial(new Color(.075f,.066f,.11f),"Leather");
             var lime=SurfaceMaterial(new Color(.68f,.88f,.19f));
-            float sideRoom=currentHairProfile==6?.043f:0;
-            float crownRoom=currentHairProfile==0?.025f:0;
+            float sideRoom=currentHairProfile==PlayerAppearance.BlackPowerHair?.15f:currentHairProfile==6?.043f:currentHairProfile==PlayerAppearance.ShortCoilsHair?.035f:0;
+            float crownRoom=currentHairProfile==PlayerAppearance.BlackPowerHair?.15f:currentHairProfile==0||currentHairProfile==PlayerAppearance.ShortCoilsHair?.025f:0;
             var band=new Vector3[17];
             for(int i=0;i<band.Length;i++){
                 float angle=Mathf.PI*i/(band.Length-1);

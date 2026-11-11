@@ -64,6 +64,11 @@ namespace FitCheck
         static float HairEdge(int profile,float theta)
         {
             float back=(1-Mathf.Cos(theta))*.5f,angle=Mathf.Abs(theta);
+            if(profile>=PlayerAppearance.BlackPowerHair){
+                float afroFront=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(.80f,1.28f,angle));
+                float afroEdge=profile==PlayerAppearance.BlackPowerHair?1.40f+back*.57f:1.15f+back*.78f;
+                return Mathf.Lerp(afroEdge,.98f+.018f*Mathf.Cos(theta*9),afroFront);
+            }
             float edge=profile==1?.96f+back*1.15f:1.09f+back*.84f;
             float temple=(angle-1.16f)/.20f;edge+=Mathf.Exp(-temple*temple)*.15f;
             if(profile==0)edge+=.045f*Mathf.Sin(theta*2+.3f)*(1-back);
@@ -100,7 +105,12 @@ namespace FitCheck
                     // Broad connected forms, never raised tubes sitting above a cap.
                     float baseThickness=thickness;
                     float crown=Mathf.Pow(1-f,1.25f),wave=Mathf.Sin(phi);
-                    if(profile==0){
+                    if(profile>=PlayerAppearance.BlackPowerHair){
+                        float volume=profile==PlayerAppearance.BlackPowerHair?.245f:.078f;
+                        float curl=Mathf.Cos(theta*19+Mathf.Sin(phi*11)*.55f)*Mathf.Sin(phi*23);
+                        float fitScale=fit==HairFit.Headphones?.78f:1;
+                        thickness+=(volume*(.86f+.14f*Mathf.Sin(phi))+.024f*curl*Mathf.Sin(phi))*taper*fitScale;
+                    }else if(profile==0){
                         float curl=.5f+.5f*Mathf.Cos(theta*11+Mathf.Sin(phi*8)*.65f)*Mathf.Cos(phi*12);
                         thickness+=(.065f*crown+.105f*wave*curl*curl)*taper;
                     }else if(profile==1)thickness+=(.020f*crown+.006f*wave*Mathf.Cos(theta*9-phi*3))*taper;
@@ -109,7 +119,8 @@ namespace FitCheck
                         float crest=Mathf.Pow(Mathf.Max(0,Mathf.Cos(sweep)),3)*wave;
                         thickness+=(.030f*crown+.080f*crest+.005f*wave*Mathf.Cos(theta*6+phi*2))*taper;
                     }else thickness+=(.022f*crown+.005f*wave*Mathf.Cos(theta*8-phi*2))*taper;
-                    if(fit==HairFit.Hood)
+                    if(fit==HairFit.Hood&&profile>=PlayerAppearance.BlackPowerHair)thickness=baseThickness+.006f*taper;
+                    else if(fit==HairFit.Hood)
                         thickness=Mathf.Lerp(baseThickness,thickness,Mathf.Lerp(.22f,.78f,Mathf.Max(0,Mathf.Cos(theta))));
                 }else thickness=Mathf.Min(thickness,.016f);
                 var direction=new Vector3(Mathf.Sin(theta)*Mathf.Sin(phi),Mathf.Cos(phi),-Mathf.Cos(theta)*Mathf.Sin(phi));
@@ -121,6 +132,10 @@ namespace FitCheck
                     else if(profile==0)point.y+=.025f*raised;
                 }
                 if(point.sqrMagnitude<.564f*.564f)point=point.normalized*.564f;
+                if(profile==PlayerAppearance.BlackPowerHair&&!coveredCrown&&fit!=HairFit.Hood){
+                    point.y+=(fit==HairFit.Headphones?.07f:.14f)*Mathf.Sqrt(taper);
+                    point.x*=1-.04f*taper;
+                }
                 if(profile==6&&fit!=HairFit.Hood){
                     float longF=coveredCrown?Mathf.Lerp(fit==HairFit.Cap?.40f:.31f,1,f):f,u=1-longF;
                     float y=u*u*u*3.43f+3*u*u*longF*3.40f+3*u*longF*longF*2.50f+longF*longF*longF*2.07f;

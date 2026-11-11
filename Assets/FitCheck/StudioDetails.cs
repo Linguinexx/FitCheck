@@ -20,11 +20,33 @@ namespace FitCheck
         }
         void BuildHair(int profile,Garment headwear)
         {
-            int cut=applyingPlayer?PlayerLook.hair:HairOverride>=0?HairOverride:profile==6?0:profile;currentHairProfile=cut;
-            foreach(Transform part in face)if(part.name=="Orelha")part.gameObject.SetActive(cut!=6);
-            var color=new[]{new Color(.065f,.038f,.025f),new Color(.49f,.17f,.065f),new Color(.08f,.045f,.03f),new Color(.12f,.065f,.115f),new Color(.36f,.37f,.39f),new Color(.78f,.59f,.27f),new Color(.21f,.09f,.055f)}[cut];
+            int cut=applyingPlayer?PlayerLook.hair:HairOverride>=0?HairOverride:profile==5?PlayerAppearance.BlackPowerHair:profile==3?6:profile==6?0:profile;currentHairProfile=cut;
+            foreach(Transform part in face)if(part.name=="Orelha")part.gameObject.SetActive(cut!=6&&cut!=PlayerAppearance.BlackPowerHair);
+            var color=cut>=PlayerAppearance.BlackPowerHair?new Color(.065f,.043f,.034f):
+                new[]{new Color(.065f,.038f,.025f),new Color(.49f,.17f,.065f),new Color(.08f,.045f,.03f),new Color(.12f,.065f,.115f),new Color(.36f,.37f,.39f),new Color(.78f,.59f,.27f),new Color(.21f,.09f,.055f)}[cut];
             if(applyingPlayer)color=PlayerAppearance.HairColors[PlayerLook.hairColor];
-            var strands=SurfaceMaterial(color,"Hair");strands.SetFloat("_HairFlow",1);strands.SetFloat("_Outline",0);
+            bool coils=cut>=PlayerAppearance.BlackPowerHair;
+            if(coils&&color.maxColorComponent<.10f)color=new Color(.115f,.093f,.077f);
+            var strands=SurfaceMaterial(color,"Hair");strands.SetFloat("_HairFlow",coils?0:1);strands.SetFloat("_Outline",0);
+            if(coils){
+                var texture=new Texture2D(64,64,TextureFormat.RGB24,false){name="Cachos crespos",filterMode=FilterMode.Point,wrapMode=TextureWrapMode.Repeat};
+                var pixels=new Color[64*64];
+                for(int y=0;y<64;y++)for(int x=0;x<64;x++){
+                    float nearest=4;
+                    Vector2 point=new Vector2(x/8f,y/8f);
+                    var cell=new Vector2(Mathf.Floor(point.x),Mathf.Floor(point.y));
+                    for(int cy=-1;cy<=1;cy++)for(int cx=-1;cx<=1;cx++){
+                        Vector2 neighbor=cell+new Vector2(cx,cy);
+                        float seed=neighbor.x*127.1f+neighbor.y*311.7f;
+                        float jitterX=Mathf.Repeat(Mathf.Sin(seed)*43758.5453f,1);
+                        float jitterY=Mathf.Repeat(Mathf.Sin(seed+74.7f)*24634.6345f,1);
+                        nearest=Mathf.Min(nearest,(point-neighbor-new Vector2(jitterX,jitterY)).sqrMagnitude);
+                    }
+                    float curl=.5f+.5f*Mathf.Cos(Mathf.Sqrt(nearest)*17);
+                    pixels[y*64+x]=Color.white*(.84f+curl*.15f);
+                }
+                texture.SetPixels(pixels);texture.Apply(false,true);Own(texture);strands.mainTexture=texture;
+            }
             if(cut!=2){
                 HairFit fit=HairFitFor(headwear);
                 HairShell(cut,strands,headwear,fit);
@@ -63,6 +85,29 @@ namespace FitCheck
                     break;
             }
             Ellipsoid("Coque — união à nuca",center,size,strands,hair,24,12);
+        }
+        void FitAppearanceSilhouette()
+        {
+            if(!feminineAppearance)return;
+            foreach(var filter in clothes.GetComponentsInChildren<MeshFilter>()){
+                var source=filter.sharedMesh;
+                if(source==null)continue;
+                var vertices=source.vertices;
+                bool changed=false;
+                for(int i=0;i<vertices.Length;i++){
+                    Vector3 point=Avatar.InverseTransformPoint(filter.transform.TransformPoint(vertices[i]));
+                    if(point.y<.92f||point.y>1.84f||Mathf.Abs(point.x)>.44f)continue;
+                    float waist=Mathf.Exp(-Mathf.Pow((point.y-1.51f)/.18f,2));
+                    float hip=Mathf.Exp(-Mathf.Pow((point.y-1.15f)/.17f,2));
+                    point.x*=1-.075f*waist+.055f*hip;
+                    vertices[i]=filter.transform.InverseTransformPoint(Avatar.TransformPoint(point));
+                    changed=true;
+                }
+                if(!changed)continue;
+                var fitted=Instantiate(source);fitted.name=source.name;
+                fitted.vertices=vertices;fitted.RecalculateNormals();fitted.RecalculateBounds();
+                Own(fitted);filter.sharedMesh=fitted;
+            }
         }
     }
 }

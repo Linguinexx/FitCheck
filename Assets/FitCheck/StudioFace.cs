@@ -14,6 +14,7 @@ namespace FitCheck
         [SerializeField] float[] upperCover=new float[2],lowerCover=new float[2],lastUpper={-1,-1},lastLower={-1,-1};
         Transform smile,openMouth,surprisedMouth,face;Mesh mouthLineMesh;int faceProfile;
         Vector3 bodyScale=Vector3.one;AvatarExpression expression;float expressionStart,blinkClock;
+        bool feminineAppearance;
         public bool TallPreview,PreviewProportions;
         public int ExpressionOverride=-1;
         public string ExpressionName {get{return new[]{"Neutra","Curiosa","Desconfiada","Sonolenta","Animada","Surpresa"}[(int)expression];}}
@@ -23,7 +24,7 @@ namespace FitCheck
         float HeadLift(int profile){return 0;}
         Vector3 HeadProportion(int profile)
         {var body=BodyProportion(profile);return new Vector3(1/body.x,1/body.y,1/body.z);}
-        Vector3 BodyProportion(int profile){return new Vector3(.98f,.94f,1f);}
+        Vector3 BodyProportion(int profile){return feminineAppearance?new Vector3(.91f,.94f,.98f):new Vector3(.98f,.94f,1f);}
         static float FaceZ(float x,float y){return -Mathf.Sqrt(Mathf.Max(.001f,HeadRadius*HeadRadius-x*x-(y-2.8f)*(y-2.8f)))-.008f;}
         Material FaceInk(Color c)
         {
@@ -54,6 +55,7 @@ namespace FitCheck
         }
         Vector3[] ArcVertices(Vector3 p,float width,float curve,float thickness,float slope)
         {
+            if(feminineAppearance){width*=.90f;thickness*=1.3f;curve-=.003f;}
             var vertices=new Vector3[26];for(int i=0;i<=12;i++)for(int edge=0;edge<2;edge++){
                 float q=i/6f-1,x=q*width*.5f,y=q*q*curve+q*slope+(edge==0?-thickness:thickness)*.5f;
                 vertices[i*2+edge]=new Vector3(x,y,FaceZ(p.x+x,p.y+y)-p.z);
@@ -130,6 +132,7 @@ namespace FitCheck
                 BuildPupil(i,dark);
                 BuildLid(i,false);BuildLid(i,true);
                 brows[i]=BuildBrow(i,dark);
+                BuildOuterLashes(i,dark);
             }
             Ellipsoid("Nariz",new Vector3(0,2.70f,-.551f),new Vector3(.105f,.13f,.12f),skin,face,16,8);
             smile=Arc("Boca",new Vector3(0,2.50f,0),.20f,0,.02f,dark);mouthLineMesh=smile.GetComponent<MeshFilter>().sharedMesh;
@@ -149,6 +152,8 @@ namespace FitCheck
             float curve=value==AvatarExpression.Curious?.018f:value==AvatarExpression.Skeptical?-.012f:value==AvatarExpression.Sleepy?-.008f:0;
             mouthLineMesh.vertices=ArcVertices(new Vector3(0,2.50f,0),value==AvatarExpression.Sleepy?.15f:.20f,curve,.020f,value==AvatarExpression.Skeptical?.014f:0);mouthLineMesh.RecalculateNormals();mouthLineMesh.RecalculateBounds();
             for(int i=0;i<2;i++){
+                var lashes=eyes[i].Find("Cílios externos");
+                if(lashes!=null)lashes.gameObject.SetActive(feminineAppearance);
                 float side=i==0?-1:1;
                 float width=surprised?.055f:happy?.095f:value==AvatarExpression.Skeptical?.065f:.08f;
                 float height=surprised?.06f:value==AvatarExpression.Sleepy?.055f:.10f;

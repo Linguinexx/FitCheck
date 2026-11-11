@@ -143,6 +143,7 @@ namespace FitCheck
             clothes=new GameObject("Vestuário 3D").transform;clothes.SetParent(Avatar,false);clothes.localPosition=Vector3.zero;
             foreach(Transform c in hair){c.gameObject.SetActive(false);Destroy(c.gameObject);}
             int profile=customer<0?6:DayOne.CustomerProfile(Mathf.Clamp(customer,0,DayOne.Customers.Length-1));
+            feminineAppearance=applyingPlayer?PlayerLook.appearanceBase==1:profile==1||profile==3||profile==5;
             skin.color=new[]{new Color(.67f,.40f,.23f),new Color(.94f,.72f,.58f),new Color(.25f,.135f,.085f),new Color(.76f,.60f,.40f),new Color(.53f,.33f,.23f),new Color(.38f,.205f,.13f),new Color(.62f,.4f,.27f)}[profile];
             if(applyingPlayer)skin.color=PlayerAppearance.SkinColors[PlayerLook.skin];
             SetFaceProfile(profile);if(applyingPlayer)ApplyExpression((AvatarExpression)PlayerLook.expression);
@@ -216,6 +217,7 @@ ShirtBody(t,cloth);
                 var p=piece.localPosition;p.x*=.9f;p.z*=.90f;piece.localPosition=p;
                 var scale=piece.localScale;scale.x*=.9f;scale.z*=.90f;piece.localScale=scale;
             }
+            FitAppearanceSilhouette();
             FitRelaxedBody(t,cloth);
             buildingGarments=false;applyingPlayer=false;
             if(originalTop&&originalBottom&&originalShoes&&string.IsNullOrEmpty(outfit[3]))CompactCivilianWardrobe();

@@ -13,10 +13,12 @@ namespace FitCheck
             float arch=value==AvatarExpression.Happy?.012f:value==AvatarExpression.Surprised?.015f:.008f;
             float slope=value==AvatarExpression.Skeptical?(eye==0?-.023f:.020f):value==AvatarExpression.Curious?(eye==0?-.008f:.008f):0;
             float width=value==AvatarExpression.Surprised?.20f:.21f;
+            if(feminineAppearance){arch+=.010f;width*=.93f;}
             for(int i=0;i<=steps;i++){
                 float u=i/(float)steps,q=u*2-1,x=q*width*.5f;
                 float y=raise+arch*(1-q*q)+q*slope;
                 float thickness=.009f+.030f*Mathf.Pow(Mathf.Max(0,Mathf.Sin(u*Mathf.PI)),.65f);
+                if(feminineAppearance)thickness*=.68f;
                 for(int layer=0;layer<2;layer++)for(int edge=0;edge<2;edge++){
                     float py=y+(edge==0?-.5f:.5f)*thickness;
                     v.Add(new Vector3(x,py,FaceZ(origin.x+x,origin.y+py)+(layer==0?-.004f:.006f)));
@@ -34,6 +36,17 @@ namespace FitCheck
         {
             Vector3[] v;int[] t;BrowGeometry(eye,AvatarExpression.Neutral,out v,out t);
             return FaceMesh("Sobrancelha",v,t,BrowOrigin(eye),material).transform;
+        }
+        void BuildOuterLashes(int eye,Material material)
+        {
+            float side=eye==0?-1:1;
+            var vertices=new List<Vector3>{
+                new Vector3(side*.145f,.025f,-.055f),new Vector3(side*.201f,.062f,-.040f),new Vector3(side*.160f,.043f,-.045f),
+                new Vector3(side*.136f,.055f,-.052f),new Vector3(side*.184f,.100f,-.038f),new Vector3(side*.151f,.070f,-.041f)
+            };
+            Surface("Cílios externos",vertices,new List<int>{0,1,2,2,1,0,3,4,5,5,4,3},
+                new List<Vector2>{Vector2.zero,Vector2.up,Vector2.one,Vector2.zero,Vector2.up,Vector2.one},
+                null,Vector3.zero,Vector3.one,material,eyes[eye]);
         }
         void UpdateBrow(int eye,AvatarExpression value)
         {

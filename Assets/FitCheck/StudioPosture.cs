@@ -148,8 +148,8 @@ namespace FitCheck
         {
             if(garmentTorso==null)return;
             float sway=ReducedMotion?0:Mathf.Sin(idle*.8f+faceProfile*.4f)*.65f;
-            var position=TorsoPivot+new Vector3(WeightSide*.035f,ReducedMotion?0:Mathf.Sin(idle*1.5f)*.003f,.01f);
-            var rotation=Quaternion.Euler(-1.5f,WeightSide*1.5f,WeightSide*2+sway);garmentTorso.localPosition=position;garmentTorso.localRotation=rotation;
+            var position=TorsoPivot+new Vector3(WeightSide*(feminineAppearance?.049f:.035f),ReducedMotion?0:Mathf.Sin(idle*1.5f)*.003f,.01f);
+            var rotation=Quaternion.Euler(-1.5f,WeightSide*1.5f,WeightSide*(feminineAppearance?2.7f:2)+sway);garmentTorso.localPosition=position;garmentTorso.localRotation=rotation;
             var restHead=new Vector3(0,2.8f+HeadLift(faceProfile),0);var headShift=position+rotation*(restHead-TorsoPivot)-restHead;
             face.localPosition=restHead+headShift;hair.localPosition=headShift;garmentHead.localPosition=headShift;
             var neck=Avatar.Find("Pescoço");neck.localPosition=position+rotation*(new Vector3(0,2.31f+HeadLift(faceProfile)*.5f,.025f)-TorsoPivot);neck.localRotation=rotation;

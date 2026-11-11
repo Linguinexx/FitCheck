@@ -9,6 +9,8 @@ Registro solicitado para uma próxima etapa.
 - Depois da expansão para sete dias, avaliar aumentar o número de clientes por dia. Quantidade ainda a definir.
 - Criar novas roupas e novos clientes para sustentar a campanha ampliada, preservando variedade, estilo gráfico e desempenho.
 - Considerar novos cortes e cores de cabelo. Black Power foi sugerido pelo usuário e deve entrar na exploração visual, com encaixe nos acessórios dos trajes.
+- Primeira etapa de cabelos implementada em 07/11/2026: Black Power atribuído à Nina e disponível no criador do jogador; Crespo curto incluído como segunda opção. IDs anteriores preservados. Encaixe específico com bonés, gorros, óculos, fones e capuz espectral. Continuação visual depende do feedback.
+- Bases de aparência masculina/feminina disponíveis no criador em 07/11/2026, com seleção persistente por save, todos os cabelos e trajes acessíveis e cabeça esférica. Primeira versão feminina com sobrancelhas arqueadas, boca mais delicada, cintura discreta e postura ajustada. Lia, Julia e Nina usam essa base; moradores alternam entre as duas. Revisar com o usuário após as prévias.
 
 Anotações solicitadas pelo usuário ao encerrar a sessão. Registrar agora; retomar no próximo pedido, sem implementar nesta sessão.
 
