@@ -45,7 +45,7 @@ namespace FitCheck
                 customer=0;record=progress.posts[0];fromHome=true;Replay();outfit=(string[])solutions[0].Clone();Apply();Submit();
                 var backup=ProgressStore.Load(DayPath+".bak");
                 if(progress.posts[0].photo==oldPhoto||backup.posts[0].photo!=oldPhoto||!File.Exists(oldPhoto)||!File.Exists(progress.posts[0].photo))throw new Exception("Replay quebrou associação de foto/backup");
-                Debug.Log("FITCHECK_CAMPAIGN_RUNTIME_PASSED: sete dias, 21 fotos e 27 peças, timer e replay sem crédito duplicado.");
+                Debug.Log("FITCHECK_CAMPAIGN_RUNTIME_PASSED: sete dias, 21 fotos, inventário completo, timer e replay sem crédito duplicado.");
             }finally{
                 var testFolder=storageOverride;
                 foreach(var file in Directory.GetFiles(testFolder))File.Delete(file);Directory.Delete(testFolder);

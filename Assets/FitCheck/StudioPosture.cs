@@ -110,7 +110,7 @@ namespace FitCheck
         }
         Vector3 BlenderLowerPoint(Vector3 p)
         {return Vector3.Lerp(LowerPoint(p,-1),LowerPoint(p,1),Mathf.SmoothStep(0,1,(p.x+.12f)/.24f));}
-        void FitRelaxedBody(Garment top,Material fabric)
+        void FitRelaxedBody(Garment top,Material fabric,bool liftSlideHem)
         {
             if(calfRest[0]==null)calfRest[0]=leftCalfRest;if(calfRest[1]==null)calfRest[1]=rightCalfRest;
             garmentTorso=new GameObject("Postura — tronco e braços").transform;garmentTorso.SetParent(clothes,false);
@@ -123,11 +123,19 @@ namespace FitCheck
                 if(part.localPosition.y>=2.5f){part.SetParent(garmentHead,false);continue;}
                 if(UpperPiece(name)){part.SetParent(garmentTorso,false);part.localPosition-=TorsoPivot;continue;}
                 var filter=part.GetComponent<MeshFilter>();var mesh=filter.sharedMesh;
-                bool shoe=name.StartsWith("Tênis")||name.StartsWith("Sola")||name=="Cadarço";
+                bool shoe=name.StartsWith("Tênis")||name.StartsWith("Sola")||name=="Cadarço"||name==SlideFootMeshName;
                 int side=part.localPosition.x+(part.localRotation*Vector3.Scale(mesh.bounds.center,part.localScale)).x<0?-1:1;
                 if(shoe){var pivot=new Vector3(side*.216f,.10f,0);part.SetParent(side<0?leftFoot:rightFoot,false);part.localPosition-=pivot;continue;}
                 var posed=Instantiate(mesh);Own(posed);var vertices=posed.vertices;
-                for(int i=0;i<vertices.Length;i++){var p=part.localPosition+part.localRotation*Vector3.Scale(vertices[i],part.localScale);vertices[i]=mesh.name.Contains("Blender Baggy")?BlenderLowerPoint(p):LowerPoint(p,name=="Cintura"?0:side);}
+                for(int i=0;i<vertices.Length;i++){
+                    var p=part.localPosition+part.localRotation*Vector3.Scale(vertices[i],part.localScale);
+                    if(liftSlideHem&&name=="Calça"){
+                        float hem=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(.32f,.55f,p.y));
+                        float front=Mathf.SmoothStep(0,1,Mathf.InverseLerp(.06f,-.12f,p.z));
+                        p.y+=.075f*hem*front;
+                    }
+                    vertices[i]=mesh.name.Contains("Blender Baggy")?BlenderLowerPoint(p):LowerPoint(p,name=="Cintura"?0:side);
+                }
                 posed.vertices=vertices;posed.RecalculateNormals();posed.RecalculateBounds();filter.sharedMesh=posed;part.localPosition=Vector3.zero;part.localRotation=Quaternion.identity;part.localScale=Vector3.one;
             }
             leftFoot.localPosition=new Vector3(-.230f,.10f,-.04f);leftFoot.localRotation=Quaternion.Euler(0,8,0);

@@ -46,7 +46,7 @@ namespace FitCheck
         {
             bool arm=name.Contains("Manga")||name.Contains("Braço")||name=="Mão"||name=="Polegar"||name=="Dedos relaxados";
             bool leg=mesh.bounds.max.y<1.45f&&name!="Cintura";
-            actor.parts.Add(new ResidentPart{mesh=mesh,rest=mesh.vertices,normals=mesh.normals,vertices=new Vector3[mesh.vertexCount],posedNormals=new Vector3[mesh.vertexCount],arm=arm,leg=leg,head=head,mouth=name.StartsWith("Boca"),center=mesh.bounds.center,pelvis=name=="Cintura",foot=name.StartsWith("Tênis")||name.StartsWith("Sola")||name=="Cadarço",side=mesh.bounds.center.x<0?-1:1});
+            actor.parts.Add(new ResidentPart{mesh=mesh,rest=mesh.vertices,normals=mesh.normals,vertices=new Vector3[mesh.vertexCount],posedNormals=new Vector3[mesh.vertexCount],arm=arm,leg=leg,head=head,mouth=name.StartsWith("Boca"),center=mesh.bounds.center,pelvis=name=="Cintura",foot=name.StartsWith("Tênis")||name.StartsWith("Sola")||name=="Cadarço"||name==StudioView.SlideFootMeshName,side=mesh.bounds.center.x<0?-1:1});
             actor.parts[actor.parts.Count-1].blenderDenim=blenderDenim;mesh.MarkDynamic();
         }
         bool ResidentBlocks(Vector2 point)

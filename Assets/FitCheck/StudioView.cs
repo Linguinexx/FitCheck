@@ -187,6 +187,7 @@ ShirtBody(t,cloth);
             }
             }
             var b=playerPieces?[1]??(originalBottom?CivilianBottom(civilianProfile):Catalog.Get(outfit[1]));
+            var shoes=playerPieces?[2]??Catalog.Get(outfit[2]);
             var denim=fubaSuit?cloth:Material(b.color);if(originalBottom)FinishCivilianMaterial(denim,"Denim");
             foreach(Transform part in Avatar){
                 if(part.name=="Canela")part.gameObject.SetActive(b.shorts);
@@ -202,7 +203,7 @@ ShirtBody(t,cloth);
                 if(b.id=="AH_BOTTOM_03"||b.id=="CG_BOTTOM_03")BuildWeekBottomTrim(b,side);
                 }
                 if(fubaSuit)BuildFubaPaw(side,cloth);
-                else if(originalShoes)BuildCivilianShoes(civilianProfile,side);else BuildShoes(playerPieces?[2]??Catalog.Get(outfit[2]),side);
+                else if(originalShoes)BuildCivilianShoes(civilianProfile,side);else BuildShoes(shoes,side);
             }
             BuildHeadwear(headwear);
             var headScale=HeadProportion(profile);
@@ -221,7 +222,7 @@ ShirtBody(t,cloth);
                 var scale=piece.localScale;scale.x*=.9f;scale.z*=.90f;piece.localScale=scale;
             }
             FitAppearanceSilhouette();
-            FitRelaxedBody(t,cloth);
+            FitRelaxedBody(t,cloth,shoes?.id==CloudSlideId&&!b.shorts);
             buildingGarments=false;applyingPlayer=false;
             if(originalTop&&originalBottom&&originalShoes&&string.IsNullOrEmpty(outfit[3]))CompactCivilianWardrobe();
         }

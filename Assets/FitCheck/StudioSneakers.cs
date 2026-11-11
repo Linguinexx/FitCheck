@@ -97,9 +97,26 @@ namespace FitCheck
             for(int row=0;row<8;row++){int a=row*2;t.AddRange(side>0?new[]{a,a+2,a+1,a+1,a+2,a+3}:new[]{a,a+1,a+2,a+1,a+3,a+2});}
             Surface("Tênis — faixas diagonais",v,t,uv,null,new Vector3(x,0,0),Vector3.one,SurfaceMaterial(color,"Leather"),clothes);
         }
+        internal const string SlideFootMeshName="Pé do slide";
+        const string CloudSlideId="AH_SHOES_02";
+        void BuildSlideFoot(int side)
+        {
+            var foot=new SneakerShape{
+                z=new[]{.28f,.22f,.12f,-.02f,-.14f,-.29f,-.41f,-.44f},
+                w=new[]{.08f,.113f,.113f,.108f,.107f,.117f,.095f,.040f},
+                y=new[]{.232f,.27f,.275f,.23f,.224f,.218f,.213f,.205f},
+                h=new[]{.04f,.142f,.145f,.066f,.047f,.040f,.031f,.016f},
+                soleY=new[]{.184f,.184f,.184f,.184f,.184f,.184f,.184f,.184f},
+                soleH=new[]{.014f,.014f,.014f,.014f,.014f,.014f,.014f,.014f}
+            };
+            ShoeVolume(SlideFootMeshName,side*.24f,skin,foot,false);
+        }
         void BuildShoes(Garment item,int side)
         {
-            if(BuildStreetwearShoes(item,side))return;
+            if(BuildStreetwearShoes(item,side)){
+                if(item.id==CloudSlideId)BuildSlideFoot(side);
+                return;
+            }
             var shape=Sneaker(item);float x=side*.24f;var cream=new Color(.86f,.84f,.76f);
             var upper=SurfaceMaterial(item.color,shape.style==2?"Leather":"Cloth");
             upper.SetFloat("_FabricWeight",.20f);

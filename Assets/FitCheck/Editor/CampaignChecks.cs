@@ -36,7 +36,7 @@ namespace FitCheck.Editor
         {
             if(DayOne.Customers.Length!=DayProgress.TotalCustomers||Solutions.Length!=DayProgress.TotalCustomers||
                 DayOne.Customers.Select(request=>request.id).Distinct().Count()!=DayProgress.TotalCustomers||
-                Catalog.All.Length!=27||Catalog.All.Select(g=>g.id).Distinct().Count()!=Catalog.All.Length)
+                Catalog.All.Length!=28||Catalog.All.Select(g=>g.id).Distinct().Count()!=Catalog.All.Length)
                 throw new Exception("Conteúdo incompleto ou IDs duplicados");
             var campaign=new DayProgress();
             for(int i=0;i<DayProgress.TotalCustomers;i++){
@@ -60,7 +60,7 @@ namespace FitCheck.Editor
                 }
                 campaign.Validate();
             }
-            if(!campaign.Complete||campaign.reputation!=2100||campaign.Available.Length!=27||campaign.achievements.Count!=3)throw new Exception("Conclusão/progressão inválida");
+            if(!campaign.Complete||campaign.reputation!=2100||campaign.Available.Length!=28||campaign.achievements.Count!=3)throw new Exception("Conclusão/progressão inválida");
             var before=campaign.reputation;var question=campaign.posts[0].question;
             if(campaign.Improve(0,Solutions[0])||campaign.reputation!=before||campaign.posts[0].question!=question)throw new Exception("Replay duplicou crédito ou mudou pergunta");
             bool denied=false;try{campaign.Improve(0,new[]{"AH_TOP_02","AH_BOTTOM_01","AH_SHOES_01",""});}catch(ArgumentException){denied=true;}
@@ -113,7 +113,7 @@ namespace FitCheck.Editor
                 File.WriteAllText(path,"save corrompido");var recovered=ProgressStore.Load(path+".bak");if(!recovered.Complete)throw new Exception("Backup inválido");
                 ProgressStore.Save(path,recovered);if(ProgressStore.Load(path).reputation!=2100)throw new Exception("Regravação inválida");
             }finally{foreach(var suffix in new[]{"",".tmp",".bak"})if(File.Exists(path+suffix))File.Delete(path+suffix);}
-            Debug.Log("FITCHECK_CAMPAIGN_PASSED: 21 pedidos, sete dias, 2100 RP, 27 peças, replays, migração do dia 3 e backup.");
+            Debug.Log("FITCHECK_CAMPAIGN_PASSED: 21 pedidos, sete dias, 2100 RP, 28 peças, replays, migração do dia 3 e backup.");
         }
         [MenuItem("Tools/Fit Check/Run full campaign runtime check")]
         public static void Runtime()

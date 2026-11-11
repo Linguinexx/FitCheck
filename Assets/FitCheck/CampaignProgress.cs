@@ -74,7 +74,7 @@ namespace FitCheck
         public static readonly int[] Milestones={100,200,300,450,600,750,1050,1400};
         public static readonly string[][] RewardNames={
             new[]{"Night Route","Remix"},new[]{"Court Lines","Daily Steps"},new[]{"Closing Time","Independent"},
-            new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"},new[]{"Pista Aberta","Cargo das Lajes"},
+            new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"},new[]{"Pista Aberta","Cargo das Lajes","Slide Nuvem"},
             new[]{"Fita Local","Bermuda de Pista"},new[]{"Luz de Poste","Aba de Tijolo"}
         };
         public bool DayComplete=>posts.Count==FirstCustomerOfDay+CustomersPerDay;
