@@ -1,0 +1,25 @@
+FIT CHECK — RELATO DE BUG
+Build: Teste 08 — Windows x64 — 11/11/2026
+Data do teste:
+
+O que deu errado? Use um título curto.
+Onde aconteceu? Indique menu, casa, bairro ou loja. Se for um atendimento, inclua o dia e o cliente.
+
+Como repetir o problema?
+1.
+2.
+3.
+
+O que você esperava que acontecesse?
+O que aconteceu?
+Acontece sempre, às vezes ou aconteceu uma vez?
+Conseguiu continuar? Como?
+
+Se envolver tela ou desempenho
+- Resolução e modo de tela (tela cheia ou janela):
+- A imagem engasga, a câmera responde devagar ou o jogo trava?
+- Acontece ao carregar um lugar ou durante o jogo?
+- Windows, placa de vídeo e RAM, se souber:
+
+Print ou vídeo (anexe junto ao relato):
+Mensagem de erro ou Player.log, se houver:

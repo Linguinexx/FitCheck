@@ -151,7 +151,7 @@ namespace FitCheck
             string tmp=path+".tmp";File.WriteAllText(tmp,JsonUtility.ToJson(progress,true));Load(tmp);
             if(File.Exists(path)){
                 bool valid=true;try{Load(path);}catch{valid=false;}
-                File.Replace(tmp,path,valid?path+".bak":null);
+                PlatformFiles.ReplaceValidated(tmp,path,valid?path+".bak":null);
             }else File.Move(tmp,path);
         }
     }

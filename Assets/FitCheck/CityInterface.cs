@@ -22,7 +22,11 @@ namespace FitCheck
             "O FitFeed mostra a foto e a nota do atendimento. Em casa, dá pra abrir o feed pela mesa. A reputação libera novas peças, entregues no fechamento do expediente.",
             "Atende os três clientes do dia e volta ao balcão pra ver o fechamento. Depois, volta pra casa e interage com a cama pra dormir e começar o próximo dia."
         };
+#if UNITY_WEBGL && !UNITY_EDITOR
+        const bool CityProofMode=false;
+#else
         static readonly bool CityProofMode=System.Array.IndexOf(System.Environment.GetCommandLineArgs(),"-city-proof")>=0;
+#endif
         bool ProofMode=>CityProofMode;
         void EnterCity()
         {EnterSpace(false);}
@@ -83,6 +87,13 @@ namespace FitCheck
             bool focused=CityInputFocused;
             bool capture=stage==Stage.City&&!paused&&!ShopSequenceActive&&!cityFreeCursor&&focused;
             if(capture){
+#if UNITY_WEBGL && !UNITY_EDITOR
+                // Browser pointer lock must follow a fresh click in the active canvas,
+                // never a passive loading completion or a focus-restoration frame.
+                if(Cursor.lockState!=CursorLockMode.Locked&&!Input.GetMouseButtonDown(0)){
+                    cityLookCaptured=false;Cursor.visible=true;return;
+                }
+#endif
                 if(!cityLookCaptured||Cursor.lockState!=CursorLockMode.Locked){
                     if(Cursor.lockState!=CursorLockMode.Locked)Cursor.lockState=CursorLockMode.Locked;
                     cityLookCaptured=true;cityLookReadyFrame=Time.frameCount+2;

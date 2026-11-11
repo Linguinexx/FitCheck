@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Fit Check — DripLab</title>
+  <link rel="icon" type="image/png" href="TemplateData/logo.png">
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080709;color:#f0eadb;font-family:Arial,sans-serif}
+    #unity-canvas{display:block;width:100vw;height:100vh;background:#000;outline:none;touch-action:none}
+    #loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;background:#080709}
+    #loading[hidden]{display:none}#loading img{width:min(320px,60vw);max-height:38vh;object-fit:contain;animation:breathe 3s ease-in-out infinite}
+    #loading p{margin:0;font-size:16px;max-width:560px;text-align:center;padding:0 24px;line-height:1.5}
+    #track{width:min(280px,64vw);height:5px;border-radius:3px;background:#30292e;overflow:hidden}#progress{height:100%;width:0;background:#e30613}
+    #retry{font:700 15px Arial,sans-serif;color:#fff;border:0;border-radius:9px;padding:14px 28px;background:#e30613;cursor:pointer}
+    @keyframes breathe{50%{transform:translateY(-3px) scale(1.018)}}
+    @media(prefers-reduced-motion:reduce){#loading img{animation:none}}
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" width="{{{ WIDTH }}}" height="{{{ HEIGHT }}}" tabindex="-1" aria-label="Fit Check, jogo da DripLab"></canvas>
+  <div id="loading" role="status" aria-live="polite">
+    <img src="TemplateData/logo.png" alt="Fit Check">
+    <p id="loading-label">Carregando o bairro…</p>
+    <div id="track"><div id="progress"></div></div>
+    <button id="retry" hidden>Recarregar</button>
+  </div>
+  <script>
+    const canvas=document.getElementById("unity-canvas");
+    const loading=document.getElementById("loading");
+    const label=document.getElementById("loading-label");
+    const retry=document.getElementById("retry");
+    canvas.addEventListener("contextmenu",event=>event.preventDefault());
+    canvas.addEventListener("pointerdown",()=>canvas.focus());
+    // A denied or unfocused pointer-lock request is recoverable: another click
+    // can acquire it. Do not turn the browser's rejected Promise into a Unity abort.
+    const requestPointerLock=canvas.requestPointerLock?.bind(canvas);
+    if(requestPointerLock)canvas.requestPointerLock=(...args)=>{
+      try{
+        const pending=requestPointerLock(...args);
+        return pending?.catch(()=>{});
+      }catch(error){console.warn("Clique no jogo para capturar o mouse.");}
+    };
+    retry.addEventListener("click",()=>location.reload());
+    function showError(message){
+      console.error(message);loading.hidden=false;
+      label.textContent="Não foi possível carregar o jogo. Confira a conexão e tente novamente.";
+      document.getElementById("track").hidden=true;retry.hidden=false;
+    }
+    if(location.protocol==="file:"){
+      label.textContent="Abra esta versão por um servidor web. Veja o LEIA-ME que acompanha a build.";
+      document.getElementById("track").hidden=true;
+    }else{
+      const config={
+        dataUrl:"Build/{{{ DATA_FILENAME }}}",
+        frameworkUrl:"Build/{{{ FRAMEWORK_FILENAME }}}",
+        codeUrl:"Build/{{{ CODE_FILENAME }}}",
+        streamingAssetsUrl:"StreamingAssets",
+        companyName:{{{ JSON.stringify(COMPANY_NAME) }}},
+        productName:{{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion:{{{ JSON.stringify(PRODUCT_VERSION) }}},
+        autoSyncPersistentDataPath:true,
+        devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),
+        showBanner:(message,type)=>{if(type==="error")showError(message);else console.warn(message);}
+      };
+      const loader=document.createElement("script");loader.src="Build/{{{ LOADER_FILENAME }}}";
+      loader.onerror=()=>showError("Falha ao baixar o carregador.");
+      loader.onload=()=>createUnityInstance(canvas,config,progress=>{
+        document.getElementById("progress").style.width=(progress*100)+"%";
+      }).then(instance=>{
+        window.fitCheckInstance=instance;loading.hidden=true;canvas.focus();
+      }).catch(showError);
+      document.body.appendChild(loader);
+    }
+  </script>
+</body>
+</html>

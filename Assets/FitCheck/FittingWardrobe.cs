@@ -13,6 +13,16 @@ namespace FitCheck
         static readonly string[] WardrobeTypes={"CIMA","BAIXO","CALÇADO","CABEÇA"};
         static readonly Color WardrobeCard=new Color32(29,27,30,255),WardrobeCardHover=new Color32(43,39,42,255);
         GUIStyle wardrobeName,wardrobeCompactName,wardrobeSmall,wardrobeTab;
+        readonly Dictionary<string,GUIStyle> wardrobeNameStyles=new Dictionary<string,GUIStyle>();
+        readonly Dictionary<string,string> wardrobeStates=new Dictionary<string,string>();
+        readonly HashSet<string> wardrobeAvailable=new HashSet<string>();
+        DayProgress wardrobeProgress;
+        string[] wardrobeInventory;
+        int wardrobeRewards=-1,wardrobeReached=-1,wardrobeReplay=-2;
+        bool wardrobeTesting;
+        readonly int[] wardrobeSlotCounts=new int[4],wardrobeDropCounts=new int[3];
+        readonly string[] wardrobeSlotLabels=new string[4],wardrobeDropLabels=new string[3];
+        internal int WardrobeCacheRefreshes {get;private set;}
 
         void WardrobeStyles()
         {
@@ -21,8 +31,26 @@ namespace FitCheck
             wardrobeCompactName=new GUIStyle(wardrobeName){fontSize=15};
             wardrobeSmall=new GUIStyle(tiny){wordWrap=false,fontSize=13,padding=new RectOffset()};
             wardrobeTab=new GUIStyle(action){fontSize=14,wordWrap=false};
+            foreach(var item in Catalog.All)wardrobeNameStyles[item.name]=wardrobeName.CalcHeight(new GUIContent(item.name),152)<=37?wardrobeName:wardrobeCompactName;
         }
-        GUIStyle WardrobeNameStyle(string name)=>wardrobeName.CalcHeight(new GUIContent(name),152)<=37?wardrobeName:wardrobeCompactName;
+        GUIStyle WardrobeNameStyle(string name)=>wardrobeNameStyles.TryGetValue(name,out var style)?style:wardrobeName;
+        void RefreshWardrobeCache()
+        {
+            if(ReferenceEquals(wardrobeProgress,progress)&&ReferenceEquals(wardrobeInventory,inventory)&&wardrobeRewards==progress.rewards.Count&&wardrobeReached==progress.reached.Count&&wardrobeReplay==replayIndex&&wardrobeTesting==CatalogTesting.Enabled)return;
+            wardrobeProgress=progress;wardrobeInventory=inventory;wardrobeRewards=progress.rewards.Count;wardrobeReached=progress.reached.Count;wardrobeReplay=replayIndex;wardrobeTesting=CatalogTesting.Enabled;
+            wardrobeAvailable.Clear();wardrobeAvailable.UnionWith(ActiveInventory);
+            Array.Clear(wardrobeSlotCounts,0,wardrobeSlotCounts.Length);Array.Clear(wardrobeDropCounts,0,wardrobeDropCounts.Length);
+            foreach(var item in Catalog.All){
+                bool unlocked=wardrobeAvailable.Contains(item.id);
+                wardrobeStates[item.id]=!unlocked?(replayIndex>=0?"FORA DESTE REPLAY":progress.reached.Contains(item.unlockAt)?"ENTREGA AO FECHAR":item.unlockAt+" RP • BLOQUEADA"):(item.unlockAt==0?"DESDE O INÍCIO":item.unlockAt+" RP • DISPONÍVEL");
+                if(!unlocked)continue;
+                wardrobeSlotCounts[item.slot]++;
+                for(int i=0;i<DropCatalog.All.Length;i++)if(DropCatalog.All[i].name==item.drop){wardrobeDropCounts[i]++;break;}
+            }
+            for(int i=0;i<4;i++)wardrobeSlotLabels[i]=wardrobeSlotCounts[i]+" / "+DropCatalog.Pieces(false,i).Length+" peças disponíveis • 3 drops";
+            for(int i=0;i<3;i++)wardrobeDropLabels[i]=wardrobeDropCounts[i]+" / "+DropCatalog.Pieces(true,i).Length+" peças disponíveis";
+            WardrobeCacheRefreshes++;
+        }
         bool WardrobeTab(Rect r,string label,bool selected)
         {
             bool hot=GUI.enabled&&r.Contains(Event.current.mousePosition);
@@ -42,12 +70,13 @@ namespace FitCheck
         {
             if(stage!=Stage.Dressing)return;
             if(locked){PlayClip(Clip("ui_unavailable"),.55f);message=item.name+" • "+item.drop+". "+(replayIndex>=0?"Peça fora do catálogo deste atendimento.":progress.reached.Contains(item.unlockAt)?"Entrega ao fechar o expediente.":"Alcance "+item.unlockAt+" RP; entrega ao fechar o expediente.");return;}
-            if(outfit[item.slot]!=item.id)PlayWardrobeSound();
+            if(outfit[item.slot]==item.id){category=item.slot;message="";return;}
+            PlayWardrobeSound();
             outfit[item.slot]=item.id;category=item.slot;message="";Apply();
         }
         void DrawWardrobeShelf()
         {
-            WardrobeStyles();
+            WardrobeStyles();RefreshWardrobeCache();
             Fill(new Rect(1000,88,440,812),surface);
             Txt(new Rect(1032,112,370,41),"Monte o fit.",heading);
             if(WardrobeTab(new Rect(1032,167,179,36),"Por peça",!wardrobeByDrop))SetWardrobeGrouping(false);
@@ -58,11 +87,10 @@ namespace FitCheck
                 for(int i=0;i<4;i++)if(WardrobeTab(new Rect(1032+i*94,219,87,39),WardrobeSlots[i],category==i)){category=i;scroll=Vector2.zero;message="";}
             }
             var items=DropCatalog.Pieces(wardrobeByDrop,wardrobeByDrop?wardrobeDrop:category);
-            var available=new HashSet<string>(ActiveInventory);
             bool originals=shopDressingInStore||replayIndex>=0;
             float gridTop;
             if(wardrobeByDrop){
-                DrawDropShelfHeader(new Rect(1032,273,368,67),DropCatalog.All[wardrobeDrop],items.Count(item=>available.Contains(item.id)),items.Length);
+                DrawDropShelfHeader(new Rect(1032,273,368,67),DropCatalog.All[wardrobeDrop],wardrobeDropLabels[wardrobeDrop]);
                 gridTop=353;
                 if(originals){
                     for(int slot=0;slot<3;slot++){
@@ -72,7 +100,7 @@ namespace FitCheck
                     gridTop=397;
                 }
             }else{
-                Txt(new Rect(1032,274,368,23),items.Count(item=>available.Contains(item.id))+" / "+items.Length+" peças disponíveis • 3 drops",wardrobeSmall,muted);
+                Txt(new Rect(1032,274,368,23),wardrobeSlotLabels[category],wardrobeSmall,muted);
                 gridTop=311;
                 if(originals&&category<3){
                     var original=Catalog.ArrivalPiece(category);
@@ -83,12 +111,13 @@ namespace FitCheck
             bool emptyAccessory=wardrobeByDrop||category==3;
             int count=items.Length+(emptyAccessory?1:0),rows=(count+1)/2;
             var viewport=new Rect(1026,gridTop,392,721-gridTop);
+            if(wardrobeByDrop)RoundedPanel(new Rect(1022,gridTop-5,398,726-gridTop),DropCatalog.All[wardrobeDrop].backdrop,12);
             scroll=GUI.BeginScrollView(viewport,scroll,new Rect(0,0,366,rows*186));
             for(int i=0;i<count;i++){
                 var r=new Rect(6+(i%2)*184,(i/2)*186,174,176);
                 if(r.yMax<scroll.y||r.y>scroll.y+viewport.height)continue;
                 if(i==items.Length){DrawNoAccessory(r);continue;}
-                var item=items[i];bool locked=!available.Contains(item.id),selected=outfit[item.slot]==item.id;
+                var item=items[i];bool locked=!wardrobeAvailable.Contains(item.id),selected=outfit[item.slot]==item.id;
                 DrawWardrobeCard(r,item,locked,selected);
                 if(GUI.Button(r,GUIContent.none,GUIStyle.none))ChooseWardrobePiece(item,locked);
             }
@@ -97,14 +126,14 @@ namespace FitCheck
             Txt(new Rect(1032,745,366,42),message.Length>0?message:CatalogTesting.Enabled&&replayIndex<0?"Catálogo de teste liberado. O progresso do save é preservado.":"Misture os drops. O visual só é enviado quando você finalizar.",tiny,muted);
             if(Tap(new Rect(1032,799,366,62),"Finalizar visual  →",true))stage=Stage.Confirm;
         }
-        void DrawDropShelfHeader(Rect r,ClothingDrop drop,int available,int total)
+        void DrawDropShelfHeader(Rect r,ClothingDrop drop,string availability)
         {
             RoundedPanel(r,drop.backdrop,9);
             DrawDropPattern(new Rect(r.xMax-108,r.y+5,100,r.height-10),drop,.28f);
             Fill(new Rect(r.x+12,r.y+12,3,r.height-24),CreatorRed);
             Txt(new Rect(r.x+25,r.y+7,235,21),drop.name,wardrobeTab,drop.ink);
             Txt(new Rect(r.x+25,r.y+28,235,20),drop.label,wardrobeSmall,paper);
-            Txt(new Rect(r.x+25,r.y+47,235,17),available+" / "+total+" peças disponíveis",wardrobeSmall,muted);
+            Txt(new Rect(r.x+25,r.y+47,235,17),availability,wardrobeSmall,paper);
         }
         void DrawDropPattern(Rect r,ClothingDrop drop,float opacity)
         {
@@ -130,7 +159,8 @@ namespace FitCheck
             bool hot=GUI.enabled&&r.Contains(Event.current.mousePosition);
             RoundedPanel(new Rect(r.x,r.y+4,r.width,r.height),new Color(0,0,0,.55f),10);
             RoundedPanel(r,selected?CreatorRed:hot?KaosHover:KaosControl,10);
-            RoundedPanel(new Rect(r.x+2,r.y+2,r.width-4,r.height-4),hot?WardrobeCardHover:WardrobeCard,8);
+            Color face=wardrobeByDrop?Color.Lerp(drop.backdrop,WardrobeCard,.25f):WardrobeCard;
+            RoundedPanel(new Rect(r.x+2,r.y+2,r.width-4,r.height-4),hot?Color.Lerp(face,WardrobeCardHover,.4f):face,8);
             var image=new Rect(r.x+8,r.y+8,r.width-16,88);
             RoundedPanel(image,drop.backdrop,6);
             DrawDropPattern(image,drop,locked?.10f:.19f);
@@ -140,10 +170,9 @@ namespace FitCheck
             RoundedPanel(new Rect(image.x+4,image.y+4,74,19),KaosPanel,4);
             Txt(new Rect(image.x+8,image.y+4,67,18),WardrobeTypes[item.slot],wardrobeSmall,muted);
             if(selected){RoundedPanel(new Rect(image.xMax-69,image.y+4,65,19),CreatorRed,4);Txt(new Rect(image.xMax-68,image.y+4,63,18),"NO FIT",wardrobeSmall,paper);}
-            Txt(new Rect(r.x+11,r.y+103,r.width-22,37),item.name,WardrobeNameStyle(item.name),locked?muted:paper);
+            Txt(new Rect(r.x+11,r.y+103,r.width-22,37),item.name,WardrobeNameStyle(item.name),locked&&!wardrobeByDrop?muted:paper);
             Txt(new Rect(r.x+11,r.y+139,r.width-22,18),item.drop,wardrobeSmall,drop.ink);
-            string state=locked?(replayIndex>=0?"FORA DESTE REPLAY":progress.reached.Contains(item.unlockAt)?"ENTREGA AO FECHAR":item.unlockAt+" RP • BLOQUEADA"):(item.unlockAt==0?"DESDE O INÍCIO":item.unlockAt+" RP • DISPONÍVEL");
-            Txt(new Rect(r.x+11,r.y+157,r.width-22,17),state,wardrobeSmall,locked?muted:paper);
+            Txt(new Rect(r.x+11,r.y+157,r.width-22,17),wardrobeStates[item.id],wardrobeSmall,locked&&!wardrobeByDrop?muted:paper);
         }
         void DrawNoAccessory(Rect r)
         {
@@ -154,7 +183,7 @@ namespace FitCheck
             Txt(new Rect(r.x+15,r.y+25,r.width-30,45),"—",heading,muted);
             Txt(new Rect(r.x+11,r.y+103,r.width-22,37),"Sem acessório",wardrobeName,paper);
             Txt(new Rect(r.x+11,r.y+139,r.width-22,18),"CABEÇA LIVRE",wardrobeSmall,muted);
-            if(GUI.Button(r,GUIContent.none,GUIStyle.none)&&stage==Stage.Dressing){outfit[3]="";category=3;message="";Sound(0);Apply();}
+            if(GUI.Button(r,GUIContent.none,GUIStyle.none)&&stage==Stage.Dressing){bool changed=!string.IsNullOrEmpty(outfit[3]);outfit[3]="";category=3;message="";Sound(0);if(changed)Apply();}
         }
     }
 }

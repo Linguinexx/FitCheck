@@ -156,7 +156,7 @@ namespace FitCheck
             bool originalTop=Catalog.IsArrivalPiece(outfit[0]),originalBottom=Catalog.IsArrivalPiece(outfit[1]),originalShoes=Catalog.IsArrivalPiece(outfit[2]);
             var t=playerPieces?[0]??(originalTop?CivilianTop(civilianProfile):Catalog.Get(outfit[0]));bool fubaSuit=t.id==FubaTop;
             var cloth=fubaSuit?SurfaceMaterial(t.color,"Knit"):Material(t.color);
-            FinishCivilianMaterial(cloth,ClothingFabric(t.id));
+            FinishCivilianMaterial(cloth,ClothingFabric(t.id),originalTop);
             cloth.SetFloat("_Outline",0);
             bool blenderTop=originalTop?BuildCivilianTop(t,cloth,civilianProfile):BuildStreetwearTop(t,cloth);
             if(fubaSuit){
@@ -190,7 +190,7 @@ ShirtBody(t,cloth);
             }
             var b=playerPieces?[1]??(originalBottom?CivilianBottom(civilianProfile):Catalog.Get(outfit[1]));
             var shoes=playerPieces?[2]??Catalog.Get(outfit[2]);
-            var denim=fubaSuit?cloth:Material(b.color);FinishCivilianMaterial(denim,originalBottom?"Denim":ClothingFabric(b.id));
+            var denim=fubaSuit?cloth:Material(b.color);FinishCivilianMaterial(denim,originalBottom?"Denim":ClothingFabric(b.id),originalBottom);
             foreach(Transform part in Avatar){
                 if(part.name=="Canela")part.gameObject.SetActive(b.shorts);
             }

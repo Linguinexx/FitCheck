@@ -21,6 +21,7 @@ namespace FitCheck.Editor
             if(rewards.Distinct().Count()!=rewards.Length||!rewards.OrderBy(name=>name).SequenceEqual(Catalog.All.Where(item=>item.unlockAt>0).Select(item=>item.name).OrderBy(name=>name)))throw new Exception("Entrega sem marco, duplicada ou ausente");
             if(Catalog.All.Any(item=>item.unlockAt>0&&!DayProgress.Milestones.Contains(item.unlockAt)))throw new Exception("Desbloqueio fora da campanha");
             for(int slot=0;slot<4;slot++)if(DropCatalog.Pieces(false,slot).Any(item=>item.slot!=slot))throw new Exception("Filtro de categoria misturou peças");
+            if(!ReferenceEquals(DropCatalog.Pieces(true,0),DropCatalog.Pieces(true,0))||!ReferenceEquals(DropCatalog.Pieces(false,2),DropCatalog.Pieces(false,2))||!ReferenceEquals(DropCatalog.Guide,DropCatalog.Guide))throw new Exception("Filtros do provador perderam o cache");
             string[] shoes=DropCatalog.Pieces(false,2).Select(item=>item.id).Take(3).ToArray();
             if(!shoes.SequenceEqual(new[]{"SB_SHOES_01","AH_SHOES_01","CG_SHOES_01"}))throw new Exception("Ordem aprovada dos tênis mudou");
             CampaignChecks.Validate();

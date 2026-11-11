@@ -15,7 +15,7 @@ namespace FitCheck
         public static ShopDecor Load(string path){if(!File.Exists(path)&&!File.Exists(path+".bak"))return new ShopDecor();try{return Read(path);}catch{if(File.Exists(path+".bak"))return Read(path+".bak");throw;}}
         public static void Save(string path,ShopDecor value){
             value.Validate();Directory.CreateDirectory(Path.GetDirectoryName(path));string temp=path+".tmp";File.WriteAllText(temp,JsonUtility.ToJson(value,true));Read(temp);
-            if(File.Exists(path)){bool valid=true;try{Read(path);}catch{valid=false;}File.Replace(temp,path,valid?path+".bak":null);}else File.Move(temp,path);
+            if(File.Exists(path)){bool valid=true;try{Read(path);}catch{valid=false;}PlatformFiles.ReplaceValidated(temp,path,valid?path+".bak":null);}else File.Move(temp,path);
         }
     }
     public partial class CityView

@@ -1,0 +1,14 @@
+{
+  "folder": "Builds/Windows-Test08",
+  "folder_bytes": 138722620,
+  "archive": "Builds/FitCheck-Windows-Test08.zip",
+  "archive_bytes": 76627523,
+  "sha256": "bd3b65967b1f4c2ed1e38c1c70e355cf7ffc56ed9b78bd6506b10fac59a5bd48",
+  "build_report": "FITCHECK_CITY_BUILD: Succeeded; size=132,28 MB; errors=0; warnings=0",
+  "wardrobe_cache": {
+    "iterations": 1000,
+    "refreshes": 0,
+    "steady_lookup_allocated_bytes": 0
+  },
+  "previous_archive_crc_verified": true
+}

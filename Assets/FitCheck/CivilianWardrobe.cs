@@ -15,9 +15,9 @@ namespace FitCheck
             var colors=new[]{new Color(.12f,.22f,.32f),new Color(.46f,.34f,.20f),new Color(.19f,.22f,.24f),new Color(.31f,.36f,.25f)};
             return new Garment("CIV_BOTTOM","Calça cotidiana","CIVIL",1,colors[id%4],true){shorts=id==6||id==8};
         }
-        void FinishCivilianMaterial(Material material,string fabric="Cotton")
+        void FinishCivilianMaterial(Material material,string fabric="Cotton",bool civilian=true)
         {
-            material.name="Civilian — "+fabric;material.shader=Resources.Load<Shader>("GarmentFabric");material.mainTexture=Resources.Load<Texture2D>("Garments/Finishes/"+fabric);material.SetFloat("_Motion",0);material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);material.SetFloat("_FabricWeight",0);
+            material.name=(civilian?"Civilian — ":"Clothing — ")+fabric;material.shader=Resources.Load<Shader>("GarmentFabric");material.mainTexture=Resources.Load<Texture2D>("Garments/Finishes/"+fabric);material.SetFloat("_Motion",0);material.SetFloat("_SmoothLight",1);material.SetFloat("_Outline",0);material.SetFloat("_FabricWeight",0);
         }
         bool BuildCivilianTop(Garment top,Material fabric,int id)
         {
@@ -66,8 +66,9 @@ namespace FitCheck
                 float height=Avatar.InverseTransformPoint(renderer.bounds.max).y;
                 if(height<.62f||renderer.name==SlideFootMeshName)continue;
                 string fabric=ClothingFabric(height>1.5f?top.id:bottom.id);
+                bool civilian=(height>1.5f?top.id:bottom.id).StartsWith("CIV_");
                 foreach(var material in renderer.sharedMaterials)
-                    if(material!=skin&&material!=ink&&material.shader.name=="FitCheck/Retro Painted")FinishCivilianMaterial(material,fabric);
+                    if(material!=skin&&material!=ink&&material.shader.name=="FitCheck/Retro Painted")FinishCivilianMaterial(material,fabric,civilian);
             }
         }
         static void FinishCollectionMaterial(Material material,string id)

@@ -82,3 +82,20 @@ Retomada em 11/11/2026 para artes, calça rosa e óculos. Sons, tutorial e build
 - Cartões em carvão/papel com seleção Vermelho Kaos, relevo, etiqueta do drop e estado de desbloqueio. Prateleiras com identidades próprias: luzes noturnas, marcações de quadra e sulcos de vinil. Miniaturas reenquadradas pelos limites de transparência, mantendo as texturas e proporções existentes.
 - Etiquetas distinguem bloqueio por RP, entrega no fechamento e peça indisponível no replay. As recompensas dos oito marcos são derivadas diretamente do catálogo para não divergir das etiquetas. Modo de teste reversível e saves mantidos.
 - Conferências em Captures/DropShelfReview e Tools/Fit Check/Check clothing drops. Nova build distribuível e tutorial seguem pendentes.
+
+## Teste 08 — cores, otimização e entrega — 11/11/2026
+
+- Por drop usa fundo destacado na prateleira inteira e nos cartões: bordô After Hours, verde Common Ground e violeta Side B. Textos claros, identidade dos drops e seleção Kaos preservados.
+- Filtros, guia, disponibilidade, etiquetas e medição dos nomes reutilizados. Cache atualiza na troca de inventário, campanha, entregas, marcos, teste ou replay. Selecionar uma peça já equipada não reconstrói o avatar. Mil consultas estáveis sem alocação; sem reduzir resolução de texturas ou alterar a distribuição da interface.
+- Corrigida a identificação interna de materiais civis/catalogados encontrada na validação de atendimento. Chegada civil e troca de roupa no provador verificadas.
+- Build Windows Teste 08 entregue em Builds/Windows-Test08 e Builds/FitCheck-Windows-Test08.zip. Pasta 138,7 MB; ZIP 76,6 MB. Compressão LZ4HC, tela cheia/configurações preservadas, relato de bugs e roteiro atualizados. Fontes da entrega e validação em Art/Releases/Test08.
+- Suítes de campanha, atendimento, loadings, saves e provador passaram. Loja em cerca de 60 FPS nos testes nativos, incluindo caminhada olhando para baixo; dados completos em Art/Releases/Test08/VALIDACAO.md.
+- Limpeza de aproximadamente 652 MiB; apenas Teste 08 atual e Teste 07 arquivado como versão anterior. Cache da Unity aberta, referências, fontes e saves preservados.
+- Nova build solicitada concluída. Tutorial de novos saves continua pendente.
+
+## Web Teste 01 — 11/11/2026
+
+- Versão de navegador em Builds/Web-Test01 e Builds/FitCheck-Web-Test01.zip, aproximadamente 50,9 MB de pasta e 50,7 MB de ZIP. Index na raiz para hospedagem HTML5; servidor local e instruções incluídos. Entrega Windows Teste 08 preservada.
+- Compilação IL2CPP, primitivas preservadas no stripping, gravação compatível com IndexedDB e sincronização persistente automática. Captura do mouse por clique; recusa de permissão não derruba o player. Interface e fluxo mantidos.
+- Verificados menu, criador, continuidade do save após reabrir o navegador, casa, movimento, pausa, interação com Fubá e porta para o bairro. Não foi repetida a campanha completa na web. Detalhes em Art/Releases/Web01/VALIDACAO.md.
+- Hospedagem pública ainda não realizada. Os saves web são separados dos saves Windows. Tutorial de novos saves continua pendente.

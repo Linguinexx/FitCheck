@@ -1,0 +1,17 @@
+{
+  "removed_bytes": 684136007.0,
+  "removed_mib": 652.4,
+  "skipped": [
+    {
+      "reason": "Editor principal aberto; cache preservado",
+      "path": "FitCheck/Library"
+    }
+  ],
+  "protected": [
+    "FitCheck/Builds/Windows-Test08/FitCheck.exe",
+    "FitCheck/Builds/FitCheck-Windows-Test08.zip",
+    "FitCheck/Builds/FitCheck-Windows-Test07.zip"
+  ],
+  "disk_free_before": 3494707200,
+  "disk_free_after": 4187500544
+}

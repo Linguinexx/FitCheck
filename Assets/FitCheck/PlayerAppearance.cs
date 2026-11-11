@@ -44,7 +44,7 @@ namespace FitCheck
             File.WriteAllText(temporary,JsonUtility.ToJson(value,true));Read(temporary);
             if(File.Exists(path)){
                 bool valid=true;try{Read(path);}catch{valid=false;}
-                File.Replace(temporary,path,valid?path+".bak":null);
+                PlatformFiles.ReplaceValidated(temporary,path,valid?path+".bak":null);
             }else File.Move(temporary,path);
         }
     }

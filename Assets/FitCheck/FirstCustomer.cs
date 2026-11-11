@@ -52,7 +52,9 @@ namespace FitCheck
             foreach(var c in FindObjectsByType<Camera>()) c.gameObject.SetActive(false);
             LoadAppearance();BuildWorld();BuildAudio();BuildPresentation();BuildThumbnails();RefreshPhotoArt();stage=Stage.Welcome;ShowPlayer();
             if(!ProofMode){BuildTitlePhoto();StartLiveTitle();}
+#if !UNITY_WEBGL || UNITY_EDITOR
             if(ProofMode){mutedAudio=true;StartCoroutine(CaptureFirstPersonProof());}
+#endif
         }
         Material Mat(Color color) { var m=new Material(Resources.Load<Material>("PrototypeBase")); m.color=color; return m; }
         GameObject Shape(string name, PrimitiveType kind, Vector3 pos, Vector3 scale, Material mat, Transform parent=null)

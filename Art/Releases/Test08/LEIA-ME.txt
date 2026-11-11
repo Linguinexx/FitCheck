@@ -1,0 +1,24 @@
+FIT CHECK — TESTE 08
+Windows 64 bits • 11/11/2026 • Unity 6000.6.7f1
+
+COMO ABRIR
+Extraia o ZIP inteiro para uma pasta. Abra FitCheck.exe e mantenha as pastas FitCheck_Data e MonoBleedingEdge junto do executável.
+O jogo mantém os saves locais existentes. Nada de progresso do desenvolvedor acompanha esta entrega.
+
+NESTA VERSÃO
+Prateleiras do provador com fundos distintos: bordô After Hours, verde Common Ground e violeta Side B. Alternância Por peça / Por drop, miniaturas enquadradas, etiquetas de disponibilidade e seleção em vermelho Kaos.
+Seleção de roupas com dados reutilizados e sem reconstruir o personagem ao clicar novamente na peça já equipada. Dados da build comprimidos sem reduzir a resolução das texturas.
+Inclui a revisão dos tecidos, o pé do slide de nuvem, Bermuda Comando, os efeitos sonoros adicionais e os demais ajustes atuais do projeto.
+
+CONTROLES
+WASD: andar. Shift: correr. Mouse: olhar / girar a prévia no provador.
+E: interagir. F: personalizar a loja quando ela está fechada.
+Tab: liberar / capturar o cursor durante a exploração. Esc: pausa.
+Sensibilidade, áudio e tela cheia / janela ficam nas Configurações.
+
+COMEÇO E PROGRESSO
+Jogar abre até três espaços de save. Criar ou continuar começa em casa. Caminhe até a loja e abra o expediente no balcão quando quiser.
+O catálogo de teste é reversível nas Configurações. Para verificar os desbloqueios normais da campanha, desligue Catálogo de teste. Isso preserva as recompensas e os inventários dos atendimentos anteriores.
+Novas peças são entregues no fechamento depois de alcançar a Reputação indicada. Replays mantêm o catálogo daquele atendimento.
+
+Se encontrar um problema, preencha RELATO-DE-BUG.txt e anexe uma imagem ou vídeo. O roteiro sugerido está em ROTEIRO-DE-TESTE.md.
