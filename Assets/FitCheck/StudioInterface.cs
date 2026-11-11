@@ -27,7 +27,7 @@ namespace FitCheck
         {
             foreach(var item in Catalog.All){
                 var image=studio.Thumbnail(item);thumbnails[item.id]=image;
-                var gray=new Texture2D(128,128,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};var pixels=image.GetPixels();
+                var gray=new Texture2D(image.width,image.height,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};var pixels=image.GetPixels();
                 for(int i=0;i<pixels.Length;i++){float value=pixels[i].grayscale*.55f;pixels[i]=new Color(value,value,value,pixels[i].a);}
                 gray.SetPixels(pixels);gray.Apply();lockedThumbnails[item.id]=gray;
             }

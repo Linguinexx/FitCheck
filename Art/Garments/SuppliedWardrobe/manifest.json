@@ -1,0 +1,25 @@
+[
+  {
+    "id": "AH_SHOES_03",
+    "input": "refs roupas\\modelos tenis\\red clog 3d model\\red_clog_3d_model.fbx",
+    "sha256": "76cfe34c3d72c606b331d3283cd42c5062c33bc66222e2f2be8d25c5656eb7bc",
+    "source_triangles": 498423,
+    "runtime_triangles": 2199,
+    "texture": 512
+  },
+  {
+    "id": "SB_HEAD_03",
+    "input": "refs roupas\\modelos tenis\\futuristic sunglasses 3d model\\futuristic_sunglasses_3d_model.fbx",
+    "sha256": "17bdc2b402786006c5dbedeedc455f17e699b71f362a46e0137e81e5ded62dd4",
+    "source_triangles": 220378,
+    "runtime_triangles": 1800,
+    "texture": 512
+  },
+  {
+    "id": "CG_BOTTOM_04",
+    "input": "FitCheck\\Assets\\Resources\\Garments\\BaggyDenim01.json",
+    "sha256": "7731b2f237596ca3f9df1aa0a58386e55ce595754ec0c1a5c3efe6a86fd0145c",
+    "runtime_triangles": 5654,
+    "texture": 512
+  }
+]

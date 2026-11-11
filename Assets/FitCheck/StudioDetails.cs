@@ -10,10 +10,11 @@ namespace FitCheck
         public string HairName=>PlayerAppearance.HairNames[currentHairProfile];
         public void CycleHair(){HairOverride=(currentHairProfile+1)%PlayerAppearance.HairNames.Length;}
         enum HairFit { Free, Glasses, Cap, Knit, Hood, Headphones }
+        const string PrismaGlassesId="SB_HEAD_03";
         static HairFit HairFitFor(Garment headwear)
         {
             if(headwear==null)return HairFit.Free;
-            if(headwear.id=="PLAYER_PINK_GLASSES")return HairFit.Glasses;
+            if(headwear.id=="PLAYER_PINK_GLASSES"||headwear.id==PrismaGlassesId)return HairFit.Glasses;
             if(headwear.id==GhostHood)return HairFit.Hood;
             if(headwear.id==GarageDjHeadphones)return HairFit.Headphones;
             return headwear.cap?HairFit.Cap:HairFit.Knit;
@@ -55,7 +56,7 @@ namespace FitCheck
                 if(cut==1)BuildFittedBun(fit,strands);
             }
             if(profile==4)Ellipsoid("Bigode",new Vector3(0,2.60f,-.534f),new Vector3(.25f,.055f,.05f),SurfaceMaterial(new Color(.40f,.37f,.33f),"Hair"),hair,16,8);
-            if(profile==3){
+            if(profile==3&&HairFitFor(headwear)!=HairFit.Glasses){
                 var frame=SurfaceMaterial(new Color(.08f,.055f,.04f),"Leather");
                 for(int side=-1;side<=1;side+=2){
                     Tube("Armação arredondada",EllipsePath(new Vector3(side*.23f,2.88f,-.63f),.205f,.215f),.013f,frame,hair,true);

@@ -7,7 +7,7 @@ namespace FitCheck
     {
         public int version=1,wall,floor,accent,poster,backdrop,backdropBase,led;public bool plants=true;
         public ShopDecor Copy(){return new ShopDecor{version=version,wall=wall,floor=floor,accent=accent,poster=poster,backdrop=backdrop,backdropBase=backdropBase,led=led,plants=plants};}
-        public void Validate(){if(version!=1||wall<0||wall>7||floor<0||floor>2||accent<0||accent>7||poster<0||poster>7||backdrop<0||backdrop>7||backdropBase<0||backdropBase>7||led<0||led>7)throw new ArgumentException("Decoração inválida");}
+        public void Validate(){if(version!=1||wall<0||wall>7||floor<0||floor>2||accent<0||accent>7||poster<0||poster>=GalleryArt.Names.Length||backdrop<0||backdrop>7||backdropBase<0||backdropBase>7||led<0||led>7)throw new ArgumentException("Decoração inválida");}
     }
     public static class ShopDecorStore
     {

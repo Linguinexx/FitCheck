@@ -101,8 +101,25 @@ namespace FitCheck
             if(Tap(new Rect(430,487,570,48),reducedMotion?"Movimento reduzido: sim":"Movimento reduzido: não")){reducedMotion=!reducedMotion;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.ReducedMotion",reducedMotion?1:0);}
             if(Tap(new Rect(430,551,570,48),retroFilter?"Pixelização: leve":"Pixelização: desligada")){retroFilter=!retroFilter;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.Retro",retroFilter?1:0);}
             if(Tap(new Rect(430,611,570,48),garmentFinishes?"Brilho das roupas: ligado":"Brilho das roupas: desligado"))SetGarmentFinishes(!garmentFinishes,true);
-            Txt(new Rect(430,670,570,35),"WASD andar • Shift correr • E interagir • Tab cursor",caption,muted);
+            if(Tap(new Rect(430,665,570,40),CatalogTesting.Enabled?"Catálogo de teste: liberado":"Catálogo de teste: desligado"))
+                SetCatalogTesting(!CatalogTesting.Enabled);
             if(Tap(new Rect(430,714,570,52),"Voltar",true))CloseSettings();
+        }
+        void SetCatalogTesting(bool enabled)
+        {
+            CatalogTesting.Enabled=enabled;
+            if(replayIndex<0&&campaignBeforePreview==null){
+                inventory=progress.Available;
+                bool changed=false;
+                for(int slot=0;slot<outfit.Length;slot++){
+                    string id=outfit[slot];
+                    if(string.IsNullOrEmpty(id)||Catalog.IsArrivalPiece(id)||System.Array.IndexOf(inventory,id)>=0)continue;
+                    outfit[slot]=slot==3?"":shopDressingInStore?Catalog.ArrivalPiece(slot).id:Catalog.Default[slot];
+                    changed=true;
+                }
+                if(changed)Apply();
+            }
+            if(!ProofMode){PlayerPrefs.SetInt(CatalogTesting.PreferenceKey,enabled?1:0);PlayerPrefs.Save();}
         }
         void PauseMenuUI()
         {

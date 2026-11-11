@@ -39,6 +39,7 @@ namespace FitCheck
         {
             if(slot==1)return "Calça";
             if(slot==2)return name.StartsWith("Sola")?"Sola":name=="Cadarço"?"Cadarço":"Tênis";
+            if(slot==3)return "Óculos esportivos";
             if(name=="Camiseta com caimento"||name=="Capuz")return name;
             if(name.Contains("Estampa")||name.Contains("Grafismo")||name.Contains("Identificação")||name.Contains("Carretel")||name.Contains("Etiqueta"))return "BlenderTopo Estampa";
             return name.Contains("Barra")?"BlenderTopo Barra":"BlenderTopo Recortes";

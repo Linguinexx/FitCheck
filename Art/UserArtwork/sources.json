@@ -2,89 +2,175 @@
   {
     "resource": "Artwork/Poster00",
     "source": "🪽.jpg",
-    "sha256": "209658e0d5346b8421e7d396b5685605a4f18c434bd026bfe91ed4fbaeca1478"
+    "sha256": "209658e0d5346b8421e7d396b5685605a4f18c434bd026bfe91ed4fbaeca1478",
+    "label": "Rua"
   },
   {
     "resource": "Artwork/Poster01",
     "source": "Music Is My Drug.jpg",
-    "sha256": "fe643e7096522bde23c9c072069fb27d720364453446a9e5d444d7751a1cf098"
+    "sha256": "fe643e7096522bde23c9c072069fb27d720364453446a9e5d444d7751a1cf098",
+    "label": "Música"
   },
   {
     "resource": "Artwork/Poster02",
     "source": "baixados.jpg",
-    "sha256": "0c4f8f26e7dfbf614dd6de94cf857764c28bb81496f830fba9c6758e0ab9ca03"
+    "sha256": "0c4f8f26e7dfbf614dd6de94cf857764c28bb81496f830fba9c6758e0ab9ca03",
+    "label": "C.R.E.A.M."
   },
   {
     "resource": "Artwork/Poster03",
     "source": "baixados (1).jpg",
-    "sha256": "56199f506a565339c312d84dca2d77213cb68458b1131b9ed88eed8700fe1f1c"
+    "sha256": "56199f506a565339c312d84dca2d77213cb68458b1131b9ed88eed8700fe1f1c",
+    "label": "Risco"
   },
   {
     "resource": "Artwork/Poster04",
     "source": "baixados (2).jpg",
-    "sha256": "cf04d1a828e38e837f8c3c0d40eea9b4eb7405c93c3edb0186cdd808a471499a"
+    "sha256": "cf04d1a828e38e837f8c3c0d40eea9b4eb7405c93c3edb0186cdd808a471499a",
+    "label": "Crie"
   },
   {
     "resource": "Artwork/Poster05",
     "source": "baixados (3).jpg",
-    "sha256": "7d4dd9cb2ad93ef27655d69ea3d8624866da771f453bfd7e79ae60862c89d833"
+    "sha256": "7d4dd9cb2ad93ef27655d69ea3d8624866da771f453bfd7e79ae60862c89d833",
+    "label": "Sol"
   },
   {
     "resource": "Artwork/Poster06",
     "source": "Ig @chizzy2cold.jpg",
-    "sha256": "94897c6c758d61117290e135be40d852473f7e61d7282c7d0a116ee640ada940"
+    "sha256": "94897c6c758d61117290e135be40d852473f7e61d7282c7d0a116ee640ada940",
+    "label": "Fortuna"
   },
   {
     "resource": "Artwork/Poster07",
     "source": "Widget.jpg",
-    "sha256": "290fcdaef3c00a25363127fe05ce7b16994c863b81052b846f03643f0ef90614"
+    "sha256": "290fcdaef3c00a25363127fe05ce7b16994c863b81052b846f03643f0ef90614",
+    "label": "Som"
   },
   {
     "resource": "Artwork/Poster08",
     "source": "_Fade Away___Digital Painting & Collage,_Made With Photoshop___💥__#posterdesign #mixmedia #artoftheday #digitalart #graphicdesign.jpg",
     "usage": "bairro: outdoor ou cartaz",
-    "sha256": "fcc1017f19a6eb77131cfaadf128526680c3510310f39a32e9297db63be94104"
+    "sha256": "fcc1017f19a6eb77131cfaadf128526680c3510310f39a32e9297db63be94104",
+    "label": "Fade"
   },
   {
     "resource": "Artwork/Poster09",
     "source": "1136736762245084106.jpg",
     "usage": "bairro: outdoor ou cartaz",
-    "sha256": "c65b4b58764c782d210a1bbec16baa863985e93ecb330d1c28e7a28b5b84aac7"
+    "sha256": "c65b4b58764c782d210a1bbec16baa863985e93ecb330d1c28e7a28b5b84aac7",
+    "label": "Pausa"
   },
   {
     "resource": "Artwork/Poster10",
     "source": "baixados (4).jpg",
     "usage": "bairro: outdoor ou cartaz",
-    "sha256": "2fd79a839e39238dd1688464bb3cb0ecd55328566450e635d7ed0906d5fa20b7"
+    "sha256": "2fd79a839e39238dd1688464bb3cb0ecd55328566450e635d7ed0906d5fa20b7",
+    "label": "Órbita"
   },
   {
     "resource": "Artwork/Poster11",
     "source": "baixados (5).jpg",
     "usage": "bairro: outdoor ou cartaz",
-    "sha256": "f59e7d456a91cd3ae6db61efccc755653b5deb6591e93a319d6e082aefa73437"
+    "sha256": "f59e7d456a91cd3ae6db61efccc755653b5deb6591e93a319d6e082aefa73437",
+    "label": "Nuvens"
   },
   {
     "resource": "Artwork/Poster12",
     "source": "baixados (6).jpg",
     "usage": "bairro: outdoor ou cartaz",
-    "sha256": "bd3d7e1abc940fad5ad1cf3ebd5d71b4c0a2e8e985a020a806c1966c51a96cd4"
+    "sha256": "bd3d7e1abc940fad5ad1cf3ebd5d71b4c0a2e8e985a020a806c1966c51a96cd4",
+    "label": "Bliss"
   },
   {
     "resource": "Artwork/Poster13",
     "source": "baixados (7).jpg",
     "usage": "bairro: outdoor ou cartaz",
-    "sha256": "354712eecbb890925f1f6bdb8708aecdd112073472e89778dd0ea292d00683dc"
+    "sha256": "354712eecbb890925f1f6bdb8708aecdd112073472e89778dd0ea292d00683dc",
+    "label": "Impulso"
   },
   {
     "resource": "Artwork/Poster14",
     "source": "baixados (8).jpg",
     "usage": "bairro: outdoor ou cartaz",
-    "sha256": "5a70a5a6e1ffb79a08d5df276bf0144af3fb3f20fad321041e811eb230157506"
+    "sha256": "5a70a5a6e1ffb79a08d5df276bf0144af3fb3f20fad321041e811eb230157506",
+    "label": "Mundo"
   },
   {
     "resource": "Artwork/Poster15",
     "source": "SUPERSTAR.jpg",
     "usage": "bairro: outdoor ou cartaz",
-    "sha256": "490cccab16dafff9cd9888c39069c0cb7534a25df908b3b0326346d03996ddcb"
+    "sha256": "490cccab16dafff9cd9888c39069c0cb7534a25df908b3b0326346d03996ddcb",
+    "label": "Superstar"
+  },
+  {
+    "resource": "Artwork/Poster16",
+    "source": "baixados (13).jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Temporal",
+    "sha256": "4a7cc2bec8a64b45b2b25213385440808898cec6e2f14ade9a74aa4b27aa2e52"
+  },
+  {
+    "resource": "Artwork/Poster17",
+    "source": "baixados (14).jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Origem",
+    "sha256": "bf3f77c5cf0b005ff72810a15ce2568451b7aed13942e81425b3330dd4f6da91"
+  },
+  {
+    "resource": "Artwork/Poster18",
+    "source": "baixados (15).jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Calma",
+    "sha256": "ca46698b224143afe7b73e8df0d2878379b0e5658d16a2a8170688421aa37d0e"
+  },
+  {
+    "resource": "Artwork/Poster19",
+    "source": "baixados (16).jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Arte",
+    "sha256": "6eb41b5333b9b0ca1c4ccd7f754e995cbf2a093b7ff25df2d2939c8f52457e06"
+  },
+  {
+    "resource": "Artwork/Poster20",
+    "source": "baixados (17).jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Estrela",
+    "sha256": "7ae24d6a335ef239931ebb408f57deff6ad5a71ffaf30ed0a17304cd07ce88df"
+  },
+  {
+    "resource": "Artwork/Poster21",
+    "source": "baixados (18).jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Miragem",
+    "sha256": "ef494f62c702ff448cd05e90ed40f31087c993dc25b544cb4a26101a52349521"
+  },
+  {
+    "resource": "Artwork/Poster22",
+    "source": "baixados (19).jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Contato",
+    "sha256": "35f44d69c6be008135716c1aa6a6060dc104217882692e45979d7925f0b6471b"
+  },
+  {
+    "resource": "Artwork/Poster23",
+    "source": "baixados (20).jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Sonho",
+    "sha256": "dfdb710c131a7d26653636278f697a620f3045c7b693c5cdb7c6035240ca921d"
+  },
+  {
+    "resource": "Artwork/Poster24",
+    "source": "flamengo.jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Mengão",
+    "sha256": "10ad6aa2e2fa74f6b0053399e6ee069dd55695b318ebb4abd13a34e5b4cd326f"
+  },
+  {
+    "resource": "Artwork/Poster25",
+    "source": "ㅤᡕᠵデᡁ᠊╾━ ▇▂▚ٓ 💥 @ 𝗦ㅤㅤ⃫𝐋𝝠SH̷̸𝐄𝐑𑢩𝗘e ؕ.jpg",
+    "usage": "bairro e personalização da loja",
+    "label": "Estranho",
+    "sha256": "e9a1a308613c540789366f08df76bece35adbeb3d4f4493608031769e032b5e0"
   }
 ]

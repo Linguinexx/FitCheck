@@ -45,7 +45,7 @@ Shader "FitCheck/City Painted"
                 float3 colorA=floor(saturate(i.color.rgb*a*illumination*_DecorTint.rgb)*63+.5)/63,colorB=floor(saturate(i.color.rgb*b*illumination*_DecorTint.rgb)*63+.5)/63;
                 float3 color=lerp(colorA,colorB,smoothstep(0,1,frac(phase)));
                 float luminance=dot(color,float3(.299,.587,.114));color=saturate(lerp(luminance.xxx,color,1.27)*1.06);
-                return fixed4(lerp(color,float3(.035,.025,.03),saturate((i.distance-35)/110)*.85),1);
+                return fixed4(CityHaze(color,i.distance,1-_Interior),1);
             }
             ENDCG
         }

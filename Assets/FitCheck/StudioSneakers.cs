@@ -99,7 +99,8 @@ namespace FitCheck
         }
         internal const string SlideFootMeshName="Pé do slide";
         const string CloudSlideId="AH_SHOES_02";
-        void BuildSlideFoot(int side)
+        const string BrasaClogId="AH_SHOES_03";
+        void BuildSlideFoot(int side,bool clog)
         {
             var foot=new SneakerShape{
                 z=new[]{.28f,.22f,.12f,-.02f,-.14f,-.29f,-.41f,-.44f},
@@ -109,12 +110,18 @@ namespace FitCheck
                 soleY=new[]{.184f,.184f,.184f,.184f,.184f,.184f,.184f,.184f},
                 soleH=new[]{.014f,.014f,.014f,.014f,.014f,.014f,.014f,.014f}
             };
+            if(clog)for(int i=0;i<foot.z.Length;i++){
+                float forefoot=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(.05f,.22f,foot.z[i]));
+                foot.y[i]-=.065f*forefoot;
+                foot.h[i]*=1-.40f*forefoot;
+                foot.soleY[i]=.13f;
+            }
             ShoeVolume(SlideFootMeshName,side*.24f,skin,foot,false);
         }
         void BuildShoes(Garment item,int side)
         {
             if(BuildStreetwearShoes(item,side)){
-                if(item.id==CloudSlideId)BuildSlideFoot(side);
+                if(item.id==CloudSlideId||item.id==BrasaClogId)BuildSlideFoot(side,item.id==BrasaClogId);
                 return;
             }
             var shape=Sneaker(item);float x=side*.24f;var cream=new Color(.86f,.84f,.76f);

@@ -110,7 +110,7 @@ namespace FitCheck
         }
         Vector3 BlenderLowerPoint(Vector3 p)
         {return Vector3.Lerp(LowerPoint(p,-1),LowerPoint(p,1),Mathf.SmoothStep(0,1,(p.x+.12f)/.24f));}
-        void FitRelaxedBody(Garment top,Material fabric,bool liftSlideHem)
+        void FitRelaxedBody(Garment top,Material fabric,bool liftOpenShoeHem)
         {
             if(calfRest[0]==null)calfRest[0]=leftCalfRest;if(calfRest[1]==null)calfRest[1]=rightCalfRest;
             garmentTorso=new GameObject("Postura — tronco e braços").transform;garmentTorso.SetParent(clothes,false);
@@ -129,7 +129,7 @@ namespace FitCheck
                 var posed=Instantiate(mesh);Own(posed);var vertices=posed.vertices;
                 for(int i=0;i<vertices.Length;i++){
                     var p=part.localPosition+part.localRotation*Vector3.Scale(vertices[i],part.localScale);
-                    if(liftSlideHem&&name=="Calça"){
+                    if(liftOpenShoeHem&&name=="Calça"){
                         float hem=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(.32f,.55f,p.y));
                         float front=Mathf.SmoothStep(0,1,Mathf.InverseLerp(.06f,-.12f,p.z));
                         p.y+=.075f*hem*front;

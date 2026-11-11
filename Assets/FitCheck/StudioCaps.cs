@@ -19,6 +19,12 @@ namespace FitCheck
         {
             if(item==null)return;
             if(item.id=="PLAYER_PINK_GLASSES"){BuildPlayerGlasses();return;}
+            if(item.id==PrismaGlassesId){
+                var model=StreetwearModel(item.id);
+                if(model==null)throw new System.InvalidOperationException("Modelo dos Óculos Prisma ausente");
+                StreetwearParts(model,new Vector3(0,2.8f,0));
+                return;
+            }
             if(item.id==GarageDjHeadphones){BuildGarageDjHeadphones();return;}
             if(item.id==GhostHood){BuildFittingGhostHood(item.color);return;}
             if(!item.cap){

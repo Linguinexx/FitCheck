@@ -114,7 +114,7 @@ namespace FitCheck
             }
             for(int i=0;i<sides;i++){int next=(i+1)%sides;triangles.AddRange(new[]{i,next,i+sides,next,next+sides,i+sides});}
             var mesh=new Mesh{name=name};mesh.SetVertices(vertices);mesh.SetNormals(normals);mesh.SetColors(colors);mesh.SetUVs(0,uv);mesh.SetTriangles(triangles,0);mesh.RecalculateBounds();assets.Add(mesh);
-            var material=new Material(Resources.Load<Shader>("CityPaint"));material.mainTexture=Resources.Load<Texture2D>("Painted/Leather");material.SetFloat("_Motion",0);assets.Add(material);
+            var material=new Material(Resources.Load<Shader>("CityPaint"));material.mainTexture=Resources.Load<Texture2D>("Painted/Leather");material.SetFloat("_Motion",0);material.SetFloat("_Interior",IsInterior?1:0);assets.Add(material);
             var go=new GameObject(name);go.transform.SetParent(transform,false);go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=material;return go.transform;
         }
         void BakeResident(StudioView studio,int customer,string[] outfit,Vector3 position,float yaw,bool wallLean=false,bool everyday=false)
@@ -136,6 +136,7 @@ namespace FitCheck
                 var actor=new Resident{root=resident,home=position,facing=resident.localRotation,expression=studio.CurrentExpression};
                 var materials=new Dictionary<Material,Material>();studio.PrepareResidentLids();
                 foreach(var renderer in studio.Avatar.GetComponentsInChildren<MeshRenderer>(true)){
+                    if(!renderer.transform.parent.gameObject.activeInHierarchy)continue;
                     int mouth=renderer.name=="Boca"?1:renderer.name=="Boca animada"?2:renderer.name=="Boca surpresa"?3:renderer.name=="Dentes"?4:0;
                     if((!renderer.gameObject.activeInHierarchy&&mouth==0&&renderer.name!="Pálpebra superior")||hideHead&&(studio.IsHeadPart(renderer.transform)||renderer.name=="Pescoço"))continue;var filter=renderer.GetComponent<MeshFilter>();if(filter==null)continue;
                     var sourceMesh=filter.sharedMesh;var vertices=sourceMesh.vertices;var normals=sourceMesh.normals;

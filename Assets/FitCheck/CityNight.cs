@@ -11,12 +11,12 @@ namespace FitCheck
         public float AmbientTime=>atmosphereTime;
         Material CityMaterial(string key)
         {
-            if(key=="CommerceSign"){var sign=new Material(Resources.Load<Shader>("CitySign")){name="Comércio local — letreiros impressos"};sign.mainTexture=Resources.Load<Texture2D>("CommerceSigns");sign.SetFloat("_Emission",0);return sign;}
+            if(key=="CommerceSign"){var sign=new Material(Resources.Load<Shader>("CitySign")){name="Comércio local — letreiros impressos"};sign.mainTexture=Resources.Load<Texture2D>("CommerceSigns");sign.SetFloat("_Emission",0);sign.SetFloat("_CityExterior",IsInterior?0:1);return sign;}
             if(key=="CityWindow"){
                 var glass=new Material(Resources.Load<Shader>("WindowGlass")){name="Vidro texturizado — reflexos e desgaste"};glass.mainTexture=Resources.Load<Texture2D>("Surfaces/Metal032");glass.SetFloat("_Interior",IsInterior?1:0);return glass;
             }
             if(key=="CitySign"||key=="CitySignGlow"){
-                var printed=new Material(Resources.Load<Shader>("CitySign")){name="Letreiro impresso"};printed.mainTexture=Resources.Load<Texture2D>("CitySigns");printed.SetFloat("_Emission",key=="CitySignGlow"?1:0);return printed;
+                var printed=new Material(Resources.Load<Shader>("CitySign")){name="Letreiro impresso"};printed.mainTexture=Resources.Load<Texture2D>("CitySigns");printed.SetFloat("_Emission",key=="CitySignGlow"?1:0);printed.SetFloat("_CityExterior",IsInterior?0:1);return printed;
             }
             var m=new Material(Resources.Load<Shader>("CityPaint")){name="Bairro noturno — "+key};
             int tile=key=="CityStucco"?1:key=="CityBrick"?2:key=="CityMetal"?3:key=="CityAsphalt"?4:0;

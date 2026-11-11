@@ -74,12 +74,12 @@ namespace FitCheck
         public static readonly int[] Milestones={100,200,300,450,600,750,1050,1400};
         public static readonly string[][] RewardNames={
             new[]{"Night Route","Remix"},new[]{"Court Lines","Daily Steps"},new[]{"Closing Time","Independent"},
-            new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"},new[]{"Pista Aberta","Cargo das Lajes","Slide Nuvem"},
-            new[]{"Fita Local","Bermuda de Pista"},new[]{"Luz de Poste","Aba de Tijolo"}
+            new[]{"Cut & Paste","City Glow"},new[]{"Meeting Point","Unreleased"},new[]{"Pista Aberta","Cargo das Lajes","Slide Nuvem","Jeans Rosa"},
+            new[]{"Fita Local","Bermuda de Pista","Clog Brasa","Óculos Prisma"},new[]{"Luz de Poste","Aba de Tijolo"}
         };
         public bool DayComplete=>posts.Count==FirstCustomerOfDay+CustomersPerDay;
         public bool Complete=>day==TotalDays&&DayComplete&&closed;
-        public string[] Available=>Catalog.All.Where(g=>g.unlockAt==0||rewards.Contains(g.name)).Select(g=>g.id).ToArray();
+        public string[] Available=>Catalog.All.Where(g=>CatalogTesting.Enabled||g.unlockAt==0||rewards.Contains(g.name)).Select(g=>g.id).ToArray();
         public static int Credit(int score,int index)=>index==0?Rules.TutorialReputation(score):score==10?100:score==7?60:score==6?30:-30;
         public static void CheckOutfit(string[] outfit,string[] inventory)
         {

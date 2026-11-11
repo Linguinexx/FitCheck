@@ -97,9 +97,11 @@ namespace FitCheck
             Block(new Vector3(-96.5f,.28f,5.59f),new Vector3(14.3f,.56f,.38f),Ink,"CityBrick");
             for(int i=0;i<3;i++){
                 float x=-101+i*4.5f;
-                Block(new Vector3(x,2.05f,5.46f),new Vector3(3.4f,2.5f,.15f),Cream,"Paper");
-                Quad(new Vector3(x-1.4f,.98f,5.36f),new Vector3(x-.8f,3.1f,5.36f),new Vector3(x+1.4f,2.8f,5.36f),new Vector3(x+.6f,1.25f,5.36f),i==1?Kaos:Ink,"Cloth");
-                Words(i==1?"LADO B":"HOJE",new Vector3(x,2.1f,5.32f),.07f,i==1?Cream:Kaos);
+                if(i==2){
+                    Block(new Vector3(x,2.05f,5.46f),new Vector3(3.4f,2.5f,.15f),Cream,"Paper");
+                    Quad(new Vector3(x-1.4f,.98f,5.36f),new Vector3(x-.8f,3.1f,5.36f),new Vector3(x+1.4f,2.8f,5.36f),new Vector3(x+.6f,1.25f,5.36f),Ink,"Cloth");
+                    Words("HOJE",new Vector3(x,2.1f,5.32f),.07f,Kaos);
+                }
                 Block(new Vector3(x,3.34f,5.26f),new Vector3(.8f,.08f,.30f),new Color(1,.79f,.46f),"CityGlow");
             }
             Ground(-96.5f,4.55f,15,1.9f,-.025f,Cream,"EntryTile");

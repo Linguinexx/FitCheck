@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace FitCheck
@@ -206,6 +207,7 @@ ShirtBody(t,cloth);
                 else if(originalShoes)BuildCivilianShoes(civilianProfile,side);else BuildShoes(shoes,side);
             }
             BuildHeadwear(headwear);
+            foreach(var eye in eyes)eye.gameObject.SetActive(headwear?.id!=PrismaGlassesId);
             var headScale=HeadProportion(profile);
             foreach(Transform part in hair){
                 var p=part.localPosition;p.x*=headScale.x;p.y=2.8f+(p.y-2.8f)*headScale.y+HeadLift(profile);part.localPosition=p;
@@ -222,7 +224,7 @@ ShirtBody(t,cloth);
                 var scale=piece.localScale;scale.x*=.9f;scale.z*=.90f;piece.localScale=scale;
             }
             FitAppearanceSilhouette();
-            FitRelaxedBody(t,cloth,shoes?.id==CloudSlideId&&!b.shorts);
+            FitRelaxedBody(t,cloth,(shoes?.id==CloudSlideId||shoes?.id==BrasaClogId)&&!b.shorts);
             buildingGarments=false;applyingPlayer=false;
             if(originalTop&&originalBottom&&originalShoes&&string.IsNullOrEmpty(outfit[3]))CompactCivilianWardrobe();
         }
@@ -242,22 +244,33 @@ ShirtBody(t,cloth);
                 string n=r.name;
                 bool visible=item.slot==0?(n=="Camiseta com caimento"||n.Contains("Manga")||n=="Gola"||n.Contains("Barra")||n.Contains("Estampa")||n.Contains("Carretel")||n.Contains("Grafismo")||n=="Capuz"||n.StartsWith("BlenderTopo")):
                     item.slot==1?(n=="Cintura"||n=="Calça"||n=="Bermuda"||n=="Bolso"||n.Contains("Faixa")||n.Contains("Painel")):
-                    item.slot==2?(n.StartsWith("Tênis")||n.StartsWith("Sola")||n=="Cadarço"):(n.Contains("Boné")||n.Contains("boné")||n=="Gorro"||n.Contains("gorro"));
+                    item.slot==2?(n.StartsWith("Tênis")||n.StartsWith("Sola")||n=="Cadarço"):(n.Contains("Boné")||n.Contains("boné")||n=="Gorro"||n.Contains("gorro")||n.StartsWith("Óculos"));
                 r.gameObject.layer=visible?31:30;
             }
-            var rt=RenderTexture.GetTemporary(128,128,24,RenderTextureFormat.ARGB32);
+            int height=item.id==PrismaGlassesId?64:128;
+            var rt=RenderTexture.GetTemporary(128,height,24,RenderTextureFormat.ARGB32);
             var oldTarget=Camera.targetTexture;var oldActive=RenderTexture.active;var pos=Camera.transform.position;var rot=Camera.transform.rotation;
             int mask=Camera.cullingMask;var bg=Camera.backgroundColor;float aspect=Camera.aspect;
+            bool orthographic=Camera.orthographic;float orthographicSize=Camera.orthographicSize;
             var oldPose=Avatar.rotation;Avatar.rotation=Quaternion.identity;
             try{
                 float y=new[]{1.9f,.94f,.25f,3.23f}[item.slot];float distance=new[]{2.6f,2.3f,1.5f,2.15f}[item.slot];
                 Camera.cullingMask=1<<31;Camera.backgroundColor=Color.clear;Camera.aspect=1;
                 Camera.transform.position=Avatar.position+new Vector3(.08f,y+.06f,-distance);Camera.transform.LookAt(Avatar.position+new Vector3(0,y,0));
+                if(item.id==PrismaGlassesId){
+                    var renderers=clothes.GetComponentsInChildren<Renderer>().Where(r=>r.gameObject.layer==31).ToArray();
+                    var bounds=renderers[0].bounds;
+                    foreach(var renderer in renderers)bounds.Encapsulate(renderer.bounds);
+                    Camera.aspect=2;Camera.orthographic=true;
+                    Camera.orthographicSize=Mathf.Max(bounds.extents.x/2,bounds.extents.y)*1.14f;
+                    Camera.transform.position=bounds.center+Vector3.back*2;Camera.transform.LookAt(bounds.center);
+                }
                 Camera.targetTexture=rt;Camera.Render();RenderTexture.active=rt;
-                var image=new Texture2D(128,128,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};
-                image.ReadPixels(new Rect(0,0,128,128),0,0);image.Apply();Own(image);return image;
+                var image=new Texture2D(128,height,TextureFormat.RGBA32,false){filterMode=FilterMode.Point};
+                image.ReadPixels(new Rect(0,0,128,height),0,0);image.Apply();Own(image);return image;
             }finally{
                 Avatar.rotation=oldPose;Camera.targetTexture=oldTarget;Camera.cullingMask=mask;Camera.backgroundColor=bg;Camera.ResetAspect();
+                Camera.orthographic=orthographic;Camera.orthographicSize=orthographicSize;
                 Camera.transform.SetPositionAndRotation(pos,rot);RenderTexture.active=oldActive;RenderTexture.ReleaseTemporary(rt);
             }
         }

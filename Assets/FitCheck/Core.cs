@@ -45,7 +45,10 @@ namespace FitCheck
             new Garment("SB_TOP_04","Fita Local","SIDE B",0,new Color(.91f,.68f,.26f),false,true,true){unlockAt=1050,light=true},
             new Garment("CG_BOTTOM_03","Bermuda de Pista","COMMON GROUND",1,new Color(.08f,.36f,.73f),false,true){unlockAt=1050,shorts=true,vibrant=true},
             new Garment("AH_TOP_04","Luz de Poste","AFTER HOURS",0,new Color(.09f,.35f,.38f),false,true,false){unlockAt=1400},
-            new Garment("SB_HEAD_02","Aba de Tijolo","SIDE B",3,new Color(.64f,.21f,.12f),false){unlockAt=1400,cap=true}
+            new Garment("SB_HEAD_02","Aba de Tijolo","SIDE B",3,new Color(.64f,.21f,.12f),false){unlockAt=1400,cap=true},
+            new Garment("AH_SHOES_03","Clog Brasa","AFTER HOURS",2,new Color(.83f,.17f,.12f),false){unlockAt=1050,vibrant=true},
+            new Garment("CG_BOTTOM_04","Jeans Rosa","COMMON GROUND",1,new Color(.74f,.39f,.49f),false,true){unlockAt=750,light=true},
+            new Garment("SB_HEAD_03","Óculos Prisma","SIDE B",3,new Color(.64f,.12f,.15f),false){unlockAt=1050}
         }).ToArray();
         static readonly Garment[] ArrivalPieces={
             new Garment("CIV_ARRIVAL_TOP","Parte de cima original","CIVIL",0,Color.gray,true),
@@ -66,6 +69,11 @@ namespace FitCheck
             Get("SB_BOTTOM_02").light=true;
         }
         public static string[] Default => new[]{"CG_TOP_01","CG_BOTTOM_01","AH_SHOES_01",""};
+    }
+    public static class CatalogTesting
+    {
+        public const string PreferenceKey="FitCheck.CatalogTesting";
+        public static bool Enabled=true;
     }
     [Serializable] public class Attempt
     {

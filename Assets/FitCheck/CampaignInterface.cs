@@ -47,7 +47,7 @@ namespace FitCheck
             if(fitFeedLogo!=null)GUI.DrawTexture(bounds,fitFeedLogo,ScaleMode.ScaleToFit,true);
             else Txt(bounds,"FitFeed",feedTitle,FeedPaper);
         }
-        static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","SeuJota","NinaFaisca"};
+        static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","SeuJota","NinaFaisca",null,"Dandara","Ravi","Joana","Teo"};
         Texture2D[] feedPortraits;
         void InvalidateFeedPhoto(string path){if(feedPhotos.TryGetValue(path,out var tex)){Destroy(tex);feedPhotos.Remove(path);}}
         Texture2D FeedPhoto(string path)
@@ -218,7 +218,7 @@ namespace FitCheck
         }
         void FeedByline(Rect r,int index)
         {
-            if(feedPortraits==null)feedPortraits=FeedPortraitNames.Select(name=>Resources.Load<Texture2D>("Artwork/PhoneAndProfiles/"+name)).ToArray();
+            if(feedPortraits==null)feedPortraits=FeedPortraitNames.Select(name=>name==null?null:Resources.Load<Texture2D>("Artwork/PhoneAndProfiles/"+name)).ToArray();
             var client=DayOne.Customers[index];
             var avatar=new Rect(r.x,r.y,68,68);
             int profile=DayOne.CustomerProfile(index);
