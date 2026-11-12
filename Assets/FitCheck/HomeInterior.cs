@@ -114,7 +114,7 @@ namespace FitCheck
             homeMirrorCamera.nearClipPlane=near;homeMirrorCamera.farClipPlane=16;
             homeMirrorCamera.projectionMatrix=Matrix4x4.Frustum((x-HomeMirrorHalfWidth)*scale,(x+HomeMirrorHalfWidth)*scale,
                 (y-HomeMirrorHalfHeight)*scale,(y+HomeMirrorHalfHeight)*scale,near,16);
-            EnsurePlayerPose();
+            EnsurePlayerPose();FrameEmoteArms(true);
             try{
                 foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(PlayerFaceVisible(piece));
                 homeMirrorCamera.Render();

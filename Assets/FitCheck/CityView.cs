@@ -150,6 +150,7 @@ namespace FitCheck
                     for(int i=0;i<vertices.Length;i++){vertices[i]=copyMatrix.MultiplyPoint3x4(vertices[i]);normals[i]=copyRotation*normals[i];}
                     mesh.vertices=vertices;mesh.normals=normals;mesh.RecalculateBounds();assets.Add(mesh);RegisterResidentMesh(actor,mesh,renderer.name,studio.IsHeadPart(renderer.transform),sourceMesh.name.Contains("Blender Baggy"));
                     var piece=new GameObject(renderer.name);piece.transform.SetParent(resident,false);piece.AddComponent<MeshFilter>().sharedMesh=mesh;
+                    if(renderer.name=="Mão")actor.parts[actor.parts.Count-1].handRestMatrix=copyMatrix;
                     if(renderer.name=="Pálpebra superior"){
                         var lidPart=actor.parts[actor.parts.Count-1];lidPart.lidToAvatar=Matrix4x4.Translate(-studio.Avatar.position)*renderer.transform.localToWorldMatrix;lidPart.lidRotation=renderer.transform.rotation;lidPart.lidBaseCover=studio.ResidentLidCover(renderer.transform);
                         Vector3[] closed,closedNormals;studio.ResidentClosedLid(renderer.transform,out closed,out closedNormals);

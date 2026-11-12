@@ -143,7 +143,7 @@ namespace FitCheck
                 studio.ApplyUniform(progress.EquippedUniform);city.RestoreWalk(position,yaw,pitch,mannequin);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);Destroy(old.gameObject);
                 shopFittingOpening=false;
             }
-            SyncCityCursor(true);
+            ReadPlayerEmotes();SyncCityCursor(true);
             Vector2 input=Vector2.zero;
             if(!paused&&!showShopDecor&&!shopGuideOpen&&!shopFittingOpening&&!ShopSequenceActive&&homeDoorExitRemaining<=0&&(!cityFreeCursor||cityDragLook)&&!ProofMode&&CityInputFocused){
                 if(cityLookCaptured&&Time.frameCount>=cityLookReadyFrame&&BrowserPointer.Locked)city.Look(new Vector2(Input.GetAxisRaw("Mouse X"),Input.GetAxisRaw("Mouse Y")));
@@ -172,10 +172,10 @@ namespace FitCheck
         void ProcessCityEvent(Event e)
         {
             if(loadingActive)return;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.F&&!showShopDecor){var hint=CurrentWorldHint();OpenShopDecor();if(showShopDecor){if(hint.key=="F")ConfirmAffordance(hint);e.Use();}return;}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.F&&!showShopDecor){city.CancelPlayerEmote(true);var hint=CurrentWorldHint();OpenShopDecor();if(showShopDecor){if(hint.key=="F")ConfirmAffordance(hint);e.Use();}return;}
             if(paused||stage!=Stage.City||ShopSequenceActive)return;
             if(ProcessCityDragLook(e))return;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){var hint=CurrentWorldHint();if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()||TryGreetPostedCustomer()||TryUseGarageDeck())){ConfirmAffordance(hint);e.Use();}return;}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){city.CancelPlayerEmote(true);var hint=CurrentWorldHint();if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()||TryGreetPostedCustomer()||TryUseGarageDeck())){ConfirmAffordance(hint);e.Use();}return;}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Tab){cityFreeCursor=!cityFreeCursor;SyncCityCursor();e.Use();return;}
             if(!CityHitArea(e.mousePosition))return;
             if(e.type==EventType.MouseDown&&CaptureCityPointer(e.mousePosition,e.button))e.Use();

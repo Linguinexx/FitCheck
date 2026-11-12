@@ -9,6 +9,7 @@ namespace FitCheck
         [SerializeField] List<GameObject> playerHeadPieces=new List<GameObject>();
         [SerializeField] List<Object> playerBodyAssets=new List<Object>();
         float playerPoseCycle=float.NaN,playerPosePhase,playerPoseBlend,playerPoseBlink;
+        bool playerPoseArmsOnly;
         public bool PlayerBodyReady=>playerBody!=null&&playerBody.root!=null&&playerBody.parts.Count>0&&playerHeadPieces.Count>0;
         public bool PlayerHeadVisible=>PlayerBodyReady&&playerHeadPieces.Exists(piece=>piece!=null&&piece.activeInHierarchy);
         public Vector3 PlayerBodyPosition=>playerBody.root.position;
@@ -27,7 +28,7 @@ namespace FitCheck
                 for(int part=0;part<playerBody.parts.Count;part++)if(playerBody.parts[part].head||playerBody.root.GetChild(part).name=="Pescoço")playerHeadPieces.Add(playerBody.root.GetChild(part).gameObject);
                 foreach(var piece in playerHeadPieces)piece.SetActive(false);
                 for(int i=first;i<assets.Count;i++)playerBodyAssets.Add(assets[i]);
-                StepPlayerBody(0,0);EnsurePlayerPose();
+                ResetPlayerEmotes();PrepareEmoteHand();StepPlayerBody(0,0);EnsurePlayerPose();
             }finally{studio.Avatar.rotation=rotation;}
         }
         public void FramePlayerForCamera(Camera camera,bool external)
@@ -36,6 +37,7 @@ namespace FitCheck
             PlayerBodyVisible=true;
             // Final camera is authoritative, including the fitting-room follow.
             if(external||ViewPitch>20)EnsurePlayerPose();
+            FrameEmoteArms(external);
             bool showHead=external&&Vector3.Distance(camera.transform.position,playerBody.root.TransformPoint(new Vector3(0,2.8f,0)))>1.25f;
             foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(showHead&&PlayerFaceVisible(piece));
             if(shadow!=null){shadow.localPosition=new Vector3(Position.x,.005f,Position.y);shadow.gameObject.SetActive(external&&showHead);}
@@ -44,6 +46,7 @@ namespace FitCheck
         {
             if(!PlayerBodyReady)return;
             var actor=playerBody;actor.cycle+=delta;
+            TickPlayerEmote(delta,distance);
             actor.phase=Mathf.Repeat(actor.phase+distance/(Running?3.4f:2.2f),1);
             actor.blend=Mathf.MoveTowards(actor.blend,distance>.00001f?1:0,delta*8);
             float dip=actor.blend*(.035f+.005f*Mathf.Cos(actor.phase*Mathf.PI*4));
@@ -54,14 +57,16 @@ namespace FitCheck
             // A forward first-person camera cannot see the body below its frustum.
             // Keep clocks/root movement live; recover the exact pose before it can
             // enter view. The generous 20-degree threshold includes all clothing.
-            if(ViewPitch>20||PlayerHeadVisible)EnsurePlayerPose();
+            if(ViewPitch>20||PlayerHeadVisible||PlayerEmoteActive||float.IsNaN(playerPoseCycle))EnsurePlayerPose(PlayerEmoteActive&&ViewPitch<=20&&!PlayerHeadVisible);
         }
-        void EnsurePlayerPose()
+        void EnsurePlayerPose(bool armsOnly=false)
         {
             var actor=playerBody;
             float dip=actor.blend*(.035f+.005f*Mathf.Cos(actor.phase*Mathf.PI*4));
-            if(playerPoseCycle!=actor.cycle||playerPosePhase!=actor.phase||playerPoseBlend!=actor.blend){
-                PoseResident(actor,4,dip);playerPoseCycle=actor.cycle;playerPosePhase=actor.phase;playerPoseBlend=actor.blend;playerPoseBlink=actor.blinkClock;
+            if(playerPoseCycle!=actor.cycle||playerPosePhase!=actor.phase||playerPoseBlend!=actor.blend||playerPoseArmsOnly&&!armsOnly){
+                if(armsOnly){var body=ResidentBody(actor,4);var leg=ResidentLeg(actor,1,dip,body);foreach(var part in actor.parts)if(part.arm)PoseResidentPart(part,actor,4,body,leg);}
+                else PoseResident(actor,4,dip);
+                PoseEmoteHand(dip);playerPoseArmsOnly=armsOnly;playerPoseCycle=actor.cycle;playerPosePhase=actor.phase;playerPoseBlend=actor.blend;playerPoseBlink=actor.blinkClock;
             }else if(playerPoseBlink!=actor.blinkClock){AdvanceStillBlink(actor,4,0);playerPoseBlink=actor.blinkClock;}
         }
         public int CheckPlayerBody(Camera camera)

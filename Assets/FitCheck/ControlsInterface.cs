@@ -29,6 +29,7 @@ namespace FitCheck
         }
         bool ControlKeyActive(string label)
         {
+            if(controlsPage==0&&(label=="1"||label=="2"||label=="3"||label=="4"||label=="0"))return true;
             if(label=="Esc")return Application.platform!=RuntimePlatform.WebGLPlayer;
             if(label=="P"&&Application.platform==RuntimePlatform.WebGLPlayer)return true;
             return controlsPage==0&&(label=="W"||label=="A"||label=="S"||label=="D"||
@@ -100,6 +101,7 @@ namespace FitCheck
             if(Tap(new Rect(354,177,240,48),"Provador",controlsPage==1))controlsPage=1;
             Txt(new Rect(692,184,270,32),"TECLAS EM DESTAQUE",tiny,muted);
             DrawControlsKeyboard();DrawControlsMouse();
+            if(controlsPage==0)Txt(new Rect(1010,548,264,28),"1–4: emotes · 0: parar",controlsSmallKey,muted);
             if(controlsPage==0){
                 ControlsLegend(112,587,"W A S D","Andar");
                 ControlsLegend(520,587,"Shift","Correr");

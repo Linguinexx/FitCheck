@@ -8,6 +8,7 @@ namespace FitCheck
         [System.Serializable] sealed class ResidentPart
         {
             [SerializeField] Vector3[] vertexPose;
+            public Matrix4x4 handRestMatrix;
             public bool rigidHead,rigidVerticesDirty;public Matrix4x4 rigidHeadMatrix;public Vector3[] headLocalVertices,headLocalNormals;public float lastLidCover=-1;
             public Vector3[] vertices {
                 get{
@@ -200,6 +201,8 @@ namespace FitCheck
             var elbow=shoulder+upperArm*(elbowRest-shoulder);
             var forearm=upperArm*Quaternion.Euler(2+(3+Mathf.Max(0,wave)*8)*actor.blend,0,-side*2*actor.blend);
             if(actor.idleStyle==2&&actor.blend<.1f&&side>0){upperArm=Quaternion.Euler(25,0,-side*12);elbow=shoulder+upperArm*(elbowRest-shoulder);forearm=upperArm*Quaternion.Euler(48,0,side*8);}
+            ApplyPlayerEmoteArm(actor,side,ref upperArm,ref forearm);
+            elbow=shoulder+upperArm*(elbowRest-shoulder);
             if(!part.head&&!referenceSkin){PoseCachedSkin(part,actor,body,leg,shoulder,elbowRest,elbow,upperArm,forearm);return;}
             for(int v=0;v<part.rest.Length;v++){
                 var p=part.rest[v];var n=part.normals[v];Vector3 posed,normal;
