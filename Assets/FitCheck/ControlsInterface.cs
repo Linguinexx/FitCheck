@@ -29,7 +29,7 @@ namespace FitCheck
         }
         bool ControlKeyActive(string label)
         {
-            if(label=="Esc")return true;
+            if(label=="Esc")return Application.platform!=RuntimePlatform.WebGLPlayer;
             if(label=="P"&&Application.platform==RuntimePlatform.WebGLPlayer)return true;
             return controlsPage==0&&(label=="W"||label=="A"||label=="S"||label=="D"||
                 label=="E"||label=="F"||label=="Shift"||label=="Tab");
@@ -114,7 +114,7 @@ namespace FitCheck
                 ControlsLegend(112,664,Application.platform==RuntimePlatform.WebGLPlayer?"P":"Esc",Application.platform==RuntimePlatform.WebGLPlayer?"Pausar":"Pausar / voltar");
                 Txt(new Rect(520,668,710,50),"Arraste e role na área do personagem.\nO visual só é enviado quando você finalizar.",caption,muted);
             }
-            Txt(new Rect(112,771,740,32),"← →  Trocar página     /     Esc  Voltar",caption,muted);
+            Txt(new Rect(112,771,740,32),Application.platform==RuntimePlatform.WebGLPlayer?"← →  Trocar página     /     Clique em Voltar para sair":"← →  Trocar página     /     Esc  Voltar",caption,muted);
             if(Tap(new Rect(1064,756,264,52),"Voltar",true))controlsOpen=false;
         }
     }

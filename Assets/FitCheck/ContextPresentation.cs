@@ -31,7 +31,7 @@ namespace FitCheck
         }
         void TickContext(float delta)
         {
-            if(!paused){contextClock+=delta;speechAge+=delta;answerAge+=delta;}
+            if(!paused){contextClock+=delta;speechAge+=delta;answerAge+=delta;affordanceTapAge=Mathf.Min(1,affordanceTapAge+delta);}
             if(!paused&&shopDressingInStore&&(stage==Stage.Dressing||stage==Stage.Confirm)&&city!=null)city.AdvanceDressingBlinks(delta);
             if(stage==Stage.City&&city!=null){string name=city.IsHome?"EM CASA":city.IsInterior?"DRIPLAB":city.Place;if(name!=contextRegion){contextRegion=name;regionUntil=contextClock+2.8f;}}
             string request=stage==Stage.Dialogue?customer.ToString():"";if(request!=speechRequestKey){speechRequestKey=request;speechAge=0;}
@@ -77,7 +77,7 @@ namespace FitCheck
         void DrawAffordance()
         {
             if(!cityFreeCursor){Fill(new Rect(718,448,4,4),new Color(.95f,.92f,.85f,.6f));}
-            var hint=CurrentWorldHint();if(!hint.valid)return;
+            var hint=affordanceTapAge<AffordanceTapDuration?affordanceTapped:CurrentWorldHint();if(!hint.valid)return;
             Vector2 centre;if(!LogicalPoint(hint.bounds.center,out centre))return;
             var lo=new Vector2(float.PositiveInfinity,float.PositiveInfinity);
             var hi=new Vector2(float.NegativeInfinity,float.NegativeInfinity);
@@ -106,8 +106,7 @@ namespace FitCheck
             float w=Mathf.Clamp(90+hint.label.Length*9,240,530);
             float left=Mathf.Clamp((allInFront?r.center.x:centre.x)-w/2,24,1416-w);
             float top=Mathf.Clamp((allInFront?r.yMin:centre.y)-60,24,800);
-            RoundedPanel(new Rect(left+2,top+4,w,48),new Color(0,0,0,.35f));RoundedPanel(new Rect(left,top,w,48),new Color(.035f,.03f,.035f,.96f));RoundedPanel(new Rect(left,top,w,48),CreatorRed,7,1.2f);
-            KaosButtonFace(new Rect(left+8,top+7,36,35),hint.key,true,true);Txt(new Rect(left+56,top+8,w-66,34),hint.label,action,paper);
+            DrawAffordancePanel(new Rect(left,top,w,48),hint);
         }
         void ComicBubble(Rect rect,string text,string speaker,float age,bool tailLeft=true)
         {

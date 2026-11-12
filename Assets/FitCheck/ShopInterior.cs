@@ -103,10 +103,10 @@ namespace FitCheck
         }
         void ShopFittingRoom()
         {
-            Block(new Vector3(-4.9f,2.1f,8.72f),new Vector3(4.6f,4.2f,.16f),new Color(.055f,.035f,.075f),"CityStucco");
-            Block(new Vector3(-2.5f,1.8f,7),new Vector3(.18f,3.6f,3.6f),Ink,"CityMetal");
+            Block(new Vector3(-4.9f,2.1f,8.72f),new Vector3(4.6f,4.2f,.16f),new Color(.73f,.69f,.60f),"CityStucco");
+            Block(new Vector3(-2.5f,1.8f,7),new Vector3(.18f,3.6f,3.6f),new Color(.85f,.81f,.71f),"CityStucco");
             obstacles.Add(new Rect(-2.6f,5.2f,.2f,3.6f));
-            Ground(-4.9f,7,4.6f,3.4f,-.045f,new Color(.13f,.07f,.19f),"CityStone",3);
+            Ground(-4.9f,7,4.6f,3.4f,-.045f,new Color(.65f,.62f,.55f),"FittingFloor");
             for(int side=-1;side<=1;side+=2){
                 BuildFittingCurtain(side);
             }
@@ -118,7 +118,7 @@ namespace FitCheck
             var abstractMaterial=new Material(Resources.Load<Shader>("AbstractBackdrop"));abstractMaterial.mainTexture=Resources.Load<Texture2D>("Painted/AbstractFlow");assets.Add(abstractMaterial);
             panel.GetComponent<MeshRenderer>().sharedMaterial=abstractMaterial;
             for(int side=-1;side<=1;side+=2)LiveBox("LED do provador "+side,new Vector3(-4.9f+side*1.25f,2.1f,8.50f),new Vector3(.045f,3.5f,.06f),Color.white,"CityGlow");
-            Block(new Vector3(-6.7f,.55f,7.2f),new Vector3(.75f,.18f,1.5f),Cream,"Wood");
+            ShopFittingFinishes();
             obstacles.Add(new Rect(-7.15f,6.35f,.9f,1.7f));
         }
         void ShopMerchandise(StudioView studio)

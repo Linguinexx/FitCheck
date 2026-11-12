@@ -1,0 +1,64 @@
+{
+  "platform": "WebGL",
+  "unity": "6000.6.7f1",
+  "folder_bytes": 50861559,
+  "zip_bytes": 50752675,
+  "zip_sha256": "0b87de55dc1cf0c71e2f41402ea80464c967ff15c712083088fb52598cb28025",
+  "files": [
+    {
+      "path": "ABRIR-WEB.bat",
+      "bytes": 432,
+      "sha256": "33054ee9472641f33407b640dbdb82610eb39c8d95ea688eb679d0e215414769"
+    },
+    {
+      "path": "Build/1fb0edb3501436e2e279124cf075bda5.framework.js.unityweb",
+      "bytes": 75396,
+      "sha256": "c4638a46943c1879f5733c418954f40eae943da0287eca7df9f48bb0548dd7cc"
+    },
+    {
+      "path": "Build/a58f02c795ed09c201ac59ad17c51e9e.wasm.unityweb",
+      "bytes": 6360947,
+      "sha256": "5aec6cf39c787f22885dd57c58bfb0039fbbb7c27bbde06d9a32d068782ea6f8"
+    },
+    {
+      "path": "Build/b5505fa4f4d8e9d1ee19f3a240854204.loader.js",
+      "bytes": 48779,
+      "sha256": "dde15fc74b5f9f8254f14c7837e403f14c73229e50d5fcabd1f9b4514b3aafee"
+    },
+    {
+      "path": "Build/ed2c1025160cef02b94b97117832a570.data.unityweb",
+      "bytes": 44336827,
+      "sha256": "1dd89789b69f2cd5bbc2ad22c58d50ebc438f6595c1b05c8262c0de560871ac6"
+    },
+    {
+      "path": "index.html",
+      "bytes": 4296,
+      "sha256": "4b8c101fbc3f58a714e7b2a2cf8debdbb5be8f2fdad7422fe125757c1a41bc52"
+    },
+    {
+      "path": "LEIA-ME.txt",
+      "bytes": 2200,
+      "sha256": "da2ea28fe5711ea69ad696fc45fed3949d04a2a10cb7a6176fef167e0ba7e562"
+    },
+    {
+      "path": "RELATO-DE-BUG.txt",
+      "bytes": 666,
+      "sha256": "ac0698a91580fb43789717e14591cdf9939b9c073be5a12bf2fd7915cc0e3ad8"
+    },
+    {
+      "path": "ROTEIRO-DE-TESTE.md",
+      "bytes": 776,
+      "sha256": "45d22011a1b1a014931078bfc952a1596b230ac0fccaf4d57923df4d760a43d9"
+    },
+    {
+      "path": "serve.py",
+      "bytes": 1437,
+      "sha256": "158d2df4ee1e0898991174793f89fc299fc3cc987e267c34637c929fe068fb7e"
+    },
+    {
+      "path": "TemplateData/logo.png",
+      "bytes": 29803,
+      "sha256": "1dfb6f9a85f264298ff0327a52b31022520ee4680f6c6bfd952595fcdc3052b3"
+    }
+  ]
+}

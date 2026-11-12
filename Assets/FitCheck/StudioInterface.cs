@@ -108,8 +108,7 @@ namespace FitCheck
 #if !UNITY_WEBGL || UNITY_EDITOR
                 HandleEscapeAction();
 #endif
-                // Web Escape is dispatched once by the browser bridge, including
-                // the first press consumed by pointer-lock/fullscreen handling.
+                // Web leaves Escape to the browser; P controls the game's pause.
                 e.Use();
             }
             bool modal=paused || settingsOpen || renderedStage==Stage.Confirm||pendingDeleteSlot>=0;
@@ -145,6 +144,7 @@ namespace FitCheck
             if(settingsOpen)SettingsUI();
             DrawAchievement();
             DrawPresentation();
+            DrawAffordanceResponse();
             if(loadingActive)DrawLoadingScreen();
             GUI.matrix=originalMatrix;GUI.enabled=originalEnabled;
             GUI.color=originalColor;GUI.contentColor=originalContent;GUI.backgroundColor=originalBackground;

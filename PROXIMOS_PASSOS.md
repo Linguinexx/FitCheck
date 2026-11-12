@@ -136,3 +136,21 @@ Retomada em 11/11/2026 para artes, calça rosa e óculos. Sons, tutorial e build
 - P é a única tecla de pausa/retomada na web. Esc não abre nem fecha a pausa, inclusive quando o navegador libera o mouse ou sai de tela cheia.
 - Esc mantém voltar/cancelar em painéis existentes; controles indicam P para pausa e Esc para voltar. Captura exclusiva de Esc removida da ponte JavaScript; browser conserva comportamento normal.
 - Windows mantém Esc para pausar. Build web atualizada em Builds/FitCheck-Web-Test07.zip.
+
+## Revisão web — Teste 08
+
+- Esc retirado de todos os comandos do jogo na web: não pausa/retoma, não volta/cancela nem pula a intro. Navegação por Voltar/Cancelar; P controla pausa/retomada.
+- Ajuda sem destaque ou legenda de Esc; guia da loja sem esse atalho. Ponte JavaScript sem listener de teclado: observa somente liberação do ponteiro/tela cheia para recuperar a câmera.
+- Comportamento nativo do navegador preservado; Windows continua com Esc. Build em Builds/FitCheck-Web-Test08.zip.
+
+## Provador — revisão visual do interior
+
+- Aplicados piso texturizado, tapete com detalhe Kaos, ripado, moldura do GIF, banco estofado com pés, ganchos, prateleira e luminária decorativa. Trama e bainhas da cortina melhoradas, mantendo suas cores e as do GIF personalizáveis.
+- Texturas existentes reaproveitadas; sem novas luzes em tempo real. Cena isolada validada: +2.330 triângulos e um grupo estático. Prévias em Captures/FittingRoom/Final; registro em Art/Reviews/FittingRoom/README.md.
+- Fontes atualizadas na Unity; builds distribuídas anteriores ainda não incluem esta revisão.
+
+## Affordances e iluminação inspirada na capa
+
+- Resposta de tecla pressionada, cor e pulso curto nas affordances E/F. Movimento reduzido mantém apenas cor; loading cobre e pausa congela feedback. Ações/limites de interação preservados.
+- Personagens com luz quente, sombra mais definida e recorte vermelho inspirado na capa. Olhos com efeito suave e sem borda vermelha; shaders de pele/cabelo/roupas compartilham o efeito, sem novas luzes reais ou texturas.
+- Revisão em Art/Reviews/InteractionLighting/README.md e prévias em Captures/CoverLighting/Final. Build web atualizada em Builds/FitCheck-Web-Test09.zip também inclui o provador revisado. Windows precisa recompilar.

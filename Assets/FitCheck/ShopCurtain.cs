@@ -18,7 +18,7 @@ namespace FitCheck
             for(int row=0;row<=rows;row++)for(int col=0;col<=columns;col++){
                 float u=col/(float)columns,v=row/(float)rows;
                 vertices.Add(new Vector3(u-.5f,.12f+v*3.38f,5.15f+Mathf.Cos(u*Mathf.PI*12)*(.05f+(1-v)*.045f)));
-                uv.Add(new Vector2(u*6,v*8));colors.Add(FittingPurple);
+                uv.Add(new Vector2(u*4,v*4.4f));colors.Add(FittingPurple*(row==0||row==rows?.70f:1));
             }
             for(int row=0;row<rows;row++)for(int col=0;col<columns;col++){
                 int a=row*(columns+1)+col,b=a+columns+1;clothTriangles.AddRange(new[]{a,b,b+1,a,b+1,a+1});
@@ -37,7 +37,7 @@ namespace FitCheck
             }
             var mesh=new Mesh{name="Cortina com pregas e argolas"};mesh.SetVertices(vertices);mesh.SetUVs(0,uv);mesh.SetColors(colors);
             mesh.subMeshCount=2;mesh.SetTriangles(clothTriangles,0);mesh.SetTriangles(ringTriangles,1);mesh.RecalculateNormals();mesh.RecalculateBounds();assets.Add(mesh);
-            var cloth=CityMaterial("Cloth");cloth.SetFloat("_Cull",0);var metal=CityMaterial("CityMetal");assets.Add(cloth);assets.Add(metal);
+            var cloth=CityMaterial("FittingFabric");cloth.SetFloat("_Cull",0);var metal=CityMaterial("CityMetal");assets.Add(cloth);assets.Add(metal);
             var panel=new GameObject(side<0?"Cortina esquerda — deslizante":"Cortina direita — deslizante");panel.transform.SetParent(transform,false);
             panel.AddComponent<MeshFilter>().sharedMesh=mesh;panel.AddComponent<MeshRenderer>().sharedMaterials=new[]{cloth,metal};
             fittingCurtains[side<0?0:1]=panel.transform;

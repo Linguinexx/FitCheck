@@ -23,6 +23,8 @@ namespace FitCheck
                 case "Cloth":case "CityBanners":asset="Fabric030";mean=.3554f;contrast=5;scale=.45f;break;
                 case "Paper":asset="Cardboard001";mean=.588f;contrast=1.8f;scale=.65f;break;
                 case "ShopFloor":asset="Concrete034";mean=.7223f;contrast=2.7f;scale=.38f;tint=new Color(.74f,.73f,.70f);break;
+                case "FittingFloor":asset="Concrete034";mean=.7223f;contrast=3.4f;scale=.85f;tint=new Color(.89f,.87f,.80f);break;
+                case "FittingFabric":asset="Fabric084";mean=.5181f;contrast=5;scale=.70f;break;
                 case "CityStucco":if(interior){asset="PaintedPlaster017";mean=.7457f;contrast=3.5f;scale=.26f;tint=new Color(.90f,.89f,.86f);}break;
                 case "CityBrick":asset="Bricks074";mean=.457f;contrast=4;scale=.20f;tint=interior?Color.white:new Color(.67f,.50f,.40f);break;
                 case "CityMetal":if(interior){asset="Metal032";mean=.5272f;contrast=7;scale=.70f;}break;

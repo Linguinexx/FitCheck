@@ -8,7 +8,7 @@ namespace FitCheck
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")] static extern void FitCheck_SetPointerCapture(int wanted);
         [DllImport("__Internal")] static extern int FitCheck_HasPointerCapture();
-        [DllImport("__Internal")] static extern int FitCheck_TakeEscape();
+        [DllImport("__Internal")] static extern int FitCheck_TakeRelease();
         [DllImport("__Internal")] static extern void FitCheck_ExitFullscreen();
         [DllImport("__Internal")] static extern void FitCheck_EnterFullscreen();
         [DllImport("__Internal")] static extern int FitCheck_HasFullscreen();
@@ -28,10 +28,10 @@ namespace FitCheck
             FitCheck_SetPointerCapture(wanted?1:0);
 #endif
         }
-        public static bool TakeEscape()
+        public static bool TakeRelease()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            return FitCheck_TakeEscape()!=0;
+            return FitCheck_TakeRelease()!=0;
 #else
             return false;
 #endif

@@ -19,6 +19,7 @@ namespace FitCheck
         Material Material(Color c, bool glow=false)
         {
             var m=new Material(Resources.Load<Shader>("RetroPaint"));m.color=c;
+            m.SetFloat("_CharacterLit",buildingGarments?1:0);
             m.mainTexture=Resources.Load<Texture2D>("Painted/Cloth");m.SetFloat("_Motion",1);m.SetFloat("_Glow",glow?.65f:0);
             if(buildingGarments)m.SetFloat("_SmoothLight",1);
             AmbientSurfaces.ClothDetail(m,buildingGarments&&!glow);
@@ -90,6 +91,7 @@ namespace FitCheck
             for(int side=-1;side<=1;side+=2)Box("Pé do banco",new Vector3(-2.8f+side*.6f,.23f,-.3f),new Vector3(.06f,.5f,.5f),dark);
             Avatar=new GameObject("Cliente").transform;Avatar.SetParent(transform,false);
             skin=Material(new Color(.62f,.39f,.25f));ink=Material(new Color(.035f,.025f,.035f));
+            skin.SetFloat("_CharacterLit",1);ink.SetFloat("_CharacterLit",1);
             BuildFace();
             for(int side=-1;side<=1;side+=2){
                 Form("Canela",new Vector3(side*.207f,.62f,0),new Vector3(.24f,.85f,.26f),skin,Avatar,6);

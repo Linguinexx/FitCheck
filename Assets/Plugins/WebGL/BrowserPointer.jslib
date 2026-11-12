@@ -4,15 +4,15 @@ mergeInto(LibraryManager.library, {
     pending: false,
     installed: false,
     locked: false,
-    escapePending: false,
-    lastEscape: -1000,
+    releasePending: false,
+    lastRelease: -1000,
     fullscreen: false,
     intentionalFullscreenExit: false,
-    escape: function () {
+    released: function () {
       var now = performance.now();
-      if (now - FitCheckPointer.lastEscape < 160) return;
-      FitCheckPointer.lastEscape = now;
-      FitCheckPointer.escapePending = true;
+      if (now - FitCheckPointer.lastRelease < 160) return;
+      FitCheckPointer.lastRelease = now;
+      FitCheckPointer.releasePending = true;
     },
     acquire: function () {
       var canvas = Module.canvas;
@@ -33,22 +33,19 @@ mergeInto(LibraryManager.library, {
     install: function () {
       if (FitCheckPointer.installed) return;
       FitCheckPointer.installed = true;
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && !event.repeat) FitCheckPointer.escape();
-      }, true);
       document.addEventListener('pointerlockchange', function () {
         var locked = document.pointerLockElement === Module.canvas;
         // Browser Escape can consume keydown before Unity sees it. An external
-        // unlock is forwarded as browser-back too; menu releases set wanted=false first.
+        // unlock only frees the camera cursor; menu releases set wanted=false first.
         if (FitCheckPointer.locked && !locked && FitCheckPointer.wanted) {
           FitCheckPointer.wanted = false;
-          FitCheckPointer.escape();
+          FitCheckPointer.released();
         }
         FitCheckPointer.locked = locked;
       });
       document.addEventListener('fullscreenchange', function () {
         var fullscreen = !!document.fullscreenElement;
-        if (FitCheckPointer.fullscreen && !fullscreen && !FitCheckPointer.intentionalFullscreenExit) FitCheckPointer.escape();
+        if (FitCheckPointer.fullscreen && !fullscreen && !FitCheckPointer.intentionalFullscreenExit) FitCheckPointer.released();
         FitCheckPointer.fullscreen = fullscreen;
         FitCheckPointer.intentionalFullscreenExit = false;
       });
@@ -77,10 +74,10 @@ mergeInto(LibraryManager.library, {
   FitCheck_HasPointerCapture: function () {
     return document.pointerLockElement === Module.canvas ? 1 : 0;
   },
-  FitCheck_TakeEscape__deps: ['$FitCheckPointer'],
-  FitCheck_TakeEscape: function () {
-    var pending = FitCheckPointer.escapePending;
-    FitCheckPointer.escapePending = false;
+  FitCheck_TakeRelease__deps: ['$FitCheckPointer'],
+  FitCheck_TakeRelease: function () {
+    var pending = FitCheckPointer.releasePending;
+    FitCheckPointer.releasePending = false;
     return pending ? 1 : 0;
   },
   FitCheck_EnterFullscreen__deps: ['$FitCheckPointer'],
@@ -96,7 +93,7 @@ mergeInto(LibraryManager.library, {
   FitCheck_ExitFullscreen: function () {
     FitCheckPointer.intentionalFullscreenExit = true;
     FitCheckPointer.wanted = false;
-    FitCheckPointer.escapePending = false;
+    FitCheckPointer.releasePending = false;
     if (document.pointerLockElement === Module.canvas) document.exitPointerLock();
     // A browser player cannot close the host tab. Leave fullscreen without
     // quitting Unity, navigating or reloading. An already-inline player stays intact.

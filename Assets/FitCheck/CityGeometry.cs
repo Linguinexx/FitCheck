@@ -21,7 +21,7 @@ namespace FitCheck
             var batch=Get(texture);int index=batch.v.Count;var normal=Vector3.Cross(b-a,c-a).normalized;
             batch.v.AddRange(new[]{a,b,c,d});for(int i=0;i<4;i++){batch.n.Add(normal);batch.c.Add(color);}
             float width=Vector3.Distance(a,d)/repeat,height=Vector3.Distance(a,b)/repeat;
-            if((texture=="Wood"||texture=="ShopFloor"||texture=="HomeFloor"||texture=="EntryTile"||texture=="CityStone"||texture=="CityAsphalt")&&Mathf.Abs(normal.y)>.9f)
+            if((texture=="Wood"||texture=="ShopFloor"||texture=="FittingFloor"||texture=="HomeFloor"||texture=="EntryTile"||texture=="CityStone"||texture=="CityAsphalt")&&Mathf.Abs(normal.y)>.9f)
                 batch.uv.AddRange(new[]{ProjectedUV(a,normal)/repeat,ProjectedUV(b,normal)/repeat,ProjectedUV(c,normal)/repeat,ProjectedUV(d,normal)/repeat});
             else batch.uv.AddRange(new[]{Vector2.zero,new Vector2(0,height),new Vector2(width,height),new Vector2(width,0)});
             batch.t.AddRange(new[]{index,index+1,index+2,index,index+2,index+3});

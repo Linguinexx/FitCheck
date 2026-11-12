@@ -1,0 +1,20 @@
+FIT CHECK — WEB TESTE 09
+
+Navegador e versão:
+Sistema e placa de vídeo:
+Endereço da página:
+Data / espaço de save / nome / dia:
+Onde aconteceu (quarto / bairro / loja / menu / provador):
+Passos para repetir:
+O que esperava:
+O que aconteceu:
+Imagem ou vídeo, se possível:
+
+Para problema de mouse:
+- Foi após loading, Tab, Esc, Retomar ou troca de aba?
+- Quantos cliques foram necessários?
+- O cursor apareceu? A câmera respondeu?
+- Estava em tela cheia ou na página?
+
+Para atualizar no itch.io: enviar FitCheck-Web-Test09.zip como jogo HTML e
+marcar que o arquivo será executado no navegador. Testar a prévia após o processamento.

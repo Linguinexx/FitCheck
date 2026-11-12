@@ -28,7 +28,7 @@ namespace FitCheck
         static float FaceZ(float x,float y){return -Mathf.Sqrt(Mathf.Max(.001f,HeadRadius*HeadRadius-x*x-(y-2.8f)*(y-2.8f)))-.008f;}
         Material FaceInk(Color c)
         {
-            var m=Material(c);m.mainTexture=Texture2D.whiteTexture;m.SetFloat("_Motion",0);m.SetFloat("_Outline",0);m.SetFloat("_SmoothLight",1);return m;
+            var m=Material(c);m.mainTexture=Texture2D.whiteTexture;m.SetFloat("_Motion",0);m.SetFloat("_Outline",0);m.SetFloat("_SmoothLight",1);m.SetFloat("_CharacterLit",.25f);m.SetFloat("_PortraitRim",0);return m;
         }
         GameObject FaceMesh(string name,Vector3[] vertices,int[] triangles,Vector3 p,Material mat)
         {

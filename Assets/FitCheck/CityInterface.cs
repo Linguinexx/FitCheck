@@ -124,9 +124,9 @@ namespace FitCheck
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
             bool pauseKey=Input.GetKeyDown(KeyCode.P)&&stage!=Stage.Title&&stage!=Stage.CharacterCreator&&stage!=Stage.Welcome;
-            bool browserBack=BrowserPointer.TakeEscape();
+            bool browserReleased=BrowserPointer.TakeRelease();
             if(pauseKey)HandleEscapeAction();
-            else if(browserBack)HandleBrowserBackAction();
+            else if(browserReleased&&stage==Stage.City&&!paused&&!loadingActive)cityFreeCursor=true;
 #endif
             // Reconcile after frame/UI work. A temporary editor/OS release must
             // never become the player's explicit Tab choice to free the pointer.
@@ -172,10 +172,10 @@ namespace FitCheck
         void ProcessCityEvent(Event e)
         {
             if(loadingActive)return;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.F&&!showShopDecor){OpenShopDecor();if(showShopDecor)e.Use();return;}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.F&&!showShopDecor){var hint=CurrentWorldHint();OpenShopDecor();if(showShopDecor){if(hint.key=="F")ConfirmAffordance(hint);e.Use();}return;}
             if(paused||stage!=Stage.City||ShopSequenceActive)return;
             if(ProcessCityDragLook(e))return;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()||TryGreetPostedCustomer()||TryUseGarageDeck()))e.Use();return;}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){var hint=CurrentWorldHint();if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()||TryGreetPostedCustomer()||TryUseGarageDeck())){ConfirmAffordance(hint);e.Use();}return;}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Tab){cityFreeCursor=!cityFreeCursor;SyncCityCursor();e.Use();return;}
             if(!CityHitArea(e.mousePosition))return;
             if(e.type==EventType.MouseDown&&CaptureCityPointer(e.mousePosition,e.button))e.Use();
@@ -237,7 +237,7 @@ namespace FitCheck
                     shopGuideTopic=i;shopGuideAnswerAt=contextClock;
                 }
             }
-            if(Tap(new Rect(944,570,424,48),"Valeu, até mais  /  Esc")){CloseShopGuide();return;}
+            if(Tap(new Rect(944,570,424,48),Application.platform==RuntimePlatform.WebGLPlayer?"Valeu, até mais":"Valeu, até mais  /  Esc")){CloseShopGuide();return;}
             ComicBubble(new Rect(96,613,750,216),shopGuideTopic<0?"Eu sou o Nando, mas pode chamar de Chave. Manda a dúvida que eu te ajudo.":ShopGuideAnswers[shopGuideTopic],
                 CityView.ShopGuideName,contextClock-shopGuideAnswerAt,false);
         }

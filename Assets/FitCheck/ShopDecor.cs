@@ -44,7 +44,7 @@ namespace FitCheck
                 if(r.name.Contains("Cortina")){
                     var filter=r.GetComponent<MeshFilter>();if(filter==null)continue;var mesh=filter.sharedMesh;Color[] original;
                     if(!decorOriginal.TryGetValue(mesh,out original)){original=mesh.colors;decorOriginal[mesh]=original;}
-                    var colors=(Color[])original.Clone();foreach(int index in mesh.GetTriangles(0))colors[index]=accents[value.accent];
+                    var colors=(Color[])original.Clone();foreach(int index in mesh.GetTriangles(0))colors[index]=accents[value.accent]*Mathf.Clamp(original[index].g/FittingPurple.g,.55f,1);
                     mesh.colors=colors;
                 }
             }

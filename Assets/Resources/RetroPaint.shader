@@ -13,6 +13,8 @@ Shader "FitCheck/Retro Painted"
         _Glow ("Printed light",Range(0,1))=0
         _Outline ("Ink edge",Range(0,0.025))=0.006
         _SmoothLight ("Rounded surface lighting",Range(0,1))=0
+        _CharacterLit ("Character cover lighting",Range(0,1))=0
+        _PortraitRim ("Character edge light",Range(0,1))=1
     }
     SubShader
     {
@@ -46,7 +48,8 @@ Shader "FitCheck/Retro Painted"
             #pragma target 3.0
             #include "UnityCG.cginc"
             #include "CityLighting.cginc"
-            sampler2D _MainTex,_FabricTex;float4 _Color,_MainTex_TexelSize;float _TexScale,_Motion,_Glow,_PaintFrame,_SmoothLight,_NightCity,_HairFlow,_FabricWeight;
+            #include "CharacterLighting.cginc"
+            sampler2D _MainTex,_FabricTex;float4 _Color,_MainTex_TexelSize;float _TexScale,_Motion,_Glow,_PaintFrame,_SmoothLight,_NightCity,_HairFlow,_FabricWeight,_CharacterLit,_PortraitRim;
             struct v2f{float4 pos:SV_POSITION;float2 uv:TEXCOORD0;float3 normal:TEXCOORD1;float3 world:TEXCOORD2;};
             v2f vert(appdata_base v)
             {v2f o;o.pos=UnityObjectToClipPos(v.vertex);o.uv=v.texcoord.xy;o.normal=UnityObjectToWorldNormal(v.normal);o.world=mul(unity_ObjectToWorld,v.vertex).xyz;return o;}
@@ -74,7 +77,8 @@ Shader "FitCheck/Retro Painted"
                 float3 colorA=floor(saturate(_Color.rgb*paintA*shade+_Color.rgb*_Glow*.55)*31+.5)/31;
                 float3 colorB=floor(saturate(_Color.rgb*paintB*shade+_Color.rgb*_Glow*.55)*31+.5)/31;
                 float3 localLight=float3(.52,.55,.60)+CityLightAt(i.world)*.66;
-                return fixed4(lerp(colorA,colorB,blend)*lerp(1,localLight,_NightCity),1);
+                float3 painted=CharacterPaintLight(lerp(colorA,colorB,blend),_Color.rgb*lerp(paintA,paintB,blend),i.normal,_WorldSpaceCameraPos-i.world,_CharacterLit,_PortraitRim);
+                return fixed4(painted*lerp(1,localLight,_NightCity),1);
             }
             ENDCG
         }
