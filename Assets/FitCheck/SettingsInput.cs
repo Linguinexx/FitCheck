@@ -3,6 +3,16 @@ namespace FitCheck
 {
     public partial class FirstCustomer
     {
+        void HandleBrowserBackAction()
+        {
+            if(loadingActive)return;
+            // Browser Escape may release pointer lock or fullscreen. It only
+            // navigates existing panels; P alone controls the web pause state.
+            if(settingsOpen||showShopDecor||shopGuideOpen||pendingDeleteSlot>=0||
+                (!paused&&(stage==Stage.Title||stage==Stage.CharacterCreator||stage==Stage.Confirm)))
+                HandleEscapeAction();
+            else if(stage==Stage.City&&!paused)cityFreeCursor=true;
+        }
         void HandleEscapeAction()
         {
             if(loadingActive)return;

@@ -123,7 +123,10 @@ namespace FitCheck
         void LateUpdate()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            if(BrowserPointer.TakeEscape())HandleEscapeAction();
+            bool pauseKey=Input.GetKeyDown(KeyCode.P)&&stage!=Stage.Title&&stage!=Stage.CharacterCreator&&stage!=Stage.Welcome;
+            bool browserBack=BrowserPointer.TakeEscape();
+            if(pauseKey)HandleEscapeAction();
+            else if(browserBack)HandleBrowserBackAction();
 #endif
             // Reconcile after frame/UI work. A temporary editor/OS release must
             // never become the player's explicit Tab choice to free the pointer.

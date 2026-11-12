@@ -10,6 +10,8 @@ namespace FitCheck
         [DllImport("__Internal")] static extern int FitCheck_HasPointerCapture();
         [DllImport("__Internal")] static extern int FitCheck_TakeEscape();
         [DllImport("__Internal")] static extern void FitCheck_ExitFullscreen();
+        [DllImport("__Internal")] static extern void FitCheck_EnterFullscreen();
+        [DllImport("__Internal")] static extern int FitCheck_HasFullscreen();
 #endif
         public static bool Locked {
             get {
@@ -32,6 +34,21 @@ namespace FitCheck
             return FitCheck_TakeEscape()!=0;
 #else
             return false;
+#endif
+        }
+        public static bool Fullscreen {
+            get {
+#if UNITY_WEBGL && !UNITY_EDITOR
+                return FitCheck_HasFullscreen()!=0;
+#else
+                return Screen.fullScreen;
+#endif
+            }
+        }
+        public static void EnterFullscreen()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            FitCheck_EnterFullscreen();
 #endif
         }
         public static void Minimize()

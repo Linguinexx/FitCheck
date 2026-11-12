@@ -75,7 +75,7 @@ namespace FitCheck
     {
         public const string PreferenceKey="FitCheck.CatalogTesting";
         public const string CountPreferenceKey="FitCheck.CatalogTesting.Count";
-        public static bool Enabled=true;
+        public static bool Enabled=false;
     }
     [Serializable] public class Attempt
     {

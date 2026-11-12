@@ -34,10 +34,10 @@ namespace FitCheck
             Cursor.lockState=CursorLockMode.None;Cursor.visible=true;
             Application.targetFrameRate=60;
             Application.runInBackground=true;
-            if(!ProofMode&&PlayerPrefs.GetInt(CatalogTesting.CountPreferenceKey,0)<Catalog.All.Length){
-                PlayerPrefs.SetInt(CatalogTesting.PreferenceKey,1);PlayerPrefs.SetInt(CatalogTesting.CountPreferenceKey,Catalog.All.Length);PlayerPrefs.Save();
+            CatalogTesting.Enabled=false;
+            if(!ProofMode&&PlayerPrefs.GetInt(CatalogTesting.PreferenceKey,0)!=0){
+                PlayerPrefs.SetInt(CatalogTesting.PreferenceKey,0);PlayerPrefs.Save();
             }
-            CatalogTesting.Enabled=!ProofMode&&PlayerPrefs.GetInt(CatalogTesting.PreferenceKey,1)==1;
             if(!ProofMode&&!Application.isEditor&&Application.platform!=RuntimePlatform.WebGLPlayer)
                 SetFullscreen(PlayerPrefs.GetInt(FullscreenPreference,1)!=0);
             if(ProofMode){storageOverride=Path.Combine(FirstPersonProofOutput(),"session");Directory.CreateDirectory(storageOverride);}

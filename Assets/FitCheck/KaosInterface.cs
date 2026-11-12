@@ -42,7 +42,7 @@ namespace FitCheck
         {
             if(ProofMode||Application.isEditor)return;
 #if UNITY_WEBGL
-            if(fullscreen)Screen.fullScreen=true;else BrowserPointer.Minimize();
+            if(fullscreen)BrowserPointer.EnterFullscreen();else BrowserPointer.Minimize();
 #else
             Resolution desktop=Screen.currentResolution;
             if(fullscreen)Screen.SetResolution(desktop.width,desktop.height,FullScreenMode.FullScreenWindow);
@@ -112,7 +112,7 @@ namespace FitCheck
             DrawKaosPanel(new Rect(390,116,660,670));
             Txt(new Rect(430,154,570,52),"Configurações",heading);
 #if UNITY_WEBGL && !UNITY_EDITOR
-            bool fullscreen=Screen.fullScreen;
+            bool fullscreen=BrowserPointer.Fullscreen;
             if(Tap(new Rect(795,154,205,48),fullscreen?"Tela cheia":"Modo janela",false,!Application.isEditor)){
                 SetFullscreen(!fullscreen);
                 if(!ProofMode){PlayerPrefs.SetInt(FullscreenPreference,fullscreen?0:1);PlayerPrefs.Save();}
@@ -133,8 +133,9 @@ namespace FitCheck
             if(Tap(new Rect(430,487,570,48),reducedMotion?"Movimento reduzido: sim":"Movimento reduzido: não")){reducedMotion=!reducedMotion;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.ReducedMotion",reducedMotion?1:0);}
             if(Tap(new Rect(430,551,570,48),retroFilter?"Pixelização: leve":"Pixelização: desligada")){retroFilter=!retroFilter;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.Retro",retroFilter?1:0);}
             if(Tap(new Rect(430,611,570,48),garmentFinishes?"Brilho das roupas: ligado":"Brilho das roupas: desligado"))SetGarmentFinishes(!garmentFinishes,true);
-            if(Tap(new Rect(430,665,570,40),CatalogTesting.Enabled?"Catálogo de teste: liberado":"Catálogo de teste: desligado"))
-                SetCatalogTesting(!CatalogTesting.Enabled);
+#if UNITY_WEBGL && !UNITY_EDITOR
+            Txt(new Rect(444,665,550,40),"Em tela cheia, use P para pausar sem sair.",caption,muted);
+#endif
             if(Tap(new Rect(430,714,570,52),"Voltar",true))CloseSettings();
         }
         void SaveAudioSettings()
@@ -144,22 +145,6 @@ namespace FitCheck
             PlayerPrefs.SetFloat(MusicVolumePreference,musicVolume);
             PlayerPrefs.SetInt("FitCheck.Mute",mutedAudio?1:0);
             PlayerPrefs.Save();
-        }
-        void SetCatalogTesting(bool enabled)
-        {
-            CatalogTesting.Enabled=enabled;
-            if(replayIndex<0&&campaignBeforePreview==null){
-                inventory=progress.Available;
-                bool changed=false;
-                for(int slot=0;slot<outfit.Length;slot++){
-                    string id=outfit[slot];
-                    if(string.IsNullOrEmpty(id)||Catalog.IsArrivalPiece(id)||System.Array.IndexOf(inventory,id)>=0)continue;
-                    outfit[slot]=slot==3?"":shopDressingInStore?Catalog.ArrivalPiece(slot).id:Catalog.Default[slot];
-                    changed=true;
-                }
-                if(changed)Apply();
-            }
-            if(!ProofMode){PlayerPrefs.SetInt(CatalogTesting.PreferenceKey,enabled?1:0);PlayerPrefs.Save();}
         }
         float AudioSlider(string label,float y,float value)
         {

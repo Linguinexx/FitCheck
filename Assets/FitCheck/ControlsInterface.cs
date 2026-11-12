@@ -30,6 +30,7 @@ namespace FitCheck
         bool ControlKeyActive(string label)
         {
             if(label=="Esc")return true;
+            if(label=="P"&&Application.platform==RuntimePlatform.WebGLPlayer)return true;
             return controlsPage==0&&(label=="W"||label=="A"||label=="S"||label=="D"||
                 label=="E"||label=="F"||label=="Shift"||label=="Tab");
         }
@@ -105,12 +106,12 @@ namespace FitCheck
                 ControlsLegend(928,587,"E","Interagir");
                 ControlsLegend(112,664,"F","Personalizar a loja","Com a loja fechada");
                 ControlsLegend(520,664,"Tab","Liberar o cursor");
-                ControlsLegend(928,664,"Esc","Pausar");
+                ControlsLegend(928,664,Application.platform==RuntimePlatform.WebGLPlayer?"P":"Esc","Pausar");
             }else{
                 ControlsLegend(112,587,"Clique","Escolher peça","Ou selecionar um botão");
                 ControlsLegend(520,587,"Arrastar","Girar personagem","Segure o botão esquerdo");
                 ControlsLegend(928,587,"Roda","Aproximar / afastar");
-                ControlsLegend(112,664,"Esc","Pausar / voltar");
+                ControlsLegend(112,664,Application.platform==RuntimePlatform.WebGLPlayer?"P":"Esc",Application.platform==RuntimePlatform.WebGLPlayer?"Pausar":"Pausar / voltar");
                 Txt(new Rect(520,668,710,50),"Arraste e role na área do personagem.\nO visual só é enviado quando você finalizar.",caption,muted);
             }
             Txt(new Rect(112,771,740,32),"← →  Trocar página     /     Esc  Voltar",caption,muted);

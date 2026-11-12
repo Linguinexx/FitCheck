@@ -119,3 +119,20 @@ Retomada em 11/11/2026 para artes, calça rosa e óculos. Sons, tutorial e build
 - Hover do Jogar reforçado; sensibilidade 0–100, padrão 35; sliders compartilhados e mouse ilustrado curvo nas duas páginas.
 - Seletor janela/tela cheia só na web. Windows Teste 08 preservado; próxima compilação deve validar Art/Releases/Web04/PENDENCIAS-WINDOWS.md.
 - Entrega Builds/FitCheck-Web-Test04.zip; validação local em iframe em Art/Releases/Web04/VALIDACAO.md. Substituição no itch.io pelo usuário.
+
+## Ajuste web — Teste 05
+
+- Botão Sair removido do título web a pedido do usuário. Navegação por teclado alterna somente Jogar e Configurações; posições, tamanhos e comportamento dos botões restantes preservados. Windows mantém Sair.
+- Entrega atualizada em Builds/FitCheck-Web-Test05.zip, preservando as correções da Web04.
+
+## Revisão web — Teste 06
+
+- Catálogo de teste retirado da UI e desativado no início do jogo, inclusive para preferências antigas. Removida a reativação automática ao entrar roupa nova; saves e inventários históricos preservados.
+- Web: P pausa/retoma sem sair da tela cheia; ajuda e configurações informam a alternativa. Esc usa captura quando o navegador permite, mas Chromium bloqueia Keyboard Lock em iframe. Não prometer que Esc preserve tela cheia no itch.io.
+- Fonte compartilhada Windows também volta aos desbloqueios normais; recompilar/validar na próxima Windows. Entrega web em Builds/FitCheck-Web-Test06.zip.
+
+## Revisão web — Teste 07
+
+- P é a única tecla de pausa/retomada na web. Esc não abre nem fecha a pausa, inclusive quando o navegador libera o mouse ou sai de tela cheia.
+- Esc mantém voltar/cancelar em painéis existentes; controles indicam P para pausa e Esc para voltar. Captura exclusiva de Esc removida da ponte JavaScript; browser conserva comportamento normal.
+- Windows mantém Esc para pausar. Build web atualizada em Builds/FitCheck-Web-Test07.zip.

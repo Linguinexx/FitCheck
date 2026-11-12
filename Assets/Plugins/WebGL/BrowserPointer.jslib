@@ -39,7 +39,7 @@ mergeInto(LibraryManager.library, {
       document.addEventListener('pointerlockchange', function () {
         var locked = document.pointerLockElement === Module.canvas;
         // Browser Escape can consume keydown before Unity sees it. An external
-        // unlock is therefore a pause request too; menu releases set wanted=false first.
+        // unlock is forwarded as browser-back too; menu releases set wanted=false first.
         if (FitCheckPointer.locked && !locked && FitCheckPointer.wanted) {
           FitCheckPointer.wanted = false;
           FitCheckPointer.escape();
@@ -83,6 +83,15 @@ mergeInto(LibraryManager.library, {
     FitCheckPointer.escapePending = false;
     return pending ? 1 : 0;
   },
+  FitCheck_EnterFullscreen__deps: ['$FitCheckPointer'],
+  FitCheck_EnterFullscreen: function () {
+    FitCheckPointer.install();
+    if (document.fullscreenElement || !Module.canvas.requestFullscreen) return;
+    try {
+      Module.canvas.requestFullscreen({navigationUI: 'hide'}).catch(function () {});
+    } catch (error) {}
+  },
+  FitCheck_HasFullscreen: function () { return document.fullscreenElement ? 1 : 0; },
   FitCheck_ExitFullscreen__deps: ['$FitCheckPointer'],
   FitCheck_ExitFullscreen: function () {
     FitCheckPointer.intentionalFullscreenExit = true;

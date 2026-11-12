@@ -51,7 +51,11 @@ namespace FitCheck
         Texture2D titleScrim;
         GUIStyle titleAction;
         int titleKeyboardFocus=-1;
+#if UNITY_WEBGL && !UNITY_EDITOR
+        const int TitleActionCount=2;
+#else
         const int TitleActionCount=3;
+#endif
         string SaveLibrary=>saveLibraryOverride??Application.persistentDataPath;
         string SessionFolder=>storageOverride??(activeSaveSlot<0?Application.persistentDataPath:SaveSlots.Folder(SaveLibrary,activeSaveSlot));
         void OpenSaveSelection()
@@ -112,16 +116,14 @@ namespace FitCheck
             int activated=ReadTitleNavigation();
             bool play=TitleButton(new Rect(left,610,width,60),"Jogar",0,true);
             bool settings=TitleButton(new Rect(left,684,width,50),"Configurações",1,false);
+#if !UNITY_WEBGL || UNITY_EDITOR
             bool quit=TitleButton(new Rect(left,746,width,50),"Sair",2,false);
+#endif
             if(play||activated==0)BeginLoading(OpenSaveSelection);
             else if(settings||activated==1)OpenSettings(false);
-            else if(quit||activated==2){
-#if UNITY_WEBGL && !UNITY_EDITOR
-                BrowserPointer.Minimize();
-#else
-                Application.Quit();
+#if !UNITY_WEBGL || UNITY_EDITOR
+            else if(quit||activated==2)Application.Quit();
 #endif
-            }
 
             Fill(new Rect(left,816,width,1),new Color(1,1,1,.19f));
             Txt(new Rect(left,834,width,26),"A game by DripLab",caption,paper);

@@ -123,7 +123,7 @@ namespace FitCheck
             }
             GUI.EndScrollView();
             Rule(1032,734,366);
-            Txt(new Rect(1032,745,366,42),message.Length>0?message:CatalogTesting.Enabled&&replayIndex<0?"Catálogo de teste liberado. O progresso do save é preservado.":"Misture os drops. O visual só é enviado quando você finalizar.",tiny,muted);
+            Txt(new Rect(1032,745,366,42),message.Length>0?message:"Misture os drops. O visual só é enviado quando você finalizar.",tiny,muted);
             if(Tap(new Rect(1032,799,366,62),"Finalizar visual  →",true))stage=Stage.Confirm;
         }
         void DrawDropShelfHeader(Rect r,ClothingDrop drop,string availability)

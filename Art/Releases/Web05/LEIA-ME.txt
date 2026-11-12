@@ -1,0 +1,28 @@
+FIT CHECK — WEB TESTE 05
+Versão de navegador para computador, com mouse e teclado.
+
+COMO JOGAR LOCALMENTE
+Extraia o ZIP inteiro. No computador do projeto, abra ABRIR-WEB.bat.
+Em outro computador, o mesmo arquivo usa Python 3, se instalado. Alternativa: python serve.py
+O servidor abre http://127.0.0.1:8710/ no navegador. Mantenha a janela do servidor aberta enquanto joga.
+Não abra index.html diretamente como arquivo: a versão web precisa de HTTP/HTTPS.
+
+PARA HOSPEDAR
+Publique index.html, Build/ e TemplateData/ juntos em uma hospedagem estática. O ZIP deixa index.html na raiz, para plataformas que recebem jogos HTML5.
+Os arquivos comprimidos têm descompressão de fallback no carregador. A build não exige servidor de threads ou cabeçalhos COOP/COEP.
+Esta entrega não publica automaticamente o jogo em nenhum serviço.
+
+PROGRESSO
+Os três espaços de save ficam no armazenamento deste navegador, separados da versão Windows. Para continuar, use o mesmo navegador e endereço do jogo. Apagar os dados do site ou usar uma sessão privada pode descartar o progresso.
+
+CONTROLES
+Abra Configurações > Controles para ver o teclado e o mouse ilustrados.
+As abas e as setas esquerda/direita alternam Exploração e Provador; Esc volta.
+WASD andar; Shift correr; mouse olhar. E interagir; F personalizar a loja fechada.
+Tab libera/captura o cursor; Esc pausa. Clique no jogo para ativar o áudio e a captura do mouse quando o navegador solicitar.
+Tela cheia deve ser ativada nas Configurações por um clique. A interface mantém a distribuição do jogo.
+Para sair da versão web, feche a aba do navegador.
+Menu inicial web com Jogar e Configurações; botão Sair removido a pedido do usuário.
+Sensibilidade: escala 0 a 100; padrão 35. Valores personalizados antigos são preservados dentro do novo limite.
+
+Se encontrar um problema, informe navegador/versão, equipamento, onde aconteceu e como repetir.
