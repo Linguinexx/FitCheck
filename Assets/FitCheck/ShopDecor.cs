@@ -70,23 +70,27 @@ namespace FitCheck
         }
         void OpenShopDecor()
         {
+            if(city!=null&&city.IsHome){OpenHomeDecor();return;}
             if(stage!=Stage.City||!city.IsInterior||city.IsHome||ShopOpen||ShopSequenceActive||paused)return;
-            decorBefore=CurrentShopDecor.Copy();decorDraft=decorBefore.Copy();decorView=decorTab=0;showShopDecor=true;city.StopWalk();cityFreeCursor=true;SyncCityCursor(true);Sound(0);
+            decorBefore=CurrentShopDecor.Copy();decorDraft=decorBefore.Copy();decorView=decorTab=0;decorCameraReady=false;showShopDecor=true;city.StopWalk();cityFreeCursor=true;SyncCityCursor(true);Sound(0);
             FrameShopDecor();
         }
         void FrameShopDecor(){
-            var positions=new[]{new Vector3(.6f,3.8f,-4.1f),new Vector3(1.5f,3.1f,.2f),new Vector3(-3,3,3),new Vector3(-4.9f,2.2f,5.9f)};
-            var targets=new[]{new Vector3(-.5f,2.1f,4.6f),new Vector3(-4.9f,1.8f,5.1f),new Vector3(-.8f,3.9f,8.7f),new Vector3(-4.9f,2.1f,8.59f)};
-            cam.transform.position=city.transform.position+positions[decorView];cam.transform.LookAt(city.transform.position+targets[decorView]);cam.fieldOfView=decorView==0?66:55;city.FramePlayerForCamera(cam,true);
+            if(city.IsHome){FrameHomeDecor();return;}
+            var positions=new[]{new Vector3(.6f,3.8f,-4.1f),new Vector3(1.5f,3.1f,.2f),new Vector3(-3,3,3),new Vector3(-4.9f,2.2f,5.9f),new Vector3(2,4.1f,-2.5f),new Vector3(3.5f,2.8f,4.6f)};
+            var targets=new[]{new Vector3(-.5f,2.1f,4.6f),new Vector3(-4.9f,1.8f,5.1f),new Vector3(-.8f,3.9f,8.7f),new Vector3(-4.9f,2.1f,8.59f),new Vector3(0,0,1.4f),new Vector3(7.5f,1.1f,8.1f)};
+            FrameDecorCamera(city.transform.position+positions[decorView],city.transform.position+targets[decorView],decorView==0?66:55);city.FramePlayerForCamera(cam,true);
         }
         void CloseShopDecor(bool save)
         {
+            if(homeDecorDraft!=null){CloseHomeDecor(save);return;}
             if(!showShopDecor)return;
             if(save)try{ShopDecorStore.Save(ShopDecorPath,decorDraft);savedDecor=decorDraft.Copy();message="Sua loja foi salva.";}catch(Exception e){message="Não foi possível salvar: "+e.Message;return;}
-            city.ApplyShopDecor(save?decorDraft:decorBefore);showShopDecor=false;decorDraft=null;cityFreeCursor=false;
+            city.ApplyShopDecor(save?decorDraft:decorBefore);showShopDecor=false;decorDraft=null;cityFreeCursor=false;decorCameraReady=false;
         }
         void ShopDecorUI()
         {
+            if(homeDecorDraft!=null){HomeDecorUI();return;}
             DrawKaosPanel(new Rect(30,108,570,766));
             Txt(new Rect(55,130,510,48),"Sua loja. Seu jeito.",heading);
             Txt(new Rect(55,191,510,50),"Escolha os acabamentos antes de abrir.\nA prévia aparece na própria loja.",caption,muted);
@@ -97,14 +101,14 @@ namespace FitCheck
             float y=316;foreach(int row in decorTab==0?new[]{0,1}:decorTab==1?new[]{2,4,5}:new[]{3}){
                 Txt(new Rect(55,y,510,26),labels[row],caption);
                 for(int i=0;i<names[row].Length;i++)if(Tap(new Rect(55+i%4*130,y+28+i/4*40,122,34),names[row][i],values[row]==i)){
-                    if(row==0)decorDraft.wall=i;else if(row==1)decorDraft.floor=i;else if(row==2)decorDraft.accent=i;else if(row==3)decorDraft.poster=i;else if(row==4)decorDraft.backdropBase=i;else decorDraft.backdrop=i;city.ApplyShopDecor(decorDraft);
+                    if(row==0)decorDraft.wall=i;else if(row==1)decorDraft.floor=i;else if(row==2)decorDraft.accent=i;else if(row==3)decorDraft.poster=i;else if(row==4)decorDraft.backdropBase=i;else decorDraft.backdrop=i;city.ApplyShopDecor(decorDraft);FocusShopDecor(row);
                 }
                 y+=40+Mathf.CeilToInt(names[row].Length/4f)*40;
             }
-            if(decorTab==0&&Tap(new Rect(55,708,510,45),decorDraft.plants?"Plantas: presentes":"Plantas: recolhidas")){decorDraft.plants=!decorDraft.plants;city.ApplyShopDecor(decorDraft);}
+            if(decorTab==0&&Tap(new Rect(55,708,510,45),decorDraft.plants?"Plantas: presentes":"Plantas: recolhidas")){decorDraft.plants=!decorDraft.plants;city.ApplyShopDecor(decorDraft);FocusShopDecor(6);}
             if(Tap(new Rect(55,782,246,55),"Salvar decoração",true))CloseShopDecor(true);
             if(Tap(new Rect(319,782,246,55),"Cancelar"))CloseShopDecor(false);
-            for(int i=0;i<4;i++)if(Tap(new Rect(620+i*195,713,182,48),new[]{"Geral","Cortina","Quadro","GIF animado"}[i],decorView==i)){decorView=i;FrameShopDecor();}
+            for(int i=0;i<6;i++)if(Tap(new Rect(620+i*132,713,124,48),new[]{"Geral","Cortina","Quadro","GIF","Piso","Plantas"}[i],decorView==i)){decorView=i;FrameShopDecor();}
             Txt(new Rect(620,790,700,40),"Olhe a prévia. As mudanças pertencem a este save.",caption,paper);
         }
     }

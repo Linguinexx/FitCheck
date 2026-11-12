@@ -17,7 +17,7 @@ namespace FitCheck
         Material homeMirrorMaterial;
         float nextHomeMirrorFrame;
         public static readonly Vector2 StreetHomeDoor=new Vector2(-124.8f,7.65f),StreetHomeThreshold=new Vector2(-124.8f,9.9f),StreetShopDoor=new Vector2(10.4f,2.1f);
-        public void BuildHome()
+        public void BuildHome(PetAppearance companion=null)
         {
             interior=true;homeInterior=true;transform.position=new Vector3(600,0,0);
             var petrol=new Color(.085f,.32f,.32f);var walnut=new Color(.44f,.24f,.125f);
@@ -44,14 +44,15 @@ namespace FitCheck
             Block(new Vector3(-3.8f,1.32f,-2.65f),new Vector3(2.5f,.16f,1.3f),new Color(.61f,.43f,.27f),"Wood");
             foreach(float x in new[]{-4.8f,-2.8f})foreach(float z in new[]{-3.1f,-2.2f})Block(new Vector3(x,.65f,z),new Vector3(.09f,1.3f,.09f),Ink,"CityMetal");
             BuildHomePhone();
+            BuildHomeDecorBook();
             Block(new Vector3(-4.5f,1.52f,-2.7f),new Vector3(.7f,.23f,.52f),Kaos,"Paper");
             obstacles.Add(new Rect(-5.05f,-3.3f,2.5f,1.3f));
             // Door, poster, night window, shelf, and a rug give each corner a purpose.
             Block(new Vector3(0,1.85f,-4.43f),new Vector3(1.9f,3.7f,.14f),Ink,"Wood");
             Rod(new Vector3(.62f,1.5f,-4.28f),new Vector3(.62f,1.95f,-4.28f),.035f,Cream,"CityMetal");
             HomeNightWindow();
-            FramedPrint("Quadro CREAM — quarto",new Vector3(-3.4f,2.9f,4.37f),0,2,new Vector2(1.45f,1.65f));
-            FramedPrint("Quadro Sol — quarto",new Vector3(-5.43f,2.8f,-.15f),-90,5,new Vector2(1.45f,1.45f));
+            homeArtBed=FramedPrint("Quadro CREAM — quarto",new Vector3(-3.4f,2.9f,4.37f),0,2,new Vector2(1.45f,1.65f));
+            homeArtSide=FramedPrint("Quadro Sol — quarto",new Vector3(-5.43f,2.8f,-.15f),-90,5,new Vector2(1.45f,1.45f));
             var rug=new Color(.30f,.09f,.25f);var trim=new Color(.75f,.36f,.22f);
             Ground(.2f,-.42f,4.05f,2.85f,-.045f,rug,"Rug",1);
             Ground(.2f,-.42f,3.78f,2.57f,-.042f,trim,"Rug",1);
@@ -68,7 +69,7 @@ namespace FitCheck
             for(int i=0;i<3;i++)Block(new Vector3(-4.5f+i*.7f,2.92f,-4.23f),new Vector3(.45f,.30f,.42f),i%2==0?Kaos:Cream,"Paper");
             DecorateHome(walnut,petrol);
             BuildHomeMirror();
-            BuildCat(new Vector3(-3.4f,1.055f,1.6f),240);
+            BuildCat(new Vector3(-3.4f,1.055f,1.6f),240,companion??new PetAppearance());
             GeometryBatches=batches.Count;FinishGeometry();motionRigVersion=ResidentArtRevision;
         }
         void BuildHomeMirror()
@@ -92,7 +93,7 @@ namespace FitCheck
             var center=transform.TransformPoint(HomeMirrorCenter);
             var eye=source.transform.position;
             float distance=center.x-eye.x;
-            if(distance<.1f||(center-eye).sqrMagnitude>36)return false;
+            if(distance<.1f)return false;
             GeometryUtility.CalculateFrustumPlanes(source,mirrorViewPlanes);
             if(!GeometryUtility.TestPlanesAABB(mirrorViewPlanes,new Bounds(center,new Vector3(.05f,2*HomeMirrorHalfHeight,2*HomeMirrorHalfWidth))))return false;
             nextHomeMirrorFrame=Time.unscaledTime+1f/15;
@@ -111,9 +112,10 @@ namespace FitCheck
             float near=distance+.015f,scale=near/distance;
             float x=center.z-eye.z,y=center.y-eye.y;
             homeMirrorCamera.cullingMask=source.cullingMask;
-            homeMirrorCamera.nearClipPlane=near;homeMirrorCamera.farClipPlane=16;
+            float far=distance+Mathf.Sqrt(HomeBounds.width*HomeBounds.width+HomeBounds.height*HomeBounds.height)+2;
+            homeMirrorCamera.nearClipPlane=near;homeMirrorCamera.farClipPlane=far;
             homeMirrorCamera.projectionMatrix=Matrix4x4.Frustum((x-HomeMirrorHalfWidth)*scale,(x+HomeMirrorHalfWidth)*scale,
-                (y-HomeMirrorHalfHeight)*scale,(y+HomeMirrorHalfHeight)*scale,near,16);
+                (y-HomeMirrorHalfHeight)*scale,(y+HomeMirrorHalfHeight)*scale,near,far);
             EnsurePlayerPose();FrameEmoteArms(true);
             try{
                 foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(PlayerFaceVisible(piece));
@@ -183,7 +185,7 @@ namespace FitCheck
             Rod(new Vector3(5.13f,1.185f,-.82f),new Vector3(4.96f,1.185f,-1.06f),.014f,Cream,"CityMetal");
             Block(new Vector3(5.01f,1.22f,.24f),new Vector3(.41f,.40f,.41f),Peach,"CityBrick",.04f);
             Foliage(new Vector3(5.01f,1.57f,.24f),new Vector3(.32f,.33f,.35f),LeafGreen,31);
-            FramedPrint("Quadro — canto dos discos",new Vector3(5.44f,2.47f,-.67f),90,0,new Vector2(1.34f,1.52f));
+            homeArtRecords=FramedPrint("Quadro — canto dos discos",new Vector3(5.44f,2.47f,-.67f),90,0,new Vector2(1.34f,1.52f));
             obstacles.Add(new Rect(4.56f,-1.75f,.95f,2.36f));
         }
         public int HomeInteraction=>Vector2.Distance(Position,HomeDoor)<1.4f?1:Vector2.Distance(Position,HomeWardrobe)<1.35f?2:Vector2.Distance(Position,HomeBed)<1.25f?3:Vector2.Distance(Position,HomeDesk)<1.25f?4:0;

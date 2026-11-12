@@ -162,4 +162,21 @@ Retomada em 11/11/2026 para artes, calça rosa e óculos. Sons, tutorial e build
 - Corrigida a abertura lateral dos braços: cotovelos dobram para a frente, mãos aparecem na visão normal e acompanham a inclinação da câmera. Espelho usa a pose do corpo inteiro, sem o deslocamento visual da primeira pessoa.
 - Anatomia única de mão cartoon seguindo a nova referência: palma arredondada, dedos separados com comprimentos diferentes, polegar curvado e base carnuda, junção contínua. Aplicada a todos os emotes.
 - Aceno/Cinema com palmas para fora; 67 com palmas para cima alternando alturas. Movimento e som das palmas mantidos. Primeira pessoa e corpo no espelho preservados.
-- Revisão isolada em Art/Reviews/Emotes/README.md; capturas atuais em Captures/Emotes/RoundedHands. Fontes prontas na Unity; incluir na próxima build web/Windows.
+- Joinha refinado pela referência específica: punho sólido, uma dobra por dedo sem segmentos duplicados, polegar mais ereto. 67 com dedos curvados para cima e leve inclinação das palmas para melhorar a leitura em primeira pessoa.
+- Revisão isolada em Art/Reviews/Emotes/README.md; capturas atuais em Captures/Emotes/ThumbAnd67. Fontes prontas na Unity; incluir na próxima build web/Windows.
+
+## Quarto e espelho
+
+- Espelho funciona à distância em todo o quarto: removido o corte de seis unidades e ampliado o plano distante da reflexão; preservados 128 × 352 e 15 Hz.
+- Personalização em F ao olhar o catálogo na mesa perto do celular. Mesmo padrão da loja, com Ambiente/Têxteis/Artes, seis vistas, Salvar e Cancelar; voltar também cancela.
+- Paredes, parede da cama, piso, roupa de cama, tapete, três quadros e planta. Prévia reversível; `home-style.json` por save com validação/backup, sem alterar a decoração da loja ou a posição dos móveis.
+- Verificado espelho, affordance, bloqueio de movimento, prévia/cancelar/voltar, salvamento, isolamento de saves, recuperação de backup, erro de gravação e fluxo da personalização da loja. Revisão em Art/Reviews/HomeDecor/README.md; capturas em Captures/HomeDecor/Final.
+- Atualizado na Unity; incluir na próxima build web/Windows.
+
+## Companheiro e foco da decoração — 12/11/2026
+
+- Criação/edição com aba Companheiro: gato (SRD, Persa, Siamês) ou cachorro (vira-lata, Shiba, Dachshund), seis pelagens e nome. Prévia giratória; Salvar/Cancelar preservam isolamento por save. Saves antigos recebem gato padrão.
+- Mesmo companheiro deitado em casa/loja, com carinho, som e respiração. Fubá único na praça perto da DripLab; somente ele conta para o traje secreto, sem apagar progresso anterior.
+- Decoração de casa/loja enquadra o item alterado com câmera suave; movimento reduzido usa troca direta. Seis vistas manuais preservadas.
+- Gesto secreto com polegar estendido horizontalmente para a esquerda na primeira pessoa.
+- Fontes atualizadas na Unity; incluir na próxima build web/Windows. Revisão em Art/Reviews/Companions.

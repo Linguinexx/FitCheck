@@ -33,7 +33,9 @@ namespace FitCheck
         const int ResidentArtRevision=38;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
+            if(IsHome&&(homeArtBed==null||homeArtSide==null||homeArtRecords==null))return false;
             if(IsInterior&&(cat==null||!cat.Ready))return false;
+            if(!IsInterior&&(cat==null||!cat.Ready||!cat.IsFuba))return false;
             if(motionRigVersion!=ResidentArtRevision||residents.Count!=(IsHome?0:IsInterior?2:StreetResidentCount+fitFeedResidents.Count))return false;
             if(IsInterior&&!IsHome&&(fittingCurtains==null||fittingCurtains.Length!=2||fittingCurtains[0]==null||fittingCurtains[1]==null))return false;
             foreach(var actor in residents)if(actor.root==null||actor.parts.Count==0)return false;

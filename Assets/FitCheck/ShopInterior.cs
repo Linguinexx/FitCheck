@@ -22,7 +22,7 @@ namespace FitCheck
             BakeResident(studio,0,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-.8f,-.055f,7.96f),0,true);
             residents[1].root.name="Frequentador fixo — "+ShopGuideName;
             Ground(-4.6f,-2.6f,1.5f,1.15f,-.048f,Kaos*.45f,"Rug");
-            BuildCat(new Vector3(-4.6f,-.045f,-2.6f),270);obstacles.Add(new Rect(-5.30f,-3.12f,1.4f,1.04f));
+            BuildCat(new Vector3(-4.6f,-.045f,-2.6f),270,studio.PlayerLook?.pet??new PetAppearance());obstacles.Add(new Rect(-5.30f,-3.12f,1.4f,1.04f));
             motionRigVersion=ResidentArtRevision;GeometryBatches=batches.Count;FinishGeometry();ResetFittingCurtain();
         }
         void ShopShell()

@@ -50,11 +50,13 @@ namespace FitCheck
             int nextCustomer=Mathf.Clamp(progress.posts.Count,0,DayOne.Customers.Length-1);
             if(interior&&!home&&shop!=null&&(shop.ShopCustomerIndex!=nextCustomer||!ReferenceEquals(shopBuiltCampaign,progress)||shopBuiltDay!=progress.day)){shop.gameObject.SetActive(false);Destroy(shop.gameObject);shop=null;}
             city=home?homeRoom:interior?shop:street;
-            if(city==null){city=new GameObject(home?"Casa — quarto do jogador":interior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(home)city.BuildHome();else if(interior)city.BuildShop(studio,nextCustomer);else city.Build(studio);if(home)homeRoom=city;else if(interior)shop=city;else street=city;}
+            if(city==null){city=new GameObject(home?"Casa — quarto do jogador":interior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(home)city.BuildHome(playerAppearance.pet);else if(interior)city.BuildShop(studio,nextCustomer);else city.Build(studio);if(home)homeRoom=city;else if(interior)shop=city;else street=city;}
             city.gameObject.SetActive(true);studio.PreviewProportions=false;studio.TallPreview=false;studio.HairOverride=-1;studio.ExpressionOverride=-1;
             if(interior&&!home){shopBuiltCampaign=progress;shopBuiltDay=progress.day;}
             city.MouseLookScale=mouseSensitivity;
             if(interior&&!home)city.ApplyShopDecor(CurrentShopDecor);
+            if(home)city.ApplyHomeDecor(CurrentHomeDecor);
+            if(interior)city.ConfigureCompanion(playerAppearance.pet);
             if(!interior&&!home){
                 if(titleStarting)city.HideFitFeedResidents();
                 else city.SyncFitFeedResidents(studio,progress);
@@ -140,6 +142,8 @@ namespace FitCheck
                 old.PrepareRuntimeDisposal();old.gameObject.SetActive(false);mannequin.gameObject.SetActive(true);
                 city=new GameObject(old.IsHome?"Casa — quarto do jogador":old.IsInterior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(old.IsHome){city.BuildHome();homeRoom=city;}else if(old.IsInterior){city.BuildShop(studio,Mathf.Clamp(progress.posts.Count,0,DayOne.Customers.Length-1));shop=city;}else{city.Build(studio);street=city;}
                 if(!old.IsInterior&&!old.IsHome)city.SyncFitFeedResidents(studio,progress);
+                if(city.IsHome)city.ApplyHomeDecor(CurrentHomeDecor);else if(city.IsInterior)city.ApplyShopDecor(CurrentShopDecor);
+                if(city.IsInterior)city.ConfigureCompanion(playerAppearance.pet);
                 studio.ApplyUniform(progress.EquippedUniform);city.RestoreWalk(position,yaw,pitch,mannequin);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);Destroy(old.gameObject);
                 shopFittingOpening=false;
             }
@@ -167,7 +171,7 @@ namespace FitCheck
             if(ShopSequenceActive){ComicBubble(new Rect(455,740,530,125),ShopSequenceLabel,"DRIPLAB",1,false);return;}
             if(cityFreeCursor&&Tap(new Rect(38,111,350,48),"Clique para olhar  /  Tab")){cityFreeCursor=false;SyncCityCursor();}
             if(contextClock<regionUntil){RoundedPanel(new Rect(38,176,380,42),new Color(.035f,.03f,.035f,.84f));Txt(new Rect(52,183,352,28),contextRegion,caption,paper);}
-            DrawAffordance();DrawAmbientBubble();ProcessCityEvent(Event.current);
+            DrawAffordance();DrawAmbientBubble();DrawHomeDecorNotice();ProcessCityEvent(Event.current);
         }
         void ProcessCityEvent(Event e)
         {

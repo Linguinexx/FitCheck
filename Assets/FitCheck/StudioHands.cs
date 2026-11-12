@@ -86,6 +86,7 @@ namespace FitCheck
         // The thenar mound and curved thumb share a continuous web with the palm.
         static float EmoteHandDistance(Vector3 p,int gesture)
         {
+            if(gesture==1)return ThumbsUpDistance(p);
             float surface=HandEllipsoid(p,new Vector3(0,-.092f,0),new Vector3(.083f,.102f,.041f));
             surface=HandBlend(surface,HandCapsule(p,new Vector3(0,.010f,0),new Vector3(0,-.046f,0),.050f),.030f);
             surface=HandBlend(surface,HandEllipsoid(p,new Vector3(-.049f,-.065f,-.005f),new Vector3(.043f,.058f,.041f)),.022f);
@@ -93,6 +94,7 @@ namespace FitCheck
                 float x=HandFingerX[finger],length=finger==1?.165f:finger==0?.145f:finger==2?.153f:.113f;
                 float spread=gesture==6?1.55f:1.28f,radius=finger==3?.018f:.021f;
                 var root=new Vector3(x,-.148f,0);var joint=new Vector3(x*1.12f,-.148f-length*.53f,.002f);var tip=new Vector3(x*spread,-.148f-length,.005f);
+                if(gesture==4){joint.z=-.018f;tip.z=-.067f;}
                 bool folded=gesture==1||gesture==5&&finger!=1;
                 float digit;
                 if(folded){
@@ -107,8 +109,27 @@ namespace FitCheck
             var basePoint=new Vector3(-.059f,-.026f,0);
             var proximal=new Vector3(-.096f,-.069f,-.004f);var distal=new Vector3(-.120f,-.110f,-.005f);var thumbTip=new Vector3(-.124f,-.151f,0);
             if(gesture==1){proximal=new Vector3(-.098f,-.040f,0);distal=new Vector3(-.128f,-.055f,0);thumbTip=new Vector3(-.149f,-.073f,0);}
+            if(gesture==5){basePoint=new Vector3(-.059f,-.060f,0);proximal=new Vector3(-.100f,-.066f,0);distal=new Vector3(-.138f,-.074f,0);thumbTip=new Vector3(-.173f,-.082f,0);}
             float thumb=HandBlend(HandCapsule(p,basePoint,proximal,.030f),HandCapsule(p,proximal,distal,.026f),.018f);
             thumb=HandBlend(thumb,HandCapsule(p,distal,thumbTip,.022f),.014f);
+            return HandBlend(surface,thumb,.022f);
+        }
+        static float ThumbsUpDistance(Vector3 p)
+        {
+            float surface=HandEllipsoid(p,new Vector3(0,-.112f,0),new Vector3(.084f,.081f,.047f));
+            surface=HandBlend(surface,HandCapsule(p,new Vector3(0,.010f,0),new Vector3(0,-.060f,0),.050f),.030f);
+            // A single pad per folded finger. No return segment peeking through
+            // the knuckle row and producing the previous double-finger silhouette.
+            for(int finger=0;finger<4;finger++){
+                float x=HandFingerX[finger],end=finger==1?-.220f:finger==0?-.213f:finger==2?-.215f:-.196f;
+                float radius=finger==3?.0175f:finger==1?.020f:.0195f;
+                float pad=HandCapsule(p,new Vector3(x,-.127f,-.047f),new Vector3(x,end,-.047f),radius);
+                surface=HandBlend(surface,pad,.006f);
+            }
+            surface=HandBlend(surface,HandEllipsoid(p,new Vector3(-.048f,-.064f,0),new Vector3(.042f,.055f,.043f)),.022f);
+            var a=new Vector3(-.055f,-.060f,0);var b=new Vector3(-.102f,-.060f,0);var c=new Vector3(-.141f,-.061f,0);var d=new Vector3(-.175f,-.064f,0);
+            float thumb=HandBlend(HandCapsule(p,a,b,.032f),HandCapsule(p,b,c,.028f),.018f);
+            thumb=HandBlend(thumb,HandCapsule(p,c,d,.024f),.014f);
             return HandBlend(surface,thumb,.022f);
         }
         static HandVolume CreateHandVolume(int gesture=0)

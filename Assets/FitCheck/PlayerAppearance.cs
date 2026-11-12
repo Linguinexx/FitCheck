@@ -7,6 +7,7 @@ namespace FitCheck
     [Serializable] public class PlayerAppearance
     {
         public int version=1,skin,hair,hairColor,expression,appearanceBase;public bool created;public string name="Você";
+        public PetAppearance pet=new PetAppearance();
         public const int BlackPowerHair=7,ShortCoilsHair=8;
         public static readonly string[] HairNames={"Cachos","Coque","Raspado","Franja","Penteado","Assimétrico","Ondulado longo","Black Power","Crespo curto"};
         internal const int CopperHairColor=7, HotPinkHairColor=9;
@@ -22,9 +23,10 @@ namespace FitCheck
             new Color(.32f,.15f,.088f),new Color(.74f,.31f,.125f),new Color(.84f,.84f,.82f),
             new Color(.88f,.21f,.49f),new Color(.16f,.38f,.89f),new Color(.10f,.66f,.56f)
         };
-        public PlayerAppearance Copy(){return new PlayerAppearance{version=version,name=name,created=created,skin=skin,hair=hair,hairColor=hairColor,expression=expression,appearanceBase=appearanceBase};}
+        public PlayerAppearance Copy(){return new PlayerAppearance{version=version,name=name,created=created,skin=skin,hair=hair,hairColor=hairColor,expression=expression,appearanceBase=appearanceBase,pet=pet?.Copy()??new PetAppearance()};}
         public void Validate()
         {
+            if(pet==null)pet=new PetAppearance();pet.Validate();
             if(version!=1||string.IsNullOrWhiteSpace(name)||name.Length>24||skin<0||skin>=SkinColors.Length||hair<0||hair>=HairNames.Length||hairColor<0||hairColor>=HairColors.Length||expression<0||expression>=FaceNames.Length||appearanceBase<0||appearanceBase>1)
                 throw new ArgumentException("Aparência inválida");
             foreach(char c in name)if(char.IsControl(c))throw new ArgumentException("Nome inválido");

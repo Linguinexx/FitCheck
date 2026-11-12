@@ -11,7 +11,7 @@ namespace FitCheck
             var appearance=playerAppearance;bool oldMuted=mutedAudio;
             var oldProgress=progress;string oldStorage=storageOverride;
             try{
-                Home();progress=new DayProgress();storageOverride=Path.Combine(folder,"cat-save-"+Guid.NewGuid().ToString("N"));
+                Home();progress=new DayProgress();storageOverride=Path.Combine(folder,"cat-save-"+Guid.NewGuid().ToString("N"));playerAppearance=appearance.Copy();playerAppearance.pet=new PetAppearance();
                 mutedAudio=true;EnterHome();var homeCat=city.Cat;
                 if(homeCat==null||homeCat.MeowClip==null||homeCat.MeowClip.length<.5f||homeCat.MeowClip.length>5)throw new Exception("Gato ou miado ausente em casa");
                 var clip=homeCat.MeowClip;var samples=new float[clip.samples*clip.channels];
@@ -26,17 +26,15 @@ namespace FitCheck
                 if(shopCat==null||shopCat.MeowClip!=clip||shopCat.name!=homeCat.name)throw new Exception("Gato mudou entre casa e loja");
                 MoveProof(new Vector2(-3.2f,-2.6f),270,55);cam.transform.LookAt(shopCat.PetTarget);
                 if(!TryPetCat()||shopCat.MeowCount!=1||ShopOpen||shopService)throw new Exception("Gato da loja não mia ou iniciou atendimento");
-                if(progress.fubaPets!=3||progress.UniformUnlocked(DayProgress.FubaUniform))throw new Exception("Carinhos de casa e loja não compartilharam o contador");
-                if(ProgressStore.Load(DayPath).fubaPets!=3)throw new Exception("Carinhos não persistiram no save");
-                var reloaded=ProgressStore.Load(DayPath);
-                for(int pet=3;pet<DayProgress.FubaPetGoal-1;pet++)
-                    if(!reloaded.RegisterFubaPet())throw new Exception("Contador interrompido antes do limite");
-                if(reloaded.UniformUnlocked(DayProgress.FubaUniform)||!reloaded.RegisterFubaPet()||
-                    !reloaded.UniformUnlocked(DayProgress.FubaUniform)||reloaded.RegisterFubaPet())
-                    throw new Exception("Traje secreto liberado fora do limite ou mais de uma vez");
+                if(homeCat.IsFuba||shopCat.IsFuba||progress.fubaPets!=0||progress.UniformUnlocked(DayProgress.FubaUniform))throw new Exception("Companheiro contou como Fubá");
                 cam.transform.rotation=Quaternion.LookRotation(-cam.transform.forward);if(TryPetCat())throw new Exception("Gato interage sem olhar para ele");
                 CaptureCatView(Path.Combine(folder,"cat-shop.png"),shopCat);
-                Debug.Log("FITCHECK_CAT_PASSED: matching resting cats in home/shop, non-silent recorded meow, gaze/range interaction, cooldown, pause and no campaign/shop side effects.");
+                EnterCity();var fuba=city.Cat;if(fuba==null||!fuba.IsFuba)throw new Exception("Fubá ausente no bairro");
+                MoveProof(city.FubaStreetPosition+new Vector2(0,-1.7f),0,30);cam.transform.LookAt(fuba.PetTarget);
+                for(int pet=0;pet<DayProgress.FubaPetGoal;pet++){fuba.Tick(6,false,false,true);if(!TryPetCat())throw new Exception("Fubá inacessível");}
+                if(progress.fubaPets!=DayProgress.FubaPetGoal||!progress.UniformUnlocked(DayProgress.FubaUniform)||ProgressStore.Load(DayPath).fubaPets!=DayProgress.FubaPetGoal)throw new Exception("Carinhos em Fubá não persistem/liberam traje");
+                CaptureCatView(Path.Combine(folder,"fuba-street.png"),fuba);
+                Debug.Log("FITCHECK_CAT_PASSED: companion in home/shop, recorded meow, cooldown/pause, distinct street Fubá and preserved outfit progression.");
             }finally{Home();progress=oldProgress;storageOverride=oldStorage;playerAppearance=appearance;mutedAudio=oldMuted;Home();}
         }
         void CaptureCatView(string path,ShopCat cat)

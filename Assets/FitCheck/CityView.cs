@@ -104,7 +104,7 @@ namespace FitCheck
             LiveBox("Corpo do celular",Vector3.zero,new Vector3(.165f,.30f,.035f),Ink,"CityMetal",phone);
             LiveBox("Tela do celular",new Vector3(0,0,.021f),new Vector3(.135f,.255f,.008f),new Color(.12f,.38f,.36f),"CityGlow",phone);
             LiveBox("Câmera do celular",new Vector3(-.045f,.10f,-.022f),new Vector3(.035f,.04f,.012f),Cream,"CityMetal",phone);
-            PoseResident(residents[0],0,0);BuildWatcher(studio);
+            PoseResident(residents[0],0,0);BuildWatcher(studio);BuildStreetFuba();
         }
         Transform Disc(string name,float rx,float rz,float inner,Color color)
         {

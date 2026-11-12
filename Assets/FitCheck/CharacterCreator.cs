@@ -18,21 +18,21 @@ namespace FitCheck
             bool wasHome=stage==Stage.Home||(stage==Stage.City&&city.IsHome);
             if(stage==Stage.City||(stage==Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf))ExitCity();
             creatorReturn=wasHome?Stage.Home:Stage.Welcome;creatorDestination=destination;
-            creatorDraft=playerAppearance.Copy();studio.PlayerLook=creatorDraft;studio.SetHome(false);
+            creatorDraft=playerAppearance.Copy();studio.PlayerLook=creatorDraft;studio.SetHome(false);creatorPetTab=false;creatorNormalFov=cam.fieldOfView;
             stage=Stage.CharacterCreator;message="";paused=false;dragging=false;rotation=-15;distance=6.8f;
             studio.ApplyUniform(progress.EquippedUniform);UpdateCamera();
         }
         void RefreshCreator(){studio.PlayerLook=creatorDraft;studio.ApplyUniform(progress.EquippedUniform);}
         bool SaveCreator()
         {
-            var saved=creatorDraft.Copy();saved.name=saved.name.Trim();saved.created=true;
+            var saved=creatorDraft.Copy();saved.name=saved.name.Trim();saved.pet.name=saved.pet.name.Trim();saved.created=true;
             try{AppearanceStore.Save(AppearancePath,saved);SaveDay();}catch(Exception error){message="Não foi possível salvar: "+error.Message;return false;}
             playerAppearance=saved;LeaveCreator(creatorDestination);return true;
         }
         void CancelCreator(){LeaveCreator(creatorReturn);}
         void LeaveCreator(Stage destination)
         {
-            creatorDraft=null;studio.PlayerLook=playerAppearance;dragging=false;
+            ClearCreatorPet();creatorDraft=null;studio.PlayerLook=playerAppearance;dragging=false;
             if(destination==Stage.Home)GoHome();else{Home();ShowPlayer();}
             UpdateCamera();
         }
@@ -44,6 +44,9 @@ namespace FitCheck
         }
         void CreatorUI()
         {
+            if(CreatorButton(new Rect(420,113,280,44),"Personagem",!creatorPetTab)){creatorPetTab=false;FrameCreatorPet();UpdateCamera();}
+            if(CreatorButton(new Rect(720,113,280,44),"Companheiro",creatorPetTab)){creatorPetTab=true;if(creatorPetPreview==null)RefreshCreatorPet();UpdateCamera();}
+            if(creatorPetTab){CreatorPetUI();return;}
             Fill(new Rect(0,88,375,812),KaosPanel);
             Fill(new Rect(1050,88,390,812),KaosPanel);
             Txt(new Rect(28,118,320,28),"SEU PERSONAGEM",tiny,CreatorRed);
@@ -62,7 +65,7 @@ namespace FitCheck
             Txt(new Rect(1074,506,330,25),PlayerAppearance.ColorNames[creatorDraft.hairColor],tiny,muted);
             Txt(new Rect(1074,559,330,32),"Expressão",caption);
             for(int i=0;i<6;i++)if(CreatorButton(new Rect(1074+i%2*166,607+i/2*57,156,45),PlayerAppearance.FaceNames[i],creatorDraft.expression==i)){creatorDraft.expression=i;RefreshCreator();}
-            if(CreatorButton(new Rect(1074,809,330,58),"Salvar personagem",true,!string.IsNullOrWhiteSpace(creatorDraft.name)))BeginLoading(()=>{SaveCreator();});
+            if(CreatorButton(new Rect(1074,809,330,58),"Salvar personagem",true,!string.IsNullOrWhiteSpace(creatorDraft.name)&&!string.IsNullOrWhiteSpace(creatorDraft.pet.name)))BeginLoading(()=>{SaveCreator();});
             if(CreatorButton(new Rect(28,808,320,54),"Voltar sem salvar"))CancelCreator();
             if(CreatorButton(new Rect(420,807,200,45),"↶ Girar")){rotation-=45;UpdateCamera();}
             if(CreatorButton(new Rect(640,807,200,45),"Girar ↷")){rotation+=45;UpdateCamera();}

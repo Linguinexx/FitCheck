@@ -51,6 +51,7 @@ namespace FitCheck
         }
         void Home()
         {
+            if(creatorPetPreview!=null)ClearCreatorPet();
             EndLiveTitle();
             pendingDeleteSlot=-1;
             if(stage==Stage.City||(city!=null&&city.IsHome&&city.gameObject.activeSelf)||(shopService&&stage==Stage.Dialogue)||shopDressingInStore)ExitCity();

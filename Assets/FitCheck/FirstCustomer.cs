@@ -76,7 +76,7 @@ namespace FitCheck
             if(shopDressingInStore&&(stage==Stage.Dressing||stage==Stage.Confirm)){FrameShopDressing();return;}
             if(campaignBeforePreview!=null&&(stage==Stage.Dressing||stage==Stage.Confirm)){studio.SetHome(false);studio.Pose(rotation,Mathf.Clamp(distance*.75f,4.8f,6.0f),.65f);cam.fieldOfView=52;return;}
             if(stage==Stage.Dialogue&&shopService){FrameShopDialogue();return;}
-            if(stage==Stage.CharacterCreator){studio.SetHome(false);studio.Pose(rotation,distance,0);return;}
+            if(stage==Stage.CharacterCreator){studio.SetHome(false);FrameCreatorPet();if(!creatorPetTab)studio.Pose(rotation,distance,0);return;}
             if(stage==Stage.City){
                 if(showShopDecor){city.Frame(cam,reducedMotion,paused?0:Time.unscaledDeltaTime);FrameShopDecor();return;}
                 var p=cam.transform.position;var r=cam.transform.rotation;float fov=cam.fieldOfView;
@@ -106,6 +106,7 @@ namespace FitCheck
             UpdateCamera();
             ShopProbeMark(3);
             if(city!=null&&city.gameObject.activeInHierarchy)city.TickCat(Time.deltaTime,paused,reducedMotion,mutedAudio);
+            if(stage==Stage.CharacterCreator&&creatorPetPreview!=null&&creatorPetTab)creatorPetPreview.Tick(Time.deltaTime,paused,reducedMotion,true);
             FinishShopFittingEntryIfReady();
             AdvanceClock(Time.deltaTime);
             if(stage==Stage.Leaving && !paused) {transition+=Time.deltaTime; if(transition>1.2f) stage=Stage.Post;}

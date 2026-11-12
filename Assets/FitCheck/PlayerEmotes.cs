@@ -67,7 +67,7 @@ namespace FitCheck
             if(playerEmote==2)return Quaternion.AngleAxis(side*6,Vector3.forward)*Quaternion.LookRotation(Vector3.right*side,Vector3.down);
             if(playerEmote==1)return Quaternion.AngleAxis(90+Mathf.Sin(emoteAge*9)*4,Vector3.forward)*Quaternion.AngleAxis(180,Vector3.right);
             if(playerEmote==3)return Quaternion.AngleAxis(180+Mathf.Sin(emoteAge*10)*14,Vector3.forward);
-            if(playerEmote==4)return Quaternion.AngleAxis(-side*12,Vector3.up)*Quaternion.AngleAxis(90,Vector3.right);
+            if(playerEmote==4)return Quaternion.AngleAxis(-side*12,Vector3.up)*Quaternion.AngleAxis(105,Vector3.right);
             if(playerEmote==6)return Quaternion.AngleAxis(180-side*9,Vector3.forward);
             // Palm is local -Z and fingers local -Y. Both face the camera after
             // this half turn; forearm bending must not decide wrist orientation.

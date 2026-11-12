@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FitCheck
 {
-    public sealed class ShopCat : MonoBehaviour
+    public sealed partial class ShopCat : MonoBehaviour
     {
         readonly List<Object> owned=new List<Object>();
         Transform body,head;AudioSource voice;float age,response,cooldown;bool wasPaused;
@@ -12,15 +12,22 @@ namespace FitCheck
         public float Age=>age;
         public AudioClip MeowClip=>voice.clip;
         public bool Ready=>voice!=null&&body!=null&&head!=null&&owned.Count>0;
+        public bool IsFuba {get;private set;}=true;
+        public string DisplayName {get;private set;}="Fubá";
+        public string ConfigurationKey {get;private set;}="Fuba";
+        Vector3 headRest;
         Material fur,cream,dark,pink;
         Material Paint(Color color,bool grain=true,bool tabby=false)
         {
             var m=new Material(Resources.Load<Shader>("CatFur")){color=color};m.mainTexture=grain?Resources.Load<Texture2D>("Surfaces/Fabric084"):Texture2D.whiteTexture;
             m.SetFloat("_FurMean",.518f);m.SetFloat("_TextureWeight",grain?.55f:0);m.SetFloat("_StripeWeight",tabby?1:0);owned.Add(m);return m;
         }
-        public void Build()
+        public void Build(){Build(null);}
+        public void Build(PetAppearance choice)
         {
-            fur=Paint(new Color(.78f,.39f,.14f),true,true);cream=Paint(new Color(.96f,.87f,.70f));dark=Paint(new Color(.20f,.105f,.055f),false);pink=Paint(new Color(.65f,.32f,.27f),false);
+            if(choice!=null)choice.Validate();IsFuba=choice==null;DisplayName=choice?.name??"Fubá";ConfigurationKey=choice==null?"Fuba":JsonUtility.ToJson(choice);
+            fur=Paint(choice==null?new Color(.78f,.39f,.14f):PetAppearance.Coats[choice.coat],true,choice==null);cream=Paint(new Color(.96f,.87f,.70f));dark=Paint(choice==null?new Color(.20f,.105f,.055f):new Color(.13f,.09f,.07f),false);pink=Paint(new Color(.65f,.32f,.27f),false);
+            if(choice!=null&&choice.species==1){BuildDog(choice);CompletePetVoice(true);return;}
             Form("Sombra de contato",new Vector3(0,.006f,.05f),new Vector3(1.22f,.012f,.77f),dark,transform);
             body=Form("Corpo — gatinho deitado",new Vector3(.06f,.31f,.07f),new Vector3(1.18f,.60f,.74f),fur,transform);
             head=new GameObject("Cabeça sonolenta").transform;head.SetParent(transform,false);head.localPosition=new Vector3(-.43f,.36f,-.14f);
@@ -42,7 +49,13 @@ namespace FitCheck
             var tail=new Vector3[22];tail[0]=new Vector3(.48f,.24f,.17f);tail[1]=new Vector3(.64f,.15f,.18f);
             for(int i=2;i<tail.Length;i++){float a=Mathf.Lerp(.25f,-3f,(i-2)/(float)(tail.Length-3));tail[i]=new Vector3(.15f+Mathf.Cos(a)*.55f,.105f,.06f+Mathf.Sin(a)*.38f);}
             Curve("Cauda enrolada",tail,.080f,fur,transform,.035f);
-            voice=gameObject.AddComponent<AudioSource>();voice.playOnAwake=false;voice.clip=Resources.Load<AudioClip>("Audio/CatMeow");voice.pitch=1;voice.dopplerLevel=0;voice.spatialBlend=.65f;voice.minDistance=2;voice.maxDistance=10;voice.rolloffMode=AudioRolloffMode.Linear;voice.volume=.60f;
+            if(choice!=null){
+                if(choice.breed==1){head.localScale=new Vector3(1.15f,1.08f,1.1f);Form("Pelagem fofa do peito",new Vector3(-.27f,.26f,-.02f),new Vector3(.52f,.55f,.60f),fur,transform);}
+                if(choice.breed==2){foreach(var renderer in head.GetComponentsInChildren<MeshRenderer>())if(renderer.name=="Cabeça arredondada"||renderer.name=="Orelha triangular")renderer.sharedMaterial=dark;}
+                if(choice.coat==1||choice.breed==2)foreach(var renderer in head.GetComponentsInChildren<MeshRenderer>())if(renderer.name=="Olho fechado")renderer.sharedMaterial=cream;
+                if(choice.coat==4){Form("Mancha bicolor",new Vector3(.20f,.49f,.06f),new Vector3(.69f,.24f,.57f),dark,transform);}
+            }
+            CompletePetVoice(false);
         }
         void Ear(int side)
         {
@@ -84,7 +97,7 @@ namespace FitCheck
             voice.mute=muted;if(paused!=wasPaused){if(paused)voice.Pause();else voice.UnPause();wasPaused=paused;}if(paused)return;
             age+=delta;cooldown=Mathf.Max(0,cooldown-delta);response=Mathf.Max(0,response-delta);
             float breath=reduced?0:Mathf.Sin(age*1.8f)*.018f;body.localScale=new Vector3(1,1+breath,1);
-            head.localPosition=new Vector3(-.43f,.36f+(reduced?0:Mathf.Sin(Mathf.Clamp01(response/Mathf.Max(.1f,voice.clip.length))*Mathf.PI)*.025f),-.14f);
+            head.localPosition=headRest+Vector3.up*(reduced?0:Mathf.Sin(Mathf.Clamp01(response/Mathf.Max(.1f,voice.clip.length))*Mathf.PI)*.025f);
         }
         void OnDisable(){if(voice!=null)voice.Stop();}
         void OnDestroy(){foreach(var value in owned)if(value!=null)Destroy(value);}
@@ -93,8 +106,14 @@ namespace FitCheck
     {
         [SerializeField] ShopCat cat;
         public ShopCat Cat=>cat;
-        public void BuildCat(Vector3 position,float yaw)
-        {var root=new GameObject("Fubá — gato da casa e da DripLab");root.transform.SetParent(transform,false);root.transform.localPosition=position;root.transform.localRotation=Quaternion.Euler(0,yaw,0);cat=root.AddComponent<ShopCat>();cat.Build();}
+        public void BuildCat(Vector3 position,float yaw,PetAppearance choice=null)
+        {var root=new GameObject(choice==null?"Fubá — gato do bairro":"Companheiro — "+choice.name);root.transform.SetParent(transform,false);root.transform.localPosition=position;root.transform.localRotation=Quaternion.Euler(0,yaw,0);cat=root.AddComponent<ShopCat>();cat.Build(choice);}
+        public void ConfigureCompanion(PetAppearance choice){
+            if(!IsInterior)return;choice=choice??new PetAppearance();string key=JsonUtility.ToJson(choice);
+            if(cat!=null&&cat.Ready&&!cat.IsFuba&&cat.ConfigurationKey==key)return;
+            var position=cat!=null?cat.transform.localPosition:IsHome?new Vector3(-3.4f,1.055f,1.6f):new Vector3(-4.6f,-.045f,-2.6f);float yaw=IsHome?240:270;
+            if(cat!=null){cat.gameObject.SetActive(false);Destroy(cat.gameObject);}BuildCat(position,yaw,choice);
+        }
         public bool CatInteraction(Camera camera)=>cat!=null&&cat.gameObject.activeInHierarchy&&cat.CanPet(camera);
         public void TickCat(float delta,bool paused,bool reduced,bool muted){if(cat!=null)cat.Tick(delta,paused,reduced,muted);}
     }
@@ -103,7 +122,7 @@ namespace FitCheck
         bool TryPetCat()
         {
             if(paused||stage!=Stage.City||ShopSequenceActive||homeDoorExitRemaining>0||!city.CatInteraction(cam))return false;
-            if(city.Cat.Pet(mutedAudio)&&progress.RegisterFubaPet()){
+            if(city.Cat.Pet(mutedAudio)&&city.Cat.IsFuba&&progress.RegisterFubaPet()){
                 if(progress.UniformUnlocked(DayProgress.FubaUniform))notices.Enqueue(DayProgress.FubaAward+" · "+FubaUniformName);
                 TrySave();
             }
