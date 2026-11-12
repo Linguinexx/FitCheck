@@ -40,7 +40,7 @@ namespace FitCheck
             }
         }
         static HandVolume handVolume;
-        static readonly HandVolume[] gestureVolumes=new HandVolume[6];
+        static readonly HandVolume[] gestureVolumes=new HandVolume[7];
         static readonly float[] HandFingerX={-.061f,-.020f,.022f,.063f},HandFingerJoint={-.199f,-.211f,-.204f,-.183f},HandFingerTip={-.239f,-.253f,-.244f,-.219f};
         static float HandBlend(float a,float b,float radius)
         {float h=Mathf.Clamp01(.5f+.5f*(b-a)/radius);return Mathf.Lerp(b,a,h)-radius*h*(1-h);}
@@ -48,7 +48,8 @@ namespace FitCheck
         {var line=b-a;return (p-a-line*Mathf.Clamp01(Vector3.Dot(p-a,line)/line.sqrMagnitude)).magnitude-radius;}
         static float HandDistance(Vector3 p,int gesture=0)
         {
-            var q=p-new Vector3(0,-.083f,.003f);var r=new Vector3(.082f,.098f,.063f);
+            if(gesture>0)return EmoteHandDistance(p,gesture);
+            var q=p-new Vector3(0,-.083f,.003f);var r=gesture==0?new Vector3(.082f,.098f,.063f):new Vector3(.076f,.087f,.052f);
             float k0=new Vector3(q.x/r.x,q.y/r.y,q.z/r.z).magnitude;
             float k1=new Vector3(q.x/(r.x*r.x),q.y/(r.y*r.y),q.z/(r.z*r.z)).magnitude;
             float surface=k1<.00001f?-.063f:k0*(k0-1)/k1;
@@ -58,23 +59,62 @@ namespace FitCheck
                 var end=new Vector3(HandFingerX[finger],HandFingerTip[finger],-.048f);
                 if(gesture==1||gesture==4||gesture==5){
                     bool extended=gesture==4&&finger==0||gesture==5&&finger==1;
-                    joint=new Vector3(HandFingerX[finger],extended?-.230f:-.174f,extended?.005f:-.040f);
-                    end=new Vector3(HandFingerX[finger],extended?-.311f:-.137f,extended?.005f:-.083f);
-                }else if(gesture==2||gesture==3){
+                    knuckle.y=-.119f;
+                    joint=new Vector3(HandFingerX[finger],extended?-.224f:-.157f,extended?.005f:-.025f);
+                    end=new Vector3(HandFingerX[finger],extended?-.302f:-.112f,extended?.005f:-.068f);
+                }else if(gesture==2||gesture==3||gesture==6){
                     joint.z=.008f;end.z=.008f;
+                    if(gesture==6){joint.x*=1.15f;end.x*=1.4f;}
                 }
                 float digit=HandBlend(HandCapsule(p,knuckle,joint,.024f),HandCapsule(p,joint,end,.019f),.012f);
-                surface=HandBlend(surface,digit,.008f);
+                surface=HandBlend(surface,digit,gesture==0?.008f:.017f);
             }
-            var thumbJoint=gesture==1?new Vector3(-.106f,-.156f,.005f):new Vector3(-.105f,-.103f,-.023f);
-            var thumbTip=gesture==1?new Vector3(-.106f,-.270f,.005f):new Vector3(-.112f,-.151f,-.056f);
-            float thumb=HandBlend(HandCapsule(p,new Vector3(-.063f,-.061f,0),thumbJoint,.032f),HandCapsule(p,thumbJoint,thumbTip,.025f),.018f);
+            bool thumbOut=gesture==1||gesture==5;
+            var thumbJoint=thumbOut?new Vector3(-.112f,-.066f,.004f):new Vector3(-.105f,-.103f,-.023f);
+            var thumbTip=thumbOut?new Vector3(-.154f,-.072f,.004f):new Vector3(-.112f,-.151f,-.056f);
+            if(gesture==2){thumbJoint=new Vector3(-.085f,-.095f,-.005f);thumbTip=new Vector3(-.088f,-.145f,-.006f);}
+            float thumb=HandBlend(HandCapsule(p,new Vector3(-.063f,-.061f,0),thumbJoint,thumbOut?.040f:.032f),HandCapsule(p,thumbJoint,thumbTip,thumbOut?.035f:.025f),.018f);
             return HandBlend(surface,thumb,.020f);
+        }
+        static float HandEllipsoid(Vector3 p,Vector3 center,Vector3 radius)
+        {
+            var q=p-center;float k0=new Vector3(q.x/radius.x,q.y/radius.y,q.z/radius.z).magnitude;
+            float k1=new Vector3(q.x/(radius.x*radius.x),q.y/(radius.y*radius.y),q.z/(radius.z*radius.z)).magnitude;
+            return k1<.00001f?-Mathf.Min(radius.x,Mathf.Min(radius.y,radius.z)):k0*(k0-1)/k1;
+        }
+        // One rounded anatomical template; only joint positions change by gesture.
+        // The thenar mound and curved thumb share a continuous web with the palm.
+        static float EmoteHandDistance(Vector3 p,int gesture)
+        {
+            float surface=HandEllipsoid(p,new Vector3(0,-.092f,0),new Vector3(.083f,.102f,.041f));
+            surface=HandBlend(surface,HandCapsule(p,new Vector3(0,.010f,0),new Vector3(0,-.046f,0),.050f),.030f);
+            surface=HandBlend(surface,HandEllipsoid(p,new Vector3(-.049f,-.065f,-.005f),new Vector3(.043f,.058f,.041f)),.022f);
+            for(int finger=0;finger<4;finger++){
+                float x=HandFingerX[finger],length=finger==1?.165f:finger==0?.145f:finger==2?.153f:.113f;
+                float spread=gesture==6?1.55f:1.28f,radius=finger==3?.018f:.021f;
+                var root=new Vector3(x,-.148f,0);var joint=new Vector3(x*1.12f,-.148f-length*.53f,.002f);var tip=new Vector3(x*spread,-.148f-length,.005f);
+                bool folded=gesture==1||gesture==5&&finger!=1;
+                float digit;
+                if(folded){
+                    joint=new Vector3(x,-.186f,-.012f);var curl=new Vector3(x,-.178f,-.052f);tip=new Vector3(x,-.126f,-.061f);
+                    digit=HandBlend(HandCapsule(p,root,joint,radius*1.06f),HandCapsule(p,joint,curl,radius),.012f);
+                    digit=HandBlend(digit,HandCapsule(p,curl,tip,radius*.90f),.012f);
+                }else{
+                    digit=HandBlend(HandCapsule(p,root,joint,radius),HandCapsule(p,joint,tip,radius*.86f),.010f);
+                }
+                surface=HandBlend(surface,digit,.010f);
+            }
+            var basePoint=new Vector3(-.059f,-.026f,0);
+            var proximal=new Vector3(-.096f,-.069f,-.004f);var distal=new Vector3(-.120f,-.110f,-.005f);var thumbTip=new Vector3(-.124f,-.151f,0);
+            if(gesture==1){proximal=new Vector3(-.098f,-.040f,0);distal=new Vector3(-.128f,-.055f,0);thumbTip=new Vector3(-.149f,-.073f,0);}
+            float thumb=HandBlend(HandCapsule(p,basePoint,proximal,.030f),HandCapsule(p,proximal,distal,.026f),.018f);
+            thumb=HandBlend(thumb,HandCapsule(p,distal,thumbTip,.022f),.014f);
+            return HandBlend(surface,thumb,.022f);
         }
         static HandVolume CreateHandVolume(int gesture=0)
         {
-            const int nx=24,ny=29,nz=21;const float step=.015f;
-            var origin=new Vector3(-.179f,-.333f,-.147f);var points=new Vector3[nx*ny*nz];var distances=new float[points.Length];
+            int nx=gesture==0?24:32,ny=gesture==0?29:37,nz=gesture==0?21:23;float step=gesture==0?.015f:.012f;
+            var origin=gesture==0?new Vector3(-.179f,-.333f,-.147f):new Vector3(-.205f,-.36f,-.132f);var points=new Vector3[nx*ny*nz];var distances=new float[points.Length];
             for(int z=0;z<nz;z++)for(int y=0;y<ny;y++)for(int x=0;x<nx;x++){
                 int id=x+nx*(y+ny*z);points[id]=origin+new Vector3(x,y,z)*step;float distance=HandDistance(points[id],gesture);
                 distances[id]=Mathf.Abs(distance)<.00001f?(distance<0?-.00001f:.00001f):distance;
@@ -96,7 +136,12 @@ namespace FitCheck
             var triangles=volume.triangles.ToArray();
             for(int i=0;i<v.Length;i++){var p=volume.vertices[i];v[i]=new Vector3(-side*p.x,p.y,p.z);uv[i]=new Vector2((p.x+.18f)/AvatarTileSize,(p.y+.34f)/AvatarTileSize);}
             if(side>0)for(int i=0;i<triangles.Length;i+=3){int swap=triangles[i+1];triangles[i+1]=triangles[i+2];triangles[i+2]=swap;}
-            var mesh=new Mesh{name="Mão — gesto alternativo",vertices=v,triangles=triangles,uv=uv};mesh.RecalculateNormals();mesh.RecalculateBounds();return mesh;
+            var normals=new Vector3[v.Length];const float h=.002f;
+            for(int i=0;i<v.Length;i++){
+                var p=volume.vertices[i];var n=new Vector3(HandDistance(p+Vector3.right*h,gesture)-HandDistance(p-Vector3.right*h,gesture),HandDistance(p+Vector3.up*h,gesture)-HandDistance(p-Vector3.up*h,gesture),HandDistance(p+Vector3.forward*h,gesture)-HandDistance(p-Vector3.forward*h,gesture)).normalized;
+                normals[i]=new Vector3(-side*n.x,n.y,n.z);
+            }
+            var mesh=new Mesh{name="Mão — gesto alternativo",vertices=v,triangles=triangles,uv=uv,normals=normals};mesh.RecalculateBounds();return mesh;
         }
         void BuildRelaxedHand(int side,Transform parent)
         {

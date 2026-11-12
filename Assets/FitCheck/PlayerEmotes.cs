@@ -7,14 +7,15 @@ namespace FitCheck
         float emoteAge,emoteBlend;bool emoteEnding;
         ResidentPart gestureHand,normalGestureHand;
         sealed class GesturePalm{public ResidentPart part,source;public Vector3[] points,normals;public Vector3 wrist;}
-        GesturePalm[,] gesturePalms=new GesturePalm[6,2];
+        GesturePalm[,] gesturePalms=new GesturePalm[7,2];
         readonly ResidentPart[] originalPalms=new ResidentPart[2];
         public bool PlayerEmoteActive=>playerEmote!=0;
         public int PlayerEmoteId=>playerEmote;
         public float PlayerEmoteTime=>emoteAge;
+        public int PlayerClapSerial {get;private set;}
         public bool PlayPlayerEmote(int id)
         {
-            if(!PlayerBodyReady||id<1||id>5)return false;
+            if(!PlayerBodyReady||id<1||id>6)return false;
             if(PlayerEmoteActive){queuedEmote=playerEmote==id?0:id;emoteEnding=true;return true;}
             playerEmote=id;emoteAge=0;emoteBlend=0;emoteEnding=false;playerPoseCycle=float.NaN;return true;
         }
@@ -23,13 +24,14 @@ namespace FitCheck
             queuedEmote=0;emoteEnding=true;
             if(immediate){playerEmote=0;emoteBlend=0;RestoreEmoteHand();playerPoseCycle=float.NaN;if(PlayerBodyReady)EnsurePlayerPose();}
         }
-        void ResetPlayerEmotes(){playerEmote=queuedEmote=0;emoteAge=emoteBlend=0;emoteEnding=false;gestureHand=normalGestureHand=null;gesturePalms=new GesturePalm[6,2];originalPalms[0]=originalPalms[1]=null;playerPoseArmsOnly=false;}
+        void ResetPlayerEmotes(){playerEmote=queuedEmote=0;emoteAge=emoteBlend=0;emoteEnding=false;gestureHand=normalGestureHand=null;gesturePalms=new GesturePalm[7,2];originalPalms[0]=originalPalms[1]=null;playerPoseArmsOnly=false;}
         void TickPlayerEmote(float delta,float distance)
         {
-            if(!PlayerEmoteActive)return;emoteAge+=delta;
+            if(!PlayerEmoteActive)return;float before=emoteAge;emoteAge+=delta;
             if(distance>.0001f){queuedEmote=0;emoteEnding=true;}
-            if(emoteAge>(playerEmote==2?2.5f:2.1f)-.25f)emoteEnding=true;
+            if(emoteAge>(playerEmote==6?2.8f:playerEmote==2||playerEmote==4?2.5f:2.1f)-.25f)emoteEnding=true;
             emoteBlend=Mathf.MoveTowards(emoteBlend,emoteEnding?0:1,delta*6);
+            if(playerEmote==2&&!emoteEnding&&emoteBlend>.8f)for(int clap=0;clap<5;clap++){float contact=.55f+clap*.4f;if(before<contact&&emoteAge>=contact)PlayerClapSerial++;}
             if(emoteEnding&&emoteBlend<=0){int next=queuedEmote;playerEmote=queuedEmote=0;RestoreEmoteHand();playerPoseCycle=float.NaN;if(next>0)PlayPlayerEmote(next);}
         }
         void ApplyPlayerEmoteArm(Resident actor,float side,ref Quaternion upper,ref Quaternion lower)
@@ -39,7 +41,7 @@ namespace FitCheck
             EmoteArmPose(side,out var a,out var b,out _);
             float weight=Mathf.SmoothStep(0,1,emoteBlend);upper=Quaternion.Slerp(upper,a,weight);lower=Quaternion.Slerp(lower,b,weight);
         }
-        static bool GestureUsesHand(int emote,float side)=>side>0||emote==2||emote==3;
+        static bool GestureUsesHand(int emote,float side)=>side>0||emote==2||emote==4||emote==6;
         void EmoteArmPose(float side,out Quaternion upper,out Quaternion lower,out Vector3 wrist)
         {
             int hand=side>0?1:0;var source=originalPalms[hand];
@@ -47,10 +49,11 @@ namespace FitCheck
             var wristRest=source==null?new Vector3(side*.485f,1.17f,-.095f):source.handRestMatrix.MultiplyPoint3x4(Vector3.zero);
             float pulse=Mathf.Sin(emoteAge*9);
             wrist=new Vector3(.27f,2.22f+pulse*.025f,-.50f);
-            if(playerEmote==2){float gap=.055f+.22f*(.5f+.5f*Mathf.Cos((emoteAge-.35f)*Mathf.PI*5));wrist=new Vector3(side*gap,2.04f,-.52f);}
-            if(playerEmote==3)wrist=side>0?new Vector3(.94f,2.16f,-.36f):new Vector3(.08f,2.19f,-.52f);
-            if(playerEmote==4)wrist=new Vector3(-.06f+pulse*.008f,2.12f,-.57f);
+            if(playerEmote==2){float gap=.047f+.22f*(.5f+.5f*Mathf.Cos((emoteAge-.35f)*Mathf.PI*5));wrist=new Vector3(side*gap,2.04f,-.52f);}
+            if(playerEmote==3)wrist=new Vector3(.53f+Mathf.Sin(emoteAge*6)*.025f,2.22f,-.48f);
+            if(playerEmote==4)wrist=new Vector3(side*.36f,2.02f+side*Mathf.Sin(emoteAge*9)*.095f,-.53f);
             if(playerEmote==5)wrist=new Vector3(.28f,2.20f+pulse*.012f,-.51f);
+            if(playerEmote==6)wrist=new Vector3(side*.61f,2.39f+Mathf.Sin(emoteAge*3)*.012f,-.31f);
             float a=(elbowRest-shoulder).magnitude,b=(wristRest-elbowRest).magnitude;
             var axis=wrist-shoulder;float distance=Mathf.Clamp(axis.magnitude,.05f,a+b-.012f);axis.Normalize();wrist=shoulder+axis*distance;
             float along=(a*a-b*b+distance*distance)/(2*distance),height=Mathf.Sqrt(Mathf.Max(0,a*a-along*along));
@@ -61,12 +64,14 @@ namespace FitCheck
         }
         Quaternion EmotePalmRotation(float side)
         {
-            if(playerEmote==2)return Quaternion.LookRotation(Vector3.right*side,Vector3.down);
-            if(playerEmote==3)return side>0?Quaternion.LookRotation(Vector3.back,Vector3.left):Quaternion.Euler(160,0,70);
-            if(playerEmote==4)return Quaternion.Euler(155,0,Mathf.Sin(emoteAge*9)*3);
+            if(playerEmote==2)return Quaternion.AngleAxis(side*6,Vector3.forward)*Quaternion.LookRotation(Vector3.right*side,Vector3.down);
+            if(playerEmote==1)return Quaternion.AngleAxis(90+Mathf.Sin(emoteAge*9)*4,Vector3.forward)*Quaternion.AngleAxis(180,Vector3.right);
+            if(playerEmote==3)return Quaternion.AngleAxis(180+Mathf.Sin(emoteAge*10)*14,Vector3.forward);
+            if(playerEmote==4)return Quaternion.AngleAxis(-side*12,Vector3.up)*Quaternion.AngleAxis(90,Vector3.right);
+            if(playerEmote==6)return Quaternion.AngleAxis(180-side*9,Vector3.forward);
             // Palm is local -Z and fingers local -Y. Both face the camera after
             // this half turn; forearm bending must not decide wrist orientation.
-            return Quaternion.Euler(180,0,playerEmote==1?Mathf.Sin(emoteAge*9)*5:0);
+            return Quaternion.Euler(180,0,0);
         }
         // Presentation transform only: the mirror always uses the anatomical body
         // pose. First-person hands sit in front of the lens and follow its pitch.
@@ -75,8 +80,9 @@ namespace FitCheck
             float weight=external||!PlayerEmoteActive?0:Mathf.SmoothStep(0,1,emoteBlend);
             var rotation=Quaternion.Slerp(Quaternion.identity,Quaternion.Euler(-ViewPitch,0,0),weight);
             var pivot=new Vector3(0,EyeHeight+.055f,-.38f);
-            float lift=playerEmote==3?.35f:.42f;
-            var offset=new Vector3(0,lift,playerEmote==3?-1.35f:-.65f)*weight;
+            float lift=playerEmote==3?.20f:playerEmote==6?.24f:.42f;
+            float depth=playerEmote==6?-.85f:-.65f;
+            var offset=new Vector3(0,lift,depth)*weight;
             var position=pivot+rotation*(offset-pivot);
             foreach(var part in playerBody.parts)if(part.arm&&part.node!=null){part.node.transform.localPosition=position;part.node.transform.localRotation=rotation;}
             foreach(var palm in gesturePalms)if(palm!=null){palm.part.node.transform.localPosition=position;palm.part.node.transform.localRotation=rotation;}
@@ -85,7 +91,7 @@ namespace FitCheck
         {
             foreach(var part in playerBody.parts)if(part.node.name=="Mão")originalPalms[part.side>0?1:0]=part;
             normalGestureHand=originalPalms[1];
-            for(int emote=1;emote<=5;emote++)for(int hand=0;hand<2;hand++){
+            for(int emote=1;emote<=6;emote++)for(int hand=0;hand<2;hand++){
                 float side=hand==0?-1:1;if(!GestureUsesHand(emote,side)||originalPalms[hand]==null)continue;
                 var source=originalPalms[hand];var mesh=StudioView.CreateGestureHand((int)side,emote);var points=mesh.vertices;var normals=mesh.normals;
                 assets.Add(mesh);playerBodyAssets.Add(mesh);var node=new GameObject("Gesto alternativo — mão");node.transform.SetParent(playerBody.root,false);
@@ -119,12 +125,14 @@ namespace FitCheck
     }
     public partial class FirstCustomer
     {
+        int heardEmoteClaps;AudioClip emoteClap;
         void ReadPlayerEmotes()
         {
             if(paused||loadingActive||showShopDecor||shopGuideOpen||shopFittingOpening||ShopSequenceActive||homeDoorExitRemaining>0||!CityInputFocused)return;
+            if(city.PlayerClapSerial>heardEmoteClaps){if(emoteClap==null)emoteClap=Clip("emote_clap");PlayClip(emoteClap,.6f);}heardEmoteClaps=city.PlayerClapSerial;
             if(Input.GetKeyDown(KeyCode.Alpha0)||Input.GetKeyDown(KeyCode.Keypad0))city.CancelPlayerEmote();
             else if(Input.GetKeyDown(KeyCode.Comma))city.PlayPlayerEmote(5);
-            else for(int i=0;i<4;i++)if(Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1+i))||Input.GetKeyDown((KeyCode)((int)KeyCode.Keypad1+i))){city.PlayPlayerEmote(i+1);break;}
+            else for(int i=0;i<5;i++)if(Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1+i))||Input.GetKeyDown((KeyCode)((int)KeyCode.Keypad1+i))){city.PlayPlayerEmote(i==4?6:i+1);break;}
         }
     }
 }

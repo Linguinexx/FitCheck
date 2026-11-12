@@ -157,8 +157,9 @@ Retomada em 11/11/2026 para artes, calça rosa e óculos. Sons, tutorial e build
 
 ## Emotes de braços
 
-- Emotes revisados: joinha (1), bater palmas (2), dab (3) e silêncio (4); 0 encerra. Gesto secreto na vírgula, sem divulgação na tela de controles.
+- Emotes revisados: joinha (1), bater palmas (2), aceno (3, substitui dab rejeitado), “67” (4, substitui silêncio) e Absolute Cinema (5); 0 encerra. Gesto secreto na vírgula, sem divulgação na tela de controles.
 - Visíveis no espelho, com entrada/saída suave, pausa respeitada e cancelamento por caminhada/interação. Preservadas as animações normais e as roupas.
 - Corrigida a abertura lateral dos braços: cotovelos dobram para a frente, mãos aparecem na visão normal e acompanham a inclinação da câmera. Espelho usa a pose do corpo inteiro, sem o deslocamento visual da primeira pessoa.
-- Punhos com orientação própria e mãos distintas para polegar, palmas abertas e indicador; palma do gesto secreto voltada à câmera. Aplauso tem contato/afastamento em ciclos, silêncio alinhado à boca, dab com um braço estendido e outro dobrado.
-- Revisão isolada em Art/Reviews/Emotes/README.md; capturas atuais em Captures/Emotes/Gestures. Fontes prontas na Unity; incluir na próxima build web/Windows.
+- Anatomia única de mão cartoon seguindo a nova referência: palma arredondada, dedos separados com comprimentos diferentes, polegar curvado e base carnuda, junção contínua. Aplicada a todos os emotes.
+- Aceno/Cinema com palmas para fora; 67 com palmas para cima alternando alturas. Movimento e som das palmas mantidos. Primeira pessoa e corpo no espelho preservados.
+- Revisão isolada em Art/Reviews/Emotes/README.md; capturas atuais em Captures/Emotes/RoundedHands. Fontes prontas na Unity; incluir na próxima build web/Windows.
