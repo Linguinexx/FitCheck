@@ -47,7 +47,7 @@ namespace FitCheck
             if(fitFeedLogo!=null)GUI.DrawTexture(bounds,fitFeedLogo,ScaleMode.ScaleToFit,true);
             else Txt(bounds,"FitFeed",feedTitle,FeedPaper);
         }
-        static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","SeuJota","NinaFaisca",null,"Dandara","Ravi","Joana","Teo"};
+        static readonly string[] FeedPortraitNames={"Kaio","Lia","Breno","Julia","SeuJota","NinaFaisca",null,"Dandara","Ravi","Joana","Teo","Iara","Dante","Cora"};
         Texture2D[] feedPortraits;
         void InvalidateFeedPhoto(string path){if(feedPhotos.TryGetValue(path,out var tex)){Destroy(tex);feedPhotos.Remove(path);}}
         Texture2D FeedPhoto(string path)
@@ -156,7 +156,7 @@ namespace FitCheck
         {
             FeedStyles();
             int count=progress.posts.Count;
-            Fill(new Rect(0,0,1440,900),FeedBackground);
+            DrawFeedBackdrop();
             Fill(new Rect(423,0,1,900),FeedDivider);
             DrawFitFeedLogo(new Rect(48,77,300,64));
             Txt(new Rect(48,160,328,40),"Da loja pra rua",feedIntro,FeedPaper);

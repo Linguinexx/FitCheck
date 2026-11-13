@@ -24,7 +24,7 @@ namespace FitCheck
                 case Ravi:return new PlayerAppearance{skin=3,hair=2,hairColor=1,expression=2};
                 case Joana:return new PlayerAppearance{skin=4,hair=1,hairColor=PlayerAppearance.HotPinkHairColor,expression=1,appearanceBase=1};
                 case Teo:return new PlayerAppearance{skin=1,hair=5,hairColor=PlayerAppearance.CopperHairColor,expression=3};
-                default:return null;
+                default:return SpecialCustomers.Appearance(profile);
             }
         }
 
@@ -43,12 +43,7 @@ namespace FitCheck
                 new[]{"Ajuda a cortar a luz quando olho pelo visor.","Lisa ou com um detalhe pequeno. A alça já cruza o peito."},
                 new[]{"Usar calça","Usar boné","Parte de cima lisa ou com estampa discreta"},
                 "Primeiro retrato da noite saiu antes de eu ligar a câmera.","Praça"),f=>new[]{!f[1].shorts,f[3]?.cap==true,f[0].discreet}),
-            new Encounter(1,1,new CustomerRequest("DAY04_LIA_PRINT","Lia",
-                "Hoje é oficina de colagem. Quero trazer a mistura de referências de SIDE B, mas já vai ter papel colorido pra todo lado. Em cima quero estampa discreta. Entre cima e baixo, contraste de luz.",
-                new[]{"Como levar SIDE B pra oficina?","Onde entra o contraste?"},
-                new[]{"Uma peça da coleção já dá o recado. Pode entrar no tênis, na calça, onde couber.","Quero uma metade clara e a outra escura, pra foto ficar fácil de ler."},
-                new[]{"Pelo menos uma peça SIDE B","Parte de cima lisa ou com estampa discreta","Contraste claro/escuro entre cima e baixo"},
-                "Cola na mão, ideia na parede.","Galeria"),f=>new[]{Drop(f,"SIDE B"),f[0].discreet,f[0].light!=f[1].light}),
+            SpecialCustomers.Encounter(11),
             new Encounter(Teo,4,new CustomerRequest("DAY05_TEO_SOUND","Téo",
                 "Vim do ensaio direto pro teste de som. Vou passar a noite levantando caixa. Em cima, deixa largo. A cabeça precisa ficar livre. Quero um toque daquela coleção que tem cara de rua acesa à noite.",
                 new[]{"Qual coleção combina com o teste?","O que você vai usar na cabeça?"},
@@ -61,18 +56,8 @@ namespace FitCheck
                 new[]{"A parte de cima. Na pista, é por ali que a galera acompanha o movimento.","Vou demonstrar os passos e quero a canela livre."},
                 new[]{"Usar bermuda","Parte de cima clara","Usar boné"},
                 "A aula terminou. A pista ficou aberta.","Rua do baile"),f=>new[]{f[1].shorts,f[0].light,f[3]?.cap==true}),
-            new Encounter(2,2,new CustomerRequest("DAY05_BRENO_REPAIR","Breno ‘Pico’",
-                "Hoje eu vou ajudar a pintar o banco da quadra. Quero camiseta folgada e calça pra ajoelhar sem ficar ralando a perna. Se entrar COMMON GROUND, melhor ainda.",
-                new[]{"Por que calça hoje?","O que fica do visual da quadra?"},
-                new[]{"Vou lixar e pintar no chão. Quero proteger as pernas.","Uma peça COMMON GROUND já carrega essa ideia de fazer junto."},
-                new[]{"Usar calça","Parte de cima larga","Pelo menos uma peça COMMON GROUND"},
-                "Era só pintar o banco. A quadra inteira apareceu.","Quadra"),f=>new[]{!f[1].shorts,f[0].loose,Drop(f,"COMMON GROUND")}),
-            new Encounter(4,0,new CustomerRequest("DAY06_JOTA_MARKET","Seu Jota",
-                "Hoje vou organizar a troca de mudas na praça. Quero calça, camiseta clara e um visual com mais neutros. O verde das plantas já dá conta da cor.",
-                new[]{"Quais peças entram na conta dos neutros?","Por que a camiseta clara?"},
-                new[]{"Pensa no trio de cima, de baixo e tênis. Quero pelo menos duas neutras.","Vou ficar perto do poste recebendo a turma. Assim me acham de longe."},
-                new[]{"Usar calça","Parte de cima clara","Maioria de peças neutras"},
-                "Trouxe três mudas. Voltei com cinco histórias.","Praça"),f=>new[]{!f[1].shorts,f[0].light,f.Take(3).Count(g=>g.neutral)>=2}),
+            SpecialCustomers.Encounter(14),
+            SpecialCustomers.Encounter(15),
             new Encounter(Dandara,6,new CustomerRequest("DAY06_DANDARA_GALLERY","Dandara",
                 "A Lia chamou a gente pra ver as fotos da quadra na galeria. Quero ir de bermuda, com estampa pequena em cima. Deixa a cabeça livre que hoje eu arrumei o cabelo.",
                 new[]{"Como entra a estampa?","Vai querer boné?"},

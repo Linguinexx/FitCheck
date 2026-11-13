@@ -68,7 +68,7 @@ namespace FitCheck
             }
             for(int i=0;i<3;i++)Block(new Vector3(-4.5f+i*.7f,2.92f,-4.23f),new Vector3(.45f,.30f,.42f),i%2==0?Kaos:Cream,"Paper");
             DecorateHome(walnut,petrol);
-            BuildHomeMirror();
+            BuildHomeMirror();BuildHomeMirrorTrim();
             BuildCat(new Vector3(-3.4f,1.055f,1.6f),240,companion??new PetAppearance());
             GeometryBatches=batches.Count;FinishGeometry();motionRigVersion=ResidentArtRevision;
         }
@@ -89,39 +89,8 @@ namespace FitCheck
         }
         public bool RenderHomeMirror(Camera source)
         {
-            if(!IsHome||homeMirrorMaterial==null||!PlayerBodyReady||Time.unscaledTime<nextHomeMirrorFrame)return false;
-            var center=transform.TransformPoint(HomeMirrorCenter);
-            var eye=source.transform.position;
-            float distance=center.x-eye.x;
-            if(distance<.1f)return false;
-            GeometryUtility.CalculateFrustumPlanes(source,mirrorViewPlanes);
-            if(!GeometryUtility.TestPlanesAABB(mirrorViewPlanes,new Bounds(center,new Vector3(.05f,2*HomeMirrorHalfHeight,2*HomeMirrorHalfWidth))))return false;
-            nextHomeMirrorFrame=Time.unscaledTime+1f/15;
-            if(homeMirrorCamera==null){
-                var target=new RenderTexture(128,352,16,RenderTextureFormat.ARGB32){name="Reflexo do quarto",filterMode=FilterMode.Point};
-                assets.Add(target);
-                var cameraObject=new GameObject("Câmera do espelho");cameraObject.transform.SetParent(transform,false);
-                homeMirrorCamera=cameraObject.AddComponent<Camera>();homeMirrorCamera.enabled=false;
-                homeMirrorCamera.clearFlags=CameraClearFlags.SolidColor;homeMirrorCamera.backgroundColor=new Color(.065f,.06f,.07f);
-                homeMirrorCamera.allowHDR=false;homeMirrorCamera.allowMSAA=false;homeMirrorCamera.targetTexture=target;
-                homeMirrorMaterial.mainTexture=target;
-            }
-            var reflectedEye=eye+Vector3.right*(2*distance);
-            homeMirrorCamera.transform.SetPositionAndRotation(reflectedEye,Quaternion.LookRotation(Vector3.left,Vector3.up));
-            // Fit the frustum to the glass and clip the wall behind it.
-            float near=distance+.015f,scale=near/distance;
-            float x=center.z-eye.z,y=center.y-eye.y;
-            homeMirrorCamera.cullingMask=source.cullingMask;
-            float far=distance+Mathf.Sqrt(HomeBounds.width*HomeBounds.width+HomeBounds.height*HomeBounds.height)+2;
-            homeMirrorCamera.nearClipPlane=near;homeMirrorCamera.farClipPlane=far;
-            homeMirrorCamera.projectionMatrix=Matrix4x4.Frustum((x-HomeMirrorHalfWidth)*scale,(x+HomeMirrorHalfWidth)*scale,
-                (y-HomeMirrorHalfHeight)*scale,(y+HomeMirrorHalfHeight)*scale,near,far);
-            EnsurePlayerPose();FrameEmoteArms(true);
-            try{
-                foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(PlayerFaceVisible(piece));
-                homeMirrorCamera.Render();
-            }finally{FramePlayerForCamera(source,false);}
-            return true;
+            return IsHome&&RenderWallMirror(source,HomeMirrorCenter,HomeMirrorHalfWidth,HomeMirrorHalfHeight,-1,HomeBounds,
+                homeMirrorMaterial,ref homeMirrorCamera,ref nextHomeMirrorFrame,"Reflexo do quarto",false);
         }
         void BuildHomePhone()
         {

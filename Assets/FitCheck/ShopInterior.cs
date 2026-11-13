@@ -15,7 +15,7 @@ namespace FitCheck
         public void BuildShop(StudioView studio,int customer=0)
         {
             interior=true;shopCustomerIndex=customer;transform.position=new Vector3(400,0,0);
-            ShopShell();ShopFixtures();ShopFittingRoom();ShopMerchandise(studio);
+            ShopShell();ShopFixtures();ShopFittingRoom();BuildShopMirror();ShopMerchandise(studio);
             BakeResident(studio,customer,Catalog.Default,new Vector3(.65f,-.055f,-4.3f),0,false,true);
             residents[0].root.name="Cliente — "+DayOne.Customers[customer].name;
             SetCustomerVisible(false);

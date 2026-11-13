@@ -28,9 +28,9 @@ namespace FitCheck
                 for(int i=0;i<DayProgress.TotalCustomers;i++){
                     Begin();question=i%2;outfit=(string[])solutions[i].Clone();Apply();EnterDressing();
                     if(i==3){
-                        paused=true;AdvanceClock(10);if(remaining!=120)throw new Exception("Pausa não congelou timer");paused=false;
-                        stage=Stage.Confirm;AdvanceClock(5);if(remaining!=115)throw new Exception("Confirmação congelou timer");
-                        AdvanceClock(115);if(progress.posts.Count!=4)throw new Exception("Tempo esgotado não enviou");
+                        paused=true;AdvanceClock(10);if(remaining!=30)throw new Exception("Pausa não congelou timer");paused=false;
+                        stage=Stage.Confirm;AdvanceClock(5);if(remaining!=25)throw new Exception("Confirmação congelou timer");
+                        AdvanceClock(25);if(progress.posts.Count!=4)throw new Exception("Tempo esgotado não enviou");
                     }else Submit();
                     var saved=ProgressStore.Load(DayPath);if(saved.posts.Count!=i+1||!File.Exists(saved.posts[i].photo))throw new Exception("Atendimento não persistido");
                     customer=i;record=saved.posts[i];Continue();if(photo==null||photo.width!=480)throw new Exception("Foto não recuperada");

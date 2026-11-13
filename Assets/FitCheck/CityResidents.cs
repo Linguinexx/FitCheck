@@ -22,7 +22,7 @@ namespace FitCheck
         }
         [System.Serializable] sealed class Resident
         {
-            public Transform root,shadow;public Vector3 home;public Quaternion facing,homeFacing;
+            public Transform root;public Vector3 home;public Quaternion facing,homeFacing;
             public List<ResidentPart> parts=new List<ResidentPart>();
             public Vector2[] path;public int target;public float cycle,blinkClock,wait,phase,speed,blend,poseDelay;public bool walking;
             public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;public int idleStyle;public Transform prop;public AvatarExpression expression;
@@ -30,10 +30,11 @@ namespace FitCheck
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
         public bool CustomerSpeaking;
-        const int ResidentArtRevision=38;
+        const int ResidentArtRevision=39;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
-            if(IsHome&&(homeArtBed==null||homeArtSide==null||homeArtRecords==null))return false;
+            if(IsHome&&(homeArtBed==null||homeArtSide==null||homeArtRecords==null||homeMirrorTrim==null))return false;
+            if(IsInterior&&!IsHome&&shopMirrorMaterial==null)return false;
             if(IsInterior&&(cat==null||!cat.Ready))return false;
             if(!IsInterior&&(cat==null||!cat.Ready||!cat.IsFuba))return false;
             if(motionRigVersion!=ResidentArtRevision||residents.Count!=(IsHome?0:IsInterior?2:StreetResidentCount+fitFeedResidents.Count))return false;
@@ -106,7 +107,6 @@ namespace FitCheck
                 float dip=actor.blend*(.035f+.005f*Mathf.Cos(actor.phase*Mathf.PI*4));
                 pos.y=actor.home.y-dip;
                 actor.root.localPosition=pos;actor.root.localRotation=actor.facing;
-                if(actor.shadow!=null)actor.shadow.localPosition=new Vector3(pos.x,.005f,pos.z);
                 if(ShouldPoseResident(actor,delta))PoseResident(actor,index,dip);
             }
             TickWatcher(delta);

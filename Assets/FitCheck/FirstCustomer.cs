@@ -13,10 +13,11 @@ namespace FitCheck
         string[] answers=>Customer.answers;
         enum Stage { Welcome, Dialogue, Dressing, Confirm, Leaving, Post, Summary, Home, Retrospective, City, CharacterCreator, Title }
         DayProgress progress=new DayProgress(); int customer;
-        int replayIndex=-1; bool fromHome; float remaining=120; bool timerWarned;
+        int replayIndex=-1; bool fromHome; float remaining=30; bool timerWarned;
         string[] inventory;
         string[] ActiveInventory=>inventory??progress.Available;
-        bool Timed=>customer==3;
+        float FittingSeconds=>SpecialCustomers.Seconds(customer);
+        bool Timed=>FittingSeconds>0;
         bool IsAvailable(Garment g)=>ActiveInventory.Contains(g.id);
 
         Stage stage; Attempt record=new Attempt(); string[] outfit=Catalog.Default; int question=-1, category;
@@ -85,7 +86,7 @@ namespace FitCheck
                 else UpdateShopSequence(Time.unscaledDeltaTime);
                 if(stage==Stage.City){
                     city.FramePlayerForCamera(cam,ShopSequenceActive);
-                    if(!paused&&city.IsHome)city.RenderHomeMirror(cam);
+                    if(!paused){if(city.IsHome)city.RenderHomeMirror(cam);else if(city.IsInterior)city.RenderShopMirror(cam,ShopSequenceActive);}
                 }
                 return;
             }
@@ -118,7 +119,7 @@ namespace FitCheck
         {
             if(!paused&&Timed&&(stage==Stage.Dressing||stage==Stage.Confirm)){
                 remaining=Mathf.Max(0,remaining-delta);
-                if(remaining<=30&&!timerWarned){timerWarned=true;message="Últimos 30 segundos!";Sound(2);}
+                if(remaining<=10&&!timerWarned){timerWarned=true;message="Últimos 10 segundos!";Sound(2);}
                 if(remaining<=0)Submit();
             }
         }
@@ -127,19 +128,19 @@ namespace FitCheck
             if(pendingPhotoBytes!=null&&!TrySave())return;
             if(progress.DayComplete){stage=Stage.Summary;return;}
             message="";
-            replayIndex=-1;fromHome=false;inventory=progress.Available;remaining=120;timerWarned=false;
+            replayIndex=-1;fromHome=false;inventory=progress.Available;remaining=FittingSeconds>0?FittingSeconds:120;timerWarned=false;
             customer=progress.posts.Count; outfit=Catalog.Default; question=-1; showRequest=false; showDrops=false;
             detailsScroll=Vector2.zero; rotation=-12;distance=7.2f;stage=Stage.Dialogue;Apply();UpdateCamera();
             mannequin.name=Customer.name+" — manequim provisório";
         }
         void SaveDay(){if(activeSaveSlot<0&&storageOverride==null)throw new InvalidOperationException("Selecione um save antes de salvar.");ProgressStore.Save(DayPath,progress);}
-        void EnterDressing(){stage=Stage.Dressing;remaining=120;timerWarned=false;showRequest=false;}
+        void EnterDressing(){stage=Stage.Dressing;remaining=FittingSeconds>0?FittingSeconds:120;timerWarned=false;showRequest=false;}
         void GoHome(){if(DeferLoading(GoHome))return;shopService=false;if(!playerAppearance.created){OpenCreator(Stage.Home);return;}fromHome=true;replayIndex=-1;showWardrobe=false;EnterHome();}
         void Replay()
         {
             shopService=false;
             replayIndex=customer;record=progress.posts[customer];inventory=(string[])record.available.Clone();
-            outfit=(string[])record.outfit.Clone();question=record.question;remaining=120;timerWarned=false;
+            outfit=(string[])record.outfit.Clone();question=record.question;remaining=FittingSeconds>0?FittingSeconds:120;timerWarned=false;
             rotation=-12;distance=7.2f;showRequest=false;showDrops=false;stage=Stage.Dressing;Apply();
             message="Repetição: peças, pergunta e tempo do atendimento original.";
         }

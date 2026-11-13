@@ -1,0 +1,9 @@
+FIT CHECK — WINDOWS TESTE 09
+
+Extraia o ZIP inteiro e execute FitCheck.exe; mantenha FitCheck_Data, MonoBleedingEdge e DLLs junto.
+
+WASD andar; Shift correr; mouse olhar; E interagir; F decorar pelo catálogo do quarto ou loja fechada; P pausar; Tab soltar/capturar cursor. Emotes 1–5; 0 encerra.
+
+Crie ou continue um dos três saves. Comece em casa, caminhe ao bairro e à loja; abra o expediente no balcão. Aba Companheiro na criação/edição. Espelho na decoração do quarto.
+
+Saves anteriores preservados; nenhum progresso de teste acompanha a entrega. O jogo continua com sete dias e 21 encontros.

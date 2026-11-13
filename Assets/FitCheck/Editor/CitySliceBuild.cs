@@ -22,6 +22,8 @@ namespace FitCheck.Editor
         {BuildTo("Windows-Test07");}
         public static void BuildTest08()
         {DropCatalogChecks.Validate();BuildTo("Windows-Test08");}
+        public static void BuildTest09()
+        {CampaignChecks.Validate();DropCatalogChecks.Validate();BuildTo("Windows-Test09");}
         static void BuildTo(string folder)
         {
             AmbientSurfaceImporter.PrepareAll();

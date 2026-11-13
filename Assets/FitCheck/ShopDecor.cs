@@ -79,7 +79,7 @@ namespace FitCheck
             if(city.IsHome){FrameHomeDecor();return;}
             var positions=new[]{new Vector3(.6f,3.8f,-4.1f),new Vector3(1.5f,3.1f,.2f),new Vector3(-3,3,3),new Vector3(-4.9f,2.2f,5.9f),new Vector3(2,4.1f,-2.5f),new Vector3(3.5f,2.8f,4.6f)};
             var targets=new[]{new Vector3(-.5f,2.1f,4.6f),new Vector3(-4.9f,1.8f,5.1f),new Vector3(-.8f,3.9f,8.7f),new Vector3(-4.9f,2.1f,8.59f),new Vector3(0,0,1.4f),new Vector3(7.5f,1.1f,8.1f)};
-            FrameDecorCamera(city.transform.position+positions[decorView],city.transform.position+targets[decorView],decorView==0?66:55);city.FramePlayerForCamera(cam,true);
+            FrameDecorCamera(city.transform.position+positions[decorView],city.transform.position+targets[decorView],decorView==0?66:55);city.FramePlayerForCamera(cam,true);city.RenderShopMirror(cam,true);
         }
         void CloseShopDecor(bool save)
         {

@@ -84,7 +84,6 @@ namespace FitCheck
             transform.position=Origin;
             BuildAtmosphere();Landscape();DripLabFacade();Neighbours();CityIdentity();WestNeighbourhood();StreetCulture();OppositeShopFrontage();NightDetails();StreetArtDisplays();NeighbourhoodPlanting();BuildNeighbourhoodCourtyards();BuildNightLighting();GeometryBatches=batches.Count;FinishGeometry();
             marker=Disc("Destino na calçada",.27f,.27f,.19f,new Color(.36f,.76f,.65f));marker.gameObject.SetActive(false);
-            shadow=Disc("Sombra do funcionário",.65f,.36f,0,new Color(.43f,.40f,.39f));
             BakeResident(studio,1,new[]{"CG_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-15.4f,-.055f,2.8f),-22);
             BakeResident(studio,8,new[]{"CG_TOP_02","SB_BOTTOM_02","CG_SHOES_01",""},new Vector3(15.7f,-.055f,-1.5f),32);
             BakeResident(studio,3,new[]{"SB_TOP_01","SB_BOTTOM_01","SB_SHOES_01",""},new Vector3(-20,-.055f,-8.5f),-90);
@@ -126,8 +125,6 @@ namespace FitCheck
                 if(wallLean)studio.SetShopAttitude();
                 var actor=CopyAvatar(studio,"Morador — "+DayOne.Customers[customer].name,position,yaw,false);residents.Add(actor);
                 if(wallLean)ConfigureShopLean(actor);
-                var blob=Disc("Sombra do morador",.63f,.35f,0,new Color(.43f,.40f,.39f));blob.localPosition=new Vector3(position.x,.005f,position.z);
-                actor.shadow=blob;
             }finally{studio.PlayerLook=oldLook;studio.HairOverride=oldHair;studio.ExpressionOverride=oldExpression;studio.PreviewProportions=oldPreview;studio.TallPreview=oldTall;studio.Avatar.rotation=rotation;}
         }
         Resident CopyAvatar(StudioView studio,string name,Vector3 position,float yaw,bool hideHead)

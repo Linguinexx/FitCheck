@@ -84,7 +84,7 @@ namespace FitCheck
                     if(i==190)SaveFirstPersonFrame(Path.Combine(folder,"service-fitting-entry.png"));
                 }
                 if(stage!=Stage.Dressing||campaignBeforePreview!=null||question!=1||progress.posts.Count!=0||remaining!=120)throw new Exception("Provador perdeu campanha/pergunta ou começou relógio antes da montagem");
-                if(!shopDressingInStore||!city.gameObject.activeSelf||city.CustomerVisible||!city.CustomerShadowVisible||!city.PlayerBodyVisible||!city.PlayerHeadVisible||Vector3.Distance(mannequin.position,city.transform.position+CityView.ShopDressingPosition)>.001f)throw new Exception("Montagem saiu do provador ou perdeu a presença do cliente/jogador");
+                if(!shopDressingInStore||!city.gameObject.activeSelf||city.CustomerVisible||!city.PlayerBodyVisible||!city.PlayerHeadVisible||Vector3.Distance(mannequin.position,city.transform.position+CityView.ShopDressingPosition)>.001f)throw new Exception("Montagem saiu do provador, recriou sombra artificial ou perdeu a presença do cliente/jogador");
                 for(int slot=0;slot<3;slot++)if(outfit[slot]!=Catalog.ArrivalPiece(slot).id)throw new Exception("Peça de chegada trocada ao abrir o provador");
                 for(int frame=0;frame<30;frame++){
                     var beforeCamera=cam.transform.position;shopDressingTime+=1/30f;FrameShopDressing();

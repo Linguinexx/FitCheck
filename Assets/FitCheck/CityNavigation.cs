@@ -22,7 +22,7 @@ namespace FitCheck
         public float ViewPitch {get;private set;}=-5;
         public const float LookSensitivity=2.8f;
         public float MouseLookScale=1;
-        Transform marker,shadow;
+        Transform marker;
         public string Place=>NeighbourhoodName(Position);
         public bool Free(Vector2 p){return WorldFree(p)&&!ResidentBlocks(p)&&!VehicleBlocks(p);}
         bool WorldFree(Vector2 p,float clearance=0)
@@ -68,7 +68,7 @@ namespace FitCheck
         {
             Position=IsHome?HomeSpawn:IsInterior?ShopSpawn:Spawn;route.Clear();waypoint=0;Walking=false;SprintRequested=false;Running=false;ViewYaw=IsHome?310:IsInterior?0:46;ViewPitch=IsHome?12:-5;
             avatar.position=transform.position+new Vector3(Position.x,-.055f,Position.y);avatar.rotation=Quaternion.Euler(0,-22,0);
-            if(marker!=null)marker.gameObject.SetActive(false);if(shadow!=null)shadow.gameObject.SetActive(false);
+            if(marker!=null)marker.gameObject.SetActive(false);
         }
         public void Step(Vector2 input,float delta,bool paused,Transform avatar)
         {
@@ -84,7 +84,6 @@ namespace FitCheck
             var movement=Position-old;Walking=movement.sqrMagnitude>.000001f;avatar.position=transform.position+new Vector3(Position.x,-.055f,Position.y);
             if(Walking){var facing=Quaternion.LookRotation(new Vector3(-movement.x,0,-movement.y));avatar.rotation=Quaternion.Slerp(avatar.rotation,facing,1-Mathf.Exp(-delta*12));}
             if(waypoint>=route.Count&&marker!=null)marker.gameObject.SetActive(false);
-            if(shadow!=null)shadow.localPosition=new Vector3(Position.x,.005f,Position.y);
             StepPlayerBody(movement.magnitude,delta);
         }
         public void Frame(Camera camera,bool reduced,float delta)

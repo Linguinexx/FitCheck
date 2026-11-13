@@ -40,7 +40,6 @@ namespace FitCheck
             FrameEmoteArms(external);
             bool showHead=external&&Vector3.Distance(camera.transform.position,playerBody.root.TransformPoint(new Vector3(0,2.8f,0)))>1.25f;
             foreach(var piece in playerHeadPieces)if(piece!=null)piece.SetActive(showHead&&PlayerFaceVisible(piece));
-            if(shadow!=null){shadow.localPosition=new Vector3(Position.x,.005f,Position.y);shadow.gameObject.SetActive(external&&showHead);}
         }
         void StepPlayerBody(float distance,float delta)
         {

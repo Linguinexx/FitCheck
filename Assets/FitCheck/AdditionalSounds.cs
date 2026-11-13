@@ -13,25 +13,26 @@ namespace FitCheck
             public float wait,interval;
             public int next;
         }
-        StreetSound[] streetSounds;
+        StreetSound[] streetSounds;CityView emoteSoundCity;int heardEmoteMoves;
         void BuildAdditionalSounds()
         {
             wardrobeSounds=new[]{Clip("equip_tecido_01"),Clip("equip_tecido_02"),Clip("equip_tecido_03")};
             clickSounds=new[]{Clip("ui_click_01"),Clip("ui_click_02")};
             var banks=new[]{
                 new[]{Clip("car_pass_01"),Clip("car_pass_02"),Clip("car_pass_03")},
-                new[]{Clip("court_ball_01"),Clip("court_ball_02"),Clip("court_squeak_01")},
+                new[]{Clip("court_ball_01"),Clip("court_ball_02"),Clip("court_squeak_01"),Clip("small_applause_01")},
                 new[]{Clip("workshop_tool_01"),Clip("workshop_tool_02")},
-                new[]{Clip("barber_clipper_01"),Clip("barber_clipper_02")}
+                new[]{Clip("barber_clipper_01"),Clip("barber_clipper_02")},
+                new[]{Clip("skate_pass_01"),Clip("skate_pass_02")},new[]{Clip("laundry_machine")},new[]{Clip("shop_fridge")},new[]{Clip("car_horn_01")}
             };
-            var positions=new[]{Vector3.zero,new Vector3(-76,1.2f,42),new Vector3(-31.5f,1.5f,5.1f),new Vector3(-98,1.5f,6.8f)};
+            var positions=new[]{Vector3.zero,new Vector3(-76,1.2f,42),new Vector3(-31.5f,1.5f,5.1f),new Vector3(-98,1.5f,6.8f),new Vector3(-80,1,39),new Vector3(-85,1.3f,6.3f),new Vector3(-112,1.3f,6),Vector3.zero};
             streetSounds=new StreetSound[banks.Length];
             for(int i=0;i<banks.Length;i++){
-                var node=new GameObject("Som local — "+new[]{"Trânsito","Quadra","Oficina","Barbearia"}[i]);
+                var node=new GameObject("Som local — "+new[]{"Trânsito","Quadra","Oficina","Barbearia","Skate","Lavanderia","Mercearia","Buzina"}[i]);
                 node.transform.SetParent(transform,false);node.transform.position=CityView.Origin+positions[i];
                 var source=node.AddComponent<AudioSource>();source.playOnAwake=false;source.loop=false;
-                source.spatialBlend=1;source.rolloffMode=AudioRolloffMode.Linear;source.minDistance=2;source.maxDistance=i==0?24:16;source.volume=i==0?.24f:.30f;
-                streetSounds[i]=new StreetSound{source=source,clips=banks[i],wait=2+i*1.7f,interval=i==0?12:8+i*2};
+                source.spatialBlend=1;source.rolloffMode=AudioRolloffMode.Linear;source.minDistance=2;source.maxDistance=i==0?24:16;source.volume=i==0?.24f:i>=5?.12f:.25f;
+                streetSounds[i]=new StreetSound{source=source,clips=banks[i],wait=2+i*1.7f,interval=i==7?48:i==0?12:8+i*3};
             }
         }
         AudioClip NextClickSound()
@@ -44,11 +45,13 @@ namespace FitCheck
         }
         void TickAdditionalSounds(float delta)
         {
+            if(emoteSoundCity!=city){emoteSoundCity=city;heardEmoteMoves=city==null?0:city.PlayerEmoteSerial;}
+            if(city!=null&&heardEmoteMoves!=city.PlayerEmoteSerial){heardEmoteMoves=city.PlayerEmoteSerial;if(city.PlayerEmoteActive)PlayClip(Clip("equip_tecido_03"),.22f);}
             bool active=stage==Stage.City&&city!=null&&!city.IsInterior&&city.gameObject.activeInHierarchy&&!paused&&!mutedAudio&&!loadingActive;
             for(int i=0;i<streetSounds.Length;i++){
                 var spot=streetSounds[i];
                 bool visible=active;
-                if(visible&&i==0){visible=city.TryTrafficAudioPosition(out var position);if(visible)spot.source.transform.position=position;}
+                if(visible&&(i==0||i==7)){visible=city.TryTrafficAudioPosition(out var position);if(visible)spot.source.transform.position=position;}
                 if(!visible){if(spot.source.isPlaying)spot.source.Stop();continue;}
                 spot.wait=Mathf.Max(0,spot.wait-delta);
                 if(spot.wait>0||spot.source.isPlaying||Vector3.Distance(cam.transform.position,spot.source.transform.position)>spot.source.maxDistance)continue;

@@ -31,3 +31,7 @@ Foram integrados 18 efeitos do mesmo ZIP entregue pelo grupo. Origem e hashes em
 - Três passagens de carro, duas batidas de bola, rangido de tênis na quadra, duas ferramentas da oficina e duas variações de máquina de barbear.
 
 Os sons da cidade são posicionados no trânsito, quadra, oficina e barbearia, com distância máxima, intervalos e interrupção em pausa, mute ou saída do bairro. O manifesto do pacote fornecido declara esses efeitos como gerados para o projeto.
+
+## Companheiros e bairro — 12/11/2026
+
+Dez arquivos adicionais do mesmo ZIP recebido: ronronado, dois miados alternativos, buzina, dois skates, máquina da lavanderia, geladeira, aplausos da quadra e retorno de interface. Origem/hash e conversões em COMPANION_AND_CITY_SOUNDS.json. Cópias mono PCM/22.050 Hz; originais intactos. Gestos usam também os tecidos já integrados; palmas originais sintetizadas permanecem sincronizadas. O latido PetBark.wav continua sendo síntese original de tools/make_pet_bark.py; não havia gravação de cachorro no pacote recebido.

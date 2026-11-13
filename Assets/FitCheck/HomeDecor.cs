@@ -6,11 +6,11 @@ namespace FitCheck
 {
     [Serializable] public class HomeDecor
     {
-        public int version=1,wall,accent,floor,bedding,rug,poster=2,posterSide=5,posterRecords;
+        public int version=1,wall,accent,floor,bedding,rug,poster=2,posterSide=5,posterRecords,mirror;
         public bool plants=true;
-        public HomeDecor Copy()=>new HomeDecor{version=version,wall=wall,accent=accent,floor=floor,bedding=bedding,rug=rug,poster=poster,posterSide=posterSide,posterRecords=posterRecords,plants=plants};
+        public HomeDecor Copy()=>new HomeDecor{version=version,wall=wall,accent=accent,floor=floor,bedding=bedding,rug=rug,poster=poster,posterSide=posterSide,posterRecords=posterRecords,mirror=mirror,plants=plants};
         public void Validate(){
-            if(version!=1||wall<0||wall>7||accent<0||accent>7||floor<0||floor>2||bedding<0||bedding>7||rug<0||rug>7||poster<0||poster>=GalleryArt.Names.Length||posterSide<0||posterSide>=GalleryArt.Names.Length||posterRecords<0||posterRecords>=GalleryArt.Names.Length)throw new ArgumentException("Decoração do quarto inválida");
+            if(mirror<0||mirror>=CityView.MirrorStyleNames.Length||version!=1||wall<0||wall>7||accent<0||accent>7||floor<0||floor>2||bedding<0||bedding>7||rug<0||rug>7||poster<0||poster>=GalleryArt.Names.Length||posterSide<0||posterSide>=GalleryArt.Names.Length||posterRecords<0||posterRecords>=GalleryArt.Names.Length)throw new ArgumentException("Decoração do quarto inválida");
         }
     }
     public static class HomeDecorStore
@@ -41,7 +41,7 @@ namespace FitCheck
             for(int i=0;i<3;i++)Block(HomeDecorBook+new Vector3(-.08f+i*.08f,.051f,-.09f),new Vector3(.042f,.009f,.055f),Ink,"Paper",.003f);
         }
         public void ApplyHomeDecor(HomeDecor value){
-            if(!IsHome)return;value.Validate();
+            if(!IsHome)return;value.Validate();ApplyHomeMirrorStyle(value.mirror);
             foreach(var renderer in GetComponentsInChildren<MeshRenderer>(true)){
                 if(!renderer.name.StartsWith("Arquitetura — "))continue;
                 var filter=renderer.GetComponent<MeshFilter>();if(filter==null)continue;var mesh=filter.sharedMesh;
@@ -81,8 +81,8 @@ namespace FitCheck
     public partial class FirstCustomer
     {
         HomeDecor homeDecorDraft,homeDecorBefore,savedHomeDecor;string homeDecorPathLoaded,homeDecorError="";int homeDecorView,homeDecorTab,homeDecorArt;float homeDecorSavedUntil;
-        static readonly Vector3[] HomeDecorPreviewPositions={new Vector3(3.7f,3.4f,-2.9f),new Vector3(.6f,3.05f,.15f),new Vector3(.4f,2.8f,-.25f),new Vector3(1.7f,2.8f,-2.5f),new Vector3(-1.5f,2.8f,.2f),new Vector3(3.2f,3.8f,-2.8f)};
-        static readonly Vector3[] HomeDecorPreviewTargets={new Vector3(-.55f,1.65f,1.45f),new Vector3(-3.4f,1.4f,2.6f),new Vector3(-3.8f,1.6f,-2.65f),new Vector3(4.9f,1.8f,-.4f),new Vector3(-5.4f,2.8f,-.15f),new Vector3(.2f,-.03f,-.42f)};
+        static readonly Vector3[] HomeDecorPreviewPositions={new Vector3(3.7f,3.4f,-2.9f),new Vector3(.6f,3.05f,.15f),new Vector3(.4f,2.8f,-.25f),new Vector3(1.7f,2.8f,-2.5f),new Vector3(-1.5f,2.8f,.2f),new Vector3(3.2f,3.8f,-2.8f),new Vector3(-.2f,2.1f,.8f)};
+        static readonly Vector3[] HomeDecorPreviewTargets={new Vector3(-.55f,1.65f,1.45f),new Vector3(-3.4f,1.4f,2.6f),new Vector3(-3.8f,1.6f,-2.65f),new Vector3(4.9f,1.8f,-.4f),new Vector3(-5.4f,2.8f,-.15f),new Vector3(.2f,-.03f,-.42f),new Vector3(5.39f,1.83f,1.36f)};
         string HomeDecorPath=>Path.Combine(SessionFolder,"home-style.json");
         HomeDecor CurrentHomeDecor{get{
             if(savedHomeDecor==null||homeDecorPathLoaded!=HomeDecorPath){homeDecorPathLoaded=HomeDecorPath;try{savedHomeDecor=HomeDecorStore.Load(homeDecorPathLoaded);}catch{savedHomeDecor=new HomeDecor();message="Não foi possível ler a decoração do quarto.";}}
@@ -103,7 +103,7 @@ namespace FitCheck
         void CloseHomeDecor(bool save){
             if(!showShopDecor||homeDecorDraft==null)return;
             if(save)try{HomeDecorStore.Save(HomeDecorPath,homeDecorDraft);savedHomeDecor=homeDecorDraft.Copy();message="Seu quarto foi salvo.";homeDecorSavedUntil=Time.unscaledTime+3;}catch(Exception error){homeDecorError="Não foi possível salvar. Tente novamente ou cancele.\n"+error.Message;return;}
-            city.ApplyHomeDecor(save?homeDecorDraft:homeDecorBefore);showShopDecor=false;homeDecorDraft=null;cityFreeCursor=false;cityDragLook=false;cityLookCaptured=false;decorCameraReady=false;
+            PlayClip(Clip(save?"ui_confirm":"ui_back"),.6f);city.ApplyHomeDecor(save?homeDecorDraft:homeDecorBefore);showShopDecor=false;homeDecorDraft=null;cityFreeCursor=false;cityDragLook=false;cityLookCaptured=false;decorCameraReady=false;
             city.Frame(cam,reducedMotion,0);city.FramePlayerForCamera(cam,false);
         }
         void DrawHomeDecorNotice(){
@@ -113,7 +113,7 @@ namespace FitCheck
         void HomeDecorUI(){
             DrawKaosPanel(new Rect(30,108,570,766));Txt(new Rect(55,130,510,48),"Seu canto. Seu jeito.",heading);
             Txt(new Rect(55,191,510,50),"Cores, tecidos e artes.\nVeja tudo no próprio quarto.",caption,muted);
-            for(int i=0;i<3;i++)if(Tap(new Rect(55+i*173,248,165,42),new[]{"Ambiente","Têxteis","Artes"}[i],homeDecorTab==i)){homeDecorTab=i;homeDecorView=i==1?1:i==2?(homeDecorArt==0?1:homeDecorArt==1?4:3):0;FrameHomeDecor();}
+            for(int i=0;i<4;i++)if(Tap(new Rect(55+i*130,248,122,42),new[]{"Ambiente","Têxteis","Artes","Espelho"}[i],homeDecorTab==i)){homeDecorTab=i;homeDecorView=i==3?6:i==1?1:i==2?(homeDecorArt==0?1:homeDecorArt==1?4:3):0;FrameHomeDecor();}
             var names=new[]{"Original","Jade","Uva","Rosa","Azul","Âmbar","Terracota","Carvão"};
             if(homeDecorTab<2){
                 int[] rows=homeDecorTab==0?new[]{0,1,2}:new[]{3,4};float y=315;
@@ -129,7 +129,7 @@ namespace FitCheck
                 }
                 if(homeDecorTab==0&&Tap(new Rect(55,666,510,42),homeDecorDraft.plants?"Planta: presente":"Planta: recolhida")){homeDecorDraft.plants=!homeDecorDraft.plants;city.ApplyHomeDecor(homeDecorDraft);FocusHomeDecor(6);}
                 if(homeDecorTab==1)Txt(new Rect(55,604,510,60),"As texturas e os detalhes dos tecidos\ncontinuam presentes em cada cor.",caption,muted);
-            }else{
+            }else if(homeDecorTab==2){
                 for(int i=0;i<3;i++)if(Tap(new Rect(55+i*173,314,165,40),new[]{"Da cama","Da parede","Dos discos"}[i],homeDecorArt==i)){homeDecorArt=i;homeDecorView=i==0?1:i==1?4:3;FrameHomeDecor();}
                 Txt(new Rect(55,370,510,26),"Quadro",caption);
                 int selected=homeDecorArt==0?homeDecorDraft.poster:homeDecorArt==1?homeDecorDraft.posterSide:homeDecorDraft.posterRecords;
@@ -137,10 +137,17 @@ namespace FitCheck
                     if(homeDecorArt==0)homeDecorDraft.poster=i;else if(homeDecorArt==1)homeDecorDraft.posterSide=i;else homeDecorDraft.posterRecords=i;city.ApplyHomeDecor(homeDecorDraft);FocusHomeDecor(5);
                 }
             }
+            if(homeDecorTab==3){
+                Txt(new Rect(55,315,510,35),"Moldura do espelho",copy);
+                for(int i=0;i<CityView.MirrorStyleNames.Length;i++)if(Tap(new Rect(55,366+i*64,510,52),CityView.MirrorStyleNames[i],homeDecorDraft.mirror==i)){
+                    homeDecorDraft.mirror=i;city.ApplyHomeDecor(homeDecorDraft);homeDecorView=6;FrameHomeDecor();
+                }
+                Txt(new Rect(55,586,510,85),"O vidro continua refletindo seu personagem.\nSó a moldura muda. Veja também seus emotes!",caption,muted);
+            }
             if(homeDecorError.Length>0)Txt(new Rect(55,716,510,58),homeDecorError,caption,new Color(1,.55f,.45f));
             if(Tap(new Rect(55,782,246,55),"Salvar decoração",true))CloseHomeDecor(true);
             if(Tap(new Rect(319,782,246,55),"Cancelar"))CloseHomeDecor(false);
-            for(int i=0;i<6;i++)if(Tap(new Rect(620+i*132,713,124,48),new[]{"Geral","Cama","Mesa","Discos","Parede","Piso"}[i],homeDecorView==i)){homeDecorView=i;FrameHomeDecor();}
+            for(int i=0;i<7;i++)if(Tap(new Rect(620+i*113,713,105,48),new[]{"Geral","Cama","Mesa","Discos","Parede","Piso","Espelho"}[i],homeDecorView==i)){homeDecorView=i;FrameHomeDecor();}
             RoundedPanel(new Rect(620,782,792,56),new Color(.035f,.03f,.035f,.86f),10);
             Txt(new Rect(636,797,760,30),"Olhe a prévia. As mudanças pertencem a este save.",caption,paper);
         }

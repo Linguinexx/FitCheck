@@ -4,7 +4,11 @@ namespace FitCheck
     public sealed partial class ShopCat
     {
         void CompletePetVoice(bool dog){
-            headRest=head.localPosition;voice=gameObject.AddComponent<AudioSource>();voice.playOnAwake=false;voice.clip=Resources.Load<AudioClip>(dog?"Audio/PetBark":"Audio/CatMeow");voice.pitch=1;voice.dopplerLevel=0;voice.spatialBlend=.65f;voice.minDistance=2;voice.maxDistance=10;voice.rolloffMode=AudioRolloffMode.Linear;voice.volume=.60f;
+            headRest=head.localPosition;voice=gameObject.AddComponent<AudioSource>();voice.playOnAwake=false;voice.clip=Resources.Load<AudioClip>(dog?"Audio/PetBark":"Audio/CatMeow");voice.pitch=dog?(body.localScale.x>1.3f?.9f:1.04f):1;voice.dopplerLevel=0;voice.spatialBlend=.65f;voice.minDistance=2;voice.maxDistance=10;voice.rolloffMode=AudioRolloffMode.Linear;voice.volume=.60f;
+            if(!dog){
+                if(!IsFuba)meowVariants=new[]{Resources.Load<AudioClip>("Audio/Game/cat_meow_alt_01"),Resources.Load<AudioClip>("Audio/Game/cat_meow_alt_02")};
+                purr=gameObject.AddComponent<AudioSource>();purr.playOnAwake=false;purr.clip=Resources.Load<AudioClip>("Audio/Game/cat_purr");purr.volume=.16f;purr.spatialBlend=1;purr.minDistance=.7f;purr.maxDistance=4;purr.rolloffMode=AudioRolloffMode.Linear;purr.dopplerLevel=0;
+            }
         }
         void BuildDog(PetAppearance choice){
             bool sausage=choice.breed==2;float length=sausage?1.48f:1.14f;

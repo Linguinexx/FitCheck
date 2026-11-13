@@ -180,3 +180,41 @@ Retomada em 11/11/2026 para artes, calça rosa e óculos. Sons, tutorial e build
 - Decoração de casa/loja enquadra o item alterado com câmera suave; movimento reduzido usa troca direta. Seis vistas manuais preservadas.
 - Gesto secreto com polegar estendido horizontalmente para a esquerda na primeira pessoa.
 - Fontes atualizadas na Unity; incluir na próxima build web/Windows. Revisão em Art/Reviews/Companions.
+
+## Retomada amanhã — anotado em 12/11/2026
+
+Pedido somente de registro; não executar nesta sessão.
+
+- Trocar a opção bicolor do gato por pelagem totalmente branca, ajustando também nome e prévia da opção. Não alterar automaticamente a pelagem bicolor dos cachorros.
+- Preparar novas builds para Windows e Web com as alterações atuais; preservar saves, distribuição da UI e limite de 200 MB da entrega. Validar ambas e manter apenas versão atual e uma anterior recuperável.
+- Avaliar adicionar mais personagens, sem aumentar o número de encontros. Ideia ainda a definir com o usuário; não criar encontros adicionais por consequência.
+
+- Áudio para a retomada: revisar e complementar os sons novos dos animais (gato e cachorro), emotes e outras ações/interações. Conferir a pasta de áudios recebidos e o que já está integrado antes de escolher; validar volume, sincronização, repetição, pausa e mute. Pedido de anotação, sem integrar novos sons nesta sessão.
+
+- Personagens adicionais com temáticas/mecânicas especiais, como atendimento com limite de tempo. Preservar o pedido de não aumentar a quantidade de encontros; definir substituições/distribuição ao retomar.
+- Reduzir para aproximadamente 30 segundos o tempo disponível da personagem atual com atendimento cronometrado. Ajustar indicação/cronômetro junto e validar pausa/resultado; somente anotado nesta sessão.
+- Adicionar opções de moldura do espelho à personalização do quarto. Referência enviada: janela do Paint antigo, com barra de título, menus, ferramentas laterais, paleta inferior e botões em relevo, deixando a área central como reflexo real. Preservar enquadramento útil, alcance no quarto e orçamento de desempenho do espelho. Explorar outras molduras retro depois; não implementar no pedido de encerramento.
+
+## Retomada implementada — 12/11/2026
+
+- Gato bicolor substituído por branco nos três tipos; cães preservados. Júlia com 30 s e Iara Ponteiro com 45 s no provador, pausa/aviso final/barra proporcional.
+- Após confirmação do usuário, três encontros repetidos foram substituídos por Iara Ponteiro, Dante Remendo e Cora Semente. Sete dias/21 encontros, IDs e regras de nota mantidos para os saves. Retratos de perfil renderizados dos personagens do jogo.
+- Molduras Original/Paint 95/Fit Player na aba Espelho da decoração do quarto. Reflexo real e resolução/frequência inalterados; escolha por save com prévia, cancelar e salvar.
+- Ronronado, miados alternativos, sons locais extras do bairro e tecido nos emotes; palmas/latido preservados. Manifesto em Art/Audio/COMPANION_AND_CITY_SOUNDS.json.
+- Entregas Windows Teste 09 e Web Teste 10, ambas abaixo de 200 MB mesmo extraídas. Notas e roteiro em Art/Releases/CompanionsAndMirrors. Builds anteriores não incluem essas mudanças.
+- Validação final: Windows sem erros/avisos, TEST_BUILD_01_PASSED; Web sem erros/avisos, criação/pet/salvamento/reabertura/P/Retomar e pointer lock confirmados em iframe com aba ativa. ZIPs Windows 75,48 MB e Web 52,07 MB; limpeza de 454,54 MB mantendo atual/uma anterior. Pronto para teste do usuário e upload manual no itch.io.
+
+## Espelho da loja — 12/11/2026
+
+- Corpo inteiro na face externa da divisória do provador, sem mexer em ganchos/banco/GIF ou caminho do cliente. Moldura fina carvão e detalhe Kaos.
+- Pose e emotes refletidos, primeira pessoa/câmera externa restauradas. Renderização 128×352/15 Hz só de frente/no enquadramento, respeitando pausa e ambiente ativo; sem novas luzes/texturas/obstáculos.
+- SHOP_MIRROR_PASSED: três posições livres, cinco emotes, limites de atualização, frente/verso, cortina e espelho do quarto. Prévias em Captures/ShopMirror; revisor em Art/Reviews/ShopMirror.
+- Pronto na Unity; incluir na próxima build Windows/Web. As entregas Windows 09/Web 10 anteriores continuam preservadas.
+
+## FitFeed e sombras — 12/11/2026
+
+- Discos cinza artificiais dos personagens removidos, sem novas sombras dinâmicas/passes extras. NPCs, cliente, corpo do jogador e atendimento preservados. Rig/cenografia revisão 39 atualiza cenas antigas em cache.
+- FitFeed com fundo preto e estrelas cinza diagonais, igual à arte do itch.io; barra lateral/cartões protegem legibilidade, sem mudar distribuição ou controles. Textura comprimida de até 1024, carregada uma vez, sem animação.
+- FEED_SHADOW_PASSED em bairro/loja e UI vazia, populada e rolada; dados de 18 posts preservados. Revisor em Art/Reviews/FeedAndShadows e prévias em Captures/FeedAndShadows.
+- Fotos novas: Iara, Dante e Cora em Profile picture. Lista com mecânicas/dias em Art/Characters/NewClients/NOVOS_PERSONAGENS.md. Júlia já existia e agora tem 30 segundos.
+- Atualizado na Unity; próxima build deve incluir estas mudanças e o espelho da loja. Windows 09/Web 10 preservadas.

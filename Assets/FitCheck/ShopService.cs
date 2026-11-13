@@ -11,16 +11,14 @@ namespace FitCheck
         public bool CustomerAtDestination=>residents[0].path==null;
         public bool CustomerSettled=>residents[0].blend<.01f;
         public bool CustomerVisible=>residents[0].root.gameObject.activeSelf;
-        public bool CustomerShadowVisible=>residents[0].shadow!=null&&residents[0].shadow.gameObject.activeSelf;
         public void WalkCustomer(params Vector2[] path)
         {
             var actor=residents[0];actor.wallLean=false;actor.oneShot=true;customerWaiting=false;
             actor.path=path;actor.target=0;actor.wait=0;actor.speed=0;
         }
-        public void SetCustomerVisible(bool visible,bool keepShadow=false)
+        public void SetCustomerVisible(bool visible)
         {
             var actor=residents[0];actor.root.gameObject.SetActive(visible);
-            if(actor.shadow!=null)actor.shadow.gameObject.SetActive(visible||keepShadow);
         }
         public bool TurnCustomer(float yaw,float delta)
         {
@@ -46,7 +44,6 @@ namespace FitCheck
         public void DressServiceCustomer(StudioView studio,string[] outfit,int customer)
         {
             var old=residents[0];old.root.gameObject.SetActive(false);Destroy(old.root.gameObject);
-            if(old.shadow!=null){old.shadow.gameObject.SetActive(false);Destroy(old.shadow.gameObject);}
             residents.RemoveAt(0);bool visible=studio.Avatar.gameObject.activeSelf;
             try{
                 studio.Avatar.gameObject.SetActive(true);BakeResident(studio,customer,outfit,ShopDressingPosition,0);
@@ -118,7 +115,7 @@ namespace FitCheck
         void EnterShopDressing()
         {
             StartShopSequence(ShopSequence.None);shopDressingTime=0;shopDressingInStore=true;
-            city.SetCustomerVisible(false,true);
+            city.SetCustomerVisible(false);
             studio.SetHome(false);Apply();mannequin.position=city.transform.position+CityView.ShopDressingPosition;
             mannequin.gameObject.SetActive(true);rotation=0;EnterDressing();FrameShopDressing();SyncCityCursor(true);
         }

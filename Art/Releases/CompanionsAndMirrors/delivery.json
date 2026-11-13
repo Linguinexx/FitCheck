@@ -1,0 +1,666 @@
+[
+  {
+    "platform": "Windows",
+    "folder": "Windows-Test09",
+    "unity": "6000.6.7f1",
+    "folder_bytes": 134553465,
+    "zip_bytes": 75477162,
+    "sha256": "601440cb4731a5b514785bd48692b89ab2244ec37cbdd6d4be5ac99e903a45b8",
+    "files": [
+      {
+        "path": "dstorage.dll",
+        "bytes": 206904
+      },
+      {
+        "path": "dstoragecore.dll",
+        "bytes": 1482784
+      },
+      {
+        "path": "FitCheck.exe",
+        "bytes": 667136
+      },
+      {
+        "path": "FitCheck_Data/app.info",
+        "bytes": 32
+      },
+      {
+        "path": "FitCheck_Data/boot.config",
+        "bytes": 156
+      },
+      {
+        "path": "FitCheck_Data/data.unity3d",
+        "bytes": 36488795
+      },
+      {
+        "path": "FitCheck_Data/Managed/Assembly-CSharp.dll",
+        "bytes": 658944
+      },
+      {
+        "path": "FitCheck_Data/Managed/Mono.Security.dll",
+        "bytes": 241152
+      },
+      {
+        "path": "FitCheck_Data/Managed/mscorlib.dll",
+        "bytes": 4632064
+      },
+      {
+        "path": "FitCheck_Data/Managed/netstandard.dll",
+        "bytes": 90112
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Buffers.dll",
+        "bytes": 4608
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Collections.Immutable.dll",
+        "bytes": 252680
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.ComponentModel.Composition.dll",
+        "bytes": 257024
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Configuration.dll",
+        "bytes": 124928
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Core.dll",
+        "bytes": 1113088
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Data.DataSetExtensions.dll",
+        "bytes": 29696
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Data.dll",
+        "bytes": 2125312
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.dll",
+        "bytes": 2641920
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Drawing.dll",
+        "bytes": 489984
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.EnterpriseServices.dll",
+        "bytes": 44544
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.IO.Compression.dll",
+        "bytes": 114688
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.IO.Compression.FileSystem.dll",
+        "bytes": 18432
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Memory.dll",
+        "bytes": 4608
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Net.Http.dll",
+        "bytes": 122880
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Numerics.dll",
+        "bytes": 119296
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Reflection.Metadata.dll",
+        "bytes": 487584
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Runtime.CompilerServices.Unsafe.dll",
+        "bytes": 19256
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Runtime.Serialization.dll",
+        "bytes": 934400
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Security.dll",
+        "bytes": 320000
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.ServiceModel.Internals.dll",
+        "bytes": 215040
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Transactions.dll",
+        "bytes": 35328
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Xml.dll",
+        "bytes": 3160064
+      },
+      {
+        "path": "FitCheck_Data/Managed/System.Xml.Linq.dll",
+        "bytes": 136704
+      },
+      {
+        "path": "FitCheck_Data/Managed/Unity.Scripting.dll",
+        "bytes": 70576
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.AccessibilityModule.dll",
+        "bytes": 49584
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.AdaptivePerformanceModule.dll",
+        "bytes": 122280
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.AIModule.dll",
+        "bytes": 87472
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.AMDModule.dll",
+        "bytes": 21936
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.AndroidJNIModule.dll",
+        "bytes": 121256
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.AnimationModule.dll",
+        "bytes": 218024
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ARModule.dll",
+        "bytes": 27568
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.AssetBundleModule.dll",
+        "bytes": 42928
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.AudioModule.dll",
+        "bytes": 142248
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.BurstModule.dll",
+        "bytes": 337832
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ClothModule.dll",
+        "bytes": 38320
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ClusterInputModule.dll",
+        "bytes": 30120
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ClusterRendererModule.dll",
+        "bytes": 28592
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ContentLoadModule.dll",
+        "bytes": 56232
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.CoreModule.dll",
+        "bytes": 2030504
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.CrashReportingModule.dll",
+        "bytes": 28584
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.DirectorModule.dll",
+        "bytes": 42928
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.dll",
+        "bytes": 226216
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.DSPGraphModule.dll",
+        "bytes": 33704
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.GameCenterModule.dll",
+        "bytes": 46504
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.GIModule.dll",
+        "bytes": 26032
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.GraphicsStateCollectionSerializerModule.dll",
+        "bytes": 14256
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.GridModule.dll",
+        "bytes": 32688
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.HierarchyCoreModule.dll",
+        "bytes": 114608
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.HierarchyModule.dll",
+        "bytes": 117168
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.HotReloadModule.dll",
+        "bytes": 26024
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.IdentifiersModule.dll",
+        "bytes": 16816
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ImageConversionModule.dll",
+        "bytes": 34224
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.IMGUIModule.dll",
+        "bytes": 191920
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.InputForUIModule.dll",
+        "bytes": 56752
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.InputLegacyModule.dll",
+        "bytes": 42928
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.InputModule.dll",
+        "bytes": 32680
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.InsightsModule.dll",
+        "bytes": 15784
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.JSONSerializeModule.dll",
+        "bytes": 29096
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.LocalizationModule.dll",
+        "bytes": 29104
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ManagedKernelModule.dll",
+        "bytes": 14256
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.MarshallingModule.dll",
+        "bytes": 100784
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.MathematicsModule.dll",
+        "bytes": 740784
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.MultiplayerModule.dll",
+        "bytes": 18352
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.NVIDIAModule.dll",
+        "bytes": 41392
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ParticleSystemModule.dll",
+        "bytes": 170416
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.PerformanceReportingModule.dll",
+        "bytes": 27056
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.Physics2DModule.dll",
+        "bytes": 222640
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.PhysicsBackendPhysXModule.dll",
+        "bytes": 14256
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.PhysicsCore2DModule.dll",
+        "bytes": 481192
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.PhysicsModule.dll",
+        "bytes": 181672
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.PropertiesModule.dll",
+        "bytes": 124840
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.RenderAs2DModule.dll",
+        "bytes": 27560
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll",
+        "bytes": 26032
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ScreenCaptureModule.dll",
+        "bytes": 28080
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ScriptingModule.dll",
+        "bytes": 65968
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.ShaderVariantAnalyticsModule.dll",
+        "bytes": 26032
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.SpriteMaskModule.dll",
+        "bytes": 30632
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.SpriteShapeModule.dll",
+        "bytes": 34216
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.StreamingModule.dll",
+        "bytes": 28080
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.SubstanceModule.dll",
+        "bytes": 31144
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.SubsystemsModule.dll",
+        "bytes": 42928
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TerrainModule.dll",
+        "bytes": 132520
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TerrainPhysicsModule.dll",
+        "bytes": 27568
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TetgenModule.dll",
+        "bytes": 26032
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TextCoreFontEngineModule.dll",
+        "bytes": 86440
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TextCoreTextEngineModule.dll",
+        "bytes": 314800
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TextRenderingModule.dll",
+        "bytes": 39344
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TilemapModule.dll",
+        "bytes": 75688
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TimelineFoundationModule.dll",
+        "bytes": 167344
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.TLSModule.dll",
+        "bytes": 34224
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.U2DRuntimeModule.dll",
+        "bytes": 73648
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UIElementsModule.dll",
+        "bytes": 2552232
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UIModule.dll",
+        "bytes": 57264
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UmbraModule.dll",
+        "bytes": 26032
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityAnalyticsCommonModule.dll",
+        "bytes": 36776
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityAnalyticsModule.dll",
+        "bytes": 61864
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityConnectModule.dll",
+        "bytes": 29616
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityConsentModule.dll",
+        "bytes": 16304
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityCurlModule.dll",
+        "bytes": 28072
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityWebRequestAssetBundleModule.dll",
+        "bytes": 30640
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityWebRequestAudioModule.dll",
+        "bytes": 30632
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityWebRequestModule.dll",
+        "bytes": 81328
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityWebRequestTextureModule.dll",
+        "bytes": 29608
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
+        "bytes": 35248
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.VectorGraphicsModule.dll",
+        "bytes": 231336
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.VehiclesModule.dll",
+        "bytes": 33200
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.VFXModule.dll",
+        "bytes": 82352
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.VideoModule.dll",
+        "bytes": 48552
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.VirtualTexturingModule.dll",
+        "bytes": 43952
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.WindModule.dll",
+        "bytes": 28584
+      },
+      {
+        "path": "FitCheck_Data/Managed/UnityEngine.XRModule.dll",
+        "bytes": 96176
+      },
+      {
+        "path": "FitCheck_Data/Resources/unity default resources",
+        "bytes": 5919584
+      },
+      {
+        "path": "FitCheck_Data/resources.resource",
+        "bytes": 10113920
+      },
+      {
+        "path": "FitCheck_Data/RuntimeInitializeOnLoads.json",
+        "bytes": 153
+      },
+      {
+        "path": "FitCheck_Data/ScriptingAssemblies.json",
+        "bytes": 3377
+      },
+      {
+        "path": "LEIA-ME.txt",
+        "bytes": 620
+      },
+      {
+        "path": "MonoBleedingEdge/EmbedRuntime/mono-2.0-bdwgc.dll",
+        "bytes": 7834544
+      },
+      {
+        "path": "MonoBleedingEdge/EmbedRuntime/MonoPosixHelper.dll",
+        "bytes": 611248
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/2.0/Browsers/Compat.browser",
+        "bytes": 1605
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx",
+        "bytes": 60575
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/2.0/machine.config",
+        "bytes": 29066
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/2.0/settings.map",
+        "bytes": 2622
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/2.0/web.config",
+        "bytes": 11635
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.0/Browsers/Compat.browser",
+        "bytes": 1605
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.0/DefaultWsdlHelpGenerator.aspx",
+        "bytes": 60575
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.0/machine.config",
+        "bytes": 33598
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.0/settings.map",
+        "bytes": 2622
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.0/web.config",
+        "bytes": 18802
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.5/Browsers/Compat.browser",
+        "bytes": 1605
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.5/DefaultWsdlHelpGenerator.aspx",
+        "bytes": 60575
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.5/machine.config",
+        "bytes": 34056
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.5/settings.map",
+        "bytes": 2622
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/4.5/web.config",
+        "bytes": 18811
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/browscap.ini",
+        "bytes": 311984
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/config",
+        "bytes": 3815
+      },
+      {
+        "path": "MonoBleedingEdge/etc/mono/mconfig/config.xml",
+        "bytes": 25817
+      },
+      {
+        "path": "RELATO-DE-BUG.txt",
+        "bytes": 299
+      },
+      {
+        "path": "ROTEIRO-DE-TESTE.md",
+        "bytes": 1227
+      },
+      {
+        "path": "UnityCrashHandler64.exe",
+        "bytes": 1773992
+      },
+      {
+        "path": "UnityPlayer.dll",
+        "bytes": 38753192
+      }
+    ]
+  },
+  {
+    "platform": "Web",
+    "folder": "Web-Test10",
+    "unity": "6000.6.7f1",
+    "folder_bytes": 52178274,
+    "zip_bytes": 52069355,
+    "sha256": "15e52a29742df5717e19ed533091c700c4074fe54bfaa27d277b491ff5b7cffb",
+    "files": [
+      {
+        "path": "ABRIR-WEB.bat",
+        "bytes": 432
+      },
+      {
+        "path": "Build/1fb0edb3501436e2e279124cf075bda5.framework.js.unityweb",
+        "bytes": 75396
+      },
+      {
+        "path": "Build/2028fbc6e5f93f3ee461458bad3669ce.loader.js",
+        "bytes": 48779
+      },
+      {
+        "path": "Build/8c80fc6fd943373d36a16b064672274c.data.unityweb",
+        "bytes": 45629389
+      },
+      {
+        "path": "Build/e9a1c0fb3e7db6e038b94e9a8c3e3801.wasm.unityweb",
+        "bytes": 6386547
+      },
+      {
+        "path": "index.html",
+        "bytes": 4296
+      },
+      {
+        "path": "LEIA-ME.txt",
+        "bytes": 669
+      },
+      {
+        "path": "RELATO-DE-BUG.txt",
+        "bytes": 299
+      },
+      {
+        "path": "ROTEIRO-DE-TESTE.md",
+        "bytes": 1227
+      },
+      {
+        "path": "serve.py",
+        "bytes": 1437
+      },
+      {
+        "path": "TemplateData/logo.png",
+        "bytes": 29803
+      }
+    ]
+  }
+]

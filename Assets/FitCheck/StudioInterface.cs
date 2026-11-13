@@ -138,6 +138,7 @@ namespace FitCheck
                 DrawKaosPanel(new Rect(440,280,560,320));Fill(new Rect(478,301,36,3),CreatorRed);
                 Txt(new Rect(478,316,490,55),"Esse é o visual?",heading);
                 Txt(new Rect(478,381,475,65),"Depois do envio, o cliente sai com as peças que você escolheu.",copy,muted);
+                if(Timed)DrawFittingClock(new Rect(600,143,240,105));
                 if(Tap(new Rect(478,485,222,60),"Voltar ao provador"))stage=Stage.Dressing;
                 if(Tap(new Rect(718,485,242,60),"Enviar visual",true))Submit();
             }
@@ -158,6 +159,7 @@ namespace FitCheck
         {
             Txt(new Rect(38,117,640,28),"DIA 0"+(customer/3+1)+"   /   ATENDIMENTO 0"+(customer%3+1)+" DE 03"+(replayIndex>=0?"   /   REPETIÇÃO":""),tiny,violet);
             Txt(new Rect(38,148,650,50),Customer.name,heading);
+            if(SpecialCustomers.Theme(customer).Length>0)Txt(new Rect(38,201,650,25),SpecialCustomers.Theme(customer),tiny,paper);
         }
         void DialogueUI()
         {
@@ -167,7 +169,13 @@ namespace FitCheck
             Txt(new Rect(1032,123,370,38),"Qual é a ocasião?",heading);
             ComicBubble(new Rect(1016,181,408,313),Request,Customer.name,speechAge);
             Rule(1032,505,366);
-            if(Timed)Txt(new Rect(50,715,850,70),Customer.name+" está com pressa: você terá 120 segundos no provador. Pausa interrompe o relógio.",copy,violet);
+            if(Timed){
+                DrawKaosPanel(new Rect(38,692,488,142));
+                RoundedPanel(new Rect(56,712,4,96),CreatorRed,2);
+                Txt(new Rect(76,707,422,30),Customer.name+" está com pressa",copy,paper);
+                Txt(new Rect(76,741,422,28),"Você tem "+FittingSeconds.ToString("0")+" segundos para montar o visual.",caption,paper);
+                Txt(new Rect(76,773,422,28),"O relógio começa no provador e para na pausa.",caption,muted);
+            }
             if(question<0){
                 Txt(new Rect(1032,526,365,45),"Se quiser, pergunte um pouco mais.",caption,muted);
                 for(int i=0;i<2;i++)if(Tap(new Rect(1032,581+i*89,366,76),questions[i]))question=i;
@@ -176,12 +184,27 @@ namespace FitCheck
                 ComicBubble(new Rect(1016,580,408,170),answers[question],Customer.name,answerAge);
             }
             if(Tap(new Rect(1032,786,366,66),question<0?"Ir ao provador  →":"Vamos montar o visual  →",true)){ProceedToFitting();}
-            Txt(new Rect(50,800,850,44),"Primeiro, entenda o pedido. Depois, experimente à vontade.",caption,muted);
+            if(!Timed)Txt(new Rect(50,800,850,44),"Primeiro, entenda o pedido. Depois, experimente à vontade.",caption,muted);
+        }
+        void DrawFittingClock(Rect area)
+        {
+            int seconds=Mathf.CeilToInt(remaining);
+            bool urgent=seconds<=10;
+            DrawKaosPanel(area);
+            Txt(new Rect(area.x+16,area.y+8,area.width-32,23),
+                paused?"TEMPO PAUSADO":urgent?"RETA FINAL":"TEMPO NO PROVADOR",tiny,paper);
+            Txt(new Rect(area.x+16,area.y+31,area.width-32,43),
+                $"{seconds/60:00}:{seconds%60:00}",heading,paper);
+            float width=area.width-32;
+            var track=new Rect(area.x+16,area.y+85,width,6);
+            RoundedPanel(track,KaosTrack,3);
+            float progress=width*Mathf.Clamp01(remaining/Mathf.Max(1,FittingSeconds));
+            if(progress>0)RoundedPanel(new Rect(track.x,track.y,progress,track.height),urgent?CreatorRed:paper,3);
         }
         void DressingUI()
         {
             CustomerBadge();
-            if(Timed){var warn=remaining<=30?new Color(1,.47f,.36f):violet;Txt(new Rect(770,122,210,55),Mathf.CeilToInt(remaining)+" s",heading,warn);Fill(new Rect(770,180,190*Mathf.Clamp01(remaining/120),4),warn);}
+            if(Timed&&stage!=Stage.Confirm)DrawFittingClock(new Rect(734,112,240,105));
             if(Tap(new Rect(38,222,190,46),showRequest?"Fechar pedido":"Reler pedido")){showRequest=!showRequest;showDrops=false;}
             if(Tap(new Rect(38,281,190,46),showDrops?"Fechar drops":"Ver drops")){showDrops=!showDrops;showRequest=false;}
             if(showRequest||showDrops){

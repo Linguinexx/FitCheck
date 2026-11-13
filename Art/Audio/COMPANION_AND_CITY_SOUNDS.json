@@ -1,0 +1,72 @@
+[
+  {
+    "id": "cat_purr",
+    "source": "AUDIOS/GATO/cat_purr.wav",
+    "source_sha256": "869bd791b9d5a460eba5646bbb9de01f848d50e92e5a71c77f0394c5acee1130",
+    "seconds": 8.0,
+    "bytes": 352844
+  },
+  {
+    "id": "cat_meow_alt_01",
+    "source": "AUDIOS/GATO/cat_meow_alt_01.wav",
+    "source_sha256": "72dbe3390af92d1f382a1bff3cd9b075d71cea306be71cf5b44d16721ae77284",
+    "seconds": 1.0,
+    "bytes": 44144
+  },
+  {
+    "id": "cat_meow_alt_02",
+    "source": "AUDIOS/GATO/cat_meow_alt_02.wav",
+    "source_sha256": "d4f41a93e9baee79d6f3f4e0ffc6b3b2eb32860ff21b45944e80afb4c75adf42",
+    "seconds": 1.0,
+    "bytes": 44144
+  },
+  {
+    "id": "car_horn_01",
+    "source": "AUDIOS/CIDADE/car_horn_01.wav",
+    "source_sha256": "640d1d6405359778553bb2f4875e156521d8fab256d858b9d1fa04f1cae15fdd",
+    "seconds": 0.6,
+    "bytes": 26504
+  },
+  {
+    "id": "skate_pass_01",
+    "source": "AUDIOS/CIDADE/skate_pass_01.wav",
+    "source_sha256": "c2b9b0769f50c2e29ba30071d8baba5fe9f5a0c2f604ec0f6dac01d0a8c5f611",
+    "seconds": 3.0,
+    "bytes": 132344
+  },
+  {
+    "id": "skate_pass_02",
+    "source": "AUDIOS/CIDADE/skate_pass_02.wav",
+    "source_sha256": "8a37f914201827d706a4fe362303edef55adfb4e580424427a7c570350d086c1",
+    "seconds": 3.2499166666666666,
+    "bytes": 143366
+  },
+  {
+    "id": "laundry_machine",
+    "source": "AUDIOS/CIDADE/laundry_machine.wav",
+    "source_sha256": "39fe7da61131a368ff2bebb3fc1cf591b805d14b1a4d76a86be0dfede500ad1c",
+    "seconds": 15.0,
+    "bytes": 661544
+  },
+  {
+    "id": "shop_fridge",
+    "source": "AUDIOS/CIDADE/shop_fridge.wav",
+    "source_sha256": "13d68e4fa093c76e24f46022105dfadf729729bc12510b8654d0fbdabd59b333",
+    "seconds": 15.0,
+    "bytes": 661544
+  },
+  {
+    "id": "small_applause_01",
+    "source": "AUDIOS/CIDADE/small_applause_01.wav",
+    "source_sha256": "63d46f386eb6aa364b70a9abd700bbaf60598cced742f8f41ddf5a1250677664",
+    "seconds": 3.0,
+    "bytes": 132344
+  },
+  {
+    "id": "ui_back",
+    "source": "AUDIOS/INTERFACE/ui_back.wav",
+    "source_sha256": "52d9cf584dbe99e70bee0ba4e7ff6bb1e338a8c0222cbd7e3308e23381e93eec",
+    "seconds": 0.45158333333333334,
+    "bytes": 19958
+  }
+]

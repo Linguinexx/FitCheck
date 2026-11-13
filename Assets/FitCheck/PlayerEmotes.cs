@@ -13,11 +13,12 @@ namespace FitCheck
         public int PlayerEmoteId=>playerEmote;
         public float PlayerEmoteTime=>emoteAge;
         public int PlayerClapSerial {get;private set;}
+        public int PlayerEmoteSerial {get;private set;}
         public bool PlayPlayerEmote(int id)
         {
             if(!PlayerBodyReady||id<1||id>6)return false;
             if(PlayerEmoteActive){queuedEmote=playerEmote==id?0:id;emoteEnding=true;return true;}
-            playerEmote=id;emoteAge=0;emoteBlend=0;emoteEnding=false;playerPoseCycle=float.NaN;return true;
+            playerEmote=id;PlayerEmoteSerial++;emoteAge=0;emoteBlend=0;emoteEnding=false;playerPoseCycle=float.NaN;return true;
         }
         public void CancelPlayerEmote(bool immediate=false)
         {
