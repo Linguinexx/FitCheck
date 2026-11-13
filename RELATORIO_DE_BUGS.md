@@ -1,6 +1,6 @@
 # Relatório de bugs do Fit Check
 
-Atualizado em 05/11/2026. Consolidação dos incidentes identificáveis na documentação local, do protótipo à entrega Teste 01. Casos sem registro suficiente ficam de fora até haver um relato. Os IDs B01 e B02 foram preservados de TESTES.md.
+Atualizado em 13/11/2026. Consolidação dos incidentes identificáveis na documentação local, do protótipo às entregas Windows/Web BairroVivo de 13/11/2026. Casos sem registro suficiente ficam de fora até haver um relato. Os IDs B01 e B02 foram preservados de TESTES.md.
 
 ## Bugs do jogo
 
@@ -49,6 +49,15 @@ Atualizado em 05/11/2026. Consolidação dos incidentes identificáveis na docum
 | B39 | Preparação de ambientes e deformações de roupa sobrecarregavam a CPU. | Cache de malhas, matrizes reutilizadas, menor frequência à distância e atualização do corpo quando visível. | Retestado por medições da mesma máquina. Cobertura em outras máquinas pendente. Art/Performance/EntryOptimization.md e ShopPerformance.md. |
 | B40 | Clientes chegavam com roupa de catálogo antes de montar o fit. | Trajes cotidianos próprios e tênis civil até o provador. | Retestado no Teste 01. DEVLOG, Clientes com roupa cotidiana. |
 
+| B41 | Web inicial perdia componentes de primitivas no stripping e acusava erro de BoxCollider. | Componentes preservados explicitamente em link.xml. | Retestado na Web01. Art/Releases/Web01/VALIDACAO.md. |
+| B42 | Captura do ponteiro no navegador exigia clique extra ou falhava sem foco. | Solicitação direta na ativação do navegador, verificação da captura real e recuperação de recusa. | Retestado em iframe Web02 e BairroVivo, incluindo recaptura em um clique. |
+| B43 | Uso de Esc para pausa conflitou com a reserva do navegador e a saída de tela cheia. | Regra atual usa P e botões. Ponte observa liberação do ponteiro sem interceptar teclado. | Retestado em iframe Web08 e BairroVivo. Teclado físico e outras hospedagens seguem na cobertura manual. |
+| B44 | Materiais do catálogo eram identificados internamente como Civilian. | Identificação dos materiais do catálogo corrigida, mantendo roupas de chegada civis. | Retestado no Test08 com verificação de troca do cliente preservada. Art/Releases/Test08/VALIDACAO.md. |
+| B45 | Espelho do quarto deixava de funcionar do lado distante por limite de seis unidades/plano de corte. | Limite removido e plano distante calculado a partir do quarto. | Retestado em cinco posições e restauração da pose. Art/Reviews/HomeDecor/README.md. |
+| B46 | Joinha apresentava segmentos de retorno duplicados nos dedos. | Núcleo de punho e uma almofada contínua por dedo, polegar revisto. | Retestado no revisor de emotes e capturas ThumbAnd67. Art/Reviews/Emotes/README.md. |
+| B47 | Orelhas dos gatos tinham encaixe inadequado na cabeça. | Base estreita embutida, pivô na base e faces laterais fechadas. | ROOM_EAR_PASSED em quatro tipos/seis cores. Art/Reviews/RoomAndEars/README.md. |
+| B48 | Catálogo/porta-retrato ficavam sem apoio adequado e affordances da mesa precisavam acompanhar a nova posição. | Apoio no tampo e separação de celular, catálogo e foto. | ROOM_EAR_PASSED e entrega BairroVivo. Art/Reviews/RoomAndEars/README.md. |
+
 ## Incidentes de produção e teste
 
 | ID | Ocorrência | Tratamento |
@@ -59,27 +68,37 @@ Atualizado em 05/11/2026. Consolidação dos incidentes identificáveis na docum
 | E04 | Disco abaixo de 256 MB impediu uma compilação. | Espaço liberado com cópias antigas já recuperáveis em ZIP. Compilação seguinte passou. |
 | E05 | Provas antigas falharam por coordenadas fixas de araras, reconstrução redundante do avatar ou eventos sintéticos ignorados em batch. | Atualizadas expectativas e preparação dos testes. Provas finais passaram. |
 
+## Atualização dos incidentes de produção — 06 a 13/11
+
+| ID | Ocorrência | Tratamento e limite |
+|---|---|---|
+| E06 | Primeira tentativa Web ficou sem espaço temporário. | Paralelismo de Emscripten/Binaryen limitado a dois processos. Build final passou. Web01/VALIDACAO.md. |
+| E07 | Indexador UnityEditor.Search/SearchDatabase emitiu exceção/aviso durante revisões isoladas. | Registrado como incidente do Editor. Revisores FittingRoom, SocialWeek e RoomAndEars passaram. Resolução do indexador continua pendente. |
+| E08 | Três OGG existentes avisaram duração truncada na primeira importação, e houve variável sem uso. | Variável corrigida e build incremental final sem avisos. Originais preservados. Conferir duração/escuta dos áudios na revisão manual. CompanionsAndMirrors/VALIDACAO.md. |
+| E09 | Trailer exigiu correções de enquadramento e timestamps na revisão editorial. | Render final de 5.400 quadros aprovado no registro da produção. Áudio medido, ainda sem escuta direta documentada. Captures/TrailerCompleto/edit. |
+
 ## Retestes e próximos relatos
 
-- Teste 01 em outros computadores. Priorizar percurso por cliques reais, resoluções menores, sensibilidade e recaptura de mouse após Alt+Tab. Verificar interrupções nas oito transições, além de desempenho ao entrar e durante a exploração.
-- Saves e atendimento. Conferir reinício do processo, recuperação de backup e arquivos ilegíveis, cancelamento e exclusão do espaço escolhido. Repetir perguntas, pausa, saída no meio do provador e passagem de dia em dados isolados.
-- Recompilação durante Play. Reproduzir a perda de referências do rosto na Unity, separando o resultado real da simulação de B14.
-- Web. Retestar persistência, fotos e desempenho quando houver build com Web Build Support. Registros Windows não encerram essa cobertura.
-- Aguardar feedback do grupo. Os itens acima são cenários de reteste. Cada nova falha observada entra com ID novo e estado próprio.
+- B14 ainda pede recompilação real durante Play, além da simulação de perda de caches. B18 ainda pede alternância manual de foco/janelas na Game View. A recuperação Web de B42 foi verificada em iframe, sem encerrar automaticamente o caso do Editor.
+- Executar a semana completa por cliques na Web e em outros equipamentos/navegadores. BairroVivo verificou criação, pet, casa, P/Retomar, recaptura e reabertura do save em Edge/Chromium local. Esse percurso delimita a evidência disponível.
+- Retestar interrupções de atendimento, replays com inventários históricos, backup, exclusão/cancelamento por espaço e erros de gravação. Usar armazenamento isolado.
+- Conferir combinações de roupas em repouso, caminhada, espelhos e câmeras externas, com atenção a corpo/cabelo/acessórios. Verificar desempenho e legibilidade em resoluções menores.
+- Escutar os arquivos finais do jogo e do trailer em equipamento real. Rever duração dos OGG, volume, sincronização, repetição, pausa e mute.
+- Verificar a integração final no itch.io após publicação manual. Iframe local não cobre todas as condições da página hospedada.
+- Novos relatos devem indicar build/plataforma, passos, impacto, frequência e evidência. Cenários preventivos e melhorias ficam com seus próprios estados.
 
-## Melhorias futuras já anotadas
+## Pedidos futuros e mudanças já entregues
 
-- Trajes comuns do jogador, sem peças DripLab nessa proposta, integrados à personalização existente.
-- Decoração do quarto, com o estilo atual e atenção ao desempenho.
-- Avaliação do FitFeed inspirada no Instagram, adiada pelo usuário.
-- Cliente aparece no local da foto assim que o atendimento termina, com o look do post do save ativo. Permanece pelo restante do dia, inclusive com a loja aberta, e sai no avanço de dia.
-- Áudio final após recebimento e conferência de fontes/licenças, preservando o miado de Fubá.
-- Avaliar IA para modelagem de outras roupas. A produção atual em Blender segue como referência da coleção.
+Casa personalizável, companheiros, espelhos, emotes, comentários do FitFeed, encontros pós-atendimento no bairro, áudio adicional e foto coletiva já têm implementação e revisões registradas. Sua validação por jogadores e os refinamentos derivados do feedback seguem abertos. A organização do quarto foi atualizada em 13/11.
 
-A lista de trabalho continua em [PROXIMOS_PASSOS.md](PROXIMOS_PASSOS.md). O plano de áudio está em [PLANO_AUDIO_FITCHECK.md](Art/Audio/PLANO_AUDIO_FITCHECK.md).
+A avaliação de IA para outras roupas permanece como possibilidade a discutir. O fluxo de integração conserva originais, cópia otimizada e teste reversível de todo o catálogo. A publicação da entrega e da mídia segue manual.
+
+Pedidos e estados por etapa permanecem em [PROXIMOS_PASSOS.md](PROXIMOS_PASSOS.md). O [GDD atual](GDD.md) e o [diário de bordo](DEVLOG.md) registram a versão consolidada. Créditos de áudio em [CREDITS.md](Art/Audio/CREDITS.md).
 
 ## Como registrar o próximo bug
 
-Usar o próximo ID B41 e incluir data, build, plataforma, resolução, área/dia/cliente, passos de reprodução, comportamento esperado e observado, frequência, impacto e evidência. Anotar o save por número ou usar dados de teste. Registrar a versão da correção e o resultado do reteste antes de fechar. O [modelo do Teste 01](Art/Releases/Test01/RELATO-DE-BUG.txt) pode ser entregue ao grupo.
+Usar o próximo ID B49 e incluir data, build, plataforma, resolução, área/dia/cliente, passos de reprodução, comportamento esperado e observado, frequência, impacto e evidência. Anotar o save por número ou usar dados de teste. Registrar a versão da correção e o resultado do reteste antes de fechar. O [modelo da entrega atual](Art/Releases/BairroVivo/RELATO-DE-BUG.txt) pode ser entregue ao grupo.
 
 Fontes principais do levantamento. [Histórico de desenvolvimento](DEVLOG.md), [registro de testes](TESTES.md), [validação Teste 01](Art/Releases/Test01/VALIDACAO.md) e [validação do teaser](Art/Video/TeaserAtual/VALIDACAO.md).
+
+Atualização de 13/11 baseada nos registros citados. As revisões anteriores foram preservadas. Não foram executados novos testes do jogo para esta consolidação documental.

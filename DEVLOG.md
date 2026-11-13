@@ -1,4 +1,54 @@
-# DevLog
+# Diário de bordo — Fit Check by DripLab
+
+Atualizado em 13/11/2026. Entradas recentes consolidadas a partir de commits, fontes e relatórios de entrega. As entradas de 30/10 a 05/11 permanecem abaixo como histórico. Cada resultado citado pertence à revisão indicada, sem representar uma execução nova nesta atualização documental.
+
+## 13/11/2026 — Documentação consolidada
+
+Atualizados GDD, relatório de bugs e diário de bordo com a semana completa, catálogo expandido, companheiros, decoração, espelhos, regras especiais, versões Windows/Web e mídia. A concepção original foi arquivada integralmente em Art/Documentation. Os limites dos testes de navegador, áudio e foco foram mantidos explícitos.
+
+## 13/11/2026 — Trailer completo e mídia para divulgação
+
+Concluídos trailer de 180 s em 1080p/30 FPS, 12 capturas e seis GIFs. Inclui criação de personagem/companheiro, atendimento, drops, desafios, FitFeed, decoração, emotes, pets e foto final. Capturas utilizaram dados isolados e build de filmagem. Edição e fontes ficam em Captures/TrailerCompleto/edit. Trailer com 73.402.585 bytes e 5.400 quadros, AAC medido em −14 LUFS e pico verdadeiro −3,5 dBFS. Houve revisão de enquadramentos e timestamps. Escuta direta permanece como limite da validação. Publicação segue manual.
+
+O manifesto cleanup-final.json registra liberação de 2.532.823.211 bytes em intermediários regeneráveis, com fontes, referências e entregas preservadas. Medições e hashes estão no delivery.json da produção.
+
+## 13/11/2026 — Entregas Windows e Web BairroVivo
+
+Entregues Builds/FitCheck-Windows.zip e Builds/FitCheck-Web.zip, com nomes sem rótulo de teste. ZIPs de 77.454.290 e 52.269.080 bytes, pastas de 139.514.362 e 52.379.149 bytes. Compilações sem erros/avisos. Windows passou TEST_BUILD_01_PASSED. A revisão web em iframe verificou criação/Sphynx, casa, pausa/retomada, ponteiro em um clique e reabertura após recarregar. O percurso Windows mediu 31,87/31,18 s. Evidência em Art/Releases/BairroVivo/VALIDACAO.md. As entregas incluem as alterações de espelhos, pets, vida no bairro e quarto.
+
+## 13/11/2026 — Encaixe de orelhas e acabamento do quarto
+
+Bases das orelhas dos gatos foram estreitadas e embutidas, com pivôs e faces laterais fechadas. A mesa passou a separar celular, catálogo, luminária e porta-retrato, com apoio no tampo. Livros, vinil e caixa de som substituíram os blocos da estante. Revisão de arte/rig 41. ROOM_EAR_PASSED e capturas em Captures/RoomAndEars. Fonte em Art/Reviews/RoomAndEars.
+
+## 12/11/2026 — Vida no bairro e memória da semana
+
+Reações visíveis aos emotes dentro de sete metros, cooldown de oito segundos, retomada de rotas e objetos presos às mãos. FitFeed recebeu comentários com retratos. Cartazes e preparativos mudam durante os sete dias. Animais ganharam olhos, piscadas, orelhas e espreguiçar, além do gato Sphynx e olhos azuis em branco/siamês.
+
+Pedidos especiais ao vivo passaram a exigir camiseta original de Ravi, três peças base AFTER HOURS para Téo e o calçado do post anterior de Ravi para Joana. Notas e replays históricos foram preservados. A foto coletiva final reúne 13 perfis e jogador, gera week-group.png por save e abre pelo porta-retrato. SOCIAL_WEEK_PASSED cobre requisitos, 42 combinações de animais, reações, comentários, cartazes, foto e isolamento. Fonte em Art/Reviews/SocialWeek.
+
+## 12/11/2026 — Novos clientes, cronômetros e espelhos
+
+Iara Ponteiro, Dante Remendo e Cora Semente substituíram encontros repetidos. Mantidos sete dias/21 encontros e IDs históricos. Júlia passou a 30 s e Iara a 45 s, com contagem na montagem e aviso em dez segundos. Molduras Original/Paint 95/Fit Player no quarto e espelho da loja compartilham reflexo real 128×352/15 Hz. SHOP_MIRROR_PASSED verificou câmera, emotes, cortina e orçamento. A validação CompanionsAndMirrors registra entregas intermediárias Windows 09/Web 10.
+
+FitFeed recebeu fundo de estrelas do itch.io e os discos cinza artificiais foram removidos dos personagens. FEED_SHADOW_PASSED verificou preservação dos posts e distribuição da interface. Material em Art/Reviews/FeedAndShadows.
+
+## 12/11/2026 — Companheiros, decoração doméstica e emotes
+
+Criação/edição passou a salvar gato ou cachorro por espaço, com tipo, seis cores e nome. Saves antigos recebem gato padrão. Fubá tornou-se gato fixo do bairro, com contagem exclusiva para seu traje. Decoração da casa usa home-style.json, prévia reversível e enquadramento automático suave também na loja. O espelho doméstico teve alcance corrigido. Revisores em Art/Reviews/Companions e HomeDecor.
+
+Emotes em primeira pessoa receberam poses e mãos dedicadas, aceno, palmas, joinha, 67 e Cinema, além de gesto secreto. Pausa e cancelamento restauram o corpo. EMOTES_REVIEW_PASSED verificou seis poses, ângulos, espelho e cinco contatos sonoros das palmas. Refinos de polegar/dedos foram registrados nas capturas de Art/Reviews/Emotes.
+
+## 11–12/11/2026 — Navegador, interação e som
+
+WebGL recebeu preservação explícita de componentes contra stripping e ponte JavaScript para captura real do ponteiro em um clique. Configurações ganharam ajuda de controles. Após revisões da tecla Esc, a regra final da Web passou a usar somente P para pausa/retomada e botões para navegação. Esc permanece do navegador. Catálogo de teste voltou a desligado. Evidências Web01–Web09 em Art/Releases.
+
+Interações E/F receberam resposta visual curta e os personagens receberam iluminação quente com recorte vermelho, reaproveitando materiais. Entraram 18 efeitos adicionais em 11/11 e dez arquivos de animais/bairro em 12/11, com manifestos, conversões mono e créditos. Latido e palmas são sínteses originais. Pause/mute/intervalos preservados. Conferências em Art/Reviews/InteractionLighting e Art/Audio.
+
+## 06–11/11/2026 — Expansão da campanha e vestuário
+
+Consolidação retrospectiva do intervalo registrada nos commits. A campanha cresceu de três para sete dias, com 21 encontros e novos perfis. Entraram cabelos/cores, roupas fornecidas, novos calçados e acessórios, chegando a 32 itens. IDs e inventários históricos foram preservados. Prateleiras/drops, materiais, acabamento e corpo em movimento receberam revisões. A progressão usa marcos adicionais de 750/1.050/1.400 RP. O teste de combinações é reversível e a distribuição começa com a progressão normal.
+
+Áudio do pacote AUDIOS e faixas Pixabay foram integrados com procedência em Art/Audio/CREDITS.md. A revisão Test08 registrou 21 encontros, 2.100 RP na execução perfeita, 32 peças, migração, backup e fluxo da loja. Medições a 60 FPS na GTX 1650 constam na validação dessa entrega e descrevem aquela máquina.
 
 ## 05/11/2026 — Teaser atualizado com o fluxo do jogo
 

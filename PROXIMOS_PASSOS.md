@@ -241,3 +241,11 @@ Pedido somente de registro; não executar nesta sessão.
 - Windows e Web com as últimas alterações, sem “Teste” nos nomes. Builds/FitCheck-Windows.zip (77,45 MB) e Builds/FitCheck-Web.zip (52,27 MB); pastas extraídas 139,51/52,38 MB, abaixo de 200 MB.
 - Compilações sem erros/avisos; Windows TEST_BUILD_01_PASSED e Web em iframe com criação/Sphynx/save/pausa/retomar/captura do mouse/reabertura.
 - Instruções, relato de bugs, roteiro, hashes e manifestos em Art/Releases/BairroVivo. Publicação no itch.io ainda manual. Preservar atual e uma anterior recuperável por plataforma.
+
+## Trailer completo e mídia de divulgação — 13/11/2026
+
+- Entrega concluída em Captures/TrailerCompleto/edit: FitCheck-Trailer-Completo.mp4 (180 s, 1920×1080, 30 FPS, 73.402.585 bytes), com cerca de 135 s de jogo e 45 s de edição/identidade. Inclui criação de personagem/companheiro, atendimento, drops, desafios, FitFeed, decoração, emotes, pets e memória final.
+- FitCheck-Itchio-Midia.zip: 12 capturas e seis GIFs; lembrança final separada em extras com spoiler. Fontes editáveis, montagem, programas, créditos, medições e conferências preservados no mesmo diretório. Captura isolada; saves e builds entregues intactos.
+- Vídeo validado com 5.400 quadros; áudio AAC medido em −14 LUFS e pico verdadeiro −3,5 dBFS, sem escuta direta. Revisão crítica independente aprovada após correção de enquadramentos e timestamps.
+- Limpeza desta produção: 2.532.823.211 bytes de caches, perfis isolados de teste, build temporária de filmagem e intermediários regeneráveis. Preservados originais, referências, saves reais, fontes de edição e builds atual/anterior. Detalhes em cleanup-final.json.
+- Publicação do trailer e das artes continua manual. As builds Windows/Web publicáveis não foram substituídas pelo executável de filmagem.
