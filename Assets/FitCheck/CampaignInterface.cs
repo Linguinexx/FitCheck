@@ -144,7 +144,7 @@ namespace FitCheck
             if(!progress.closed){
                 Txt(new Rect(96,645,1100,75),"As peças dos marcos alcançados chegam no fechamento.",copy,muted);
                 if(Tap(new Rect(96,769,510,67),"Receber recompensas e fechar o dia",true)){
-                    int rewards=progress.rewards.Count;var before=progress.achievements.ToArray();progress.Close();NotifyAchievements(before);TrySave();if(progress.rewards.Count>rewards)PlayClip(Clip("unlock_drop"),.65f);else Sound(2);
+                    int rewards=progress.rewards.Count;var before=progress.achievements.ToArray();progress.Close();NotifyAchievements(before);bool saved=TrySave();if(saved&&progress.Complete)BeginLoading(OpenWeekMemory);if(progress.rewards.Count>rewards)PlayClip(Clip("unlock_drop"),.65f);else Sound(2);
                 }
             }else{
                 Txt(new Rect(96,640,1200,90),progress.rewards.Count>0?"Peças conquistadas: "+string.Join("  /  ",progress.rewards):"Novos visuais podem melhorar sua Reputação. A campanha continua mesmo com notas baixas.",copy,violet);
@@ -186,7 +186,7 @@ namespace FitCheck
                 return;
             }
 
-            const float cardHeight=738;
+            const float cardHeight=972;
             float contentHeight=count*cardHeight-16+24;
             fitFeedScroll=GUI.BeginScrollView(new Rect(424,firstCardY,1016,viewportHeight),fitFeedScroll,
                 new Rect(0,0,1016,contentHeight),false,false,GUIStyle.none,GUIStyle.none);
@@ -197,7 +197,7 @@ namespace FitCheck
                 int index=count-1-row;
                 var post=progress.posts[index];
                 const float left=232;
-                RoundedPanel(new Rect(left,y,cardWidth,722),FeedCardColor,8);
+                RoundedPanel(new Rect(left,y,cardWidth,956),FeedCardColor,8);
                 FeedByline(new Rect(left+20,y+20,512,68),index);
                 var photoRect=new Rect(left+20,y+100,512,512);
                 FitFeedImage(photoRect,FeedPhoto(post.photo));
@@ -206,6 +206,7 @@ namespace FitCheck
                 Txt(new Rect(left+20,y+664,186,14),"ATENDIMENTO",feedTag,FeedMuted);
                 Txt(new Rect(left+20,y+678,186,24),"Nota "+post.score+"/10",feedScore,FeedPaper);
                 if(Tap(new Rect(left+380,y+662,152,40),"Ver avaliação →",true))opened=index;
+                DrawFeedComments(left+20,y+724,index,post.score);
             }
             GUI.EndScrollView();
 
@@ -220,16 +221,8 @@ namespace FitCheck
         }
         void FeedByline(Rect r,int index)
         {
-            if(feedPortraits==null)feedPortraits=FeedPortraitNames.Select(name=>name==null?null:Resources.Load<Texture2D>("Artwork/PhoneAndProfiles/"+name)).ToArray();
             var client=DayOne.Customers[index];
-            var avatar=new Rect(r.x,r.y,68,68);
-            int profile=DayOne.CustomerProfile(index);
-            var portrait=profile<feedPortraits.Length?feedPortraits[profile]:null;
-            if(portrait!=null)GUI.DrawTexture(avatar,portrait,ScaleMode.ScaleToFit,true);
-            else{
-                RoundedPanel(avatar,FeedInset,34);
-                Txt(avatar,client.name.Substring(0,1),action,paper);
-            }
+            FeedAvatar(new Rect(r.x,r.y,68,68),DayOne.CustomerProfile(index),client.name);
             FeedStyles();
             Txt(new Rect(r.x+84,r.y+8,r.width-84,30),client.name,feedName,FeedPaper);
             Txt(new Rect(r.x+84,r.y+42,r.width-84,23),client.location+" · Dia "+(index/DayProgress.CustomersPerDay+1).ToString("00"),feedSmall,FeedMuted);
@@ -244,6 +237,6 @@ namespace FitCheck
             if(!focus&&(stage==Stage.Dressing||stage==Stage.Confirm)){paused=true;dragging=false;}
             if(!focus&&stage==Stage.City){dragging=false;SyncCityCursor();}
         }
-        void OnDestroy(){if(bubbleTail!=null)Destroy(bubbleTail);DisposePresentation();Font.textureRebuilt-=FontRebuilt;if(titlePhoto!=null)Destroy(titlePhoto);if(titleScrim!=null)Destroy(titleScrim);if(photo!=null)Destroy(photo);foreach(var t in lockedThumbnails.Values)Destroy(t);foreach(var t in feedPhotos.Values)Destroy(t);if(clickSound!=null)Destroy(clickSound);if(photoSound!=null)Destroy(photoSound);if(awardSound!=null)Destroy(awardSound);}
+        void OnDestroy(){if(weekMemoryPhoto!=null)Destroy(weekMemoryPhoto);if(bubbleTail!=null)Destroy(bubbleTail);DisposePresentation();Font.textureRebuilt-=FontRebuilt;if(titlePhoto!=null)Destroy(titlePhoto);if(titleScrim!=null)Destroy(titleScrim);if(photo!=null)Destroy(photo);foreach(var t in lockedThumbnails.Values)Destroy(t);foreach(var t in feedPhotos.Values)Destroy(t);if(clickSound!=null)Destroy(clickSound);if(photoSound!=null)Destroy(photoSound);if(awardSound!=null)Destroy(awardSound);}
     }
 }

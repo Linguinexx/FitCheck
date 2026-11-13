@@ -8,7 +8,7 @@ namespace FitCheck
         public bool IsHome=>homeInterior;
         public static readonly Rect HomeBounds=new Rect(-5.5f,-4.5f,11,9);
         public static readonly Vector2 HomeSpawn=new Vector2(0,.2f),HomeDoor=new Vector2(0,-3.5f),HomeBed=new Vector2(-1.5f,2.6f),HomeWardrobe=new Vector2(3,2),HomeDesk=new Vector2(-2.1f,-2.2f);
-        public static readonly Vector3 HomePhonePosition=new Vector3(-3.3f,1.49f,-2.6f);
+        public static readonly Vector3 HomePhonePosition=new Vector3(-3.12f,1.49f,-2.30f);
         public static readonly Vector3 HomeWardrobeCenter=new Vector3(4.4f,1.8f,3.875f);
         static readonly Vector3 HomeMirrorCenter=new Vector3(5.39f,1.83f,1.36f);
         const float HomeMirrorHalfWidth=.59f,HomeMirrorHalfHeight=1.62f;
@@ -44,8 +44,7 @@ namespace FitCheck
             Block(new Vector3(-3.8f,1.32f,-2.65f),new Vector3(2.5f,.16f,1.3f),new Color(.61f,.43f,.27f),"Wood");
             foreach(float x in new[]{-4.8f,-2.8f})foreach(float z in new[]{-3.1f,-2.2f})Block(new Vector3(x,.65f,z),new Vector3(.09f,1.3f,.09f),Ink,"CityMetal");
             BuildHomePhone();
-            BuildHomeDecorBook();
-            Block(new Vector3(-4.5f,1.52f,-2.7f),new Vector3(.7f,.23f,.52f),Kaos,"Paper");
+            BuildHomeDecorBook();BuildWeekFrame();
             obstacles.Add(new Rect(-5.05f,-3.3f,2.5f,1.3f));
             // Door, poster, night window, shelf, and a rug give each corner a purpose.
             Block(new Vector3(0,1.85f,-4.43f),new Vector3(1.9f,3.7f,.14f),Ink,"Wood");
@@ -66,7 +65,7 @@ namespace FitCheck
                 Rod(new Vector3(x,2.30f,-4.44f),new Vector3(x,2.64f,-4.00f),.035f,Ink,"CityMetal");
                 Rod(new Vector3(x,2.30f,-4.44f),new Vector3(x,2.67f,-4.44f),.035f,Ink,"CityMetal");
             }
-            for(int i=0;i<3;i++)Block(new Vector3(-4.5f+i*.7f,2.92f,-4.23f),new Vector3(.45f,.30f,.42f),i%2==0?Kaos:Cream,"Paper");
+            FurnishHomeShelf();
             DecorateHome(walnut,petrol);
             BuildHomeMirror();BuildHomeMirrorTrim();
             BuildCat(new Vector3(-3.4f,1.055f,1.6f),240,companion??new PetAppearance());
@@ -182,6 +181,7 @@ namespace FitCheck
         bool InteractHome()
         {
             if(loadingActive||paused||stage!=Stage.City||!city.IsHome)return false;
+            if(city.LookingAtWeekFrame(cam)){if(progress.Complete)BeginLoading(OpenWeekMemory);else message="A lembrança do bairro chega ao terminar a semana.";return true;}
             int action=city.HomeInteraction;if(action==0)return false;
             if(action==1){if(DeferLoading(()=>{EnterStreetAt(CityView.StreetHomeThreshold,180);homeDoorExitRemaining=.95f;}))return true;EnterStreetAt(CityView.StreetHomeThreshold,180);homeDoorExitRemaining=.95f;return true;}
             if(action==4)fitFeedScroll=Vector2.zero;

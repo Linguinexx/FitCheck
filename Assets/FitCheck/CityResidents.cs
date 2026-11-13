@@ -25,15 +25,15 @@ namespace FitCheck
             public Transform root;public Vector3 home;public Quaternion facing,homeFacing;
             public List<ResidentPart> parts=new List<ResidentPart>();
             public Vector2[] path;public int target;public float cycle,blinkClock,wait,phase,speed,blend,poseDelay;public bool walking;
-            public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;public int idleStyle;public Transform prop;public AvatarExpression expression;
+            public float reaction,reactionCooldown;public int reactionKind;public bool wallLean,oneShot;public Vector3 leanAnkle;public float leanBlend,leanTarget;public int idleStyle;public Transform prop;public AvatarExpression expression;
         }
         [SerializeField] List<Resident> residents=new List<Resident>();
         public const int StreetResidentCount=7;
         public bool CustomerSpeaking;
-        const int ResidentArtRevision=39;
+        const int ResidentArtRevision=41;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
-            if(IsHome&&(homeArtBed==null||homeArtSide==null||homeArtRecords==null||homeMirrorTrim==null))return false;
+            if(IsHome&&(weekFrameMaterial==null||homeArtBed==null||homeArtSide==null||homeArtRecords==null||homeMirrorTrim==null))return false;
             if(IsInterior&&!IsHome&&shopMirrorMaterial==null)return false;
             if(IsInterior&&(cat==null||!cat.Ready))return false;
             if(!IsInterior&&(cat==null||!cat.Ready||!cat.IsFuba))return false;
@@ -59,6 +59,7 @@ namespace FitCheck
         }
         void TickResidents(float delta)
         {
+            TickNeighbourReactions(delta);
             for(int index=0;index<residents.Count;index++){
                 var actor=residents[index];if(!actor.root.gameObject.activeSelf)continue;actor.cycle+=delta;actor.blinkClock+=delta;actor.walking=false;
                 var pos=actor.root.localPosition;float travelled=0;
@@ -101,6 +102,7 @@ namespace FitCheck
                         }else actor.speed=0;
                     }
                 }
+                if(actor.reaction>0){var toward=Position-new Vector2(pos.x,pos.z);if(toward.sqrMagnitude>.01f)actor.facing=Quaternion.RotateTowards(actor.facing,Quaternion.LookRotation(new Vector3(-toward.x,0,-toward.y)),delta*180);}
                 actor.phase=Mathf.Repeat(actor.phase+travelled/.90f,1);
                 actor.blend=Mathf.MoveTowards(actor.blend,actor.walking?1:0,delta*5);
                 actor.leanBlend=actor.wallLean?Mathf.MoveTowards(actor.leanBlend,actor.leanTarget,delta*3.2f):0;
@@ -164,6 +166,7 @@ namespace FitCheck
                 body.pelvis=Quaternion.Slerp(body.pelvis,lean.pelvis,f);body.torso=Quaternion.Slerp(body.torso,lean.torso,f);body.head=Quaternion.Slerp(body.head,lean.head,f);
                 body.pelvisShift=Vector3.Lerp(body.pelvisShift,lean.pelvisShift,f);body.torsoShift=Vector3.Lerp(body.torsoShift,lean.torsoShift,f);
             }
+            if(actor.reaction>0){float f=Mathf.Clamp01(Mathf.Min((2.8f-actor.reaction)*4,actor.reaction*3));body.head=Quaternion.Slerp(body.head,body.torso*Quaternion.Euler(Mathf.Sin(actor.reaction*8)*4,0,0),f);}
             return body;
         }
         LegPose ResidentLeg(Resident actor,float side,float dip,BodyPose body)
@@ -204,6 +207,7 @@ namespace FitCheck
             var forearm=upperArm*Quaternion.Euler(2+(3+Mathf.Max(0,wave)*8)*actor.blend,0,-side*2*actor.blend);
             if(actor.idleStyle==2&&actor.blend<.1f&&side>0){upperArm=Quaternion.Euler(25,0,-side*12);elbow=shoulder+upperArm*(elbowRest-shoulder);forearm=upperArm*Quaternion.Euler(48,0,side*8);}
             ApplyPlayerEmoteArm(actor,side,ref upperArm,ref forearm);
+            ApplyNeighbourReactionArm(actor,side,ref upperArm,ref forearm);
             elbow=shoulder+upperArm*(elbowRest-shoulder);
             if(!part.head&&!referenceSkin){PoseCachedSkin(part,actor,body,leg,shoulder,elbowRest,elbow,upperArm,forearm);return;}
             for(int v=0;v<part.rest.Length;v++){

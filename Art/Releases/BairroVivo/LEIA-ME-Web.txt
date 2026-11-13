@@ -1,0 +1,14 @@
+FIT CHECK — WEB
+Atualização de 13/11/2026
+
+itch.io: envie FitCheck-Web.zip como HTML e habilite jogar no navegador. O index.html está na raiz. Não é necessário descompactar para enviar.
+Local: use ABRIR-WEB.bat ou python serve.py. Não abra index.html diretamente pelo Explorador.
+
+WASD: andar; Shift: correr; mouse: olhar; E: interagir; F: personalizar pelo catálogo; P: pausar; Tab: soltar/capturar cursor. Emotes 1–5, 0 encerra.
+Na Web, Esc é reservado ao navegador; use P para pausar.
+
+Comece em casa. Caminhe até a loja e abra o expediente no balcão. Até três saves independentes, sete dias e 21 encontros. Seus saves anteriores são preservados; esta entrega não inclui progresso pronto.
+
+Novo: comentários no FitFeed, reações aos emotes, bairro com preparativos por dia, pets com olhos/orelhas animados e gato Sphynx, pedidos especiais e foto coletiva final.
+
+Em save já concluído, olhe para o porta-retrato na mesa do quarto e pressione E para gerar a lembrança.

@@ -4,7 +4,9 @@ namespace FitCheck
     public partial class FirstCustomer
     {
         float arrivalFade,photoFlash,footDistance;Vector2 lastFootPosition;CityView lastFootSpace;
-        AudioClip doorFx,stepStone,stepWood,clothFx,windFx;AudioSource ambience,music;
+        AudioClip doorFx,stepStone,stepWood,clothFx,windFx;AudioSource ambience,music,incomingMusic;
+        float musicBlend;
+        const float MusicFadeSeconds=1.6f;
         AudioClip[] tracks, backgrounds;
         AudioClip[][] steps;
         int stepIndex;
@@ -15,8 +17,8 @@ namespace FitCheck
         {
             doorFx=Foley("Porta e trinco",.36f,170,.25f);stepStone=Foley("Passo na rua",.12f,110,.10f);stepWood=Foley("Passo no piso",.15f,85,.08f);clothFx=Foley("Cortina de tecido",.5f,50,.28f);windFx=Foley("Ar do bairro",8,28,.015f,true);
             ambience=gameObject.AddComponent<AudioSource>();ambience.clip=windFx;ambience.loop=true;ambience.playOnAwake=false;ambience.volume=.23f;ambience.spatialBlend=0;
-            music=gameObject.AddComponent<AudioSource>();
-            music.playOnAwake=false;music.loop=true;music.volume=.26f;
+            music=CreateMusicSource();
+            incomingMusic=CreateMusicSource();
             tracks=new[]{Clip("mus_menu"),Clip("mus_bairro_noite"),Clip("mus_quarto"),Clip("mus_loja")};
             backgrounds=new[]{null,Clip("amb_bairro_noite")??windFx,Clip("amb_quarto_noite"),Clip("amb_loja_interior")};
             steps=new[]{Steps("calcada"),Steps("madeira"),Steps("loja")};
@@ -39,6 +41,39 @@ namespace FitCheck
         void PlayClip(AudioClip clip,float volume=1)
         {
             if(clip!=null&&effects!=null&&!mutedAudio&&!paused)effects.PlayOneShot(clip,volume);
+        }
+        AudioSource CreateMusicSource()
+        {
+            var source=gameObject.AddComponent<AudioSource>();
+            source.playOnAwake=false;
+            source.loop=true;
+            source.volume=0;
+            return source;
+        }
+        void TickMusic(AudioClip target,float delta,bool hold)
+        {
+            if(incomingMusic.clip!=null&&target==music.clip){
+                (music,incomingMusic)=(incomingMusic,music);
+                musicBlend=1-musicBlend;
+            }
+            if(incomingMusic.clip==null&&music.clip!=target){
+                incomingMusic.clip=target;
+                musicBlend=0;
+            }
+            if(!hold&&incomingMusic.clip!=null)
+                musicBlend=Mathf.MoveTowards(musicBlend,1,delta/MusicFadeSeconds);
+            float angle=musicBlend*Mathf.PI*.5f;
+            float volume=.26f*musicVolume;
+            music.volume=volume*Mathf.Cos(angle);
+            incomingMusic.volume=volume*Mathf.Sin(angle);
+            TickLoop(music,music.clip,hold);
+            TickLoop(incomingMusic,incomingMusic.clip,hold);
+            if(musicBlend>=1){
+                music.Stop();
+                music.clip=null;
+                (music,incomingMusic)=(incomingMusic,music);
+                musicBlend=0;
+            }
         }
         static void TickLoop(AudioSource source,AudioClip clip,bool hold)
         {
@@ -96,10 +131,9 @@ namespace FitCheck
             bool menu=stage==Stage.Title||stage==Stage.Welcome||stage==Stage.CharacterCreator;
             bool activeWorld=city!=null&&city.gameObject.activeInHierarchy;
             int zone=menu?0:activeWorld?(city.IsHome?2:city.IsInterior?3:1):3;
-            music.volume=.26f*musicVolume;
-            AudioListener.volume=masterVolume;
-            TickLoop(music,tracks[zone],paused||mutedAudio);
+            TickMusic(tracks[zone],delta,paused||mutedAudio);
             TickLoop(ambience,activeWorld&&!menu?backgrounds[zone]:null,paused||mutedAudio);
+            AudioListener.volume=masterVolume;
             effects.mute=mutedAudio||paused;
             bool dust=world&&!reducedMotion;
             if(!dust){if(motes.isPlaying)motes.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);}

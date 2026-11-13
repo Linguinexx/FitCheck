@@ -1,0 +1,13 @@
+FIT CHECK — WINDOWS
+Atualização de 13/11/2026
+
+Extraia o ZIP inteiro e abra FitCheck.exe. Mantenha as pastas e DLLs junto do executável.
+
+WASD: andar; Shift: correr; mouse: olhar; E: interagir; F: personalizar pelo catálogo; P: pausar; Tab: soltar/capturar cursor. Emotes 1–5, 0 encerra.
+Esc também abre a pausa no Windows.
+
+Comece em casa. Caminhe até a loja e abra o expediente no balcão. Até três saves independentes, sete dias e 21 encontros. Seus saves anteriores são preservados; esta entrega não inclui progresso pronto.
+
+Novo: comentários no FitFeed, reações aos emotes, bairro com preparativos por dia, pets com olhos/orelhas animados e gato Sphynx, pedidos especiais e foto coletiva final.
+
+Em save já concluído, olhe para o porta-retrato na mesa do quarto e pressione E para gerar a lembrança.

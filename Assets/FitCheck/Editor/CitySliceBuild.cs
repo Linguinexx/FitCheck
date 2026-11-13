@@ -11,7 +11,9 @@ namespace FitCheck.Editor
         // Also callable with -batchmode -executeMethod FitCheck.Editor.CitySliceBuild.Build.
         [MenuItem("Tools/Fit Check/Build Windows first person")]
         public static void Build()
-        {BuildTo("Windows-Test01");}
+        {BuildRelease();}
+        public static void BuildRelease()
+        {CampaignChecks.Validate();DropCatalogChecks.Validate();BuildTo("Windows");}
         public static void BuildTeaserCapture()
         {BuildTo("Windows-TeaserCurrent");}
         public static void BuildTest04()

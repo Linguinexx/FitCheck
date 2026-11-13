@@ -6,6 +6,7 @@ namespace FitCheck
         void HandleEscapeAction()
         {
             if(loadingActive)return;
+            if(stage==Stage.WeekMemory){CloseWeekMemory();return;}
             if(stage==Stage.Title&&titleIntroPlaying&&!reducedMotion){titleIntroPlaying=false;return;}
             if(settingsOpen&&controlsOpen){controlsOpen=false;return;}
             if(settingsOpen&&audioSettingsOpen){audioSettingsOpen=false;return;}

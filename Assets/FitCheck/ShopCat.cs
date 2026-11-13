@@ -27,7 +27,8 @@ namespace FitCheck
         public void Build(PetAppearance choice)
         {
             if(choice!=null)choice.Validate();IsFuba=choice==null;DisplayName=choice?.name??"Fubá";ConfigurationKey=choice==null?"Fuba":JsonUtility.ToJson(choice);
-            fur=Paint(choice==null?new Color(.78f,.39f,.14f):choice.CoatColor,true,choice==null);cream=Paint(choice!=null&&choice.species==0&&choice.coat==4?choice.CoatColor:new Color(.96f,.87f,.70f));dark=Paint(choice==null?new Color(.20f,.105f,.055f):new Color(.13f,.09f,.07f),false);pink=Paint(new Color(.65f,.32f,.27f),false);
+            hairlessCat=choice!=null&&choice.species==0&&choice.breed==3;
+            fur=Paint(choice==null?new Color(.78f,.39f,.14f):choice.CoatColor,!hairlessCat,choice==null);cream=Paint(choice!=null&&choice.species==0&&choice.coat==4?choice.CoatColor:new Color(.96f,.87f,.70f));dark=Paint(choice==null?new Color(.20f,.105f,.055f):new Color(.13f,.09f,.07f),false);pink=Paint(new Color(.65f,.32f,.27f),false);
             if(choice!=null&&choice.species==1){BuildDog(choice);CompletePetVoice(true);return;}
             Form("Sombra de contato",new Vector3(0,.006f,.05f),new Vector3(1.22f,.012f,.77f),dark,transform);
             body=Form("Corpo — gatinho deitado",new Vector3(.06f,.31f,.07f),new Vector3(1.18f,.60f,.74f),fur,transform);
@@ -55,15 +56,10 @@ namespace FitCheck
                 if(choice.breed==2&&choice.coat!=4){foreach(var renderer in head.GetComponentsInChildren<MeshRenderer>())if(renderer.name=="Cabeça arredondada"||renderer.name=="Orelha triangular")renderer.sharedMaterial=dark;}
                 if(choice.coat==1||(choice.breed==2&&choice.coat!=4))foreach(var renderer in head.GetComponentsInChildren<MeshRenderer>())if(renderer.name=="Olho fechado")renderer.sharedMaterial=cream;
             }
+            if(hairlessCat){body.localScale=new Vector3(.91f,.85f,.87f);var fold=Paint(Color.Lerp(choice.CoatColor,pink.color,.22f),false);foreach(float y in new[]{.105f,.135f}){var line=new Vector3[9];for(int i=0;i<line.Length;i++){float x=Mathf.Lerp(-.075f,.075f,i/8f),h=y+.004f*Mathf.Cos(i*Mathf.PI/4);line[i]=new Vector3(x,h,-.245f*Mathf.Sqrt(1-x*x/.0729f-h*h/.055225f)-.003f);}Curve("Ruguinha do Sphynx",line,.0028f,fold,head);}}
             CompletePetVoice(false);
         }
-        void Ear(int side)
-        {
-            var center=new Vector3(side*.19f,.18f,.01f);
-            var a=center+new Vector3(-.11f,0,-.11f);var b=center+new Vector3(.11f,0,-.11f);var tip=center+new Vector3(side*.035f,.21f,0);var back=center+new Vector3(0,.015f,.13f);
-            MeshPart("Orelha triangular",new[]{a,b,tip,back},new[]{0,2,1,0,3,2,1,2,3,0,1,3},fur,head);
-            var c=(a+b+tip)/3;MeshPart("Interior da orelha",new[]{Vector3.Lerp(c,a,.65f)-Vector3.forward*.007f,Vector3.Lerp(c,b,.65f)-Vector3.forward*.007f,Vector3.Lerp(c,tip,.65f)-Vector3.forward*.007f},new[]{0,2,1},pink,head);
-        }
+        void Ear(int side){BuildSoftEar(side);}
         Transform Form(string name,Vector3 p,Vector3 size,Material material,Transform parent)
         {
             const int sides=16,rows=10;var v=new List<Vector3>();var uv=new List<Vector2>();var t=new List<int>();
@@ -91,14 +87,15 @@ namespace FitCheck
         public bool CanPet(Camera camera)
         {var d=PetTarget-camera.transform.position;return d.sqrMagnitude<3.6f*3.6f&&Vector3.Dot(camera.transform.forward,d.normalized)>.93f;}
         public bool Pet(bool muted)
-        {if(cooldown>0||voice.clip==null)return false;if(meowVariants!=null&&meowVariants[MeowCount%meowVariants.Length]!=null)voice.clip=meowVariants[MeowCount%meowVariants.Length];voice.mute=muted;voice.Play();response=voice.clip.length;cooldown=voice.clip.length+.35f;if(purr!=null){purr.Stop();purr.mute=muted;purrDelay=voice.clip.length/voice.pitch+.04f;}MeowCount++;return true;}
+        {if(cooldown>0||voice.clip==null)return false;if(meowVariants!=null&&meowVariants[MeowCount%meowVariants.Length]!=null)voice.clip=meowVariants[MeowCount%meowVariants.Length];awakeTime=3.2f;voice.mute=muted;voice.Play();response=voice.clip.length;cooldown=voice.clip.length+.35f;if(purr!=null){purr.Stop();purr.mute=muted;purrDelay=voice.clip.length/voice.pitch+.04f;}MeowCount++;return true;}
         public void Tick(float delta,bool paused,bool reduced,bool muted)
         {
             voice.mute=muted;if(purr!=null)purr.mute=muted;if(paused!=wasPaused){if(paused){voice.Pause();if(purr!=null)purr.Pause();}else{voice.UnPause();if(purr!=null)purr.UnPause();}wasPaused=paused;}if(paused)return;
             if(purr!=null&&purrDelay>=0){purrDelay-=delta;if(purrDelay<0&&purr.clip!=null)purr.Play();}
             age+=delta;cooldown=Mathf.Max(0,cooldown-delta);response=Mathf.Max(0,response-delta);
-            float breath=reduced?0:Mathf.Sin(age*1.8f)*.018f;body.localScale=new Vector3(1,1+breath,1);
+            float breath=reduced?0:Mathf.Sin(age*1.8f)*.018f;body.localScale=Vector3.Scale(bodyRestScale,new Vector3(1,1+breath,1));
             head.localPosition=headRest+Vector3.up*(reduced?0:Mathf.Sin(Mathf.Clamp01(response/Mathf.Max(.1f,voice.clip.length))*Mathf.PI)*.025f);
+            AnimatePetExpression(delta,reduced);
         }
         void OnDisable(){if(voice!=null)voice.Stop();if(purr!=null)purr.Stop();purrDelay=-1;}
         void OnDestroy(){foreach(var value in owned)if(value!=null)Destroy(value);}

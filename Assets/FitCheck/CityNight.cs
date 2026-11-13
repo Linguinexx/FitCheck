@@ -11,6 +11,7 @@ namespace FitCheck
         public float AmbientTime=>atmosphereTime;
         Material CityMaterial(string key)
         {
+            if(key=="WeekSign"){var sign=new Material(Resources.Load<Shader>("CitySign")){name="Cartazes da semana — atlas compartilhado"};sign.mainTexture=Resources.Load<Texture2D>("WeekSigns");sign.SetFloat("_Emission",.18f);return sign;}
             if(key=="CommerceSign"){var sign=new Material(Resources.Load<Shader>("CitySign")){name="Comércio local — letreiros impressos"};sign.mainTexture=Resources.Load<Texture2D>("CommerceSigns");sign.SetFloat("_Emission",0);return sign;}
             if(key=="CityWindow"){
                 var glass=new Material(Resources.Load<Shader>("WindowGlass")){name="Vidro texturizado — reflexos e desgaste"};glass.mainTexture=Resources.Load<Texture2D>("Surfaces/Metal032");glass.SetFloat("_Interior",IsInterior?1:0);return glass;

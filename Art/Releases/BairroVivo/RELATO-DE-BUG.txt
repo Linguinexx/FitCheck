@@ -1,0 +1,14 @@
+FIT CHECK — RELATO DE BUG
+Versão: atualização de 13/11/2026
+Plataforma: Windows / Web
+Navegador (Web) / versão do Windows:
+Configuração do computador, se souber:
+Save / nome do personagem / dia:
+Local:
+O que você estava fazendo:
+Passos para repetir:
+O que deveria acontecer:
+O que aconteceu:
+Acontece sempre ou às vezes?
+Foto ou vídeo:
+Áudio / volume / mute / pausa, se relevante:

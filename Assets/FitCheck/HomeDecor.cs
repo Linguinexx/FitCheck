@@ -24,7 +24,7 @@ namespace FitCheck
     }
     public partial class CityView
     {
-        public static readonly Vector3 HomeDecorBook=new Vector3(-4.02f,1.47f,-2.25f);
+        public static readonly Vector3 HomeDecorBook=new Vector3(-4.23f,1.438f,-2.32f);
         [SerializeField] Transform homeArtBed,homeArtSide,homeArtRecords;
         [SerializeField] HomeDecor activeHomeDecor;
         readonly Dictionary<Mesh,Color[]> homeDecorOriginal=new Dictionary<Mesh,Color[]>();

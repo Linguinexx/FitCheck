@@ -70,6 +70,7 @@ namespace FitCheck
         {
             if(stage!=Stage.Dressing)return;
             if(locked){PlayClip(Clip("ui_unavailable"),.55f);message=item.name+" • "+item.drop+". "+(replayIndex>=0?"Peça fora do catálogo deste atendimento.":progress.reached.Contains(item.unlockAt)?"Entrega ao fechar o expediente.":"Alcance "+item.unlockAt+" RP; entrega ao fechar o expediente.");return;}
+            if(!AllowSpecialOrderPiece(item))return;
             if(outfit[item.slot]==item.id){category=item.slot;message="";return;}
             PlayWardrobeSound();
             outfit[item.slot]=item.id;category=item.slot;message="";Apply();

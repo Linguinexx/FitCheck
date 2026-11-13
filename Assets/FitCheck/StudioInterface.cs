@@ -128,6 +128,7 @@ namespace FitCheck
             if(renderedStage==Stage.Summary)SummaryUI();
             if(renderedStage==Stage.Home)HomeUI();
             if(renderedStage==Stage.Retrospective)RetrospectiveUI();
+            if(renderedStage==Stage.WeekMemory)WeekMemoryUI();
             if(renderedStage==Stage.City)CityUI();
             if(renderedStage==Stage.CharacterCreator&&stage==Stage.CharacterCreator)CreatorUI();
             }
@@ -223,7 +224,7 @@ namespace FitCheck
             }
             Fill(new Rect(325,827,565,57),KaosPanel);
             Txt(new Rect(340,840,535,30),"ARRASTE PARA GIRAR   /   ROLE PARA APROXIMAR",tiny,paper);
-            DrawWardrobeShelf();
+            DrawWardrobeShelf();DrawSpecialOrder();
             if(Tap(new Rect(910,836,66,38),"↺")){rotation=-12;distance=7.2f;UpdateCamera();}
             HandlePreview();
         }

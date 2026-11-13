@@ -55,9 +55,10 @@ namespace FitCheck
             if(interior&&!home){shopBuiltCampaign=progress;shopBuiltDay=progress.day;}
             city.MouseLookScale=mouseSensitivity;
             if(interior&&!home)city.ApplyShopDecor(CurrentShopDecor);
-            if(home)city.ApplyHomeDecor(CurrentHomeDecor);
+            if(home){city.ApplyHomeDecor(CurrentHomeDecor);city.SetWeekFrame(LoadWeekMemory());}
             if(interior)city.ConfigureCompanion(playerAppearance.pet);
             if(!interior&&!home){
+                city.ApplyWeekScenery(progress.day);
                 if(titleStarting)city.HideFitFeedResidents();
                 else city.SyncFitFeedResidents(studio,progress);
             }
@@ -141,8 +142,8 @@ namespace FitCheck
                 var old=city;var position=old.Position;float yaw=old.ViewYaw,pitch=old.ViewPitch;
                 old.PrepareRuntimeDisposal();old.gameObject.SetActive(false);mannequin.gameObject.SetActive(true);
                 city=new GameObject(old.IsHome?"Casa — quarto do jogador":old.IsInterior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(old.IsHome){city.BuildHome();homeRoom=city;}else if(old.IsInterior){city.BuildShop(studio,Mathf.Clamp(progress.posts.Count,0,DayOne.Customers.Length-1));shop=city;}else{city.Build(studio);street=city;}
-                if(!old.IsInterior&&!old.IsHome)city.SyncFitFeedResidents(studio,progress);
-                if(city.IsHome)city.ApplyHomeDecor(CurrentHomeDecor);else if(city.IsInterior)city.ApplyShopDecor(CurrentShopDecor);
+                if(!old.IsInterior&&!old.IsHome){city.ApplyWeekScenery(progress.day);city.SyncFitFeedResidents(studio,progress);}
+                if(city.IsHome){city.ApplyHomeDecor(CurrentHomeDecor);city.SetWeekFrame(LoadWeekMemory());}else if(city.IsInterior)city.ApplyShopDecor(CurrentShopDecor);
                 if(city.IsInterior)city.ConfigureCompanion(playerAppearance.pet);
                 studio.ApplyUniform(progress.EquippedUniform);city.RestoreWalk(position,yaw,pitch,mannequin);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);Destroy(old.gameObject);
                 shopFittingOpening=false;

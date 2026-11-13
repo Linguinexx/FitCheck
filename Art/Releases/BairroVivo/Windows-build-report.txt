@@ -1,0 +1,1 @@
+FITCHECK_CITY_BUILD: Succeeded; size=133,05 MB; errors=0; warnings=0

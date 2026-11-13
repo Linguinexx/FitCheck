@@ -218,3 +218,26 @@ Pedido somente de registro; não executar nesta sessão.
 - FEED_SHADOW_PASSED em bairro/loja e UI vazia, populada e rolada; dados de 18 posts preservados. Revisor em Art/Reviews/FeedAndShadows e prévias em Captures/FeedAndShadows.
 - Fotos novas: Iara, Dante e Cora em Profile picture. Lista com mecânicas/dias em Art/Characters/NewClients/NOVOS_PERSONAGENS.md. Júlia já existia e agora tem 30 segundos.
 - Atualizado na Unity; próxima build deve incluir estas mudanças e o espelho da loja. Windows 09/Web 10 preservadas.
+
+
+## Vida no bairro e final da semana — 12/11/2026
+
+- Seis propostas autorizadas implementadas: reações aos emotes, comentários com retratos no FitFeed, cartazes/preparativos ao longo dos sete dias, pets mais vivos/Sphynx/olhos azuis no gato branco, três pedidos especiais e foto coletiva final no porta-retrato do quarto.
+- Ravi (dia 4): manter camiseta própria; Téo (dia 5): três peças After Hours; Joana (dia 7): calçado igual ao do Ravi. Apenas atendimento ao vivo; notas, IDs, 21 encontros, saves e replays históricos preservados.
+- Foto reúne 13 clientes distintos + jogador, usa o último look de cada um e salva week-group.png por espaço. Saves zerados geram a lembrança pelo porta-retrato. Sem personagens permanentes ou novas luzes na cidade.
+- SOCIAL_WEEK_PASSED, roteiro e fonte em Art/Reviews/SocialWeek; prévias em Captures/SocialWeek. As novas mudanças ainda precisam das próximas builds Windows/Web, preservando limite de 200 MB.
+
+
+## Ajustes do quarto e gatos — 13/11/2026
+
+- Orelhas encaixadas na cabeça com base estreita/embutida e pivô próprio, mantendo olhos/cores/tipos.
+- Mesa reorganizada; caixa vermelha removida, catálogo e foto apoiados no tampo, celular/catálogo/foto/luminária separados. Interações seguem as novas posições.
+- Blocos da estante substituídos por livros, vinil e caixa de som com materiais existentes. Arte/rig 41.
+- ROOM_EAR_PASSED; fonte/roteiro Art/Reviews/RoomAndEars, prévias Captures/RoomAndEars. Incluir na próxima build solicitada.
+
+
+## Builds atualizadas — 13/11/2026
+
+- Windows e Web com as últimas alterações, sem “Teste” nos nomes. Builds/FitCheck-Windows.zip (77,45 MB) e Builds/FitCheck-Web.zip (52,27 MB); pastas extraídas 139,51/52,38 MB, abaixo de 200 MB.
+- Compilações sem erros/avisos; Windows TEST_BUILD_01_PASSED e Web em iframe com criação/Sphynx/save/pausa/retomar/captura do mouse/reabertura.
+- Instruções, relato de bugs, roteiro, hashes e manifestos em Art/Releases/BairroVivo. Publicação no itch.io ainda manual. Preservar atual e uma anterior recuperável por plataforma.

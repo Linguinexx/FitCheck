@@ -8,10 +8,10 @@ namespace FitCheck
     public partial class FirstCustomer : MonoBehaviour
     {
         CustomerRequest Customer=>DayOne.Customers[customer];
-        string Request=>Customer.request;
+        string Request=>Customer.request+(SpecialOrderActive?"\n\n"+SpecialOrderText:"");
         string[] questions=>Customer.questions;
         string[] answers=>Customer.answers;
-        enum Stage { Welcome, Dialogue, Dressing, Confirm, Leaving, Post, Summary, Home, Retrospective, City, CharacterCreator, Title }
+        enum Stage { Welcome, Dialogue, Dressing, Confirm, Leaving, Post, Summary, Home, Retrospective, City, CharacterCreator, Title, WeekMemory }
         DayProgress progress=new DayProgress(); int customer;
         int replayIndex=-1; bool fromHome; float remaining=30; bool timerWarned;
         string[] inventory;
@@ -71,6 +71,7 @@ namespace FitCheck
         void Apply(){if(shopService&&stage==Stage.Dialogue)studio.ApplyCivilian(customer,true);else studio.Apply(outfit,customer);}
         void UpdateCamera()
         {
+            if(stage==Stage.WeekMemory)return;
             if(stage==Stage.Title&&titleSceneActive){FrameLiveTitle(Time.unscaledDeltaTime);return;}
             if(stage!=Stage.City&&stage!=Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf)ExitCity();
             if(stage==Stage.Home&&city!=null&&city.IsHome&&city.gameObject.activeSelf){if(showWardrobe)FrameHomeWardrobe();else{mannequin.gameObject.SetActive(false);city.Frame(cam,reducedMotion,0);city.FramePlayerForCamera(cam,false);}return;}
@@ -95,6 +96,7 @@ namespace FitCheck
         void Update()
         {
             if(loadingActive){loadingClock+=Time.unscaledDeltaTime;return;}
+            if(stage==Stage.WeekMemory)return;
             ShopProbeMark(0);
             studio.Talking=stage==Stage.Dialogue&&!paused;
             if(city!=null)city.CustomerSpeaking=stage==Stage.Dialogue&&shopService&&!paused;
@@ -161,6 +163,7 @@ namespace FitCheck
         void Submit()
         {
             if(campaignBeforePreview!=null){SubmitVisualPreview();return;}
+            if(!SpecialOrderSatisfied()){message=SpecialOrderText;stage=Stage.Dressing;return;}
             if(replayIndex>=0&&DayOne.Score(customer,outfit)<=progress.posts[customer].score){
                 record=progress.posts[customer];Continue();message="Seu melhor visual foi mantido. Sem alteração na Reputação.";replayIndex=-1;return;
             }
