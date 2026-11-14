@@ -129,7 +129,7 @@ namespace FitCheck
         int heardEmoteClaps;AudioClip emoteClap;
         void ReadPlayerEmotes()
         {
-            if(paused||loadingActive||showShopDecor||shopGuideOpen||shopFittingOpening||ShopSequenceActive||homeDoorExitRemaining>0||!CityInputFocused)return;
+            if(paused||loadingActive||ShopLeisurePanelOpen||StreetPanelOpen||city.BallHeld||showShopDecor||shopGuideOpen||shopFittingOpening||ShopSequenceActive||homeDoorExitRemaining>0||!CityInputFocused)return;
             if(city.PlayerClapSerial>heardEmoteClaps){if(emoteClap==null)emoteClap=Clip("emote_clap");PlayClip(emoteClap,.6f);}heardEmoteClaps=city.PlayerClapSerial;
             if(Input.GetKeyDown(KeyCode.Alpha0)||Input.GetKeyDown(KeyCode.Keypad0))city.CancelPlayerEmote();
             else if(Input.GetKeyDown(KeyCode.Comma))city.PlayPlayerEmote(5);

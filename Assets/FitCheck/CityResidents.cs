@@ -33,8 +33,9 @@ namespace FitCheck
         const int ResidentArtRevision=41;
         [SerializeField] int motionRigVersion;
         public bool RuntimeReady {get{
+            if(!IsInterior&&(streetStickers==null||courtBall==null))return false;
             if(IsHome&&(weekFrameMaterial==null||homeArtBed==null||homeArtSide==null||homeArtRecords==null||homeMirrorTrim==null))return false;
-            if(IsInterior&&!IsHome&&shopMirrorMaterial==null)return false;
+            if(IsInterior&&!IsHome&&(shopMirrorMaterial==null||shopMemoryMaterial==null))return false;
             if(IsInterior&&(cat==null||!cat.Ready))return false;
             if(!IsInterior&&(cat==null||!cat.Ready||!cat.IsFuba))return false;
             if(motionRigVersion!=ResidentArtRevision||residents.Count!=(IsHome?0:IsInterior?2:StreetResidentCount+fitFeedResidents.Count))return false;
@@ -152,7 +153,7 @@ namespace FitCheck
                 pelvisShift=new Vector3(wave*.027f,0,-.011f*b),
                 torsoShift=new Vector3(wave*.027f,Mathf.Sin(actor.cycle*1.3f)*.004f*idle,-.022f*b)
             };
-            if(actor.idleStyle==2&&b<.1f){body.torso=Quaternion.Euler(-4,0,-2);body.head=Quaternion.Euler(-23,-12+Mathf.Sin(actor.cycle*.5f)*2,-3);}
+            if(actor.idleStyle==2&&b<.1f&&!IsStreetSpeaker(actor)){body.torso=Quaternion.Euler(-4,0,-2);body.head=Quaternion.Euler(-23,-12+Mathf.Sin(actor.cycle*.5f)*2,-3);}
             if(actor.idleStyle>=3){
                 float side=actor.idleStyle==4?-1:1;
                 body.pelvis=Quaternion.Euler(0,-6*side,-3*side);

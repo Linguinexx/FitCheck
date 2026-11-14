@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "browser": "Microsoft Edge / Chromium, headless SwiftShader",
+  "embedding": "cross-origin localhost iframe with fullscreen and pointer lock permissions",
+  "checks": [
+    "Unity ready and loader hidden",
+    "new save selection and character/companion creation",
+    "Golden Retriever selection and room entry",
+    "P pause and first-click resume pointer lock",
+    "page reload, saved-slot persistence and return home",
+    "P pause and first-click resume pointer lock after reload"
+  ],
+  "pointerLockedOnResume": true,
+  "pointerLockedAfterReload": true,
+  "gameRuntimeErrors": 0,
+  "notes": [
+    "Two favicon 404s belong to the local iframe wrapper, not the game.",
+    "Software renderer emitted ReadPixels warnings; this is not a hardware FPS benchmark.",
+    "Reload interaction checked after the title intro completed."
+  ]
+}

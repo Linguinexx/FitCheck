@@ -109,6 +109,7 @@ namespace FitCheck
             ShopProbeMark(2);
             if(!paused){if(stage==Stage.Dialogue&&shopService)shopCameraTime+=Time.unscaledDeltaTime;if(shopDressingInStore)shopDressingTime+=Time.unscaledDeltaTime;}
             UpdateCamera();
+            FrameStreetActivities();
             ShopProbeMark(3);
             if(city!=null&&city.gameObject.activeInHierarchy)city.TickCat(Time.deltaTime,paused,reducedMotion,mutedAudio);
             if(stage==Stage.CharacterCreator&&creatorPetPreview!=null&&creatorPetTab)creatorPetPreview.Tick(Time.deltaTime,paused,reducedMotion,true);

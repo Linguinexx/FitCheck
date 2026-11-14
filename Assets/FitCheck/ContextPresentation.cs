@@ -31,6 +31,7 @@ namespace FitCheck
         }
         void TickContext(float delta)
         {
+            TickStreetActivities();
             if(!paused){contextClock+=delta;speechAge+=delta;answerAge+=delta;affordanceTapAge=Mathf.Min(1,affordanceTapAge+delta);}
             if(!paused&&shopDressingInStore&&(stage==Stage.Dressing||stage==Stage.Confirm)&&city!=null)city.AdvanceDressingBlinks(delta);
             if(stage==Stage.City&&city!=null){string name=city.IsHome?"EM CASA":city.IsInterior?"DRIPLAB":city.Place;if(name!=contextRegion){contextRegion=name;regionUntil=contextClock+2.8f;}}
@@ -41,7 +42,7 @@ namespace FitCheck
         {return new WorldHint{key=key,label=label,bounds=new Bounds(p,size),valid=true};}
         WorldHint CurrentWorldHint()
         {
-            if(city==null||stage!=Stage.City||paused||ShopSequenceActive||showShopDecor||shopGuideOpen||homeDoorExitRemaining>0)return default;
+            if(city==null||stage!=Stage.City||paused||ShopLeisurePanelOpen||StreetPanelOpen||ShopSequenceActive||showShopDecor||shopGuideOpen||homeDoorExitRemaining>0)return default;
             Vector3 origin=city.transform.position;
             if(city.CatInteraction(cam))return Hint("E","Fazer carinho em "+city.Cat.DisplayName,city.Cat.transform.position+Vector3.up*.35f,new Vector3(1.5f,.8f,1));
             if(city.IsHome){if(city.LookingAtWeekFrame(cam))return Hint("E",progress.Complete?"Ver a foto da semana":"Lembrança da semana",origin+CityView.WeekFramePosition,new Vector3(1.1f,.65f,.2f));if(city.LookingAtHomeDecor(cam))return Hint("F","Personalizar o quarto",origin+CityView.HomeDecorBook,new Vector3(.7f,.13f,.5f));switch(city.HomeInteraction){
@@ -52,12 +53,14 @@ namespace FitCheck
             }}else if(!city.IsInterior){
                 if(city.StreetInteraction==1)return Hint("E","Entrar na DripLab",origin+new Vector3(10.4f,2,3.3f),new Vector3(2.2f,4,.3f));
                 if(city.StreetInteraction==2)return Hint("E","Entrar em casa",origin+new Vector3(CityView.StreetHomeDoor.x,2,8.65f),new Vector3(2.1f,4,.25f));
+                var activity=StreetActivityHint();if(activity.valid)return activity;
                 if(city.TryLookAtPostedCustomer(cam,progress,out int index,out Vector3 point))
                     return Hint("E","Cumprimentar "+DayOne.Customers[index].name,point-Vector3.up*.65f,new Vector3(1.3f,3.25f,1.2f));
                 if(city.LookingAtGarageDeck(cam,progress,out _,out Vector3 deck))
                     return Hint("E","Conferir o disco",origin+deck,new Vector3(1.1f,.65f,.68f));
             }else{
                 if(!shopFittingOpening&&city.LookingAtShopGuide(cam))return Hint("E","Conversar com "+CityView.ShopGuideName,city.ShopGuideTarget-Vector3.up*.8f,new Vector3(1.2f,3.4f,1));
+                var moment=ShopMomentHint();if(moment.valid)return moment;
                 if(city.ShopInteraction==1){if(ShopOpen&&!city.CustomerWaitingAtCounter&&!progress.DayComplete)return default;return Hint("E",ShopActionLabel(),origin+new Vector3(4.4f,.82f,6.15f),new Vector3(5.95f,1.64f,1.62f));}
                 if(!ShopOpen&&Vector2.Distance(city.Position,new Vector2(2.1f,7.55f))<2)return Hint("F","Personalizar a loja",origin+new Vector3(2.1f,1.58f,6.35f),new Vector3(1.7f,.15f,1.25f));
                 if(city.ShopInteraction==2)return Hint("E",ShopActionLabel(),origin+new Vector3(-4.9f,1.85f,5.15f),new Vector3(4.86f,3.5f,.2f));
@@ -135,6 +138,7 @@ namespace FitCheck
         void DrawAmbientBubble()
         {
             if(!StreetBubblesAllowed)return;
+            if(DrawStreetActivityBubble())return;
             if(contextClock<garageRecordUntil){
                 int record=progress.GarageRecordsFound;
                 ComicBubble(new Rect(487,697,466,122),GarageRecordTitles[lastGarageDeck],"VITROLAS  /  "+record+" DE "+DayProgress.GarageDjRecordGoal,contextClock-(garageRecordUntil-1.8f),false);

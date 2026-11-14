@@ -131,7 +131,8 @@ namespace FitCheck
             bool menu=stage==Stage.Title||stage==Stage.Welcome||stage==Stage.CharacterCreator;
             bool activeWorld=city!=null&&city.gameObject.activeInHierarchy;
             int zone=menu?0:activeWorld?(city.IsHome?2:city.IsInterior?3:1):3;
-            TickMusic(tracks[zone],delta,paused||mutedAudio);
+            int track=activeWorld&&!menu&&city.IsInterior&&!city.IsHome?ShopMusicTrack:zone;
+            TickMusic(tracks[track],delta,paused||mutedAudio);
             TickLoop(ambience,activeWorld&&!menu?backgrounds[zone]:null,paused||mutedAudio);
             AudioListener.volume=masterVolume;
             effects.mute=mutedAudio||paused;

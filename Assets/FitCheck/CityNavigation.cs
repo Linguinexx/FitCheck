@@ -88,6 +88,7 @@ namespace FitCheck
         }
         public void Frame(Camera camera,bool reduced,float delta)
         {
+            if(delta>0)TickStreetActivitiesWorld(Mathf.Min(delta,.05f));
             BindNightLighting();
             if(delta>0){float step=Mathf.Min(delta,.05f);TickResidents(step);if(IsInterior){if(!IsHome)AdvanceFittingCurtain(step);}else{TickTraffic(step);if(!reduced)AnimateAtmosphere(step);}}
             StepPlayerBody(0,0);

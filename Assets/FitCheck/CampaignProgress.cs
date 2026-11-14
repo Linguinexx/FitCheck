@@ -11,6 +11,7 @@ namespace FitCheck
         public const int TotalDays=7, CustomersPerDay=3;
         public const int TotalCustomers=TotalDays*CustomersPerDay;
         public int version=2, day=1, reputation, uniform;
+        public NeighbourhoodProgress neighbourhood=new NeighbourhoodProgress();
         public int FirstCustomerOfDay=>(day-1)*CustomersPerDay;
         public bool closed;
         public List<Attempt> posts=new List<Attempt>();
@@ -129,6 +130,7 @@ namespace FitCheck
         }
         public void Validate()
         {
+            neighbourhood??=new NeighbourhoodProgress();neighbourhood.Validate();
             if(version==1){version=2;day=1;achievements=new List<string>();foreach(var post in posts)post.available=Catalog.Items.Select(g=>g.id).ToArray();UpdateAchievements();}
             if(version!=2||day<1||day>TotalDays||posts==null||posts.Count<FirstCustomerOfDay||posts.Count>FirstCustomerOfDay+CustomersPerDay||reached==null||rewards==null||achievements==null||closed&&!DayComplete)
                 throw new ArgumentException("Progresso inválido");

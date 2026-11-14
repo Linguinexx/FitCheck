@@ -7,6 +7,8 @@ namespace FitCheck
         {
             if(loadingActive)return;
             if(weekCelebrating){paused=!paused;return;}
+            if(ShopLeisurePanelOpen){CloseShopMoment();return;}
+            if(StreetPanelOpen){CloseStreetPanel();return;}
             if(stage==Stage.WeekMemory){CloseWeekMemory();return;}
             if(stage==Stage.Title&&titleIntroPlaying&&!reducedMotion){titleIntroPlaying=false;return;}
             if(settingsOpen&&controlsOpen){controlsOpen=false;return;}

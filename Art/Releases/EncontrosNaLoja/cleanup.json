@@ -1,0 +1,94 @@
+{
+  "bytes": 1458669928,
+  "deleted": [
+    {
+      "bytes": 868379787,
+      "path": "tools/.web05-build-project/Library"
+    },
+    {
+      "bytes": 447206,
+      "path": "tools/.web05-build-project/Logs"
+    },
+    {
+      "bytes": 191979589,
+      "path": "tools/.web05-build-project/Builds"
+    },
+    {
+      "bytes": 17258,
+      "path": "tools/.encontros-delivery"
+    },
+    {
+      "bytes": 83297601,
+      "path": "tools/.encontros-browser-profile"
+    },
+    {
+      "bytes": 134553465,
+      "path": "FitCheck/Builds/Windows-Test09"
+    },
+    {
+      "bytes": 52178274,
+      "path": "FitCheck/Builds/Web-Test10"
+    },
+    {
+      "bytes": 75477162,
+      "path": "FitCheck/Builds/FitCheck-Windows-Test09.zip"
+    },
+    {
+      "bytes": 95,
+      "path": "FitCheck/Builds/FitCheck-Windows-Test09.zip.sha256"
+    },
+    {
+      "bytes": 52069355,
+      "path": "FitCheck/Builds/FitCheck-Web-Test10.zip"
+    },
+    {
+      "bytes": 91,
+      "path": "FitCheck/Builds/FitCheck-Web-Test10.zip.sha256"
+    },
+    {
+      "bytes": 1386,
+      "path": "FitCheck/Captures/EncontrosRelease/Windows/cat-save-a731d554dab64d7fbc82677dcacddcae"
+    },
+    {
+      "bytes": 322,
+      "path": "FitCheck/Captures/EncontrosRelease/Windows/decoration-ec25c31af9d24ff0b330c2523f667b27"
+    },
+    {
+      "bytes": 0,
+      "path": "FitCheck/Captures/EncontrosRelease/Windows/home-session"
+    },
+    {
+      "bytes": 950,
+      "path": "FitCheck/Captures/EncontrosRelease/Windows/loading-saves-22a49a03be4a47a584713c8998b5600e"
+    },
+    {
+      "bytes": 0,
+      "path": "FitCheck/Captures/EncontrosRelease/Windows/loading-session"
+    },
+    {
+      "bytes": 9622,
+      "path": "FitCheck/Captures/EncontrosRelease/Windows/save-slots-acb261ad7299485db7ab4a80a0d6d9cc"
+    },
+    {
+      "bytes": 84930,
+      "path": "FitCheck/Captures/EncontrosRelease/Windows/service-session"
+    },
+    {
+      "bytes": 0,
+      "path": "FitCheck/Captures/EncontrosRelease/Windows/session"
+    },
+    {
+      "bytes": 85591,
+      "path": "FitCheck/Captures/EncontrosRelease/Shop/service-session"
+    },
+    {
+      "bytes": 0,
+      "path": "FitCheck/Captures/EncontrosRelease/Shop/session"
+    },
+    {
+      "bytes": 87244,
+      "path": "FitCheck/Captures/EncontrosRelease/Shop/sessions"
+    }
+  ],
+  "preserved": "Current and previous verified releases, original assets/references, real saves, source tools and final proof images"
+}

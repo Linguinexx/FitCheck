@@ -21,6 +21,8 @@ namespace FitCheck
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-gameplay-performance")>=0){yield return CheckShopGameplayPerformance(folder);Application.Quit(0);yield break;}
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-test-build-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-loading-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-road-polish-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-night-lighting-review")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"-sneaker-v2-review")>=0){yield return RunLoadingReview(folder);yield break;}
             try{
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-moments-review")>=0){CheckShopMoments(folder);Application.Quit(0);yield break;}
+                if(Array.IndexOf(Environment.GetCommandLineArgs(),"-neighbourhood-activities")>=0){CheckNeighbourhoodActivities(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-pets-finale-review")>=0){CheckPetsFinale(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-drop-shelf-review")>=0){CheckDropShelfRelease(folder);Application.Quit(0);yield break;}
                 if(Array.IndexOf(Environment.GetCommandLineArgs(),"-current-teaser")>=0){CaptureCurrentTeaser(folder);Application.Quit(0);yield break;}

@@ -28,6 +28,7 @@ namespace FitCheck
         }
         bool NeighbourVisible(Vector2 start,Vector2 end){int count=Mathf.CeilToInt(Vector2.Distance(start,end)/.15f);for(int i=0;i<=count;i++)if(!WorldFree(Vector2.Lerp(start,end,i/(float)Mathf.Max(1,count))))return false;return true;}
         void ApplyNeighbourReactionArm(Resident actor,float side,ref Quaternion upper,ref Quaternion lower){
+            if(ApplyStreetChallengeArm(actor,side,ref upper,ref lower))return;
             if(actor.reaction<=0||actor.prop!=null||side<0)return;
             float age=2.8f-actor.reaction,weight=Mathf.Clamp01(Mathf.Min(age/.25f,actor.reaction/.35f));
             var shoulder=new Vector3(side*.39f,1.84f,.015f);var elbowRest=new Vector3(side*.52f,1.50f,-.025f);var wristRest=new Vector3(side*.485f,1.17f,-.095f);

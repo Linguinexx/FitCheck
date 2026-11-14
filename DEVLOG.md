@@ -708,3 +708,30 @@ Limpeza desta entrega: removidos 39 diretórios/pacotes antigos gerados em Build
 - Fechar o dia 7 após os 21 encontros inicia celebração de 7,4 s com jogador/clientes e cinco fogos, seguida da foto coletiva guardada no quarto. Pausa e avanço para a foto; reabrir lembrança existente preserva arquivo e não repete fogos. Movimento reduzido usa constelações estáticas e câmera fixa.
 - Efeito temporário com uma malha/material, sem luzes ou atores permanentes novos. PETS_FINALE_PASSED: 36 combinações raça/pelagem salvas/recarregadas, IDs legados, pausa, movimento reduzido, câmera restaurada, término automático/manual e foto/progresso preservados. Máximo de 4.847 vértices por cachorro. Compilação de revisão sem erros/avisos.
 - Fonte/roteiro Art/Reviews/PetsFinale; prévias reais Captures/PetsFinale. Alterações na Unity; builds Windows/Web entregues anteriormente preservadas, incluir na próxima build solicitada.
+
+## Atividades opcionais no trajeto — 14/11/2026
+
+- Implementados os quatro itens aprovados: desafio diário de emotes com moradores existentes, rodadas de três arremessos na quadra, sete adesivos e mural coletivo personalizável perto da galeria, três histórias com sete capítulos/respostas que continuam por dia.
+- Campo DayProgress.neighbourhood isolado por save; defaults em saves antigos. Não alterar notas, inventários, IDs, reputação, sete dias ou 21 atendimentos para representar estas atividades. Recompensas somente cosméticas, sem obrigatoriedade.
+- Mural com prévia/Salvar/Cancelar e enquadramento automático; bola/medidor/desafios respeitam pausa. NPC conversando olha para o jogador, objetos presos à mão permanecem corretos; rotas retomam depois. Encerrar atividade ao entrar em interiores e não mostrar balões ambientais dentro deles.
+- Reutilizados sete moradores e materiais/sons existentes; nenhuma textura, luz em tempo real ou ator permanente novo. NEIGHBOURHOOD_ACTIVITIES_PASSED, compilação sem erros/avisos; fonte e guia Art/Reviews/NeighbourhoodActivities, capturas Captures/NeighbourhoodActivities. Não afirmar ganho de FPS sem benchmark.
+- Alterações no projeto da Unity; builds Windows/Web anteriores preservadas, incluir na próxima build solicitada. Contador GitHub deste pedido: 1 de 3.
+
+## Momentos opcionais na loja — 14/11/2026
+
+- Nando mantém ajuda durante o expediente e ganha abas Resenha/Desafio com loja fechada: sete conversas e sete perguntas diárias, tentativa sem penalidade e um adesivo cosmético por dia correto. Não alterar reputação, notas, inventários, IDs nem 21 encontros.
+- Caixa de som no banco da entrada permite escolher entre três trilhas já existentes; preferência por save aplicada somente à loja, preservando áudio dos outros ambientes, volume, mute e pausa. Rádio sem novas texturas/luzes/atores.
+- Álbum e porta-retrato no balcão permitem rever fotos reais dos atendimentos e expor uma favorita; vazio não cria foto/cliente. Persistência por save em DayProgress.neighbourhood, defaults legados. Painéis devolvem câmera/controle ao fechar; lazer indisponível com loja aberta e guia permanece disponível.
+- Fonte/roteiro Art/Reviews/ShopMoments; imagens reais Captures/ShopMoments. Alterações na Unity; builds Windows/Web publicáveis anteriores preservadas, incluir na próxima build solicitada. Contador GitHub deste pedido: 2 de 3.
+
+Validação final: SHOP_MOMENTS_PASSED e FITCHECK_SHOP_SERVICE_PASSED. Compilação sem erros/avisos; acesso físico, retorno do controle, três escolhas de trilha, álbum vazio/fotos reais/favorita, resposta errada/certa/repetida, persistência e isolamento de saves, bloqueio do lazer durante o expediente, guia disponível, atores/luzes preservados, cortina vazia e atendimento completo. Conferência visual das telas e porta-retrato aprovada após corrigir a ocultação imediata da cabeça ao abrir os painéis.
+
+Limpeza concluída: 847,616,798 bytes de instalador substituível, páginas antigas de revisão, compilação temporária, seus caches e saves isolados. Preservados originais, referências, ferramentas úteis, saves reais, capturas finais e builds atual/anterior. Auditoria local em tools/shop-moments-cleanup.json.
+
+## Builds Windows e Web — 14/11/2026
+
+- Entrega EncontrosNaLoja concluída com novas raças/fogos, atividades do bairro e interações da loja. Windows/Web compilados sem erros/avisos. TEST_BUILD_01_PASSED e SHOP_MOMENTS_PASSED no executável final; Web em iframe com Golden/save/pausa/retomar/recarga e captura do mouse.
+- ZIPs Windows 77.477.146 bytes / Web 52.306.764 bytes; pastas 139.569.155 / 52.418.026 bytes, todos abaixo de 200 MB. Caminhos atuais Builds/FitCheck-Windows.zip e Builds/FitCheck-Web.zip; anteriores em Windows-Previous/Web-Previous. CompanyName/productName e saves preservados. Publicação manual.
+- Roteiro, relato de bugs, validação, hashes e manifests em Art/Releases/EncontrosNaLoja.
+
+- Limpeza após validação: 1458669928 bytes de caches/compilações duplicadas e saves de verificação; entregas antigas Windows-Test09/Web-Test10 removidas somente após conferir os hashes da atual e da anterior de 13/11. Originais, referências, saves reais e capturas finais preservados.

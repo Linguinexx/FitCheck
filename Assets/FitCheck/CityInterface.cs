@@ -57,8 +57,9 @@ namespace FitCheck
             if(interior&&!home)city.ApplyShopDecor(CurrentShopDecor);
             if(home){city.ApplyHomeDecor(CurrentHomeDecor);city.SetWeekFrame(LoadWeekMemory());}
             if(interior)city.ConfigureCompanion(playerAppearance.pet);
+            if(interior&&!home)SyncShopMemory();
             if(!interior&&!home){
-                city.ApplyWeekScenery(progress.day);
+                city.ApplyWeekScenery(progress.day);city.ApplyStreetMemories(StreetMemory);
                 if(titleStarting)city.HideFitFeedResidents();
                 else city.SyncFitFeedResidents(studio,progress);
             }
@@ -68,6 +69,7 @@ namespace FitCheck
         }
         void ExitCity()
         {
+            CloseShopMoment();ResetStreetActivities();
             greetedIndex=-1;
             garageRecordUntil=0;
             if(shopGuideOpen)CloseShopGuide();
@@ -142,15 +144,15 @@ namespace FitCheck
                 var old=city;var position=old.Position;float yaw=old.ViewYaw,pitch=old.ViewPitch;
                 old.PrepareRuntimeDisposal();old.gameObject.SetActive(false);mannequin.gameObject.SetActive(true);
                 city=new GameObject(old.IsHome?"Casa — quarto do jogador":old.IsInterior?"DripLab — interior da loja":"Bairro — Praça do Encontro").AddComponent<CityView>();if(old.IsHome){city.BuildHome();homeRoom=city;}else if(old.IsInterior){city.BuildShop(studio,Mathf.Clamp(progress.posts.Count,0,DayOne.Customers.Length-1));shop=city;}else{city.Build(studio);street=city;}
-                if(!old.IsInterior&&!old.IsHome){city.ApplyWeekScenery(progress.day);city.SyncFitFeedResidents(studio,progress);}
+                if(!old.IsInterior&&!old.IsHome){city.ApplyWeekScenery(progress.day);city.SyncFitFeedResidents(studio,progress);city.ApplyStreetMemories(StreetMemory);}
                 if(city.IsHome){city.ApplyHomeDecor(CurrentHomeDecor);city.SetWeekFrame(LoadWeekMemory());}else if(city.IsInterior)city.ApplyShopDecor(CurrentShopDecor);
-                if(city.IsInterior)city.ConfigureCompanion(playerAppearance.pet);
+                if(city.IsInterior){city.ConfigureCompanion(playerAppearance.pet);SyncShopMemory();}
                 studio.ApplyUniform(progress.EquippedUniform);city.RestoreWalk(position,yaw,pitch,mannequin);city.PreparePlayerBody(studio);mannequin.gameObject.SetActive(false);Destroy(old.gameObject);
                 shopFittingOpening=false;
             }
             ReadPlayerEmotes();SyncCityCursor(true);
             Vector2 input=Vector2.zero;
-            if(!paused&&!showShopDecor&&!shopGuideOpen&&!shopFittingOpening&&!ShopSequenceActive&&homeDoorExitRemaining<=0&&(!cityFreeCursor||cityDragLook)&&!ProofMode&&CityInputFocused){
+            if(!paused&&!showShopDecor&&!shopGuideOpen&&!ShopLeisurePanelOpen&&!StreetPanelOpen&&!shopFittingOpening&&!ShopSequenceActive&&homeDoorExitRemaining<=0&&(!cityFreeCursor||cityDragLook)&&!ProofMode&&CityInputFocused){
                 if(cityLookCaptured&&Time.frameCount>=cityLookReadyFrame&&BrowserPointer.Locked)city.Look(new Vector2(Input.GetAxisRaw("Mouse X"),Input.GetAxisRaw("Mouse Y")));
                 float x=(Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.RightArrow)?1:0)-(Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.LeftArrow)?1:0);
                 float y=(Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow)?1:0)-(Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow)?1:0);
@@ -159,7 +161,7 @@ namespace FitCheck
             if(!paused&&homeDoorExitRemaining>0&&!city.IsInterior){float exitStep=Mathf.Min(Mathf.Min(delta,.05f),homeDoorExitRemaining);homeDoorExitRemaining-=exitStep;input=new Vector2(0,-.55f);delta=exitStep;}
             city.SprintRequested=!ProofMode&&!paused&&!cityFreeCursor&&homeDoorExitRemaining<=0&&(Input.GetKey(KeyCode.LeftShift)||Input.GetKey(KeyCode.RightShift));
             if(shopProbeActive)input=shopProbeMoving?new Vector2(0,Mathf.Sin(Time.frameCount*.06f)>0?.3f:-.3f):Vector2.zero;
-            city.Step(input,delta,paused||shopFittingOpening||ShopSequenceActive,mannequin);
+            city.Step(input,delta,paused||ShopLeisurePanelOpen||StreetPanelOpen||shopFittingOpening||ShopSequenceActive,mannequin);
         }
         static bool CityHitArea(Vector2 p)
         {
@@ -167,12 +169,14 @@ namespace FitCheck
         }
         void CityUI()
         {
+            if(StreetPanelOpen){DrawStreetPanel();return;}
+            if(ShopLeisurePanelOpen){ShopMomentsUI();return;}
             if(shopGuideOpen){ShopGuideUI();return;}
             if(showShopDecor){ShopDecorUI();return;}
             if(ShopSequenceActive){ComicBubble(new Rect(455,740,530,125),ShopSequenceLabel,"DRIPLAB",1,false);return;}
             if(cityFreeCursor&&Tap(new Rect(38,111,350,48),"Clique para olhar  /  Tab")){cityFreeCursor=false;SyncCityCursor();}
             if(contextClock<regionUntil){RoundedPanel(new Rect(38,176,380,42),new Color(.035f,.03f,.035f,.84f));Txt(new Rect(52,183,352,28),contextRegion,caption,paper);}
-            DrawAffordance();DrawAmbientBubble();DrawHomeDecorNotice();ProcessCityEvent(Event.current);
+            DrawAffordance();DrawAmbientBubble();DrawStreetActivitiesHUD();DrawHomeDecorNotice();ProcessCityEvent(Event.current);
         }
         void ProcessCityEvent(Event e)
         {
@@ -180,7 +184,7 @@ namespace FitCheck
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.F&&!showShopDecor){city.CancelPlayerEmote(true);var hint=CurrentWorldHint();OpenShopDecor();if(showShopDecor){if(hint.key=="F")ConfirmAffordance(hint);e.Use();}return;}
             if(paused||stage!=Stage.City||ShopSequenceActive)return;
             if(ProcessCityDragLook(e))return;
-            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){city.CancelPlayerEmote(true);var hint=CurrentWorldHint();if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()||TryGreetPostedCustomer()||TryUseGarageDeck())){ConfirmAffordance(hint);e.Use();}return;}
+            if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.E){city.CancelPlayerEmote(true);var hint=CurrentWorldHint();if(TryPetCat()||(city.IsHome?InteractHome():city.IsInterior?InteractShop():InteractStreet()||TryStreetActivity()||TryGreetPostedCustomer()||TryUseGarageDeck())){ConfirmAffordance(hint);e.Use();}return;}
             if(e.type==EventType.KeyDown&&e.keyCode==KeyCode.Tab){cityFreeCursor=!cityFreeCursor;SyncCityCursor();e.Use();return;}
             if(!CityHitArea(e.mousePosition))return;
             if(e.type==EventType.MouseDown&&CaptureCityPointer(e.mousePosition,e.button))e.Use();
@@ -214,10 +218,11 @@ namespace FitCheck
             if(loadingActive||paused||stage!=Stage.City||!city.IsInterior||city.IsHome||ShopSequenceActive||shopGuideOpen)return false;
             if(shopFittingOpening)return true;
             if(city.LookingAtShopGuide(cam)){
-                shopGuidePreviousCursor=cityFreeCursor;shopGuideOpen=true;shopGuideTopic=-1;shopGuideAnswerAt=contextClock;
+                shopGuidePreviousCursor=cityFreeCursor;shopGuideOpen=true;shopGuideTab=0;shopQuizAnswer=-1;shopGuideTopic=-1;shopGuideAnswerAt=contextClock;
                 city.StopWalk();cityDragLook=false;cityFreeCursor=true;SyncCityCursor(true);
                 return true;
             }
+            if(TryShopMoment())return true;
             int action=city.ShopInteraction;if(action==0)return false;
             if(action==3){EnterStreetAt(CityView.StreetShopDoor,180);return true;}
             if(pendingPhotoBytes!=null&&!TrySave())return false;
@@ -232,20 +237,7 @@ namespace FitCheck
         {
             shopGuideOpen=false;cityFreeCursor=shopGuidePreviousCursor;SyncCityCursor(true);
         }
-        void ShopGuideUI()
-        {
-            var panel=new Rect(916,162,482,510);
-            DrawKaosPanel(panel);
-            Txt(new Rect(944,184,425,52),"Bora trocar ideia?",heading,paper);
-            for(int i=0;i<ShopGuideTopics.Length;i++){
-                if(Tap(new Rect(944,250+i*57,424,48),ShopGuideTopics[i],shopGuideTopic==i)){
-                    shopGuideTopic=i;shopGuideAnswerAt=contextClock;
-                }
-            }
-            if(Tap(new Rect(944,570,424,48),Application.platform==RuntimePlatform.WebGLPlayer?"Valeu, até mais":"Valeu, até mais  /  Esc")){CloseShopGuide();return;}
-            ComicBubble(new Rect(96,613,750,216),shopGuideTopic<0?"Eu sou o Nando, mas pode chamar de Chave. Manda a dúvida que eu te ajudo.":ShopGuideAnswers[shopGuideTopic],
-                CityView.ShopGuideName,contextClock-shopGuideAnswerAt,false);
-        }
+        void ShopGuideUI(){NandoLeisureUI();}
         void FinishShopFittingEntryIfReady()
         {
             if(!shopFittingOpening||paused||stage!=Stage.City||city.FittingMoving)return;

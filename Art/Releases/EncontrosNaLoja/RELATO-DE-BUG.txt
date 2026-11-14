@@ -1,0 +1,12 @@
+FIT CHECK — RELATO DE BUG
+Versão: atualização de 14/11/2026 — Encontros na loja
+Plataforma: Windows / Web
+Navegador / versão do Windows:
+Save / nome / dia:
+Local e interação:
+Passos para repetir:
+O que deveria acontecer:
+O que aconteceu:
+Frequência:
+Foto ou vídeo:
+Áudio / pausa / mute / movimento reduzido:
