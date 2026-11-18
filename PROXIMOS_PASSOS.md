@@ -322,3 +322,9 @@ Limpeza concluída: 847,616,798 bytes de instalador substituível, páginas anti
 O usuário rejeitou iniciais, números e nomes como elemento principal. Quer desenhos com personalidade, usando como referência sua logo ilustrada da DripLab. Novos conceitos sem texto nas capas em Art/Audio/ShopRecords/MascotConcepts: guaxinim de boné (Laje 92), sol com sorriso torto (Passo Torto), coruja sonolenta (Depois das Dez). V2 tem PNG-fonte, SVG vetorizado, cores lisas e testes de escala; são propostas para avaliação, ainda sem aplicação em Assets. LogoConcepts tipográfico é direção anterior rejeitada. Preservar a logo oficial e as capas atuais.
 
 Revisão V3: direção dos mascotes aprovada. Guaxinim preto sobre vermelho; sol com olhos igualmente fechados e óculos na testa; coruja com olheiras simples e gorro de dormir. Prévia concepts-color-v3.png, PNGs/SVGs/fontes/prompts e teste de escala preservados. Aguardar avaliação desta revisão antes de aplicar no jogo; versões anteriores preservadas.
+
+Teste V4 solicitado: mesmo sol com olhar malandro semicerrado; óculos e gorro com volume gráfico no nível do boné do guaxinim (recortes claros, sombras pretas, sem cinzas/degradês). Prévia concepts-color-v4.png, fontes e vetores preservados com V3. Ainda sem aplicação no jogo.
+
+Correção posterior: usuário descartou a alteração dos dois olhos/nariz; quer o sol original piscando, com nariz, acrescentando apenas os óculos refinados da V4. Prévia raster passo-source-v6.png e prompt correspondente em MascotConcepts. Coruja e guaxinim permanecem na V4; nenhuma integração no jogo nesta etapa.
+
+Capas finalizadas em Art/Audio/ShopRecords/MascotConcepts/Final: SVGs de símbolos/capas, PNGs 1024 e apresentação FitCheck-Discos.png. Guaxinim preto/vermelho, sol original piscando com óculos preto/lima, coruja de gorro preto/roxo. Artes entregues para uso; aplicação em Assets/seleção de discos continua pendente. Áudios comerciais não recebidos nem integrados.

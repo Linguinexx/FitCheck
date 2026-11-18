@@ -17,3 +17,9 @@ Direção ilustrada aprovada pelo usuário. Laje mantém exatamente os caminhos 
 Capas 1024×1024 e folha de escala renderizadas e inspecionadas: símbolos totalmente dentro das margens, sem palavras, com acessórios e olhos legíveis na apresentação. Expressões funcionam em 64 px; em 16 px os detalhes ainda exigem redução dedicada. Auditoria do sol: uma cor, sem raster/texto/gradientes/filtros, 448 âncoras; a complexidade vetorial continua uma limitação para simplificar após avaliação.
 
 Prévia atual: concepts-color-v3.png; testes: scale-tests-v3.png. Nenhuma integração nas capas do jogo, música, UI ou builds nesta revisão.
+
+## V4 — olhar malandro e acabamento dos acessórios
+
+Novo teste solicitado após aprovação da V3: sol com ambos os olhos semicerrados olhando de lado, sorriso preservado; óculos com aro espesso, haste visível e um recorte de reflexo por lente. Gorro da coruja com espessura na dobra, pregas largas e sombra simples no pompom. Boné do guaxinim usado como referência de densidade de detalhes, massas pretas e recortes claros. Não adicionar cinzas, degradês ou textura. Laje preserva os caminhos aprovados.
+
+Fontes PNG editadas com image_gen, vetorizadas e renderizadas em 1024 px. concepts-color-v4.png e scale-tests-v4.png inspecionadas: acessórios legíveis e recortes separados nas capas, expressões visíveis em 64 px; 16 px continua dependente de simplificação para uso real. A equivalência de acabamento é uma avaliação visual, sujeita ao retorno do usuário. V3 preservada para comparação do olhar amigável. Nenhuma alteração em Assets, músicas ou builds. Prompts exatos em PROMPTS-v4.md.
