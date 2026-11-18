@@ -1,0 +1,27 @@
+{
+  "disc": "laje",
+  "index": 3,
+  "title": "Gin and Juice",
+  "artist": "Snoop Dogg",
+  "seconds": 211.64,
+  "source": "Soundtracks\\Laje92\\Snoop_Dogg_-_Gin_and_Juice_Prod._By_Emanuel_Dean_Dr._Dre_(mp3.pm).mp3",
+  "sourceBytes": 8466852,
+  "sourceSha256": "1531a1ba0b432c88d548b872dc7aed39c8a6ce68799aa688e263284c0b06bb8f",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\laje_04.ogg",
+  "gameBytes": 2211691,
+  "gameSha256": "381255e4b83f51c75e8a7ec1c49e47a3dacb0891a076c938d026676aebbccbf1",
+  "inputMeasurement": {
+    "input_i": "-11.14",
+    "input_tp": "1.71",
+    "input_lra": "1.50",
+    "input_thresh": "-21.15",
+    "output_i": "-17.69",
+    "output_tp": "-2.75",
+    "output_lra": "1.60",
+    "output_thresh": "-27.69",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.31"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

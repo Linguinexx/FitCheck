@@ -1,0 +1,27 @@
+{
+  "disc": "passo",
+  "index": 4,
+  "title": "Cotidiano",
+  "artist": "Chico Buarque",
+  "seconds": 171.18,
+  "source": "Soundtracks\\Passo Torto\\Chico_Buarque_-_Cotidiano_2_51_(mp3.pm).mp3",
+  "sourceBytes": 2739348,
+  "sourceSha256": "790f44a2c6bc809f7cda3b9dbf4cdad452c397fb27a4e20026a64a2d2c7707bf",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\passo_05.ogg",
+  "gameBytes": 1634921,
+  "gameSha256": "48f47460a2509306ec9cf00937bb45497bb688c63e9059d26936c0d93c9938c6",
+  "inputMeasurement": {
+    "input_i": "-16.93",
+    "input_tp": "-1.47",
+    "input_lra": "8.30",
+    "input_thresh": "-27.28",
+    "output_i": "-17.05",
+    "output_tp": "-2.00",
+    "output_lra": "8.00",
+    "output_thresh": "-27.30",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.95"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

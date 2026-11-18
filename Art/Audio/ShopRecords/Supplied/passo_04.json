@@ -1,0 +1,27 @@
+{
+  "disc": "passo",
+  "index": 3,
+  "title": "Construção",
+  "artist": "Chico Buarque",
+  "seconds": 384.16,
+  "source": "Soundtracks\\Passo Torto\\Chico_Buarque_-_Construcao_1971_(mp3.pm).mp3",
+  "sourceBytes": 15367358,
+  "sourceSha256": "54cc8817b98a0ce933643f560e4d9aec032f74f53a98fc178b38131c6dca0086",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\passo_04.ogg",
+  "gameBytes": 3901896,
+  "gameSha256": "4ddc962a49324644b2411a1675ff18a54afb743e2a7c58d85e951e68cf1f7acd",
+  "inputMeasurement": {
+    "input_i": "-14.07",
+    "input_tp": "-0.13",
+    "input_lra": "11.50",
+    "input_thresh": "-24.29",
+    "output_i": "-15.31",
+    "output_tp": "-2.00",
+    "output_lra": "4.80",
+    "output_thresh": "-25.34",
+    "normalization_type": "dynamic",
+    "target_offset": "-2.69"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

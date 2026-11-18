@@ -1,0 +1,27 @@
+{
+  "disc": "dez",
+  "index": 4,
+  "title": "4:00 A.M.",
+  "artist": "Taeko Ohnuki",
+  "seconds": 337.03,
+  "source": "Soundtracks\\Depois Das Dez\\Taeko_Onuki_-_4_00A.M._(mp3.pm).mp3",
+  "sourceBytes": 13482362,
+  "sourceSha256": "fd9fd1470f00993fcb6fc9e4a6027640342664c9bb9cb82dd2cbc31831192a9f",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\dez_05.ogg",
+  "gameBytes": 3517477,
+  "gameSha256": "d6fa52af179ce9502eedcd36071ca918a34e25751a7b85640a36cca0dc07f87d",
+  "inputMeasurement": {
+    "input_i": "-10.21",
+    "input_tp": "0.58",
+    "input_lra": "5.00",
+    "input_thresh": "-20.37",
+    "output_i": "-17.19",
+    "output_tp": "-2.00",
+    "output_lra": "5.40",
+    "output_thresh": "-27.25",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.81"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

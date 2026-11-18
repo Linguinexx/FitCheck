@@ -9,7 +9,7 @@ namespace FitCheck.Editor
     {
         static double nextCheck;
         static InkOutlineReview(){InkOutlinePreview.Restore(true);EditorApplication.update+=Refresh;EditorApplication.playModeStateChanged+=state=>{if(state==PlayModeStateChange.ExitingPlayMode||state==PlayModeStateChange.EnteredEditMode)InkOutlinePreview.Restore();};}
-        static void Refresh(){if(!EditorApplication.isPlaying||!InkOutlinePreview.Enabled||EditorApplication.timeSinceStartup<nextCheck)return;nextCheck=EditorApplication.timeSinceStartup+.5;var game=UnityEngine.Object.FindAnyObjectByType<FirstCustomer>();if(game!=null)game.SetInkOutlinePreview(true);}
+        static void Refresh(){if(!EditorApplication.isPlaying||!InkOutlinePreview.Enabled||!InkOutlinePreview.UserEnabled||EditorApplication.timeSinceStartup<nextCheck)return;nextCheck=EditorApplication.timeSinceStartup+.5;var game=UnityEngine.Object.FindAnyObjectByType<FirstCustomer>();if(game!=null)game.SetInkOutlinePreview(true);}
         [MenuItem("Tools/Fit Check/Prévia de contorno/Ativar no Play")]
         public static void Enable(){var game=UnityEngine.Object.FindAnyObjectByType<FirstCustomer>();if(!EditorApplication.isPlaying||game==null){Debug.Log("Entre no Play para comparar o contorno.");return;}game.SetInkOutlinePreview(true);}
         [MenuItem("Tools/Fit Check/Prévia de contorno/Restaurar original")]

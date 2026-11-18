@@ -1,0 +1,3 @@
+SUPPLIED_PLAYLIST_PASSED: 15 stereo tracks loaded asynchronously, per-track seek/play/pause and game pause, persistence, bounded cache, browse isolation, track wrap, stop, legacy and home isolation. Audio measured, not evaluated by direct listening.
+SHOP_MOMENTS_PASSED
+FITCHECK_SHOP_SERVICE_PASSED

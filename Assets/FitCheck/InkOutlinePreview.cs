@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace FitCheck
 {
-    // Explicit art preview only. No material is changed during normal gameplay.
+    // Selective character ink; player preference also controls the furniture pass.
     public static class InkOutlinePreview
     {
         static readonly Dictionary<Material,Shader> originals=new Dictionary<Material,Shader>();
@@ -11,10 +11,12 @@ namespace FitCheck
         static readonly string[] previewNames={"FitCheck/Preview/Ink Retro","FitCheck/Preview/Ink Fabric","FitCheck/Preview/Ink Finishes","FitCheck/Preview/Ink Pet"};
         static readonly string[] originalResources={"RetroPaint","GarmentFabric","GarmentFinishEffects","CatFur"};
         public static bool Enabled {get;private set;}
+        public const string PreferenceKey="FitCheck.InkOutline";
+        public static bool UserEnabled=>PlayerPrefs.GetInt(PreferenceKey,1)==1;
 #if UNITY_WEBGL && !UNITY_EDITOR
-        public static bool GameplayEnabled=>true;
+        public static bool GameplayEnabled=>UserEnabled;
 #else
-        public static bool GameplayEnabled=>System.Array.IndexOf(System.Environment.GetCommandLineArgs(),"-city-proof")<0;
+        public static bool GameplayEnabled=>UserEnabled&&System.Array.IndexOf(System.Environment.GetCommandLineArgs(),"-city-proof")<0;
 #endif
         public static int MaterialCount=>originals.Count;
         public static void Apply(Transform root){
@@ -62,7 +64,15 @@ namespace FitCheck
     }
     public partial class FirstCustomer
     {
+        bool characterOutline=true;
+        void SetOutlinePreference(bool enabled,bool save=false){
+            characterOutline=enabled;
+            Shader.SetGlobalFloat("_InkEffectsDisabled",enabled?0:1);
+            SetInkOutlinePreview(enabled);
+            if(save&&!ProofMode){PlayerPrefs.SetInt(InkOutlinePreview.PreferenceKey,enabled?1:0);PlayerPrefs.Save();}
+        }
         public void SetInkOutlinePreview(bool enabled){
+            Shader.SetGlobalFloat("_InkEffectsDisabled",enabled?0:1);
             if(!enabled){InkOutlinePreview.Restore();return;}
             InkOutlinePreview.Apply(mannequin);
             if(city!=null&&city.gameObject.activeInHierarchy)city.PreviewCharacterInk();

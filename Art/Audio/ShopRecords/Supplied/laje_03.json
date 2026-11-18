@@ -1,0 +1,27 @@
+{
+  "disc": "laje",
+  "index": 2,
+  "title": "Regulate",
+  "artist": "Warren G feat. Nate Dogg",
+  "seconds": 253.54,
+  "source": "Soundtracks\\Laje92\\Warren_G_ft._Nate_Dogg_-_Regluate_(mp3.pm).mp3",
+  "sourceBytes": 4057173,
+  "sourceSha256": "3f503ae231f122fd118a23e53dd28d70d8e2f72e3eeee6a3fe53d2b18e81e498",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\laje_03.ogg",
+  "gameBytes": 2383222,
+  "gameSha256": "783552bdba963655a5d0980ce384c54a08853da2834e990580cb2ee99a1632cf",
+  "inputMeasurement": {
+    "input_i": "-10.19",
+    "input_tp": "1.53",
+    "input_lra": "8.60",
+    "input_thresh": "-20.56",
+    "output_i": "-16.79",
+    "output_tp": "-2.00",
+    "output_lra": "7.90",
+    "output_thresh": "-27.01",
+    "normalization_type": "dynamic",
+    "target_offset": "-1.21"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

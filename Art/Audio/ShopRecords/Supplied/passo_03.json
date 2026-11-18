@@ -1,0 +1,27 @@
+{
+  "disc": "passo",
+  "index": 2,
+  "title": "Tudo Vai Dar Certo",
+  "artist": "Natiruts e Amani Kush",
+  "seconds": 240.38,
+  "source": "Soundtracks\\Passo Torto\\Natiruts_Amani_Kush_-_Tudo_Vai_Dar_Certo_(mp3.pm).mp3",
+  "sourceBytes": 9616240,
+  "sourceSha256": "72f9f9da2bf87ab14a842c40f35bc6fa84857a865da2959d27b4d333e7ed38b2",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\passo_03.ogg",
+  "gameBytes": 2514561,
+  "gameSha256": "ab9b39abee9465f82e5ff2db437a235cb8d73af665c82013446bed884fe6d662",
+  "inputMeasurement": {
+    "input_i": "-9.38",
+    "input_tp": "0.96",
+    "input_lra": "4.10",
+    "input_thresh": "-19.55",
+    "output_i": "-17.44",
+    "output_tp": "-4.32",
+    "output_lra": "3.60",
+    "output_thresh": "-27.56",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.56"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

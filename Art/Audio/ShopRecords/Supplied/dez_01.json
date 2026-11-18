@@ -1,0 +1,27 @@
+{
+  "disc": "dez",
+  "index": 0,
+  "title": "Flow",
+  "artist": "Sade",
+  "seconds": 270.47,
+  "source": "Soundtracks\\Depois Das Dez\\Sade_-_Sade_-_Flow_(mp3.pm).mp3",
+  "sourceBytes": 8655978,
+  "sourceSha256": "4e5f1b56702b97fc720631c3dfa33b73c26572f2284fb457cda885bb7670fd8f",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\dez_01.ogg",
+  "gameBytes": 2637943,
+  "gameSha256": "40dd488227a55563b8d0ced6574ace73c6a612c51c8ccd935c65cde791c846a2",
+  "inputMeasurement": {
+    "input_i": "-12.03",
+    "input_tp": "0.47",
+    "input_lra": "3.20",
+    "input_thresh": "-22.38",
+    "output_i": "-17.66",
+    "output_tp": "-2.44",
+    "output_lra": "3.40",
+    "output_thresh": "-27.93",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.34"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

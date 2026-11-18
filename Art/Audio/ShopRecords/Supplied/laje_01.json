@@ -1,0 +1,27 @@
+{
+  "disc": "laje",
+  "index": 0,
+  "title": "It Was a Good Day",
+  "artist": "Ice Cube",
+  "seconds": 260.13,
+  "source": "Soundtracks\\Laje92\\Ice_Cube_-_It_Was_A_Good_Day_(mp3.pm).mp3",
+  "sourceBytes": 4162499,
+  "sourceSha256": "08523a1e1cf992d0c6b10e8c38fc8072cdde8a707e2792f42c4abe7ad24e2020",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\laje_01.ogg",
+  "gameBytes": 2346483,
+  "gameSha256": "c56892eb2ea5645a095bf0683d03f4e0cc5974f003ef8ae57e240d5960735885",
+  "inputMeasurement": {
+    "input_i": "-11.52",
+    "input_tp": "1.78",
+    "input_lra": "2.50",
+    "input_thresh": "-21.55",
+    "output_i": "-17.92",
+    "output_tp": "-4.13",
+    "output_lra": "2.20",
+    "output_thresh": "-27.93",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.08"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

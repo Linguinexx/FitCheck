@@ -1,0 +1,27 @@
+{
+  "disc": "laje",
+  "index": 1,
+  "title": "Big Poppa",
+  "artist": "The Notorious B.I.G.",
+  "seconds": 251.98,
+  "source": "Soundtracks\\Laje92\\The_Notorious_B.I.G._-_Big_Poppa_2016_Remaster_(mp3.pm).mp3",
+  "sourceBytes": 10080174,
+  "sourceSha256": "77bed586e0dcb1393b80c04246342b8d098e442eae377b130fada5fa828cf94e",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\laje_02.ogg",
+  "gameBytes": 2566648,
+  "gameSha256": "bfca6afb4ba59234462428e71c73b85778497dcb778af94d4395ecf03cfabc93",
+  "inputMeasurement": {
+    "input_i": "-9.61",
+    "input_tp": "1.35",
+    "input_lra": "4.00",
+    "input_thresh": "-19.77",
+    "output_i": "-17.32",
+    "output_tp": "-5.31",
+    "output_lra": "2.80",
+    "output_thresh": "-27.43",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.68"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

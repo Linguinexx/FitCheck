@@ -1,0 +1,27 @@
+{
+  "disc": "laje",
+  "index": 4,
+  "title": "Superman",
+  "artist": "Eminem feat. Dina Rae",
+  "seconds": 352.5,
+  "source": "Soundtracks\\Laje92\\Em_feat._Dina_Rae_-_Superman_(mp3.pm).mp3",
+  "sourceBytes": 7050494,
+  "sourceSha256": "b30795b8d484b604b511f14b91b788a33db4371207ba7fd3e5b55aa3674f3c80",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\laje_05.ogg",
+  "gameBytes": 3597132,
+  "gameSha256": "a9ad6c0bd3f9a1699a94c3e2c79da3614dc1de04494ba20fde3ebbec73d0c0fa",
+  "inputMeasurement": {
+    "input_i": "-9.22",
+    "input_tp": "2.02",
+    "input_lra": "1.60",
+    "input_thresh": "-19.30",
+    "output_i": "-18.03",
+    "output_tp": "-6.56",
+    "output_lra": "1.70",
+    "output_thresh": "-28.09",
+    "normalization_type": "dynamic",
+    "target_offset": "0.03"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

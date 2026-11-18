@@ -1,0 +1,27 @@
+{
+  "disc": "dez",
+  "index": 2,
+  "title": "On & On",
+  "artist": "Erykah Badu",
+  "seconds": 220.47,
+  "source": "Soundtracks\\Depois Das Dez\\Erikah_Badu_-_On_and_On_(mp3.pm).mp3",
+  "sourceBytes": 5292034,
+  "sourceSha256": "2eabbbdf3180842fec4d35abdfa1335e50891eb3e472722d1fb9b8d2a8c7fae0",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\dez_03.ogg",
+  "gameBytes": 2332167,
+  "gameSha256": "9310a3096a4316dafa518a12114f2178a459d8b6ac0f4c1539eb84c807c1e892",
+  "inputMeasurement": {
+    "input_i": "-11.33",
+    "input_tp": "-0.10",
+    "input_lra": "2.80",
+    "input_thresh": "-21.41",
+    "output_i": "-17.54",
+    "output_tp": "-5.06",
+    "output_lra": "2.40",
+    "output_thresh": "-27.58",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.46"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

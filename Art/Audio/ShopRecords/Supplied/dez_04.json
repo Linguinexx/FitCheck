@@ -1,0 +1,27 @@
+{
+  "disc": "dez",
+  "index": 3,
+  "title": "Sometimes…",
+  "artist": "Erykah Badu",
+  "seconds": 249.47,
+  "source": "Soundtracks\\Depois Das Dez\\Erykah_Badu_-_Sometimes..._(mp3.pm).mp3",
+  "sourceBytes": 9979864,
+  "sourceSha256": "6ab7b6a0df66fcb4aefcb58f201087eaa1ed2e92332bee828c797526872043f2",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\dez_04.ogg",
+  "gameBytes": 2751077,
+  "gameSha256": "65890e5f7a8ce66e2b0406d9892160b260267ba18d9ce95a9b2c8af1a5616971",
+  "inputMeasurement": {
+    "input_i": "-13.13",
+    "input_tp": "-0.06",
+    "input_lra": "4.10",
+    "input_thresh": "-23.65",
+    "output_i": "-17.53",
+    "output_tp": "-2.00",
+    "output_lra": "2.90",
+    "output_thresh": "-27.69",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.47"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

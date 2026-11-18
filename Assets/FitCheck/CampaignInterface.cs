@@ -65,6 +65,7 @@ namespace FitCheck
         }
         void BuildAudio()
         {
+            SetOutlinePreference(!ProofMode&&InkOutlinePreview.UserEnabled);
             SetGarmentFinishes(ProofMode||PlayerPrefs.GetInt("FitCheck.GarmentFinishes",1)==1);
             LoadMouseSensitivity();
             masterVolume=ProofMode?1:Mathf.Clamp01(PlayerPrefs.GetFloat(MasterVolumePreference,1));

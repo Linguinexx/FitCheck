@@ -1,0 +1,27 @@
+{
+  "disc": "passo",
+  "index": 1,
+  "title": "Samurai",
+  "artist": "Djavan",
+  "seconds": 338.29,
+  "source": "Soundtracks\\Passo Torto\\Djavan_-_Samurai_(mp3.pm).mp3",
+  "sourceBytes": 13532517,
+  "sourceSha256": "03cf3ca5206efee903e63127cfc6645352e2b97faf0cb6142e6c3925d06b60f3",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\passo_02.ogg",
+  "gameBytes": 3359335,
+  "gameSha256": "1bd0a0e9fb989ac61de10cd809efd7d914edb6f6dd0281fdbb7fcf9862f0b145",
+  "inputMeasurement": {
+    "input_i": "-11.40",
+    "input_tp": "-0.05",
+    "input_lra": "3.30",
+    "input_thresh": "-21.49",
+    "output_i": "-17.49",
+    "output_tp": "-4.03",
+    "output_lra": "2.80",
+    "output_thresh": "-27.53",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.51"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

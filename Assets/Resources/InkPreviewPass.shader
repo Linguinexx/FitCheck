@@ -14,7 +14,7 @@ Shader "FitCheck/Preview/Character Ink"
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
-            float _InkPreviewPixels,_InkPreviewWorldLimit;
+            float _InkPreviewPixels,_InkPreviewWorldLimit,_InkEffectsDisabled;
             fixed4 _InkPreviewColor;
             struct v2f {float4 pos:SV_POSITION;float amount:TEXCOORD0;};
             v2f vert(appdata_base v){
@@ -30,7 +30,7 @@ Shader "FitCheck/Preview/Character Ink"
                 o.pos.xy+=direction*(2*pixels/_ScreenParams.xy)*o.pos.w;
                 o.amount=pixels;return o;
             }
-            fixed4 frag(v2f i):SV_Target {clip(i.amount-.03);return _InkPreviewColor;}
+            fixed4 frag(v2f i):SV_Target {clip(.5-_InkEffectsDisabled);clip(i.amount-.03);return _InkPreviewColor;}
             ENDCG
         }
     }

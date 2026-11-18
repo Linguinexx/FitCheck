@@ -7,8 +7,8 @@ namespace FitCheck
         int shopGuideTab,shopQuizAnswer=-1,shopAlbumSelection;Vector2 shopAlbumScroll;
         bool ShopLeisurePanelOpen=>shopMusicOpen||shopAlbumOpen;
         static readonly string[] ShopMusicNames={"Laje 92","Passo Torto","Depois das Dez"};
-        AudioClip[] shopRecords;int shopRecordSelected;
-        AudioClip ShopRecordClip=>StreetMemory.musicStopped?null:shopRecords[StreetMemory.musicChoice];
+        int shopRecordSelected;
+        AudioClip ShopRecordClip=>StreetMemory.musicStopped?null:LoadShopSong();
         static readonly string[] NandoDays={
             "Antes de abrir eu sempre dou uma volta pela loja. Parece bobeira, mas o primeiro encontro já começa no jeito que a gente recebe.",
             "Ontem eu quase chamei um cliente pelo nome do gato. Se eu falar 'pspsps' no atendimento, você me interrompe.",
@@ -33,7 +33,7 @@ namespace FitCheck
             StreetMemory.shopQuizDays|=1<<day;StreetMemory.Collect((day+2)%7);
             if(TrySave())PlayClip(Clip("ui_confirm"),.45f);else{StreetMemory.shopQuizDays=oldDays;StreetMemory.stickers=oldStickers;}
         }
-        void ChooseShopMusic(int choice){if(ShopOpen||choice<0||choice>2)return;int before=StreetMemory.musicChoice;bool stopped=StreetMemory.musicStopped;StreetMemory.musicChoice=choice;StreetMemory.musicStopped=false;if(!TrySave()){StreetMemory.musicChoice=before;StreetMemory.musicStopped=stopped;}}
+        void ChooseShopMusic(int choice){ChooseShopSong(choice,choice==StreetMemory.musicChoice?StreetMemory.musicTrack:0);}
         void StopShopRecord(){if(ShopOpen)return;bool before=StreetMemory.musicStopped;StreetMemory.musicStopped=true;if(!TrySave())StreetMemory.musicStopped=before;}
         void PinShopPhoto(){if(ShopOpen||shopAlbumSelection<0||shopAlbumSelection>=progress.posts.Count)return;int before=StreetMemory.shopPhoto;StreetMemory.shopPhoto=shopAlbumSelection+1;if(TrySave())SyncShopMemory();else StreetMemory.shopPhoto=before;}
         void SyncShopMemory(){if(city==null||!city.IsInterior||city.IsHome)return;int index=StreetMemory.shopPhoto-1;city.SetShopMemory(index>=0&&index<progress.posts.Count?FeedPhoto(progress.posts[index].photo):null);}

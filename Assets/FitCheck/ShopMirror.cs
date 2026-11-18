@@ -4,15 +4,15 @@ namespace FitCheck
     public partial class CityView
     {
         public static readonly Vector3 ShopMirrorCenter=new Vector3(-2.365f,1.88f,6.15f);
-        const float ShopMirrorHalfWidth=.63f,ShopMirrorHalfHeight=1.65f;
+        const float ShopMirrorHalfWidth=.61f,ShopMirrorHalfHeight=1.53f;
         [SerializeField] Material shopMirrorMaterial;
         Camera shopMirrorCamera;float nextShopMirrorFrame;
         void BuildShopMirror(){
             // Outside face of the fitting partition: hooks, bench and animated
             // interior panel stay untouched; no floor footprint or new collider.
-            Block(ShopMirrorCenter-Vector3.right*.065f,new Vector3(.12f,3.47f,1.45f),Ink,"CityMetal",.035f);
-            Block(ShopMirrorCenter-Vector3.right*.018f,new Vector3(.025f,3.37f,1.32f),new Color(.46f,.44f,.40f),"CityMetal",.012f);
-            Block(ShopMirrorCenter+new Vector3(.005f,1.71f,0),new Vector3(.025f,.028f,.30f),Kaos,"CityMetal",.005f);
+            Block(ShopMirrorCenter-Vector3.right*.065f,new Vector3(.12f,3.23f,1.41f),Ink,"CityMetal",.035f);
+            Block(ShopMirrorCenter-Vector3.right*.018f,new Vector3(.025f,3.13f,1.28f),new Color(.46f,.44f,.40f),"CityMetal",.012f);
+            Block(ShopMirrorCenter+new Vector3(.005f,1.59f,0),new Vector3(.025f,.028f,.30f),Kaos,"CityMetal",.005f);
             float w=ShopMirrorHalfWidth,h=ShopMirrorHalfHeight;
             var mesh=new Mesh{name="Espelho da loja — vidro",
                 vertices=new[]{new Vector3(0,-h,-w),new Vector3(0,h,-w),new Vector3(0,h,w),new Vector3(0,-h,w)},

@@ -1,0 +1,2 @@
+POLISH_PREFERENCES_PASSED: music continues during pause/settings with live volume and mute; outline off/on and shared furniture pass; sleeve gloss; smaller shop mirror; six dog breeds use the recorded bark with cooldown and pause. Native visual inspection accompanies checks.
+SUPPLIED_PLAYLIST_PASSED: 15 stereo tracks loaded asynchronously, per-track seek/play/pause and game pause, persistence, bounded cache, browse isolation, track wrap, stop, legacy and home isolation. Audio measured, not evaluated by direct listening.

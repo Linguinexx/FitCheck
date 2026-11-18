@@ -132,7 +132,8 @@ namespace FitCheck
             if(Tap(new Rect(722,423,278,48),"Controles  →"))OpenControls();
             if(Tap(new Rect(430,487,570,48),reducedMotion?"Movimento reduzido: sim":"Movimento reduzido: não")){reducedMotion=!reducedMotion;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.ReducedMotion",reducedMotion?1:0);}
             if(Tap(new Rect(430,551,570,48),retroFilter?"Pixelização: leve":"Pixelização: desligada")){retroFilter=!retroFilter;if(!ProofMode)PlayerPrefs.SetInt("FitCheck.Retro",retroFilter?1:0);}
-            if(Tap(new Rect(430,611,570,48),garmentFinishes?"Brilho das roupas: ligado":"Brilho das roupas: desligado"))SetGarmentFinishes(!garmentFinishes,true);
+            if(Tap(new Rect(430,611,278,48),characterOutline?"Contorno: ligado":"Contorno: desligado"))SetOutlinePreference(!characterOutline,true);
+            if(Tap(new Rect(722,611,278,48),garmentFinishes?"Brilho das roupas: sim":"Brilho das roupas: não"))SetGarmentFinishes(!garmentFinishes,true);
 #if UNITY_WEBGL && !UNITY_EDITOR
             Txt(new Rect(444,665,550,40),"Em tela cheia, use P para pausar sem sair.",caption,muted);
 #endif

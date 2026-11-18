@@ -18,7 +18,7 @@ namespace FitCheck
             LookAtShopMoment(new Vector2(5.45f,-1.5f),CityView.ShopRadioSpot);
             CaptureInterface(Path.Combine(folder,"radio-interaction.png"));
             if(!TryShopMoment()||!shopMusicOpen||!cityFreeCursor)throw new Exception("Caixa de som inacessível");
-            for(int i=0;i<3;i++){ChooseShopMusic(i);if(ShopRecordClip==null||ShopRecordClip!=shopRecords[i])throw new Exception("Disco selecionado incorreto");}
+            for(int i=0;i<3;i++){ChooseShopMusic(i);if(StreetMemory.musicChoice!=i||StreetMemory.musicStopped||CurrentShopSong.path!=ShopSongs[i][StreetMemory.musicTrack].path)throw new Exception("Disco selecionado incorreto");}
             CaptureInterface(Path.Combine(folder,"music.png"));HandleEscapeAction();if(ShopLeisurePanelOpen||cityFreeCursor)throw new Exception("Fechar não restaurou controle");
             LookAtShopMoment(new Vector2(4.08f,7.75f),CityView.ShopAlbumSpot);
             if(!InteractShop()||!shopAlbumOpen||ShopOpen||progress.posts.Count!=0)throw new Exception("Álbum vazio criou atendimento");

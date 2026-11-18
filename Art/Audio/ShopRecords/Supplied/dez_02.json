@@ -1,0 +1,27 @@
+{
+  "disc": "dez",
+  "index": 1,
+  "title": "Mr Wrong",
+  "artist": "Sade",
+  "seconds": 171.44,
+  "source": "Soundtracks\\Depois Das Dez\\Sade_-_Mr_Wrong_(mp3.pm).mp3",
+  "sourceBytes": 6858754,
+  "sourceSha256": "2bdd6788090071890a5d06e2ae43acae45199bb1120ec6cb5fe96e3bf3a8ce79",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\dez_02.ogg",
+  "gameBytes": 1733180,
+  "gameSha256": "2e8511881bd20b4eae2c7b7e54415004207cbeb901c95d7e41ac2c6c24540673",
+  "inputMeasurement": {
+    "input_i": "-10.86",
+    "input_tp": "1.11",
+    "input_lra": "10.50",
+    "input_thresh": "-21.40",
+    "output_i": "-16.60",
+    "output_tp": "-2.00",
+    "output_lra": "4.00",
+    "output_thresh": "-26.72",
+    "normalization_type": "dynamic",
+    "target_offset": "-1.40"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

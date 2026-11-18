@@ -1,0 +1,27 @@
+{
+  "disc": "passo",
+  "index": 0,
+  "title": "O Descobridor dos Sete Mares",
+  "artist": "Tim Maia",
+  "seconds": 265.53,
+  "source": "Soundtracks\\Passo Torto\\Tim_Maia_-_O_Descobridor_Dos_Sete_Mares_(mp3.pm).mp3",
+  "sourceBytes": 5311261,
+  "sourceSha256": "7c4eed275bb4987284f667cd1c0dafaabf88ef543636809cb1d9f7702bfe9fd4",
+  "gameAsset": "Assets\\Resources\\Audio\\ShopRecords\\passo_01.ogg",
+  "gameBytes": 2726400,
+  "gameSha256": "232ab59d9a9a2e907a74360503ae452a5a2ba5e4c7af8d9dcb05f2e7ac0ff408",
+  "inputMeasurement": {
+    "input_i": "-16.86",
+    "input_tp": "0.88",
+    "input_lra": "2.10",
+    "input_thresh": "-26.90",
+    "output_i": "-17.86",
+    "output_tp": "-2.00",
+    "output_lra": "2.00",
+    "output_thresh": "-27.89",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.14"
+  },
+  "rights": "User-supplied; no distribution license supplied or inferred",
+  "listened": false
+}

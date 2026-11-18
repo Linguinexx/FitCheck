@@ -1,0 +1,152 @@
+[
+  {
+    "track": "Flow",
+    "artist": "Sade",
+    "lufs": -18.03,
+    "truePeak": -5.0,
+    "bytes": 2637943,
+    "sha256": "40dd488227a55563b8d0ced6574ace73c6a612c51c8ccd935c65cde791c846a2",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Mr Wrong",
+    "artist": "Sade",
+    "lufs": -18.05,
+    "truePeak": -4.79,
+    "bytes": 1733180,
+    "sha256": "2e8511881bd20b4eae2c7b7e54415004207cbeb901c95d7e41ac2c6c24540673",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "On & On",
+    "artist": "Erykah Badu",
+    "lufs": -18.07,
+    "truePeak": -6.41,
+    "bytes": 2332167,
+    "sha256": "9310a3096a4316dafa518a12114f2178a459d8b6ac0f4c1539eb84c807c1e892",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Sometimes…",
+    "artist": "Erykah Badu",
+    "lufs": -18.02,
+    "truePeak": -4.67,
+    "bytes": 2751077,
+    "sha256": "65890e5f7a8ce66e2b0406d9892160b260267ba18d9ce95a9b2c8af1a5616971",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "4:00 A.M.",
+    "artist": "Taeko Ohnuki",
+    "lufs": -18.07,
+    "truePeak": -6.35,
+    "bytes": 3517477,
+    "sha256": "d6fa52af179ce9502eedcd36071ca918a34e25751a7b85640a36cca0dc07f87d",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "It Was a Good Day",
+    "artist": "Ice Cube",
+    "lufs": -18.07,
+    "truePeak": -4.66,
+    "bytes": 2346483,
+    "sha256": "c56892eb2ea5645a095bf0683d03f4e0cc5974f003ef8ae57e240d5960735885",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Big Poppa",
+    "artist": "The Notorious B.I.G.",
+    "lufs": -18.0,
+    "truePeak": -4.31,
+    "bytes": 2566648,
+    "sha256": "bfca6afb4ba59234462428e71c73b85778497dcb778af94d4395ecf03cfabc93",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Regulate",
+    "artist": "Warren G feat. Nate Dogg",
+    "lufs": -18.06,
+    "truePeak": -5.97,
+    "bytes": 2383222,
+    "sha256": "783552bdba963655a5d0980ce384c54a08853da2834e990580cb2ee99a1632cf",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Gin and Juice",
+    "artist": "Snoop Dogg",
+    "lufs": -18.04,
+    "truePeak": -4.54,
+    "bytes": 2211691,
+    "sha256": "381255e4b83f51c75e8a7ec1c49e47a3dacb0891a076c938d026676aebbccbf1",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Superman",
+    "artist": "Eminem feat. Dina Rae",
+    "lufs": -18.05,
+    "truePeak": -6.13,
+    "bytes": 3597132,
+    "sha256": "a9ad6c0bd3f9a1699a94c3e2c79da3614dc1de04494ba20fde3ebbec73d0c0fa",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "O Descobridor dos Sete Mares",
+    "artist": "Tim Maia",
+    "lufs": -18.42,
+    "truePeak": -2.3,
+    "bytes": 2726400,
+    "sha256": "232ab59d9a9a2e907a74360503ae452a5a2ba5e4c7af8d9dcb05f2e7ac0ff408",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Samurai",
+    "artist": "Djavan",
+    "lufs": -18.07,
+    "truePeak": -6.08,
+    "bytes": 3359335,
+    "sha256": "1bd0a0e9fb989ac61de10cd809efd7d914edb6f6dd0281fdbb7fcf9862f0b145",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Tudo Vai Dar Certo",
+    "artist": "Natiruts e Amani Kush",
+    "lufs": -18.08,
+    "truePeak": -6.61,
+    "bytes": 2514561,
+    "sha256": "ab9b39abee9465f82e5ff2db437a235cb8d73af665c82013446bed884fe6d662",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Construção",
+    "artist": "Chico Buarque",
+    "lufs": -18.12,
+    "truePeak": -2.33,
+    "bytes": 3901896,
+    "sha256": "4ddc962a49324644b2411a1675ff18a54afb743e2a7c58d85e951e68cf1f7acd",
+    "originalUnchanged": true,
+    "listened": false
+  },
+  {
+    "track": "Cotidiano",
+    "artist": "Chico Buarque",
+    "lufs": -18.05,
+    "truePeak": -2.27,
+    "bytes": 1634921,
+    "sha256": "48f47460a2509306ec9cf00937bb45497bb688c63e9059d26936c0d93c9938c6",
+    "originalUnchanged": true,
+    "listened": false
+  }
+]

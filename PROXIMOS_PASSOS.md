@@ -328,3 +328,17 @@ Teste V4 solicitado: mesmo sol com olhar malandro semicerrado; óculos e gorro c
 Correção posterior: usuário descartou a alteração dos dois olhos/nariz; quer o sol original piscando, com nariz, acrescentando apenas os óculos refinados da V4. Prévia raster passo-source-v6.png e prompt correspondente em MascotConcepts. Coruja e guaxinim permanecem na V4; nenhuma integração no jogo nesta etapa.
 
 Capas finalizadas em Art/Audio/ShopRecords/MascotConcepts/Final: SVGs de símbolos/capas, PNGs 1024 e apresentação FitCheck-Discos.png. Guaxinim preto/vermelho, sol original piscando com óculos preto/lima, coruja de gorro preto/roxo. Artes entregues para uso; aplicação em Assets/seleção de discos continua pendente. Áudios comerciais não recebidos nem integrados.
+
+## Discos com as músicas recebidas — 18/11/2026
+
+### Ajustes após teste do player
+
+- Música continua no menu de pausa/configurações para permitir ajuste de volume ao vivo; mute e pausa manual do disco continuam valendo. Som ambiente/efeitos e gameplay permanecem pausados. Playlist também pode avançar naturalmente durante a pausa.
+- Contorno opcional ao lado dos efeitos visuais, persistido em FitCheck.InkOutline, ligado por padrão para preservar o visual aprovado. Desligar restaura materiais dos personagens/pets e desativa o passe da cama; roupas continuam fora do contorno seletivo. Editor não reativa a opção desligada.
+- Gravação CC0 Dog barking mono de Brandon Morris/HaelDB substitui o latido anterior: primeiro latido, 0,37 s, mono 22.050 Hz, 16.396 bytes. Fonte/crédito/editável em Art/Audio/Pets, GUID e vínculo em todas as raças preservados.
+- Capas com reflexo diagonal e borda de plástico desenhados na UI por uma textura 128 compartilhada; artes finais permanecem intactas. Espelho da loja: altura externa 3,47→3,23 m, vidro 3,30→3,06 m, largura levemente reduzida; centro e render 128×352/15 Hz preservados, com parede aparecendo acima. Revisão de cenário 44 força atualização do cache.
+
+- Soundtracks recebida com 15 faixas, cinco por disco. Usuário substituiu OMA por Ice Cube em It Was a Good Day. Originais intactos fora de Assets; cópias estéreo Ogg 32 kHz somam 40.214.133 bytes frente a 124.652.908 bytes originais. Medições finais entre −18,42 e −18 LUFS, maior pico −2,27 dBTP; nenhuma escuta direta declarada. Tim Maia recebeu margem adicional contra picos após compressão.
+- Capas finais integradas no seletor mantendo GUIDs. Player com lista por disco, artista, tempo, busca, anterior/próxima, pausa/continuar/retirar e avanço automático. Navegar entre capas mantém reprodução; preferências de disco/faixa/retirado por save, com default da primeira faixa em saves antigos. Música continua exclusiva do ambiente da loja.
+- Carga assíncrona e cache limitado aos clipes atuais/em transição, importação streaming sem pré-carregar todo o catálogo. Fonte ShopPlaylist.cs, UI ShopRecordsUI.cs; manifestos/hashes/medições em Art/Audio/ShopRecords/Supplied. As alternativas licenciadas foram rejeitadas, não integradas. Nenhuma autorização de distribuição foi declarada como recebida.
+- Revisão nativa isolada: compilação final sem erros/avisos, cerca de 172,5 MB. Capturas em Captures/SuppliedPlaylist. Builds públicas Windows/Web anteriores preservadas; conferir comportamento/memória do Web na próxima build solicitada, sem presumir equivalência de streaming com desktop.

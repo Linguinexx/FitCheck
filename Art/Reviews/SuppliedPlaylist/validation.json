@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-18",
+  "tracks": 15,
+  "discs": 3,
+  "filesBytes": 40214133,
+  "lufsRange": [
+    -18.42,
+    -18.0
+  ],
+  "maxTruePeak": -2.27,
+  "native": {
+    "bytes": 172493643,
+    "errors": 0,
+    "warnings": 0
+  },
+  "checks": "SUPPLIED_PLAYLIST_PASSED: 15 stereo tracks loaded asynchronously, per-track seek/play/pause and game pause, persistence, bounded cache, browse isolation, track wrap, stop, legacy and home isolation. Audio measured, not evaluated by direct listening.",
+  "shopServiceRegression": true,
+  "publicBuilds": {
+    "Windows": {
+      "sha256": "871cb6cf142eef481a7b4800325fb586aad6f05c541bb282313ff27882a31a25",
+      "bytes": 77481288,
+      "unchanged": true
+    },
+    "Web": {
+      "sha256": "4eb114a8d89fd01a95630f023b9db0d3ae4a89a3b008c692b043ce0f6e41806b",
+      "bytes": 52316512,
+      "unchanged": true
+    }
+  },
+  "visualReview": "Three native 1440×900 record screens and paused player inspected; titles/artists/cards/progress fit. Final mascots preserved.",
+  "listened": false,
+  "webValidation": "Pending next requested Web build; native streaming behavior is not proof of browser memory behavior."
+}

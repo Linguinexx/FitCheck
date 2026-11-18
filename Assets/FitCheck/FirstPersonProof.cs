@@ -16,6 +16,8 @@ namespace FitCheck
         {
             yield return null;yield return null;
             string folder=FirstPersonProofOutput();Directory.CreateDirectory(folder);
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-polish-preferences-review")>=0){yield return CheckPolishPreferences(folder);Application.Quit(0);yield break;}
+            if(Array.IndexOf(Environment.GetCommandLineArgs(),"-supplied-playlist-review")>=0){yield return CheckSuppliedPlaylist(folder);Application.Quit(0);yield break;}
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-entry-performance")>=0){yield return CheckEntryPerformance(folder);File.WriteAllText(Path.Combine(folder,"checks.txt"),"PERFORMANCE_CAPTURED: home, street and shop cold/return entry timings and scene costs.");Application.Quit(0);yield break;}
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-garment-render-performance")>=0){yield return CheckGarmentRenderPerformance(folder);Application.Quit(0);yield break;}
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"-shop-gameplay-performance")>=0){yield return CheckShopGameplayPerformance(folder);Application.Quit(0);yield break;}
