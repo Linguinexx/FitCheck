@@ -311,3 +311,14 @@ Limpeza concluída: 847,616,798 bytes de instalador substituível, páginas anti
 - Olhos dos pets mantêm aparência aprovada, com desenho aberto/fechado mutuamente exclusivo desde a criação. Verificadas 60 combinações de raça/pelagem, pausa e movimento reduzido.
 - Seleção dos lambe-lambes alinhada ao papel inclinado na matriz da UI; coleta em pequenos suportes na altura dos olhos, sete temas/IDs/progresso preservados. PENDENTE: usuário enviará artes; converter para papel/recorte de lambe-lambe relacionado ao contexto de cada um, sem substituir recompensas por imagens arbitrárias.
 - COMFORT_REFRESH_PASSED, NEIGHBOURHOOD_ACTIVITIES_PASSED, SHOP_MOMENTS_PASSED e FITCHECK_SHOP_SERVICE_PASSED. Compilação nativa sem erros/avisos. Fontes/roteiro/manifesto em Art/Reviews/ComfortRefresh; imagens reais Captures/ComfortRefresh. Projeto Unity atualizado; builds públicas Windows/Web MuralLambes atual e Previous preservadas.
+
+## Discos — estudo de capas e curadoria
+
+- Três seleções de cinco faixas definidas em Art/Audio/ShopRecords/CURADORIA.md. Laje 92 inclui Superman no lugar de Electric Relaxation; Feather rejeitada. Passo Torto inclui Construção e Cotidiano, não duas cópias de Construção.
+- Primeira direção fotográfica/colagem não agradou. Nova direção solicitada: logo própria preta ou branca sobre fundo da cor do disco. Habilidade logo-design aplicada; três conceitos vetoriais, PNGs e teste mono/16–64 px em Art/Audio/ShopRecords/LogoConcepts. Esperar reação aos conceitos antes de produzir kit final ou aplicar nas capas do jogo.
+- Resources/UI/ShopRecords, áudios, UI e builds preservados. Ainda pendentes: UI por faixa com nome/artista/tempo/controles e disco girando; contorno em cesta/bola/outros objetos e slider de espessura para avaliação nas configurações. Não integrar gravações automaticamente nesta etapa visual.
+### Correção da direção das capas — símbolos ilustrados
+
+O usuário rejeitou iniciais, números e nomes como elemento principal. Quer desenhos com personalidade, usando como referência sua logo ilustrada da DripLab. Novos conceitos sem texto nas capas em Art/Audio/ShopRecords/MascotConcepts: guaxinim de boné (Laje 92), sol com sorriso torto (Passo Torto), coruja sonolenta (Depois das Dez). V2 tem PNG-fonte, SVG vetorizado, cores lisas e testes de escala; são propostas para avaliação, ainda sem aplicação em Assets. LogoConcepts tipográfico é direção anterior rejeitada. Preservar a logo oficial e as capas atuais.
+
+Revisão V3: direção dos mascotes aprovada. Guaxinim preto sobre vermelho; sol com olhos igualmente fechados e óculos na testa; coruja com olheiras simples e gorro de dormir. Prévia concepts-color-v3.png, PNGs/SVGs/fontes/prompts e teste de escala preservados. Aguardar avaliação desta revisão antes de aplicar no jogo; versões anteriores preservadas.
