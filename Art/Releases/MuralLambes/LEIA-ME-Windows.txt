@@ -1,0 +1,13 @@
+FIT CHECK — WINDOWS
+Atualização de 14/11/2026
+
+Extraia o ZIP inteiro e abra FitCheck.exe. Mantenha as pastas e DLLs junto.
+
+WASD andar; Shift correr; mouse olhar; E interagir; F personalizar; P pausar; Tab soltar/capturar o mouse. Emotes 1–5; 0 encerra.
+Esc também pausa no Windows.
+
+Até três saves, sete dias e 21 encontros. Comece em casa e abra a loja pelo balcão quando quiser. Saves anteriores preservados; nenhum progresso pronto acompanha esta entrega.
+
+Novo: Pinscher/Shih-tzu/Golden, fogos antes da foto final, atividades e histórias do bairro, mural/adesivos/basquete/desafios de emotes. Loja fechada: resenha/pergunta do Nando, escolha de trilha na caixa de som e álbum de atendimentos com foto favorita no balcão.
+
+Correção: mural voltado para a travessa. Lambe-lambes com papéis rasgados, arraste livre, rotação e sobreposição. Posições, ângulos e ordem por save; Salvar/Cancelar e migração dos murais antigos.

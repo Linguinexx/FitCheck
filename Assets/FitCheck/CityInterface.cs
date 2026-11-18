@@ -66,6 +66,7 @@ namespace FitCheck
             studio.PlayerLook=playerAppearance;studio.ApplyUniform(progress.EquippedUniform);city.ResetWalk(mannequin);city.PreparePlayerBody(studio);if(interior&&!home)city.ResetFittingCurtain();shopFittingOpening=false;stage=Stage.City;paused=false;showRequest=false;showDrops=false;
             city.Frame(cam,true,0);mannequin.gameObject.SetActive(false);cityFreeCursor=false;cityLookCaptured=false;cityDragLook=false;SyncCityCursor();
             ArrivalPresentation();
+            if(InkOutlinePreview.GameplayEnabled)SetInkOutlinePreview(true);
         }
         void ExitCity()
         {

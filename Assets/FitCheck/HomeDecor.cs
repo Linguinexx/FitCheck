@@ -63,7 +63,7 @@ namespace FitCheck
                     if(renderer.name=="Arquitetura — CityStucco"&&point.y<4.3f&&(Mathf.Abs(point.x)>5.45f||Mathf.Abs(point.z)>4.45f)){
                         bool back=color.g>color.r*1.6f&&color.b>color.r*1.6f;int choice=back?value.accent:value.wall;
                         if(choice>0)colors[i]=HomeDecorColors[choice]*(color.maxColorComponent/(back?.32f:.94f));
-                    }else if(renderer.name=="Arquitetura — Cloth"&&point.x<-2.2f&&point.z>.6f&&point.y>.84f&&point.y<1.2f&&color.r>color.g*1.5f&&value.bedding>0){
+                    }else if(renderer.name=="Arquitetura — Cloth"&&point.x<-2.2f&&point.z>.6f&&point.y>.68f&&point.y<1.2f&&color.r>color.g*1.5f&&value.bedding>0){
                         bool fold=color.r>.6f;var target=fold?Color.Lerp(HomeDecorColors[value.bedding],Cream,.2f):HomeDecorColors[value.bedding];colors[i]=target*(color.maxColorComponent/(fold?.74f:.54f));
                     }else if(renderer.name=="Arquitetura — Rug"&&value.rug>0){
                         if(color.maxColorComponent<.4f)colors[i]=HomeDecorColors[value.rug]*.72f;

@@ -80,6 +80,7 @@ namespace FitCheck
         void DrawAffordance()
         {
             if(!cityFreeCursor){Fill(new Rect(718,448,4,4),new Color(.95f,.92f,.85f,.6f));}
+            if(city.BallHeld)return; // The court scoreboard already shows its E action.
             var hint=affordanceTapAge<AffordanceTapDuration?affordanceTapped:CurrentWorldHint();if(!hint.valid)return;
             Vector2 centre;if(!LogicalPoint(hint.bounds.center,out centre))return;
             var lo=new Vector2(float.PositiveInfinity,float.PositiveInfinity);

@@ -283,3 +283,31 @@ Limpeza concluída: 847,616,798 bytes de instalador substituível, páginas anti
 - Roteiro, relato de bugs, validação, hashes e manifests em Art/Releases/EncontrosNaLoja.
 
 - Limpeza após validação: 1458669928 bytes de caches/compilações duplicadas e saves de verificação; entregas antigas Windows-Test09/Web-Test10 removidas somente após conferir os hashes da atual e da anterior de 13/11. Originais, referências, saves reais e capturas finais preservados.
+
+## Mural e lambe-lambes — 14/11/2026
+
+- Mural agora voltado para a travessa, face norte do muro (-103,1.23,17.99); frente, câmera e E compartilham orientação. Verso não oferece interação. Papel com proporções diferentes, bordas rasgadas, canto dobrado e atlas impresso existente, sobre base escura.
+- Editor permite selecionar na lista/no papel, arrastar, girar ±5° (limite ±30°), sobrepor e retirar. Selecionado vem para a frente; papel fica inteiramente no mural. Salvar/Cancelar preservam/restauram presença, posição, ângulo e ordem. Corpo do jogador não bloqueia a câmera; fechamento restaura visão normal.
+- Estado por save em neighbourhood.muralX/muralY/muralAngle/muralLayer, sete entradas; migração de campos ausentes/vazios preserva adesivos/placed, campanha e desbloqueios. ResidentArtRevision 42 atualiza o cenário em recompilação. Sem novos NPCs/luzes/texturas; geometria e atlas existentes.
+- MURAL_EDITOR_PASSED, regressão completa das atividades NEIGHBOURHOOD_ACTIVITIES_PASSED; builds sem erros/avisos. Windows ZIP 77.481.288 / Web 52.316.512 bytes; pastas 139.578.596 / 52.426.766 bytes, abaixo de 200 MB. Web em iframe: novo save/casa/pausa/retomar com mouse no primeiro clique. Builds atuais substituídas; EncontrosNaLoja mantida como Previous. Publicação manual.
+- Fonte/roteiro Art/Reviews/MuralLambes; entrega/hashes Art/Releases/MuralLambes; imagens Captures/MuralLambes. Contador GitHub deste pedido: 1 de 3; sem novo commit/push nesta rodada.
+
+- Limpeza após a correção: 1465944180 bytes de caches, builds de revisão, perfil/saves isolados e entrega antiga já substituída. Atual e Previous verificadas por SHA-256; originais, referências e saves reais preservados.
+
+## Prévia de contorno — 17/11/2026
+
+- Usuário aprovou experimentar contorno inspirado na referência de Pimbolas. Prévia reversível, DESLIGADA por padrão; ainda não adotar automaticamente ou substituir builds. Menus da Unity: Tools/Fit Check/Prévia de contorno/Ativar no Play e Restaurar original.
+- Wrappers preservam passes de pintura/texturas/acabamentos, com casca de 1,15 px a 720p, limite 0,012 m, redução à distância e escala para espelhos. Avatar, NPCs, mãos/roupas e pets; overlays de olhos/boca excluídos. Cenário e UI preservados. Nenhuma malha/material/textura/luz adicional; passes extras para roupa/pet devem ser considerados.
+- Restauração inclui clones de cabelo/roupa e saída/reload do Play. INK_OUTLINE_PREVIEW_PASSED, compilação sem erros/avisos; cinco pares original/contorno/restaurado, espelho real e primeira pessoa, sem alteração da campanha. Originais/restaurados idênticos em pixels.
+- Capturas e comparativos em Captures/InkOutline; documentação e medições em Art/Reviews/InkOutline. Medição curta D3D11/GTX1650 é preliminar, NÃO demonstra melhora/piora de FPS; validar Web/desempenho real antes de adotar. Builds MuralLambes atuais e anterior preservadas. Contador GitHub: 2 de 3.
+
+
+## Quarto, quadra, discos e pulso — 17/11/2026
+
+- Cama e cesta refeitas no Blender: fonte Art/Environment/RoomCourtRefresh/RoomCourt.blend; 4.312/2.568 triângulos, três grupos cada. Cama com contorno próprio, coberta personalizável e apoio do pet preservados. Cesta mantém CourtHoop e arremesso, com rede em losangos. UI do basquete com três tentativas, zona de acerto, tecla e resultado, sem affordance duplicada.
+- Seletor de discos com capas originais, vinil/agulha, navegar sem trocar, colocar para tocar e retirar. Laje 92, Passo Torto e Depois das Dez são instrumentais locais exclusivos, criados por partitura/síntese (sem samples das trilhas existentes); fontes em Art/Audio/ShopRecords. Geração fal bloqueada por saldo, nenhum resultado desse serviço usado. musicChoice e musicStopped por save, migração legada, pausa/mute/crossfade/transições preservados. Áudio medido, sem avaliação por escuta.
+- Pulso: apenas anéis terminais do antebraço adaptados à raiz da mão nos emotes, sem peça adicional. StudioHands.cs e StudioPosture.cs mantidos intactos. Conferência em seis gestos, manga curta, primeira pessoa e espelho.
+- Contorno aprovado ativo em personagens/cabelo/pets; roupas excluídas e filetes antigos das roupas removidos. Cama recebe contorno separado. Sem aplicação global à arquitetura nem novas luzes. Não afirmar ganho de FPS; conferir Web na próxima build.
+- Olhos dos pets mantêm aparência aprovada, com desenho aberto/fechado mutuamente exclusivo desde a criação. Verificadas 60 combinações de raça/pelagem, pausa e movimento reduzido.
+- Seleção dos lambe-lambes alinhada ao papel inclinado na matriz da UI; coleta em pequenos suportes na altura dos olhos, sete temas/IDs/progresso preservados. PENDENTE: usuário enviará artes; converter para papel/recorte de lambe-lambe relacionado ao contexto de cada um, sem substituir recompensas por imagens arbitrárias.
+- COMFORT_REFRESH_PASSED, NEIGHBOURHOOD_ACTIVITIES_PASSED, SHOP_MOMENTS_PASSED e FITCHECK_SHOP_SERVICE_PASSED. Compilação nativa sem erros/avisos. Fontes/roteiro/manifesto em Art/Reviews/ComfortRefresh; imagens reais Captures/ComfortRefresh. Projeto Unity atualizado; builds públicas Windows/Web MuralLambes atual e Previous preservadas.

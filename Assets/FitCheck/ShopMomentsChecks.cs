@@ -18,7 +18,7 @@ namespace FitCheck
             LookAtShopMoment(new Vector2(5.45f,-1.5f),CityView.ShopRadioSpot);
             CaptureInterface(Path.Combine(folder,"radio-interaction.png"));
             if(!TryShopMoment()||!shopMusicOpen||!cityFreeCursor)throw new Exception("Caixa de som inacessível");
-            for(int i=0;i<3;i++){ChooseShopMusic(i);if(ShopMusicTrack!=new[]{3,1,2}[i])throw new Exception("Trilha selecionada incorreta");}
+            for(int i=0;i<3;i++){ChooseShopMusic(i);if(ShopRecordClip==null||ShopRecordClip!=shopRecords[i])throw new Exception("Disco selecionado incorreto");}
             CaptureInterface(Path.Combine(folder,"music.png"));HandleEscapeAction();if(ShopLeisurePanelOpen||cityFreeCursor)throw new Exception("Fechar não restaurou controle");
             LookAtShopMoment(new Vector2(4.08f,7.75f),CityView.ShopAlbumSpot);
             if(!InteractShop()||!shopAlbumOpen||ShopOpen||progress.posts.Count!=0)throw new Exception("Álbum vazio criou atendimento");
@@ -38,7 +38,7 @@ namespace FitCheck
             SaveFirstPersonFrame(Path.Combine(folder,"counter-photo.png"));
             var loaded=ProgressStore.Load(DayPath);if(loaded.neighbourhood.shopPhoto!=1||loaded.neighbourhood.musicChoice!=2||loaded.neighbourhood.shopQuizDays!=1)throw new Exception("Lembranças não persistem");
             ProgressStore.Save(Path.Combine(storageOverride,"other.json"),new DayProgress());var other=ProgressStore.Load(Path.Combine(storageOverride,"other.json"));if(other.neighbourhood.shopPhoto!=0||other.neighbourhood.musicChoice!=0||other.neighbourhood.shopQuizDays!=0)throw new Exception("Lembranças vazaram entre saves");
-            EnterHome();if(ShopLeisurePanelOpen||ShopMusicTrack!=2)throw new Exception("Painel vazou para casa");EnterShop();
+            EnterHome();if(ShopLeisurePanelOpen||StreetMemory.musicChoice!=2)throw new Exception("Painel vazou para casa");EnterShop();
             MoveProof(CityView.ShopCounter,180,0);OpenShopForDay();LookAtShopMoment(new Vector2(5.45f,-1.5f),CityView.ShopRadioSpot);
             if(TryShopMoment()||ShopMomentHint().valid)throw new Exception("Lazer interrompe expediente");
             int choice=StreetMemory.musicChoice,quiz=StreetMemory.shopQuizDays;ChooseShopMusic(0);AnswerShopQuiz(1);if(choice!=StreetMemory.musicChoice||quiz!=StreetMemory.shopQuizDays)throw new Exception("Lazer alterou expediente");

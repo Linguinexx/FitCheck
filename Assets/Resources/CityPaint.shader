@@ -6,6 +6,7 @@ Shader "FitCheck/City Painted"
         Tags {"RenderType"="Opaque"}
         Pass
         {
+            Name "PAINT"
             Cull [_Cull]
             CGPROGRAM
             #pragma vertex vert

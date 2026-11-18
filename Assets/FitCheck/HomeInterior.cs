@@ -29,13 +29,7 @@ namespace FitCheck
                 Block(new Vector3(0,.18f,z*.97f),new Vector3(11,.28f,.1f),Ink,"Wood");
             }
             // A compact lived-in room, at the same character scale as the shop.
-            Block(new Vector3(-3.4f,.34f,2.3f),new Vector3(2.2f,.62f,3.4f),new Color(.33f,.20f,.13f),"Wood",.10f);
-            Block(new Vector3(-3.4f,.76f,2.3f),new Vector3(2.13f,.31f,3.3f),Cream,"Cloth",.10f);
-            Block(new Vector3(-3.4f,.96f,1.9f),new Vector3(2.16f,.15f,2.3f),new Color(.54f,.12f,.25f),"Cloth",.08f);
-            Block(new Vector3(-3.4f,1.035f,2.94f),new Vector3(2.17f,.16f,.33f),new Color(.74f,.24f,.32f),"Cloth",.09f);
-            foreach(float x in new[]{-3.91f,-2.89f})Block(new Vector3(x,1.08f,3.48f),new Vector3(.88f,.26f,.62f),Cream,"Cloth",.15f);
-            Block(new Vector3(-3.4f,.85f,4.05f),new Vector3(2.3f,1.6f,.16f),walnut,"Wood");
-            for(int i=0;i<10;i++)Block(new Vector3(-4.37f+i*.215f,1.11f,3.93f),new Vector3(.115f,.99f,.08f),walnut*1.16f,"Wood",.016f);
+            BuildHomeBedModel();
             obstacles.Add(new Rect(-4.5f,.6f,2.2f,3.5f));
             Block(HomeWardrobeCenter,new Vector3(1.65f,3.6f,1.25f),new Color(.35f,.23f,.15f),"Wood",.09f);
             Block(HomeWardrobeCenter+new Vector3(0,.1f,-.66f),new Vector3(.035f,3.3f,.04f),Ink,"CityMetal");

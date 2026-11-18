@@ -13,6 +13,7 @@ Shader "FitCheck/Cat Fur"
         Tags {"RenderType"="Opaque"}
         Pass
         {
+            Name "PAINT"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag

@@ -1,0 +1,38 @@
+{
+  "bytes": 1465944180,
+  "deleted": [
+    {
+      "bytes": 868705369,
+      "path": "tools/.web05-build-project/Library"
+    },
+    {
+      "bytes": 446774,
+      "path": "tools/.web05-build-project/Logs"
+    },
+    {
+      "bytes": 52422769,
+      "path": "tools/.web05-build-project/Builds"
+    },
+    {
+      "bytes": 139576532,
+      "path": "tools/.neighbourhood-review"
+    },
+    {
+      "bytes": 321634310,
+      "path": "tools/.mural-delivery"
+    },
+    {
+      "bytes": 83139619,
+      "path": "tools/.mural-browser-profile"
+    },
+    {
+      "bytes": 5708,
+      "path": "FitCheck/Captures/MuralLambes/sessions"
+    },
+    {
+      "bytes": 13099,
+      "path": "FitCheck/Captures/MuralLambes/regression/sessions"
+    }
+  ],
+  "preserved": "Verified current/previous releases, original references/assets, real saves, source tools and proof images"
+}

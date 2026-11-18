@@ -1,0 +1,32 @@
+[
+  {
+    "id": "laje",
+    "title": "Laje 92",
+    "bpm": 92,
+    "seconds": 41.73913043478261,
+    "source": "FitCheck\\Art\\Audio\\ShopRecords\\laje.flac",
+    "audio": "FitCheck\\Assets\\Resources\\Audio\\Game\\shop_record_laje.ogg",
+    "authoring": "Original procedural score; no samples; deterministic synthesis",
+    "seed": 718
+  },
+  {
+    "id": "passo",
+    "title": "Passo Torto",
+    "bpm": 98,
+    "seconds": 39.183673469387756,
+    "source": "FitCheck\\Art\\Audio\\ShopRecords\\passo.flac",
+    "audio": "FitCheck\\Assets\\Resources\\Audio\\Game\\shop_record_passo.ogg",
+    "authoring": "Original procedural score; no samples; deterministic synthesis",
+    "seed": 719
+  },
+  {
+    "id": "dez",
+    "title": "Depois das Dez",
+    "bpm": 84,
+    "seconds": 45.714285714285715,
+    "source": "FitCheck\\Art\\Audio\\ShopRecords\\dez.flac",
+    "audio": "FitCheck\\Assets\\Resources\\Audio\\Game\\shop_record_dez.ogg",
+    "authoring": "Original procedural score; no samples; deterministic synthesis",
+    "seed": 720
+  }
+]

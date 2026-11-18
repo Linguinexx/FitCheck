@@ -1,0 +1,31 @@
+{
+  "bytes": 472316417.0,
+  "preserved": "Model/audio/art sources, references, real saves, final captures, public Windows/Web current and Previous",
+  "removed": [
+    {
+      "path": "tools\\.comfort-refresh-review",
+      "bytes": 140644887.0
+    },
+    {
+      "path": "tools\\.web05-build-project\\Library",
+      "bytes": 331275875.0
+    },
+    {
+      "path": "tools\\.web05-build-project\\Logs",
+      "bytes": 26356.0
+    },
+    {
+      "path": "FitCheck\\Captures\\ComfortRefresh\\sessions",
+      "bytes": 15275.0
+    },
+    {
+      "path": "FitCheck\\Captures\\ComfortRefresh\\activities\\sessions",
+      "bytes": 27404.0
+    },
+    {
+      "path": "FitCheck\\Captures\\ComfortRefresh\\shop-regression\\sessions",
+      "bytes": 326620.0
+    }
+  ],
+  "date": "2026-11-17"
+}

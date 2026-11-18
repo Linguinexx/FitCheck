@@ -10,6 +10,7 @@ namespace FitCheck
             var route=new List<Vector2>();bool found=false;
             for(int i=0;i<12;i++){
                 float a=i*Mathf.PI/6;var p=new Vector2(target.x+Mathf.Sin(a)*2.35f,target.z-Mathf.Cos(a)*2.35f);
+                if(Vector3.Distance(target,CityView.CollectiveMural)<.01f&&p.y<target.z+.2f)continue;
                 if(!city.Free(p)||!city.PlanRoute(CityView.StreetShopDoor,p,route))continue;
                 city.RestoreWalk(p,0,0,mannequin);city.Frame(cam,true,0);found=true;break;
             }

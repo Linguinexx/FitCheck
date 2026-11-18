@@ -1,0 +1,22 @@
+{
+  "bytes": 464756535,
+  "preserved": "Original sources/references, real saves, public Windows/Web builds, comparison images and review sources",
+  "deleted": [
+    {
+      "bytes": 325151349,
+      "path": "tools/.web05-build-project/Library"
+    },
+    {
+      "bytes": 26177,
+      "path": "tools/.web05-build-project/Logs"
+    },
+    {
+      "bytes": 139579009,
+      "path": "tools/.ink-outline-review"
+    },
+    {
+      "bytes": 0,
+      "path": "FitCheck/Captures/InkOutline/sessions"
+    }
+  ]
+}

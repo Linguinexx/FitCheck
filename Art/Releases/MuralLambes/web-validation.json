@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "browser": "Edge/Chromium headless SwiftShader",
+  "checks": [
+    "WebGL load in cross-origin iframe",
+    "new save selection/creation",
+    "room entry",
+    "P pause",
+    "first-click resume pointer capture"
+  ],
+  "pointerLockedOnResume": true,
+  "runtimeErrors": 0,
+  "warnings": "Software GPU ReadPixels warnings and iframe permission notice; not a hardware FPS measurement."
+}

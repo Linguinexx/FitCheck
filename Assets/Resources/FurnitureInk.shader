@@ -1,0 +1,5 @@
+Shader "FitCheck/Furniture Ink"
+{
+    Properties { _DecorTint("Decoration tint",Color)=(1,1,1,1) _MainTex("Paint atlas",2D)="white"{} _SingleSurface("Imported surface",Float)=0 _SurfaceMean("Surface mean",Float)=.5 _SurfaceContrast("Surface contrast",Float)=3 _SurfaceTint("Surface tint",Color)=(1,1,1,1) _SurfaceTile("Urban atlas tile",Float)=0 _TexScale("Material scale",Float)=1 _Emission("Light",Float)=0 _Interior("Indoor lighting",Float)=0 _LeafWind("Leaves",Float)=0 _Motion("Paint movement",Float)=1 _TextureWeight("Paint detail",Float)=.35 _Wind("Banner wind",Float)=0 [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull",Float)=2 [HideInInspector] _HomeOrigin("Home lighting origin",Vector)=(0,0,0,0)  _InkPreviewPixels("Contour pixels",Float)=1.15 _InkPreviewWorldLimit("Contour limit",Float)=.012 _InkPreviewColor("Contour ink",Color)=(.025,.022,.028,1) }
+ SubShader { Tags {"RenderType"="Opaque"} UsePass "FitCheck/City Painted/PAINT" UsePass "FitCheck/Preview/Character Ink/INK_PREVIEW" }
+}

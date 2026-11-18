@@ -25,7 +25,7 @@ namespace FitCheck
             queuedEmote=0;emoteEnding=true;
             if(immediate){playerEmote=0;emoteBlend=0;RestoreEmoteHand();playerPoseCycle=float.NaN;if(PlayerBodyReady)EnsurePlayerPose();}
         }
-        void ResetPlayerEmotes(){playerEmote=queuedEmote=0;emoteAge=emoteBlend=0;emoteEnding=false;gestureHand=normalGestureHand=null;gesturePalms=new GesturePalm[7,2];originalPalms[0]=originalPalms[1]=null;playerPoseArmsOnly=false;}
+        void ResetPlayerEmotes(){playerEmote=queuedEmote=0;emoteAge=emoteBlend=0;emoteEnding=false;gestureHand=normalGestureHand=null;gesturePalms=new GesturePalm[7,2];originalPalms[0]=originalPalms[1]=null;wristArms[0]=wristArms[1]=null;playerPoseArmsOnly=false;}
         void TickPlayerEmote(float delta,float distance)
         {
             if(!PlayerEmoteActive)return;float before=emoteAge;emoteAge+=delta;
@@ -87,6 +87,7 @@ namespace FitCheck
             var position=pivot+rotation*(offset-pivot);
             foreach(var part in playerBody.parts)if(part.arm&&part.node!=null){part.node.transform.localPosition=position;part.node.transform.localRotation=rotation;}
             foreach(var palm in gesturePalms)if(palm!=null){palm.part.node.transform.localPosition=position;palm.part.node.transform.localRotation=rotation;}
+
         }
         void PrepareEmoteHand()
         {
@@ -104,6 +105,7 @@ namespace FitCheck
         }
         void RestoreEmoteHand()
         {
+
             foreach(var palm in gesturePalms)if(palm!=null&&palm.part.node!=null)palm.part.node.SetActive(false);
             foreach(var palm in originalPalms)if(palm!=null&&palm.node!=null)palm.node.GetComponent<MeshRenderer>().enabled=true;
         }
@@ -120,6 +122,7 @@ namespace FitCheck
                 var rotation=Quaternion.Slerp(palm.source.handRestMatrix.rotation,EmotePalmRotation(side),weight);
                 for(int i=0;i<part.rest.Length;i++){part.vertices[i]=body.TorsoPoint(wrist+rotation*palm.points[i]);part.posedNormals[i]=body.torso*rotation*palm.normals[i];}
                 part.mesh.vertices=part.vertices;part.mesh.normals=part.posedNormals;part.mesh.RecalculateBounds();
+                PoseWristJoin(hand,wrist,lower,rotation,body,elbowRest,weight);
                 palm.source.node.GetComponent<MeshRenderer>().enabled=false;part.node.SetActive(true);
             }
         }

@@ -1,0 +1,27 @@
+[
+  {
+    "scene": "fitting",
+    "changed_pixels": 6176,
+    "restored_pixel_identical": true
+  },
+  {
+    "scene": "shop",
+    "changed_pixels": 3633,
+    "restored_pixel_identical": true
+  },
+  {
+    "scene": "pet",
+    "changed_pixels": 5346,
+    "restored_pixel_identical": true
+  },
+  {
+    "scene": "mirror",
+    "changed_pixels": 5084,
+    "restored_pixel_identical": true
+  },
+  {
+    "scene": "first-person",
+    "changed_pixels": 3390,
+    "restored_pixel_identical": true
+  }
+]

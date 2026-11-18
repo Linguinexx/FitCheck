@@ -27,6 +27,7 @@ namespace FitCheck
                 PetEyePatch("Pupila",dog?.020f:.012f,.032f,Vector2.zero,.007f,dark,root,dog);
                 PetEyePatch("Brilho do olho",.006f,.006f,new Vector2(-.014f,.016f),.010f,shine,root,dog);
             }
+            ApplyPetEyeState();
         }
         void PetEyePatch(string name,float width,float height,Vector2 offset,float depth,Material paint,Transform parent,bool dog){
             const int sides=20;var points=new Vector3[sides+1];var faces=new int[sides*3];
@@ -38,12 +39,20 @@ namespace FitCheck
             float cycle=Mathf.Repeat(age,18),peek=cycle>10&&cycle<14?Mathf.Sin((cycle-10)/4*Mathf.PI):0;
             float awake=Mathf.Max(Mathf.Clamp01(awakeTime),peek);float blink=Mathf.Repeat(age,3.7f);if(blink<.16f)awake*=Mathf.Abs(blink-.08f)/.08f;
             EyeOpen=Mathf.MoveTowards(EyeOpen,awake,delta*5);
-            for(int i=0;i<openPetEyes.Length;i++){openPetEyes[i].gameObject.SetActive(EyeOpen>.035f);openPetEyes[i].localScale=new Vector3(1,Mathf.Max(.035f,EyeOpen),1);}
-            foreach(var lid in closedPetEyes)lid.gameObject.SetActive(EyeOpen<.16f);
+            ApplyPetEyeState();
             if(reduced){head.localRotation=Quaternion.identity;for(int i=0;i<petEars.Length;i++)petEars[i].localRotation=petEarRest[i];for(int i=0;i<frontPaws.Length;i++)frontPaws[i].localPosition=petPawRest[i];return;}
             head.localPosition+=Vector3.up*(awake*.055f);head.localRotation=Quaternion.Euler(-awake*5,Mathf.Sin(age*.8f)*awake*7,Mathf.Sin(age*.55f)*awake*2);
             for(int i=0;i<petEars.Length;i++)petEars[i].localRotation=petEarRest[i]*Quaternion.Euler(0,0,Mathf.Sin(age*4+i)*awake*3);
             for(int i=0;i<frontPaws.Length;i++)frontPaws[i].localPosition=petPawRest[i]+new Vector3(-.025f*awake,0,-.025f*awake);
+        }
+        void ApplyPetEyeState(){
+            bool open=EyeOpen>=.08f;
+            foreach(var eye in openPetEyes){eye.gameObject.SetActive(open);eye.localScale=new Vector3(1,Mathf.Max(.08f,EyeOpen),1);}
+            foreach(var lid in closedPetEyes)lid.gameObject.SetActive(!open);
+        }
+        public void ValidateEyeVisibility(){
+            if(openPetEyes==null||closedPetEyes==null)throw new System.Exception("Olhos do pet sem estado");
+            foreach(var eye in openPetEyes)foreach(var lid in closedPetEyes)if(eye.gameObject.activeSelf&&lid.gameObject.activeSelf)throw new System.Exception("Pet com olhos abertos e fechados ao mesmo tempo");
         }
         void BuildSoftEar(int side){
             float width=hairlessCat?.135f:.11f,height=hairlessCat?.29f:.21f;

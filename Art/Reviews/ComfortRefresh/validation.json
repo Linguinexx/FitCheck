@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-17",
+  "nativeBuild": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "checks": "COMFORT_REFRESH_PASSED: exclusive record clips/play/stop/browse/pause/persistence/legacy/home isolation; 60 pet breed-coat combinations and mutually exclusive eye states; six wrist joints and mirror captures; Blender bed/hoop; three-shot court and collectible access; full shop/service regression. Native visual review required alongside these checks.",
+  "models": {
+    "Bed": {
+      "triangles": 4312,
+      "groups": 3
+    },
+    "Hoop": {
+      "triangles": 2568,
+      "groups": 3
+    }
+  },
+  "exclusiveRecords": {
+    "laje": {
+      "lufs": -17.79,
+      "truePeakDBTP": -3.41,
+      "bytes": 240297,
+      "sha256": "abbd5487875da9372e13772bfe5b4d5f243fb3b0409b407af51237bbde6d91dc",
+      "listened": false,
+      "source": "Original deterministic score and synthesis; no reused game track or third-party sample"
+    },
+    "passo": {
+      "lufs": -17.94,
+      "truePeakDBTP": -4.06,
+      "bytes": 224972,
+      "sha256": "8f21ceba9cf54ce966e8424317f2bb880bb7d65b1b0637c92a1fc8ceeb7161d2",
+      "listened": false,
+      "source": "Original deterministic score and synthesis; no reused game track or third-party sample"
+    },
+    "dez": {
+      "lufs": -17.76,
+      "truePeakDBTP": -2.19,
+      "bytes": 235276,
+      "sha256": "232e88deba0ff844dd41b69e8d2a8e96c426c52f62e648d7becafcc22298a306",
+      "listened": false,
+      "source": "Original deterministic score and synthesis; no reused game track or third-party sample"
+    }
+  },
+  "approvedModelSourcesUnchanged": {
+    "StudioHands.cs": true,
+    "StudioPosture.cs": true
+  },
+  "publicBuilds": {
+    "Windows": {
+      "bytes": 77481288,
+      "sha256": "871cb6cf142eef481a7b4800325fb586aad6f05c541bb282313ff27882a31a25",
+      "replaced": false
+    },
+    "Web": {
+      "bytes": 52316512,
+      "sha256": "4eb114a8d89fd01a95630f023b9db0d3ae4a89a3b008c692b043ce0f6e41806b",
+      "replaced": false
+    }
+  },
+  "webValidation": "Not performed this round; include and check on the next requested Web build",
+  "visualReview": "Native 1440x900 captures inspected: bed, awake/resting pet, six emotes and short sleeves/mirror, three record covers, basketball HUD and hoop, collectible stands and inclined mural selection."
+}

@@ -19,6 +19,7 @@ namespace FitCheck
         Material Material(Color c, bool glow=false)
         {
             var m=new Material(Resources.Load<Shader>("RetroPaint"));m.color=c;
+            m.name=buildingGarments?"Roupa — pintura têxtil":"Avatar — pintura";
             m.SetFloat("_CharacterLit",buildingGarments?1:0);
             m.mainTexture=Resources.Load<Texture2D>("Painted/Cloth");m.SetFloat("_Motion",1);m.SetFloat("_Glow",glow?.65f:0);
             if(buildingGarments)m.SetFloat("_SmoothLight",1);
@@ -231,6 +232,9 @@ ShirtBody(t,cloth);
             FitRelaxedBody(t,cloth,(shoes?.id==CloudSlideId||shoes?.id==BrasaClogId)&&!b.shorts);
             buildingGarments=false;applyingPlayer=false;
             if(originalTop&&originalBottom&&originalShoes&&string.IsNullOrEmpty(outfit[3]))CompactCivilianWardrobe();
+            foreach(var renderer in hair.GetComponentsInChildren<MeshRenderer>(true))foreach(var material in renderer.sharedMaterials)material.name="Cabelo — pintura";
+            foreach(var asset in garmentAssets)if(asset is Material material&&material.name.StartsWith("Roupa —")&&material.HasProperty("_Outline"))material.SetFloat("_Outline",0);
+            if(InkOutlinePreview.GameplayEnabled)InkOutlinePreview.Apply(Avatar);
         }
         public void Pose(float rotation,float distance,float framing)
         {

@@ -20,6 +20,7 @@ namespace FitCheck
             music=CreateMusicSource();
             incomingMusic=CreateMusicSource();
             tracks=new[]{Clip("mus_menu"),Clip("mus_bairro_noite"),Clip("mus_quarto"),Clip("mus_loja")};
+            shopRecords=new[]{Clip("shop_record_laje"),Clip("shop_record_passo"),Clip("shop_record_dez")};
             backgrounds=new[]{null,Clip("amb_bairro_noite")??windFx,Clip("amb_quarto_noite"),Clip("amb_loja_interior")};
             steps=new[]{Steps("calcada"),Steps("madeira"),Steps("loja")};
             BuildAdditionalSounds();
@@ -52,6 +53,11 @@ namespace FitCheck
         }
         void TickMusic(AudioClip target,float delta,bool hold)
         {
+            if(target==null){music.Stop();incomingMusic.Stop();music.clip=incomingMusic.clip=null;musicBlend=0;return;}
+            if(incomingMusic.clip!=null&&target!=incomingMusic.clip&&target!=music.clip){
+                if(musicBlend>.5f)(music,incomingMusic)=(incomingMusic,music);
+                incomingMusic.Stop();incomingMusic.clip=target;musicBlend=0;
+            }
             if(incomingMusic.clip!=null&&target==music.clip){
                 (music,incomingMusic)=(incomingMusic,music);
                 musicBlend=1-musicBlend;
@@ -131,8 +137,8 @@ namespace FitCheck
             bool menu=stage==Stage.Title||stage==Stage.Welcome||stage==Stage.CharacterCreator;
             bool activeWorld=city!=null&&city.gameObject.activeInHierarchy;
             int zone=menu?0:activeWorld?(city.IsHome?2:city.IsInterior?3:1):3;
-            int track=activeWorld&&!menu&&city.IsInterior&&!city.IsHome?ShopMusicTrack:zone;
-            TickMusic(tracks[track],delta,paused||mutedAudio);
+            var track=activeWorld&&!menu&&city.IsInterior&&!city.IsHome?ShopRecordClip:tracks[zone];
+            TickMusic(track,delta,paused||mutedAudio);
             TickLoop(ambience,activeWorld&&!menu?backgrounds[zone]:null,paused||mutedAudio);
             AudioListener.volume=masterVolume;
             effects.mute=mutedAudio||paused;

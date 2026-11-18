@@ -6,7 +6,9 @@ namespace FitCheck
         bool shopMusicOpen,shopAlbumOpen,shopLeisureCursor;
         int shopGuideTab,shopQuizAnswer=-1,shopAlbumSelection;Vector2 shopAlbumScroll;
         bool ShopLeisurePanelOpen=>shopMusicOpen||shopAlbumOpen;
-        static readonly string[] ShopMusicNames={"Boombap da loja","Batida do bairro","Clima do quarto"};
+        static readonly string[] ShopMusicNames={"Laje 92","Passo Torto","Depois das Dez"};
+        AudioClip[] shopRecords;int shopRecordSelected;
+        AudioClip ShopRecordClip=>StreetMemory.musicStopped?null:shopRecords[StreetMemory.musicChoice];
         static readonly string[] NandoDays={
             "Antes de abrir eu sempre dou uma volta pela loja. Parece bobeira, mas o primeiro encontro já começa no jeito que a gente recebe.",
             "Ontem eu quase chamei um cliente pelo nome do gato. Se eu falar 'pspsps' no atendimento, você me interrompe.",
@@ -23,7 +25,6 @@ namespace FitCheck
             new[]{"After Hours","Common Ground","Side B"},new[]{"Destacar tudo ao mesmo tempo","Ignorar a ocasião","Escolher o destaque e equilibrar o resto"},new[]{"Sem acessório de cabeça","Boné por cima de tudo","Trocar o cabelo do cliente"},new[]{"Sortear uma roupa","Conversar e reler o pedido","Usar sempre o mesmo fit"},new[]{"Sim, basta olhar para ela","Sim, se combinar com o tênis","Não, valem os desbloqueios do catálogo"},new[]{"No FitFeed","Na caixa de som","Na cortina vazia"},new[]{"Tudo na mesma luminosidade","Parte de cima clara e de baixo escura","Somente duas cores claras"}
         };
         static readonly int[] NandoCorrect={1,2,0,1,2,0,1};
-        int ShopMusicTrack=>StreetMemory.musicChoice==1?1:StreetMemory.musicChoice==2?2:3;
         void AnswerShopQuiz(int answer){
             int day=progress.day-1;if(ShopOpen||answer<0||answer>2||(StreetMemory.shopQuizDays&(1<<day))!=0)return;
             shopQuizAnswer=answer;shopGuideAnswerAt=contextClock;
@@ -32,7 +33,8 @@ namespace FitCheck
             StreetMemory.shopQuizDays|=1<<day;StreetMemory.Collect((day+2)%7);
             if(TrySave())PlayClip(Clip("ui_confirm"),.45f);else{StreetMemory.shopQuizDays=oldDays;StreetMemory.stickers=oldStickers;}
         }
-        void ChooseShopMusic(int choice){if(ShopOpen||choice<0||choice>2)return;int before=StreetMemory.musicChoice;StreetMemory.musicChoice=choice;if(!TrySave())StreetMemory.musicChoice=before;}
+        void ChooseShopMusic(int choice){if(ShopOpen||choice<0||choice>2)return;int before=StreetMemory.musicChoice;bool stopped=StreetMemory.musicStopped;StreetMemory.musicChoice=choice;StreetMemory.musicStopped=false;if(!TrySave()){StreetMemory.musicChoice=before;StreetMemory.musicStopped=stopped;}}
+        void StopShopRecord(){if(ShopOpen)return;bool before=StreetMemory.musicStopped;StreetMemory.musicStopped=true;if(!TrySave())StreetMemory.musicStopped=before;}
         void PinShopPhoto(){if(ShopOpen||shopAlbumSelection<0||shopAlbumSelection>=progress.posts.Count)return;int before=StreetMemory.shopPhoto;StreetMemory.shopPhoto=shopAlbumSelection+1;if(TrySave())SyncShopMemory();else StreetMemory.shopPhoto=before;}
         void SyncShopMemory(){if(city==null||!city.IsInterior||city.IsHome)return;int index=StreetMemory.shopPhoto-1;city.SetShopMemory(index>=0&&index<progress.posts.Count?FeedPhoto(progress.posts[index].photo):null);}
         WorldHint ShopMomentHint(){
@@ -45,6 +47,7 @@ namespace FitCheck
             if(ShopOpen||ShopSequenceActive||shopGuideOpen||!city.IsInterior||city.IsHome)return false;
             bool radio=city.LookingAtShopRadio(cam),album=city.LookingAtShopAlbum(cam);if(!radio&&!album)return false;
             shopLeisureCursor=cityFreeCursor;shopMusicOpen=radio;shopAlbumOpen=album;shopAlbumSelection=Mathf.Clamp(StreetMemory.shopPhoto>0?StreetMemory.shopPhoto-1:progress.posts.Count-1,0,Mathf.Max(0,progress.posts.Count-1));shopAlbumScroll=Vector2.zero;
+            shopRecordSelected=StreetMemory.musicChoice;
             city.StopWalk();city.CancelPlayerEmote(true);city.FramePlayerForCamera(cam,false);cityFreeCursor=true;cityDragLook=false;SyncCityCursor(true);SyncShopMemory();return true;
         }
         void CloseShopMoment(){if(!ShopLeisurePanelOpen)return;shopMusicOpen=shopAlbumOpen=false;cityFreeCursor=shopLeisureCursor;SyncCityCursor(true);}
@@ -73,9 +76,7 @@ namespace FitCheck
         }
         void ShopMomentsUI(){
             if(shopMusicOpen){
-                DrawKaosPanel(new Rect(418,192,604,530));Txt(new Rect(450,222,540,58),"O som da DripLab",heading,paper);Txt(new Rect(450,298,540,64),"Escolha o clima da loja. Volume e mute continuam nas configurações.",caption,muted);
-                for(int i=0;i<3;i++)if(Tap(new Rect(450,390+i*72,540,56),ShopMusicNames[i],StreetMemory.musicChoice==i))ChooseShopMusic(i);
-                if(Tap(new Rect(450,634,540,50),"Voltar à loja"))CloseShopMoment();return;
+                ShopRecordsUI();return;
             }
             DrawKaosPanel(new Rect(932,123,468,680));Txt(new Rect(960,147,412,52),"Álbum da loja",heading,paper);
             if(progress.posts.Count==0){Txt(new Rect(960,243,410,180),"O primeiro atendimento começa a nossa coleção de encontros. As fotos vão aparecer aqui depois de atender os clientes.",copy,paper);}

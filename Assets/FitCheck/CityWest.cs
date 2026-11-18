@@ -154,14 +154,7 @@ namespace FitCheck
             Words("QUADRA",new Vector3(-76,2,20.04f),.15f,Ink);
             CourtMural();
             obstacles.Add(new Rect(-87.5f,20,23,.5f));
-            Rod(new Vector3(-76,0,18.7f),new Vector3(-76,6.7f,18.7f),.12f,Ink,"CityMetal");
-            Block(new Vector3(-76,6.1f,18.1f),new Vector3(3.4f,2.1f,.18f),Cream,"Wood");
-            Block(new Vector3(-76,5.8f,17.97f),new Vector3(1.5f,.8f,.04f),Kaos,"Leather");
-            for(int i=0;i<16;i++){
-                float a=i*Mathf.PI*2/16,b=(i+1)*Mathf.PI*2/16;
-                Rod(new Vector3(-76+Mathf.Cos(a)*.65f,5.3f,17.35f+Mathf.Sin(a)*.65f),new Vector3(-76+Mathf.Cos(b)*.65f,5.3f,17.35f+Mathf.Sin(b)*.65f),.035f,Kaos,"CityMetal",5);
-                if(i%2==0)Rod(new Vector3(-76+Mathf.Cos(a)*.65f,5.3f,17.35f+Mathf.Sin(a)*.65f),new Vector3(-76+Mathf.Cos(a)*.4f,4.6f,17.35f+Mathf.Sin(a)*.4f),.012f,Cream,"Leather",4);
-            }
+            BuildCourtHoopModel();
             obstacles.Add(new Rect(-76.2f,18.5f,.4f,.4f));
             Words("QUADRA",new Vector3(-80.5f,4.4f,4.1f),.09f,Cream);
             Block(new Vector3(-80.5f,4.4f,4.2f),new Vector3(5.3f,.85f,.16f),Ink,"CityMetal");
